@@ -2,9 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#080a0f">
-<title>منصة الموشن جرافيك الذكية — V3</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+
+<title>منصة الموشن جرافيك الذكية — V3 Mobile</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/webm-muxer@5.1.4/build/webm-muxer.js"></script>
@@ -12,837 +17,1344 @@
 <style>
 *{
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-:root{
-    --bg:#07090e;
-    --panel:#0d1119;
-    --panel2:#111722;
-    --panel3:#151c29;
-    --border:rgba(255,255,255,.09);
-    --border2:rgba(255,255,255,.15);
-    --text:#f4f7fb;
-    --muted:#8d98aa;
-    --accent:#8b7cff;
-    --accent2:#5c8cff;
-    --good:#3ddc97;
-    --warn:#ffbd55;
-    --bad:#ff5d73;
-    --radius:18px;
-}
-
-html,body{
+html{
     width:100%;
-    height:100%;
+    min-height:100%;
+    background:#07090d;
+}
+
+body{
     margin:0;
-    overflow:hidden;
-    background:var(--bg);
-    color:var(--text);
-    font-family:
-        Inter,
-        "SF Pro Display",
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
+    padding:0;
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(0,220,255,.07),transparent 30%),
+        radial-gradient(circle at 90% 85%,rgba(145,70,255,.08),transparent 32%),
+        #07090d;
+    color:#f4f7fb;
+    font-family:"Cairo",sans-serif;
+    overflow-x:hidden;
 }
 
 button,
+textarea,
 input,
-select,
-textarea{
+select{
     font:inherit;
 }
 
 button{
-    border:0;
     cursor:pointer;
 }
 
-.app{
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
+:root{
+    --bg:#07090d;
+    --panel:#0d1118;
+    --panel2:#111720;
+    --panel3:#151c27;
+    --line:rgba(255,255,255,.08);
+    --line2:rgba(255,255,255,.13);
+    --text:#f4f7fb;
+    --muted:#8994a5;
+    --cyan:#42ddff;
+    --cyan2:#0aa6d6;
+    --purple:#9b72ff;
+    --green:#44e19a;
+    --red:#ff6678;
+    --gold:#e4c36b;
+    --radius:18px;
 }
 
-/* TOPBAR */
+/* =========================
+   APP
+========================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+    display:grid;
+    grid-template-columns:300px minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr);
+}
+
+/* =========================
+   TOPBAR
+========================= */
 
 .topbar{
-    height:72px;
+    grid-column:1/-1;
     min-height:72px;
+    padding:
+        10px
+        max(18px,env(safe-area-inset-right))
+        10px
+        max(18px,env(safe-area-inset-left));
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:0 22px;
-    border-bottom:1px solid var(--border);
-    background:rgba(7,9,14,.92);
-    backdrop-filter:blur(20px);
-    z-index:10;
+    gap:16px;
+    border-bottom:1px solid var(--line);
+    background:rgba(7,9,13,.84);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+    position:relative;
+    z-index:20;
 }
 
 .brand{
     display:flex;
     align-items:center;
     gap:12px;
+    min-width:0;
 }
 
 .brand-mark{
-    width:40px;
-    height:40px;
-    border-radius:12px;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    border:1px solid rgba(66,221,255,.25);
+    border-radius:13px;
+    display:grid;
+    place-items:center;
     background:
-        radial-gradient(circle at 30% 25%,#fff 0 3%,transparent 4%),
-        linear-gradient(135deg,#8b7cff,#4f73ff);
-    box-shadow:0 8px 30px rgba(102,94,255,.25);
-    position:relative;
-    overflow:hidden;
+        linear-gradient(135deg,rgba(66,221,255,.18),rgba(155,114,255,.15)),
+        #0c1118;
+    box-shadow:0 0 28px rgba(66,221,255,.07);
 }
 
-.brand-mark:after{
-    content:"";
-    position:absolute;
-    width:50px;
-    height:10px;
-    background:rgba(255,255,255,.25);
-    transform:rotate(-45deg);
-    top:18px;
-    right:-14px;
+.brand-mark span{
+    width:16px;
+    height:16px;
+    border-radius:5px;
+    border:2px solid var(--cyan);
+    transform:rotate(45deg);
+    box-shadow:0 0 16px rgba(66,221,255,.4);
+}
+
+.brand-text{
+    min-width:0;
 }
 
 .brand-title{
+    font-size:15px;
     font-weight:800;
-    font-size:16px;
+    white-space:nowrap;
 }
 
 .brand-sub{
+    font-size:10px;
     color:var(--muted);
-    font-size:11px;
-    margin-top:2px;
+    margin-top:-2px;
+    white-space:nowrap;
 }
 
-.top-actions{
+.status{
     display:flex;
     align-items:center;
     gap:8px;
-}
-
-.status-pill{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:var(--muted);
-    font-size:12px;
-    padding:9px 12px;
-    border:1px solid var(--border);
-    background:#0b0e15;
+    padding:7px 12px;
+    border:1px solid var(--line);
+    background:#0c1117;
     border-radius:999px;
+    font-size:11px;
+    color:#aeb8c7;
+    white-space:nowrap;
 }
 
 .status-dot{
     width:7px;
     height:7px;
     border-radius:50%;
-    background:var(--good);
-    box-shadow:0 0 12px var(--good);
+    background:var(--green);
+    box-shadow:0 0 12px rgba(68,225,154,.75);
 }
 
-/* MAIN */
-
-.main{
-    flex:1;
-    min-height:0;
-    display:grid;
-    grid-template-columns:390px minmax(0,1fr);
-    gap:0;
+.status.rendering .status-dot{
+    background:var(--gold);
+    box-shadow:0 0 12px rgba(228,195,107,.8);
+    animation:pulse 1s infinite;
 }
 
-/* SIDEBAR */
+.status.error .status-dot{
+    background:var(--red);
+    box-shadow:0 0 12px rgba(255,102,120,.8);
+}
+
+@keyframes pulse{
+    50%{opacity:.35}
+}
+
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar{
+    grid-row:2;
+    width:300px;
     min-width:0;
-    overflow:auto;
-    border-left:1px solid var(--border);
-    background:#090c12;
+    border-left:1px solid var(--line);
+    background:rgba(10,13,18,.78);
     padding:18px;
+    overflow:auto;
+    scrollbar-width:thin;
 }
 
-.tabs{
+.sidebar-section{
+    margin-bottom:20px;
+}
+
+.section-label{
+    color:#687386;
+    font-size:10px;
+    font-weight:800;
+    margin:0 4px 8px;
+}
+
+.nav-tabs{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6px;
-    padding:5px;
-    background:#0e131c;
-    border:1px solid var(--border);
+    gap:8px;
+}
+
+.nav-tab{
+    width:100%;
+    min-height:54px;
+    border:1px solid transparent;
     border-radius:14px;
-    margin-bottom:16px;
-}
-
-.tab{
-    color:var(--muted);
     background:transparent;
-    padding:11px;
-    border-radius:10px;
-    font-weight:700;
-    font-size:12px;
+    color:#8e99aa;
+    text-align:right;
+    padding:0 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    transition:.2s ease;
 }
 
-.tab.active{
-    background:#191f2c;
+.nav-tab:hover{
+    background:rgba(255,255,255,.035);
+    color:#dce4ef;
+}
+
+.nav-tab.active{
     color:#fff;
-    box-shadow:0 5px 18px rgba(0,0,0,.18);
+    background:
+        linear-gradient(135deg,rgba(66,221,255,.11),rgba(155,114,255,.08)),
+        #10161e;
+    border-color:rgba(66,221,255,.14);
 }
 
-.section{
-    margin-bottom:16px;
+.nav-main{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.section-title{
+.nav-icon{
+    width:32px;
+    height:32px;
+    display:grid;
+    place-items:center;
+    border-radius:9px;
+    background:#151c26;
+    color:#8c9aaf;
+    font-size:13px;
+}
+
+.nav-tab.active .nav-icon{
+    color:var(--cyan);
+    background:rgba(66,221,255,.08);
+}
+
+.nav-arrow{
+    opacity:.35;
+}
+
+.info-box{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.018);
+    border-radius:15px;
+    padding:13px;
+    font-size:10px;
+    color:#798598;
+    line-height:1.9;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    grid-row:2;
+    min-width:0;
+    min-height:0;
+    padding:18px;
+    overflow:auto;
+}
+
+.view{
+    display:none;
+    min-width:0;
+}
+
+.view.active{
+    display:block;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.page-head{
     display:flex;
     justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:18px;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:900;
+    margin:0;
+    letter-spacing:-.5px;
+}
+
+.page-description{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.8;
+}
+
+.head-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.export-layout{
+    display:grid;
+    grid-template-columns:minmax(290px,390px) minmax(0,1fr);
+    gap:16px;
+    align-items:start;
+}
+
+.panel{
+    min-width:0;
+    border:1px solid var(--line);
+    background:
+        linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01)),
+        rgba(10,14,20,.9);
+    border-radius:var(--radius);
+    box-shadow:0 18px 50px rgba(0,0,0,.2);
+}
+
+.panel-head{
+    min-height:54px;
+    padding:13px 15px;
+    border-bottom:1px solid var(--line);
+    display:flex;
     align-items:center;
-    margin-bottom:9px;
-    color:#dfe5ee;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.panel-title{
     font-size:12px;
     font-weight:800;
 }
 
-.section-title span{
-    color:var(--muted);
-    font-size:10px;
-    font-weight:500;
+.panel-meta{
+    font-size:9px;
+    color:#667286;
 }
 
-label.small{
+.panel-body{
+    padding:15px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.form-group{
+    min-width:0;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.label{
     display:block;
-    color:var(--muted);
+    color:#9ca7b7;
     font-size:10px;
-    margin-bottom:6px;
+    font-weight:700;
+    margin:0 0 6px;
 }
 
-textarea,
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid var(--line2);
+    outline:none;
+    background:#090d13;
+    color:#eef3f8;
+    border-radius:12px;
+}
+
 input,
 select{
-    width:100%;
-    background:#0c1018;
-    border:1px solid var(--border);
-    color:#fff;
-    border-radius:12px;
-    outline:none;
+    height:43px;
+    padding:0 11px;
 }
 
 textarea{
     resize:vertical;
-    min-height:120px;
+    min-height:170px;
     padding:12px;
-    line-height:1.7;
-    font-size:12px;
+    line-height:1.8;
+    font-size:11px;
+    direction:ltr;
+    text-align:left;
 }
 
-input,
-select{
-    height:40px;
-    padding:0 11px;
-    font-size:12px;
-}
-
-textarea:focus,
 input:focus,
-select:focus{
-    border-color:rgba(139,124,255,.55);
-    box-shadow:0 0 0 3px rgba(139,124,255,.08);
+select:focus,
+textarea:focus{
+    border-color:rgba(66,221,255,.42);
+    box-shadow:0 0 0 3px rgba(66,221,255,.06);
 }
 
-.grid2{
+textarea.code{
+    min-height:430px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    font-size:10px;
+}
+
+/* =========================
+   CHOICES
+========================= */
+
+.choice-row{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.choice-row.three{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.choice-row.four{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.choice{
+    min-height:42px;
+    padding:7px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:#0b1017;
+    color:#8995a7;
+    font-size:10px;
+    font-weight:700;
+}
+
+.choice.active{
+    color:#fff;
+    border-color:rgba(66,221,255,.38);
+    background:
+        linear-gradient(135deg,rgba(66,221,255,.12),rgba(155,114,255,.08)),
+        #0d141d;
+}
+
+.mode-box{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:8px;
 }
 
-.grid3{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:7px;
+.mode-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px;
+    background:#0b1017;
+    color:#8995a7;
+    text-align:right;
+    min-height:105px;
 }
 
-.mode-switch{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:7px;
+.mode-card.active{
+    border-color:rgba(155,114,255,.4);
+    background:linear-gradient(135deg,rgba(155,114,255,.12),rgba(66,221,255,.06));
+    color:#fff;
 }
 
-.mode{
-    padding:13px 8px;
-    border:1px solid var(--border);
-    border-radius:13px;
-    background:#0c1018;
-    color:var(--muted);
-    text-align:center;
+.mode-card-title{
     font-size:11px;
-    font-weight:800;
+    font-weight:900;
 }
 
-.mode strong{
-    display:block;
-    color:inherit;
-    margin-bottom:3px;
+.mode-card-text{
+    margin-top:5px;
+    font-size:9px;
+    color:#717e91;
+    line-height:1.8;
 }
 
-.mode small{
-    font-weight:500;
-    opacity:.7;
+.mode-card.active .mode-card-text{
+    color:#9ba8ba;
 }
 
-.mode.active{
-    color:#fff;
-    border-color:rgba(139,124,255,.55);
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139,124,255,.17),
-            rgba(92,140,255,.08)
-        );
-}
+/* =========================
+   BUTTONS
+========================= */
 
-.chips{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-}
-
-.chip{
-    padding:7px 9px;
-    border-radius:999px;
-    background:#0c1018;
-    border:1px solid var(--border);
-    color:var(--muted);
-    font-size:10px;
-}
-
-.chip.active{
-    color:#fff;
-    border-color:rgba(139,124,255,.45);
-    background:rgba(139,124,255,.12);
-}
-
-.check-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:7px;
-}
-
-.check{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:10px;
-    border:1px solid var(--border);
+.btn{
+    min-height:42px;
     border-radius:11px;
-    background:#0c1018;
-    color:var(--muted);
+    border:1px solid var(--line2);
+    background:#111720;
+    color:#dce5ef;
+    padding:0 14px;
     font-size:10px;
-}
-
-.check input{
-    width:auto;
-    height:auto;
-    accent-color:var(--accent);
-}
-
-.primary{
-    width:100%;
-    height:43px;
-    border-radius:12px;
-    color:#fff;
     font-weight:800;
-    background:linear-gradient(135deg,#8b7cff,#5d82ff);
-    box-shadow:0 10px 30px rgba(91,102,255,.18);
-}
-
-.secondary{
-    width:100%;
-    height:40px;
-    border-radius:11px;
-    color:#e9edf5;
-    background:#111722;
-    border:1px solid var(--border);
-}
-
-.danger{
-    color:#ff8a9a;
-    border-color:rgba(255,93,115,.18);
-}
-
-.button-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:7px;
-}
-
-.range-row{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.range-row input{
-    flex:1;
-}
-
-.range-value{
-    min-width:45px;
-    text-align:center;
-    font-size:11px;
-    color:#fff;
-}
-
-/* WORKSPACE */
-
-.workspace{
-    min-width:0;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    background:
-        radial-gradient(circle at 60% 20%,rgba(92,140,255,.06),transparent 30%),
-        #080b11;
-}
-
-.workspace-head{
-    height:60px;
-    min-height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 18px;
-    border-bottom:1px solid var(--border);
-}
-
-.workspace-title{
-    font-size:12px;
-    font-weight:800;
-}
-
-.workspace-info{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    color:var(--muted);
-    font-size:10px;
-}
-
-.preview-area{
-    flex:1;
-    min-height:0;
-    display:flex;
+    display:inline-flex;
     align-items:center;
     justify-content:center;
-    padding:25px;
-    position:relative;
+    gap:7px;
+    transition:.18s ease;
 }
 
-.preview-shell{
-    position:relative;
-    width:min(100%,1000px);
+.btn:hover{
+    transform:translateY(-1px);
+    border-color:rgba(255,255,255,.2);
+}
+
+.btn:active{
+    transform:translateY(0);
+}
+
+.btn.primary{
+    border-color:rgba(66,221,255,.3);
+    background:linear-gradient(135deg,#0d718f,#155b75);
+    color:white;
+    box-shadow:0 8px 25px rgba(0,160,210,.12);
+}
+
+.btn.purple{
+    border-color:rgba(155,114,255,.3);
+    background:linear-gradient(135deg,#5639a1,#37286d);
+}
+
+.btn.danger{
+    border-color:rgba(255,102,120,.25);
+    color:#ff9aa6;
+    background:rgba(255,102,120,.06);
+}
+
+.btn.ghost{
+    background:transparent;
+}
+
+.btn.full{
+    width:100%;
+}
+
+.btn:disabled{
+    opacity:.4;
+    pointer-events:none;
+}
+
+.action-stack{
+    display:grid;
+    gap:8px;
+    margin-top:12px;
+}
+
+.action-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.action-row .btn{
+    flex:1;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview-panel{
+    min-width:0;
+}
+
+.preview-wrap{
+    padding:15px;
+}
+
+.preview-stage{
+    width:100%;
+    max-width:100%;
     aspect-ratio:16/9;
-    background:#020305;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:
-        0 35px 100px rgba(0,0,0,.5),
-        0 0 0 1px rgba(255,255,255,.02);
+    position:relative;
     overflow:hidden;
+    border-radius:14px;
+    border:1px solid var(--line2);
+    background:
+        linear-gradient(45deg,#10151d 25%,transparent 25%) 0 0/20px 20px,
+        linear-gradient(-45deg,#10151d 25%,transparent 25%) 0 0/20px 20px,
+        linear-gradient(45deg,transparent 75%,#10151d 75%) 0 0/20px 20px,
+        linear-gradient(-45deg,transparent 75%,#10151d 75%) 0 0/20px 20px,
+        #0a0e14;
 }
 
-.preview-shell.vertical{
-    width:auto;
-    height:min(100%,780px);
+.preview-stage.vertical{
     aspect-ratio:9/16;
+    max-height:70vh;
+    margin:auto;
 }
 
-#previewFrame{
+.preview-stage.transparent{
+    background:
+        linear-gradient(45deg,#1a1f27 25%,transparent 25%) 0 0/18px 18px,
+        linear-gradient(-45deg,#1a1f27 25%,transparent 25%) 0 0/18px 18px,
+        linear-gradient(45deg,transparent 75%,#1a1f27 75%) 0 0/18px 18px,
+        linear-gradient(-45deg,transparent 75%,#1a1f27 75%) 0 0/18px 18px,
+        #11161d;
+}
+
+.preview-stage iframe{
     width:100%;
     height:100%;
     border:0;
     display:block;
-    background:#000;
+    background:transparent;
 }
 
 .preview-overlay{
     position:absolute;
     inset:0;
     pointer-events:none;
-    border:1px solid rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.04);
 }
 
 .safe-area{
     position:absolute;
     inset:7%;
-    border:1px dashed rgba(255,255,255,.08);
+    border:1px dashed rgba(66,221,255,.25);
     pointer-events:none;
-    opacity:0;
-    transition:opacity .2s;
+    opacity:.55;
 }
 
-.safe-area.visible{
-    opacity:1;
-}
-
-.preview-hud{
-    position:absolute;
-    bottom:14px;
-    left:14px;
-    display:flex;
-    gap:6px;
-}
-
-.hud{
-    padding:7px 9px;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.09);
-    color:#dfe5ee;
-    border-radius:8px;
-    font-size:9px;
-}
-
-/* TIMELINE */
-
-.timeline{
-    height:145px;
-    min-height:145px;
-    border-top:1px solid var(--border);
-    background:#090c12;
-    padding:12px 16px;
-}
-
-.timeline-head{
+.preview-controls{
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    margin-bottom:9px;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
 }
 
-.timeline-head strong{
-    font-size:11px;
+.preview-controls .range-wrap{
+    flex:1;
+    min-width:150px;
 }
 
-.timeline-head span{
-    color:var(--muted);
+input[type=range]{
+    height:4px;
+    padding:0;
+    border:0;
+    accent-color:var(--cyan);
+}
+
+.time-label{
+    color:#8d99aa;
     font-size:10px;
+    white-space:nowrap;
 }
 
-.timeline-track{
-    height:72px;
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline{
+    margin-top:15px;
+}
+
+.timeline-bar{
     position:relative;
-    border:1px solid var(--border);
-    background:#0b0f16;
-    border-radius:11px;
+    height:52px;
+    margin-top:10px;
+    border:1px solid var(--line);
+    border-radius:12px;
     overflow:hidden;
+    background:#090d13;
 }
 
 .timeline-grid{
     position:absolute;
     inset:0;
-    background-image:
-        linear-gradient(to right,rgba(255,255,255,.05) 1px,transparent 1px);
-    background-size:5% 100%;
+    background:
+        repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,.035) 0,
+            rgba(255,255,255,.035) 1px,
+            transparent 1px,
+            transparent 10%
+        );
 }
 
-.playhead{
+.timeline-progress{
     position:absolute;
     top:0;
     bottom:0;
-    width:1px;
-    background:#fff;
-    box-shadow:0 0 10px rgba(255,255,255,.7);
-    left:0;
+    right:100%;
+    width:2px;
+    background:var(--cyan);
+    box-shadow:0 0 12px rgba(66,221,255,.8);
 }
 
-.scene{
-    position:absolute;
-    top:15px;
-    bottom:15px;
-    border-radius:7px;
-    background:linear-gradient(135deg,rgba(139,124,255,.5),rgba(92,140,255,.25));
-    border:1px solid rgba(139,124,255,.45);
-    padding:7px;
-    overflow:hidden;
-    white-space:nowrap;
-    color:#fff;
-    font-size:9px;
-}
-
-.timeline-footer{
-    margin-top:9px;
+.timeline-labels{
     display:flex;
     justify-content:space-between;
-    color:var(--muted);
-    font-size:9px;
+    margin-top:5px;
+    color:#596578;
+    font-size:8px;
+    direction:ltr;
 }
 
-/* GENERATOR */
+/* =========================
+   VALIDATOR
+========================= */
 
-.generator{
-    display:none;
-    flex:1;
-    min-height:0;
-    overflow:auto;
-    padding:24px;
+.validation{
+    margin-top:12px;
+    border:1px solid var(--line);
+    border-radius:13px;
+    background:#090d13;
+    padding:11px;
 }
 
-.generator.active{
-    display:block;
-}
-
-.export.active{
+.validation-title{
     display:flex;
-}
-
-.export{
-    display:none;
-    flex-direction:column;
-    flex:1;
-    min-height:0;
-}
-
-.generator-card{
-    max-width:900px;
-    margin:0 auto;
-}
-
-.hero{
-    padding:24px;
-    border:1px solid var(--border);
-    border-radius:20px;
-    background:
-        radial-gradient(circle at 80% 20%,rgba(139,124,255,.13),transparent 35%),
-        #0c1018;
-    margin-bottom:14px;
-}
-
-.hero h1{
-    margin:0 0 7px;
-    font-size:24px;
-}
-
-.hero p{
-    margin:0;
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.7;
-}
-
-.prompt-output{
-    min-height:340px;
-    font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        Monaco,
-        Consolas,
-        monospace;
-    direction:ltr;
-    text-align:left;
-    font-size:11px;
-    line-height:1.65;
-}
-
-.output-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:7px;
-    margin-top:9px;
-}
-
-/* DIAGNOSTICS */
-
-.diagnostics{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-}
-
-.diag{
-    padding:10px;
-    background:#0c1018;
-    border:1px solid var(--border);
-    border-radius:11px;
-}
-
-.diag b{
-    display:block;
-    font-size:10px;
-    margin-bottom:3px;
-}
-
-.diag span{
-    font-size:9px;
-    color:var(--muted);
-}
-
-.ok{
-    color:var(--good)!important;
-}
-
-.bad{
-    color:var(--bad)!important;
-}
-
-.warn{
-    color:var(--warn)!important;
-}
-
-/* LOG */
-
-.log{
-    height:90px;
-    overflow:auto;
-    margin-top:10px;
-    padding:9px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:#070a0f;
-    color:#7f8b9d;
-    font:9px/1.7 ui-monospace,monospace;
-    direction:ltr;
-    text-align:left;
-}
-
-.progress{
-    height:5px;
-    background:#111722;
-    border-radius:999px;
-    overflow:hidden;
-    margin-top:8px;
-}
-
-.progress-bar{
-    height:100%;
-    width:0;
-    background:linear-gradient(90deg,#8b7cff,#5c8cff);
-    transition:width .15s;
-}
-
-/* TOAST */
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:24px;
-    transform:translate(-50%,20px);
-    opacity:0;
-    pointer-events:none;
-    background:#151b26;
-    color:#fff;
-    border:1px solid var(--border2);
-    padding:11px 15px;
-    border-radius:12px;
-    font-size:11px;
-    z-index:9999;
-    transition:.2s;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-/* MODAL */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    backdrop-filter:blur(12px);
-    display:none;
     align-items:center;
-    justify-content:center;
-    z-index:999;
+    justify-content:space-between;
+    font-size:10px;
+    font-weight:800;
 }
 
-.modal.show{
-    display:flex;
+.validation-status{
+    font-size:9px;
 }
 
-.modal-box{
-    width:min(560px,calc(100% - 30px));
-    background:#0d1119;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:20px;
+.validation-status.ok{
+    color:var(--green);
 }
 
-.modal-box h3{
-    margin:0 0 7px;
-    font-size:15px;
-}
-
-.modal-box p{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.7;
+.validation-status.bad{
+    color:var(--red);
 }
 
 .validation-list{
-    max-height:300px;
-    overflow:auto;
-    margin:12px 0;
+    margin-top:8px;
+    display:grid;
+    gap:5px;
 }
 
 .validation-item{
-    padding:9px 10px;
-    border:1px solid var(--border);
-    border-radius:9px;
-    margin-bottom:6px;
-    font-size:10px;
-}
-
-.validation-item.error{
-    border-color:rgba(255,93,115,.3);
-    color:#ff91a0;
-}
-
-.validation-item.warn{
-    border-color:rgba(255,189,85,.25);
-    color:#ffd17d;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:9px;
+    color:#788496;
 }
 
 .validation-item.ok{
-    border-color:rgba(61,220,151,.2);
-    color:#78eab9;
+    color:#9be4c4;
 }
 
-.hidden{
-    display:none!important;
+.validation-item.bad{
+    color:#ff9aa6;
 }
 
-@media(max-width:950px){
-    .main{
-        grid-template-columns:330px minmax(0,1fr);
+.dot-check{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#515b6a;
+}
+
+.validation-item.ok .dot-check{
+    background:var(--green);
+}
+
+.validation-item.bad .dot-check{
+    background:var(--red);
+}
+
+/* =========================
+   PROMPT
+========================= */
+
+.prompt-layout{
+    display:grid;
+    grid-template-columns:minmax(280px,390px) minmax(0,1fr);
+    gap:16px;
+}
+
+.prompt-box{
+    min-height:600px;
+    position:relative;
+}
+
+.prompt-output{
+    min-height:580px;
+    direction:ltr;
+    text-align:left;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    line-height:1.65;
+    font-size:10px;
+    color:#cdd7e5;
+    background:#070b10;
+}
+
+.prompt-footer{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:center;
+    margin-top:9px;
+    color:#626e80;
+    font-size:9px;
+}
+
+/* =========================
+   GENERATOR TIPS
+========================= */
+
+.creative-banner{
+    border:1px solid rgba(155,114,255,.18);
+    background:
+        radial-gradient(circle at 10% 20%,rgba(155,114,255,.13),transparent 40%),
+        linear-gradient(135deg,rgba(66,221,255,.05),rgba(155,114,255,.08));
+    border-radius:15px;
+    padding:14px;
+    margin-bottom:12px;
+}
+
+.creative-banner strong{
+    display:block;
+    font-size:11px;
+}
+
+.creative-banner span{
+    display:block;
+    margin-top:5px;
+    color:#8591a4;
+    font-size:9px;
+    line-height:1.8;
+}
+
+/* =========================
+   DIAGNOSTICS
+========================= */
+
+.diagnostics{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:15px;
+}
+
+.stat{
+    border:1px solid var(--line);
+    background:#090d13;
+    border-radius:12px;
+    padding:11px;
+}
+
+.stat-value{
+    font-size:16px;
+    font-weight:900;
+}
+
+.stat-label{
+    color:#667286;
+    font-size:8px;
+    margin-top:3px;
+}
+
+/* =========================
+   MOBILE NAV
+========================= */
+
+.mobile-nav{
+    display:none;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast-container{
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    z-index:9999;
+    display:grid;
+    gap:8px;
+    width:min(360px,calc(100vw - 36px));
+    pointer-events:none;
+}
+
+.toast{
+    border:1px solid var(--line2);
+    background:rgba(12,17,24,.94);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-radius:13px;
+    padding:12px 14px;
+    color:#dbe4ef;
+    font-size:10px;
+    box-shadow:0 15px 45px rgba(0,0,0,.35);
+    animation:toastIn .22s ease;
+}
+
+.toast.good{
+    border-color:rgba(68,225,154,.25);
+}
+
+.toast.bad{
+    border-color:rgba(255,102,120,.25);
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
     }
 }
 
-@media(max-width:750px){
-    .main{
+/* =========================
+   PROGRESS
+========================= */
+
+.render-progress{
+    display:none;
+    margin-top:12px;
+}
+
+.render-progress.active{
+    display:block;
+}
+
+.progress-head{
+    display:flex;
+    justify-content:space-between;
+    color:#7e8a9c;
+    font-size:9px;
+    margin-bottom:6px;
+}
+
+.progress-track{
+    height:5px;
+    border-radius:999px;
+    background:#161d27;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--cyan),var(--purple));
+    transition:width:.08s linear;
+}
+
+/* =========================
+   RESPONSIVE TABLET
+========================= */
+
+@media(max-width:1100px){
+
+    .app{
+        grid-template-columns:240px minmax(0,1fr);
+    }
+
+    .sidebar{
+        width:240px;
+        padding:14px;
+    }
+
+    .export-layout,
+    .prompt-layout{
         grid-template-columns:1fr;
     }
 
+    .prompt-box{
+        min-height:auto;
+    }
+
+    .prompt-output{
+        min-height:420px;
+    }
+
+    .preview-panel{
+        order:-1;
+    }
+}
+
+/* =========================
+   IPHONE / MOBILE
+========================= */
+
+@media(max-width:750px){
+
+    html,
+    body{
+        width:100%;
+        min-width:0;
+        overflow-x:hidden;
+    }
+
+    body{
+        padding-bottom:calc(76px + env(safe-area-inset-bottom));
+    }
+
+    .app{
+        display:block;
+        min-height:100dvh;
+    }
+
+    .topbar{
+        position:sticky;
+        top:0;
+        min-height:62px;
+        padding:
+            8px
+            max(12px,env(safe-area-inset-right))
+            8px
+            max(12px,env(safe-area-inset-left));
+    }
+
+    .brand-mark{
+        width:37px;
+        height:37px;
+        flex-basis:37px;
+    }
+
+    .brand-title{
+        font-size:12px;
+    }
+
+    .brand-sub{
+        font-size:8px;
+    }
+
+    .status{
+        font-size:8px;
+        padding:6px 9px;
+    }
+
+    /* مهم: لا نخفي الـSidebar */
     .sidebar{
         display:none;
     }
 
-    .preview-area{
+    .main{
+        width:100%;
+        padding:
+            13px
+            max(12px,env(safe-area-inset-right))
+            20px
+            max(12px,env(safe-area-inset-left));
+        overflow:visible;
+    }
+
+    .page-head{
+        display:block;
+        margin-bottom:14px;
+    }
+
+    .page-title{
+        font-size:20px;
+        line-height:1.5;
+    }
+
+    .page-description{
+        font-size:9px;
+        line-height:1.9;
+    }
+
+    .head-actions{
+        margin-top:11px;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+    }
+
+    .head-actions .btn{
+        width:100%;
+    }
+
+    .panel{
+        border-radius:15px;
+    }
+
+    .panel-head{
+        min-height:50px;
+        padding:11px 12px;
+    }
+
+    .panel-body{
         padding:12px;
     }
 
-    .timeline{
-        height:120px;
-        min-height:120px;
+    .export-layout,
+    .prompt-layout{
+        display:flex;
+        flex-direction:column;
+        gap:12px;
     }
 
-    .topbar{
-        padding:0 12px;
+    .preview-panel{
+        order:-1;
+    }
+
+    .preview-wrap{
+        padding:10px;
+    }
+
+    .preview-stage{
+        width:100%;
+        aspect-ratio:16/9;
+        border-radius:11px;
+    }
+
+    .preview-stage.vertical{
+        width:min(100%,260px);
+        max-height:none;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .form-group.full{
+        grid-column:1/-1;
+    }
+
+    .choice-row.four{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .choice-row.three{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .choice{
+        min-height:44px;
+        font-size:9px;
+    }
+
+    .mode-box{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .mode-card{
+        min-height:112px;
+        padding:10px;
+    }
+
+    textarea.code{
+        min-height:300px;
+    }
+
+    textarea{
+        min-height:145px;
+    }
+
+    .prompt-output{
+        min-height:420px;
+        max-height:none;
+        font-size:9px;
+    }
+
+    .prompt-box{
+        min-height:0;
+    }
+
+    .diagnostics{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .timeline-bar{
+        height:44px;
+    }
+
+    .preview-controls{
+        display:grid;
+        grid-template-columns:auto 1fr auto;
+    }
+
+    .preview-controls .range-wrap{
+        min-width:0;
+    }
+
+    .action-row{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+    }
+
+    .action-row .btn{
+        width:100%;
+    }
+
+    .action-stack .btn{
+        min-height:46px;
+    }
+
+    .render-progress{
+        margin-bottom:4px;
+    }
+
+    /* Bottom mobile navigation */
+    .mobile-nav{
+        position:fixed;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:1000;
+        padding:
+            7px
+            max(8px,env(safe-area-inset-right))
+            calc(7px + env(safe-area-inset-bottom))
+            max(8px,env(safe-area-inset-left));
+        background:rgba(7,9,13,.93);
+        border-top:1px solid var(--line);
+        backdrop-filter:blur(25px);
+        -webkit-backdrop-filter:blur(25px);
+    }
+
+    .mobile-tab{
+        min-height:54px;
+        border:0;
+        background:transparent;
+        color:#6e7a8d;
+        border-radius:13px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:2px;
+        font-size:9px;
+        font-weight:800;
+    }
+
+    .mobile-tab strong{
+        font-size:17px;
+        line-height:1;
+        font-weight:500;
+    }
+
+    .mobile-tab.active{
+        color:#fff;
+        background:rgba(66,221,255,.08);
+    }
+
+    .mobile-tab.active strong{
+        color:var(--cyan);
+    }
+
+    .toast-container{
+        left:12px;
+        right:12px;
+        bottom:calc(83px + env(safe-area-inset-bottom));
+        width:auto;
+    }
+
+    .toast{
+        font-size:9px;
+    }
+}
+
+/* =========================
+   SMALL IPHONE
+========================= */
+
+@media(max-width:390px){
+
+    .brand-sub{
+        display:none;
+    }
+
+    .status{
+        max-width:100px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .choice-row.three{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+
+    .mode-box{
+        grid-template-columns:1fr;
+    }
+
+    .head-actions{
+        grid-template-columns:1fr;
+    }
+
+    .action-row{
+        grid-template-columns:1fr;
+    }
+
+    .preview-controls{
+        grid-template-columns:1fr;
+    }
+}
+
+/* =========================
+   REDUCE MOTION
+========================= */
+
+@media(prefers-reduced-motion:reduce){
+    *,
+    *::before,
+    *::after{
+        animation-duration:.001ms!important;
+        animation-iteration-count:1!important;
+        transition-duration:.001ms!important;
     }
 }
 </style>
@@ -852,514 +1364,907 @@ select:focus{
 
 <div class="app">
 
-<header class="topbar">
-    <div class="brand">
-        <div class="brand-mark"></div>
-        <div>
-            <div class="brand-title">منصة الموشن جرافيك الذكية</div>
-            <div class="brand-sub">Deterministic Motion Rendering Studio V3</div>
-        </div>
-    </div>
+    <!-- ================= TOPBAR ================= -->
 
-    <div class="top-actions">
-        <div class="status-pill">
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <span></span>
+            </div>
+
+            <div class="brand-text">
+                <div class="brand-title">
+                    منصة الموشن جرافيك الذكية
+                </div>
+
+                <div class="brand-sub">
+                    HTML Motion Graphics Studio
+                </div>
+            </div>
+
+        </div>
+
+        <div class="status" id="systemStatus">
             <span class="status-dot"></span>
-            <span id="systemStatus">جاهز</span>
+            <span id="statusText">جاهز</span>
         </div>
-    </div>
-</header>
 
-<main class="main">
+    </header>
 
-<aside class="sidebar">
 
-    <div class="tabs">
-        <button class="tab active" data-tab="export">مساحة التصدير</button>
-        <button class="tab" data-tab="generator">المولد الذكي</button>
-    </div>
+    <!-- ================= DESKTOP SIDEBAR ================= -->
 
-    <div id="exportSidebar">
+    <aside class="sidebar">
 
-        <div class="section">
-            <div class="section-title">
-                كود الموشن
-                <span>HTML / CSS / JS</span>
+        <div class="sidebar-section">
+
+            <div class="section-label">
+                مساحة العمل
             </div>
 
-            <textarea id="codeInput" spellcheck="false"><!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<style>
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#080b12;
-    font-family:Arial,sans-serif;
-}
-.stage{
-    width:100%;
-    height:100%;
-    display:grid;
-    place-items:center;
-    color:white;
-}
-.title{
-    font-size:clamp(40px,7vw,100px);
-    font-weight:900;
-    opacity:0;
-    transform:translateY(40px) scale(.94);
-}
-.line{
-    width:0;
-    height:3px;
-    background:#8b7cff;
-    margin:25px auto 0;
-}
-</style>
-</head>
+            <div class="nav-tabs">
 
-<body>
-<div class="stage">
-    <div>
-        <div class="title">موشن جرافيك</div>
-        <div class="line"></div>
-    </div>
-</div>
+                <button class="nav-tab active" data-view="export">
 
-<script>
-const title = document.querySelector('.title');
-const line = document.querySelector('.line');
+                    <span class="nav-main">
+                        <span class="nav-icon">▶</span>
+                        <span>مساحة التصدير</span>
+                    </span>
 
-window.motionAnimations = [
-    title.animate(
-        [
-            {
-                opacity:0,
-                transform:'translateY(40px) scale(.94)'
-            },
-            {
-                opacity:1,
-                transform:'translateY(0) scale(1)'
-            }
-        ],
-        {
-            duration:1200,
-            delay:200,
-            easing:'cubic-bezier(.16,1,.3,1)',
-            fill:'both'
-        }
-    ),
+                    <span class="nav-arrow">‹</span>
 
-    line.animate(
-        [
-            {width:'0'},
-            {width:'260px'}
-        ],
-        {
-            duration:900,
-            delay:850,
-            easing:'cubic-bezier(.16,1,.3,1)',
-            fill:'both'
-        }
-    )
-];
-</script>
-</body>
-</html></textarea>
-        </div>
-
-        <div class="section">
-            <div class="section-title">نسبة العرض</div>
-
-            <div class="chips">
-                <button class="chip active ratio-chip" data-ratio="16:9">16:9</button>
-                <button class="chip ratio-chip" data-ratio="9:16">9:16</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">الدقة</div>
-
-            <div class="chips">
-                <button class="chip active res-chip" data-res="720">720p</button>
-                <button class="chip res-chip" data-res="1080">1080p</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">FPS</div>
-
-            <div class="chips">
-                <button class="chip" data-fps="24">24</button>
-                <button class="chip active" data-fps="30">30</button>
-                <button class="chip" data-fps="60">60</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">المدة</div>
-
-            <div class="range-row">
-                <input id="durationRange" type="range" min="1" max="60" step=".5" value="10">
-                <div class="range-value" id="durationValue">10s</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">الجودة</div>
-
-            <div class="chips">
-                <button class="chip quality-chip" data-quality="low">خفيفة</button>
-                <button class="chip active quality-chip" data-quality="medium">متوازنة</button>
-                <button class="chip quality-chip" data-quality="high">عالية</button>
-                <button class="chip quality-chip" data-quality="ultra">قصوى</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="check-row">
-
-                <label class="check">
-                    <input id="safeArea" type="checkbox">
-                    <span>إظهار Safe Area</span>
-                </label>
-
-                <label class="check">
-                    <input id="transparentPreview" type="checkbox">
-                    <span>خلفية شفافة</span>
-                </label>
-
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="button-row">
-                <button class="secondary" id="previewBtn">تحديث المعاينة</button>
-                <button class="secondary" id="validateBtn">فحص الكود</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="button-row">
-                <button class="primary" id="testFrameBtn">اختبار Frame</button>
-                <button class="secondary danger" id="stopBtn">إيقاف</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <button class="primary" id="exportBtn">تصدير الفيديو</button>
-            <div class="progress">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">تشخيص المتصفح</div>
-
-            <div class="diagnostics">
-
-                <div class="diag">
-                    <b>WebCodecs</b>
-                    <span id="diagWebCodecs">...</span>
-                </div>
-
-                <div class="diag">
-                    <b>VideoEncoder</b>
-                    <span id="diagEncoder">...</span>
-                </div>
-
-                <div class="diag">
-                    <b>Muxer</b>
-                    <span id="diagMuxer">...</span>
-                </div>
-
-            </div>
-
-            <div class="log" id="log"></div>
-        </div>
-
-    </div>
-
-    <div id="generatorSidebar" class="hidden">
-
-        <div class="section">
-            <div class="section-title">طريقة بناء الموشن</div>
-
-            <div class="mode-switch">
-
-                <button class="mode active" data-mode="manual">
-                    <strong>توجيه دقيق</strong>
-                    <small>أنت تحدد الهوية</small>
                 </button>
 
-                <button class="mode" data-mode="creative">
-                    <strong>دع الذكاء يبدع</strong>
-                    <small>AI يقرر الهوية</small>
+                <button class="nav-tab" data-view="generator">
+
+                    <span class="nav-main">
+                        <span class="nav-icon">✦</span>
+                        <span>المولد الذكي</span>
+                    </span>
+
+                    <span class="nav-arrow">‹</span>
+
                 </button>
 
             </div>
+
         </div>
 
-        <div class="section">
-            <div class="section-title">الموضوع</div>
 
-            <textarea
-                id="subjectInput"
-                style="min-height:80px"
-                placeholder="مثال: اليوم الوطني السعودي 96، بأسلوب سينمائي فخم وغامض..."
-            ></textarea>
+        <div class="sidebar-section">
+
+            <div class="section-label">
+                سير العمل
+            </div>
+
+            <div class="info-box">
+                فكرة → Prompt صارم → HTML Motion →
+                معاينة → تحقق → Frame Renderer →
+                WebCodecs → WebM
+            </div>
+
         </div>
 
-        <div class="section">
-            <div class="grid2">
+
+        <div class="sidebar-section">
+
+            <div class="section-label">
+                عقد الحركة
+            </div>
+
+            <div class="info-box">
+                جميع الحركة الزمنية في كود الذكاء
+                يجب أن تكون مبنية على Web Animations API
+                مع إمكانية التحكم بالزمن بشكل حتمي.
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
+             EXPORT VIEW
+        ====================================================== -->
+
+        <section class="view active" id="exportView">
+
+            <div class="page-head">
 
                 <div>
-                    <label class="small">العنوان</label>
-                    <input id="titleInput" placeholder="اختياري">
+                    <h1 class="page-title">
+                        مساحة التصدير
+                    </h1>
+
+                    <p class="page-description">
+                        ألصق كود الموشن هنا، اختبره، ثم صدّره إطارًا بإطار.
+                    </p>
                 </div>
+
+                <div class="head-actions">
+
+                    <button class="btn ghost" id="clearCodeBtn">
+                        مسح الكود
+                    </button>
+
+                    <button class="btn primary" id="updatePreviewBtn">
+                        تحديث المعاينة
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="export-layout">
+
+
+                <!-- ================= SETTINGS ================= -->
+
+                <div class="panel">
+
+                    <div class="panel-head">
+                        <span class="panel-title">
+                            إعدادات التصدير
+                        </span>
+
+                        <span class="panel-meta">
+                            Render Settings
+                        </span>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    النسبة
+                                </label>
+
+                                <div class="choice-row">
+
+                                    <button class="choice active"
+                                            data-ratio="16:9">
+                                        16:9
+                                    </button>
+
+                                    <button class="choice"
+                                            data-ratio="9:16">
+                                        9:16
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    الدقة
+                                </label>
+
+                                <div class="choice-row">
+
+                                    <button class="choice active"
+                                            data-resolution="720">
+                                        720p
+                                    </button>
+
+                                    <button class="choice"
+                                            data-resolution="1080">
+                                        1080p
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    FPS
+                                </label>
+
+                                <div class="choice-row three">
+
+                                    <button class="choice"
+                                            data-fps="24">
+                                        24
+                                    </button>
+
+                                    <button class="choice active"
+                                            data-fps="30">
+                                        30
+                                    </button>
+
+                                    <button class="choice"
+                                            data-fps="60">
+                                        60
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    المدة بالثواني
+                                </label>
+
+                                <input
+                                    id="durationInput"
+                                    type="number"
+                                    min="1"
+                                    max="60"
+                                    step=".1"
+                                    value="10"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    الجودة
+                                </label>
+
+                                <div class="choice-row four">
+
+                                    <button class="choice"
+                                            data-quality="low">
+                                        خفيفة
+                                    </button>
+
+                                    <button class="choice active"
+                                            data-quality="medium">
+                                        متوسطة
+                                    </button>
+
+                                    <button class="choice"
+                                            data-quality="high">
+                                        عالية
+                                    </button>
+
+                                    <button class="choice"
+                                            data-quality="ultra">
+                                        قصوى
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    كود HTML / CSS / JS
+                                </label>
+
+                                <textarea
+                                    class="code"
+                                    id="codeInput"
+                                    spellcheck="false"
+                                    placeholder="ألصق ملف HTML كامل هنا..."></textarea>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="action-stack">
+
+                            <button class="btn primary full"
+                                    id="validateBtn">
+                                فحص الكود
+                            </button>
+
+                            <div class="action-row">
+
+                                <button class="btn"
+                                        id="testFrameBtn">
+                                    اختبار إطار
+                                </button>
+
+                                <button class="btn danger"
+                                        id="cancelBtn"
+                                        disabled>
+                                    إيقاف التصدير
+                                </button>
+
+                            </div>
+
+                            <button class="btn purple full"
+                                    id="exportBtn">
+                                تصدير WebM
+                            </button>
+
+                        </div>
+
+
+                        <div class="render-progress"
+                             id="renderProgress">
+
+                            <div class="progress-head">
+
+                                <span id="progressText">
+                                    جاري التصيير...
+                                </span>
+
+                                <span id="progressPercent">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill"
+                                     id="progressFill"></div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="validation"
+                             id="validationBox">
+
+                            <div class="validation-title">
+
+                                <span>
+                                    حالة الكود
+                                </span>
+
+                                <span class="validation-status"
+                                      id="validationStatus">
+                                    لم يتم الفحص
+                                </span>
+
+                            </div>
+
+                            <div class="validation-list"
+                                 id="validationList">
+
+                                <div class="validation-item">
+                                    <span class="dot-check"></span>
+                                    بانتظار الفحص
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= PREVIEW ================= -->
+
+                <div class="panel preview-panel">
+
+                    <div class="panel-head">
+
+                        <span class="panel-title">
+                            المعاينة
+                        </span>
+
+                        <span class="panel-meta"
+                              id="previewInfo">
+                            1280 × 720
+                        </span>
+
+                    </div>
+
+                    <div class="preview-wrap">
+
+                        <div class="preview-stage"
+                             id="previewStage">
+
+                            <iframe
+                                id="previewFrame"
+                                sandbox="allow-scripts allow-same-origin">
+                            </iframe>
+
+                            <div class="safe-area"
+                                 id="safeArea"></div>
+
+                            <div class="preview-overlay"></div>
+
+                        </div>
+
+
+                        <div class="preview-controls">
+
+                            <span class="time-label"
+                                  id="previewTimeLabel">
+                                0.00s
+                            </span>
+
+                            <div class="range-wrap">
+
+                                <input
+                                    id="previewRange"
+                                    type="range"
+                                    min="0"
+                                    max="10"
+                                    step=".001"
+                                    value="0"
+                                >
+
+                            </div>
+
+                            <button class="btn"
+                                    id="previewResetBtn">
+                                إعادة
+                            </button>
+
+                        </div>
+
+
+                        <div class="timeline">
+
+                            <div class="panel-title">
+                                Timeline
+                            </div>
+
+                            <div class="timeline-bar">
+
+                                <div class="timeline-grid"></div>
+
+                                <div class="timeline-progress"
+                                     id="timelineProgress"></div>
+
+                            </div>
+
+                            <div class="timeline-labels">
+                                <span>0s</span>
+                                <span id="timelineMiddle">5s</span>
+                                <span id="timelineEnd">10s</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="diagnostics">
+
+                            <div class="stat">
+
+                                <div class="stat-value"
+                                     id="statFrames">
+                                    300
+                                </div>
+
+                                <div class="stat-label">
+                                    Frames
+                                </div>
+
+                            </div>
+
+                            <div class="stat">
+
+                                <div class="stat-value"
+                                     id="statResolution">
+                                    720p
+                                </div>
+
+                                <div class="stat-label">
+                                    Resolution
+                                </div>
+
+                            </div>
+
+                            <div class="stat">
+
+                                <div class="stat-value"
+                                     id="statFPS">
+                                    30
+                                </div>
+
+                                <div class="stat-label">
+                                    FPS
+                                </div>
+
+                            </div>
+
+                            <div class="stat">
+
+                                <div class="stat-value"
+                                     id="statCodec">
+                                    VP9
+                                </div>
+
+                                <div class="stat-label">
+                                    Codec
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             GENERATOR VIEW
+        ====================================================== -->
+
+        <section class="view" id="generatorView">
+
+            <div class="page-head">
 
                 <div>
-                    <label class="small">المدة</label>
-                    <input id="genDuration" type="number" min="1" max="60" value="10">
+
+                    <h1 class="page-title">
+                        المولد الذكي
+                    </h1>
+
+                    <p class="page-description">
+                        اصنع Prompt صارمًا يوجّه الذكاء الاصطناعي لبناء موشن HTML قابل للتصيير إطارًا بإطار.
+                    </p>
+
+                </div>
+
+                <div class="head-actions">
+
+                    <button class="btn"
+                            id="sendToExportBtn">
+                        إلى مساحة التصدير
+                    </button>
+
                 </div>
 
             </div>
-        </div>
 
-        <div id="manualOptions">
 
-            <div class="section">
-                <div class="section-title">الهوية البصرية</div>
+            <div class="prompt-layout">
 
-                <input id="visualStyle" placeholder="مثال: سينمائي فاخر، تاريخي، غامض">
-            </div>
 
-            <div class="section">
-                <div class="section-title">الألوان</div>
+                <!-- ================= PROMPT SETTINGS ================= -->
 
-                <input id="colorsInput" placeholder="مثال: أخضر داكن، ذهبي، أسود">
-            </div>
+                <div class="panel">
 
-            <div class="section">
-                <div class="section-title">الإيقاع</div>
+                    <div class="panel-head">
 
-                <div class="chips">
-                    <button class="chip pacing active" data-value="cinematic">سينمائي</button>
-                    <button class="chip pacing" data-value="dynamic">سريع</button>
-                    <button class="chip pacing" data-value="calm">هادئ</button>
-                    <button class="chip pacing" data-value="dramatic">درامي</button>
+                        <span class="panel-title">
+                            إعداد المشروع
+                        </span>
+
+                        <span class="panel-meta">
+                            Prompt Engine
+                        </span>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+
+                        <div class="creative-banner">
+
+                            <strong>
+                                الوضع الإبداعي
+                            </strong>
+
+                            <span>
+                                عند تفعيل «دع الذكاء يبدع»، لا تفرض عليه
+                                الهوية البصرية؛ أعطه الموضوع والمدة والنسبة
+                                واترك له بناء التجربة كاملة، مع بقاء الشروط
+                                التقنية صارمة.
+                            </span>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="label">
+                                طريقة التصميم
+                            </label>
+
+                            <div class="mode-box">
+
+                                <button class="mode-card active"
+                                        data-mode="creative">
+
+                                    <div class="mode-card-title">
+                                        دع الذكاء يبدع
+                                    </div>
+
+                                    <div class="mode-card-text">
+                                        الذكاء يختار الهوية والألوان
+                                        والخطوط والمشاهد والحركة.
+                                    </div>
+
+                                </button>
+
+
+                                <button class="mode-card"
+                                        data-mode="manual">
+
+                                    <div class="mode-card-title">
+                                        توجيه دقيق
+                                    </div>
+
+                                    <div class="mode-card-text">
+                                        أنت تحدد الاتجاه البصري
+                                        والتفاصيل التي تريدها.
+                                    </div>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="height:12px"></div>
+
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    الموضوع
+                                </label>
+
+                                <input
+                                    id="subjectInput"
+                                    type="text"
+                                    placeholder="مثال: اليوم الوطني السعودي 96"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    العنوان الرئيسي
+                                </label>
+
+                                <input
+                                    id="titleInput"
+                                    type="text"
+                                    placeholder="مثال: اليوم الوطني السعودي 96"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    المدة
+                                </label>
+
+                                <input
+                                    id="promptDurationInput"
+                                    type="number"
+                                    min="1"
+                                    max="60"
+                                    step=".1"
+                                    value="10"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="label">
+                                    النسبة
+                                </label>
+
+                                <div class="choice-row">
+
+                                    <button class="choice active"
+                                            data-prompt-ratio="16:9">
+                                        16:9
+                                    </button>
+
+                                    <button class="choice"
+                                            data-prompt-ratio="9:16">
+                                        9:16
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    مستوى الإبداع
+                                </label>
+
+                                <select id="creativityInput">
+
+                                    <option value="balanced">
+                                        متوازن
+                                    </option>
+
+                                    <option value="high" selected>
+                                        مرتفع
+                                    </option>
+
+                                    <option value="extreme">
+                                        حر بالكامل
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group full"
+                                 id="manualDirectionGroup">
+
+                                <label class="label">
+                                    التوجيه البصري الإضافي
+                                </label>
+
+                                <textarea
+                                    id="visualDirectionInput"
+                                    placeholder="مثال: أسلوب سينمائي فاخر، خلفية داكنة، إضاءة ذهبية، إحساس تاريخي..."></textarea>
+
+                            </div>
+
+
+                            <div class="form-group full">
+
+                                <label class="label">
+                                    متطلبات إضافية
+                                </label>
+
+                                <textarea
+                                    id="extraRequirementsInput"
+                                    placeholder="أي تفاصيل إضافية تريدها في الموشن..."></textarea>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="action-stack">
+
+                            <button class="btn purple full"
+                                    id="generatePromptBtn">
+                                توليد Prompt احترافي
+                            </button>
+
+                            <button class="btn full"
+                                    id="clearPromptBtn">
+                                مسح الإعدادات
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
-            </div>
 
-        </div>
 
-        <div id="creativeOptions" class="hidden">
 
-            <div class="section">
-                <div class="section-title">مستوى الحرية الإبداعية</div>
+                <!-- ================= PROMPT OUTPUT ================= -->
 
-                <div class="range-row">
-                    <input id="creativityRange" type="range" min="1" max="10" value="9">
-                    <span class="range-value" id="creativityValue">9/10</span>
+                <div class="panel prompt-box">
+
+                    <div class="panel-head">
+
+                        <span class="panel-title">
+                            الـ Prompt الناتج
+                        </span>
+
+                        <span class="panel-meta">
+                            Strict AI Contract
+                        </span>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+                        <textarea
+                            class="prompt-output"
+                            id="promptOutput"
+                            spellcheck="false"
+                            placeholder="اضغط «توليد Prompt احترافي» وسيظهر البرومبت هنا..."></textarea>
+
+
+                        <div class="prompt-footer">
+
+                            <span id="promptStats">
+                                0 حرف
+                            </span>
+
+                            <button class="btn"
+                                    id="copyPromptBtn">
+                                نسخ الـ Prompt
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
 
-            <div class="section">
-                <div class="section-title">ما الذي يقرره الذكاء؟</div>
+        </section>
 
-                <div class="check-row">
+    </main>
 
-                    <label class="check">
-                        <input type="checkbox" checked id="aiColors">
-                        <span>الألوان</span>
-                    </label>
 
-                    <label class="check">
-                        <input type="checkbox" checked id="aiTypography">
-                        <span>الخطوط</span>
-                    </label>
+    <!-- ================= MOBILE NAV ================= -->
 
-                    <label class="check">
-                        <input type="checkbox" checked id="aiScenes">
-                        <span>المشاهد</span>
-                    </label>
+    <nav class="mobile-nav">
 
-                    <label class="check">
-                        <input type="checkbox" checked id="aiMotion">
-                        <span>الحركة</span>
-                    </label>
+        <button class="mobile-tab active"
+                data-view="export">
 
-                </div>
-            </div>
+            <strong>▶</strong>
+            التصدير
 
-        </div>
-
-        <div class="section">
-            <div class="section-title">متطلبات إضافية</div>
-
-            <textarea
-                id="extraRequirements"
-                style="min-height:90px"
-                placeholder="أي تفاصيل إضافية تريدها..."
-            ></textarea>
-        </div>
-
-        <div class="section">
-            <div class="button-row">
-                <button class="secondary" id="presetNational">اليوم الوطني</button>
-                <button class="secondary" id="presetHistory">تاريخي</button>
-            </div>
-        </div>
-
-        <button class="primary" id="generatePromptBtn">
-            توليد Prompt احترافي
         </button>
 
-    </div>
+        <button class="mobile-tab"
+                data-view="generator">
 
-</aside>
+            <strong>✦</strong>
+            المولد الذكي
 
-<section class="workspace">
+        </button>
 
-    <div class="workspace-head">
-
-        <div>
-            <div class="workspace-title" id="workspaceTitle">
-                مساحة التصدير
-            </div>
-        </div>
-
-        <div class="workspace-info">
-            <span id="resolutionInfo">1280 × 720</span>
-            <span>•</span>
-            <span id="fpsInfo">30 FPS</span>
-            <span>•</span>
-            <span id="durationInfo">10s</span>
-        </div>
-
-    </div>
-
-    <div class="export active" id="exportWorkspace">
-
-        <div class="preview-area">
-
-            <div class="preview-shell" id="previewShell">
-
-                <iframe
-                    id="previewFrame"
-                    sandbox="allow-scripts allow-same-origin"
-                ></iframe>
-
-                <div class="safe-area" id="safeAreaOverlay"></div>
-                <div class="preview-overlay"></div>
-
-                <div class="preview-hud">
-                    <span class="hud" id="hudResolution">1280×720</span>
-                    <span class="hud" id="hudFps">30 FPS</span>
-                    <span class="hud" id="hudTime">0.00s</span>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="timeline">
-
-            <div class="timeline-head">
-                <strong>Timeline</strong>
-                <span id="timelineDuration">00:10.00</span>
-            </div>
-
-            <div class="timeline-track" id="timelineTrack">
-                <div class="timeline-grid"></div>
-                <div id="timelineScenes"></div>
-                <div class="playhead" id="playhead"></div>
-            </div>
-
-            <div class="timeline-footer">
-                <span>00:00</span>
-                <span id="timelineCenter">00:05</span>
-                <span id="timelineEnd">00:10</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="generator" id="generatorWorkspace">
-
-        <div class="generator-card">
-
-            <div class="hero">
-                <h1>مولد الموشن جرافيك</h1>
-                <p>
-                    يصنع لك Prompt تقني صارم يوجّه الذكاء الاصطناعي
-                    لبناء Motion Graphics قابل للتحكم Frame-by-Frame.
-                    في وضع «دع الذكاء يبدع» نعطيه حرية فنية واسعة
-                    مع إبقاء القيود التقنية إلزامية.
-                </p>
-            </div>
-
-            <textarea
-                id="promptOutput"
-                class="prompt-output"
-                spellcheck="false"
-                placeholder="سيظهر الـPrompt هنا..."
-            ></textarea>
-
-            <div class="output-actions">
-                <button class="secondary" id="copyPromptBtn">نسخ</button>
-                <button class="secondary" id="loadPromptBtn">إرسال للمساحة</button>
-                <button class="secondary" id="clearPromptBtn">مسح</button>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-</main>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<div class="modal" id="validationModal">
-
-    <div class="modal-box">
-
-        <h3>نتيجة فحص الكود</h3>
-        <p>
-            الفحص يبحث عن أنماط قد تجعل التصدير غير حتمي
-            أو تتعارض مع نظام التحكم بالزمن.
-        </p>
-
-        <div class="validation-list" id="validationList"></div>
-
-        <div class="button-row">
-            <button class="primary" id="closeValidation">إغلاق</button>
-            <button class="secondary" id="forceExport">تصدير رغم التحذيرات</button>
-        </div>
-
-    </div>
+    </nav>
 
 </div>
+
+
+<div class="toast-container"
+     id="toastContainer"></div>
+
 
 <script>
 /* =========================================================
-   MOTION GRAPHICS STUDIO V3
-   ========================================================= */
+   STATE
+========================================================= */
 
 const state = {
 
     tab: "export",
 
-    mode: "manual",
+    mode: "creative",
 
     ratio: "16:9",
+
+    promptRatio: "16:9",
 
     resolution: 720,
 
@@ -1369,9 +2274,11 @@ const state = {
 
     quality: "medium",
 
-    bitrate: 8_000_000,
+    bitrate: 8000000,
 
     code: "",
+
+    prompt: "",
 
     rendering: false,
 
@@ -1389,8 +2296,6 @@ const state = {
 
     lastBlobUrl: null,
 
-    prompt: "",
-
     forceExport: false
 
 };
@@ -1398,1472 +2303,1515 @@ const state = {
 
 /* =========================================================
    DOM
-   ========================================================= */
+========================================================= */
 
 const $ = id => document.getElementById(id);
 
 const codeInput = $("codeInput");
 const previewFrame = $("previewFrame");
-const previewShell = $("previewShell");
-const promptOutput = $("promptOutput");
+const previewStage = $("previewStage");
+const previewRange = $("previewRange");
+const previewTimeLabel = $("previewTimeLabel");
+const timelineProgress = $("timelineProgress");
+const timelineMiddle = $("timelineMiddle");
+const timelineEnd = $("timelineEnd");
+
+const durationInput = $("durationInput");
 
 const systemStatus = $("systemStatus");
-const progressBar = $("progressBar");
+const statusText = $("statusText");
 
-const resolutionInfo = $("resolutionInfo");
-const fpsInfo = $("fpsInfo");
-const durationInfo = $("durationInfo");
+const renderProgress = $("renderProgress");
+const progressFill = $("progressFill");
+const progressText = $("progressText");
+const progressPercent = $("progressPercent");
 
-const hudResolution = $("hudResolution");
-const hudFps = $("hudFps");
-const hudTime = $("hudTime");
+const validationStatus = $("validationStatus");
+const validationList = $("validationList");
 
-const playhead = $("playhead");
-const timelineScenes = $("timelineScenes");
-
-const toast = $("toast");
-const logBox = $("log");
+const promptOutput = $("promptOutput");
+const promptStats = $("promptStats");
 
 
 /* =========================================================
-   UTILITIES
-   ========================================================= */
+   TOAST
+========================================================= */
 
-function log(message, type = "info"){
+function toast(message, type=""){
 
-    const time = new Date().toLocaleTimeString("ar-SA", {
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit"
-    });
+    const el = document.createElement("div");
 
-    const prefix =
-        type === "error" ? "[ERROR]" :
-        type === "warn" ? "[WARN]" :
-        "[INFO]";
+    el.className = "toast " + type;
 
-    logBox.textContent += `${time} ${prefix} ${message}\n`;
-    logBox.scrollTop = logBox.scrollHeight;
+    el.textContent = message;
+
+    $("toastContainer").appendChild(el);
+
+    setTimeout(() => {
+        el.remove();
+    }, 3500);
 }
 
 
-function toastMessage(message){
+/* =========================================================
+   STATUS
+========================================================= */
 
-    toast.textContent = message;
-    toast.classList.add("show");
+function setStatus(text, mode=""){
 
-    clearTimeout(window.__toastTimer);
+    statusText.textContent = text;
 
-    window.__toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2200);
-}
-
-
-function setStatus(text){
-
-    systemStatus.textContent = text;
-}
-
-
-function escapeHTML(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-}
-
-
-function formatTime(seconds){
-
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-
-    return `${String(min).padStart(2,"0")}:${sec
-        .toFixed(2)
-        .padStart(5,"0")}`;
-}
-
-
-function getDimensions(){
-
-    if(state.ratio === "16:9"){
-
-        if(state.resolution === 1080){
-            return {
-                width:1920,
-                height:1080
-            };
-        }
-
-        return {
-            width:1280,
-            height:720
-        };
-    }
-
-    if(state.resolution === 1080){
-
-        return {
-            width:1080,
-            height:1920
-        };
-    }
-
-    return {
-        width:720,
-        height:1280
-    };
-}
-
-
-function getBitrate(){
-
-    const base = {
-
-        low: 4_000_000,
-
-        medium: 8_000_000,
-
-        high: 14_000_000,
-
-        ultra: 22_000_000
-
-    }[state.quality];
-
-    const resolutionFactor =
-        state.resolution === 1080 ? 1.6 : 1;
-
-    const fpsFactor =
-        state.fps === 60 ? 1.25 :
-        state.fps === 24 ? .85 :
-        1;
-
-    return Math.round(
-        base *
-        resolutionFactor *
-        fpsFactor
+    systemStatus.classList.remove(
+        "rendering",
+        "error"
     );
+
+    if(mode){
+        systemStatus.classList.add(mode);
+    }
 }
 
 
 /* =========================================================
-   TABS
-   ========================================================= */
+   VIEW NAVIGATION
+========================================================= */
 
-document.querySelectorAll(".tab").forEach(button => {
+function setView(view){
+
+    state.tab = view;
+
+    document.querySelectorAll(".view")
+        .forEach(v => v.classList.remove("active"));
+
+    document.querySelectorAll(".nav-tab,.mobile-tab")
+        .forEach(v => v.classList.remove("active"));
+
+    if(view === "export"){
+
+        $("exportView").classList.add("active");
+
+        document.querySelectorAll(
+            '[data-view="export"]'
+        ).forEach(v => v.classList.add("active"));
+
+    }else{
+
+        $("generatorView").classList.add("active");
+
+        document.querySelectorAll(
+            '[data-view="generator"]'
+        ).forEach(v => v.classList.add("active"));
+
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+document.querySelectorAll(
+    ".nav-tab,.mobile-tab"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll(".tab")
-            .forEach(b => b.classList.remove("active"));
+        setView(button.dataset.view);
 
-        button.classList.add("active");
-
-        state.tab = button.dataset.tab;
-
-        $("exportWorkspace")
-            .classList.toggle(
-                "active",
-                state.tab === "export"
-            );
-
-        $("generatorWorkspace")
-            .classList.toggle(
-                "active",
-                state.tab === "generator"
-            );
-
-        $("exportSidebar")
-            .classList.toggle(
-                "hidden",
-                state.tab !== "export"
-            );
-
-        $("generatorSidebar")
-            .classList.toggle(
-                "hidden",
-                state.tab !== "generator"
-            );
-
-        $("workspaceTitle").textContent =
-            state.tab === "export"
-                ? "مساحة التصدير"
-                : "المولد الذكي";
     });
 
 });
 
 
 /* =========================================================
-   RENDER SETTINGS
-   ========================================================= */
+   RATIO
+========================================================= */
 
-document.querySelectorAll(".ratio-chip").forEach(button => {
+document.querySelectorAll(
+    "[data-ratio]"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll(".ratio-chip")
-            .forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(
+            "[data-ratio]"
+        ).forEach(x => x.classList.remove("active"));
 
         button.classList.add("active");
 
         state.ratio = button.dataset.ratio;
 
-        updateUI();
-        updatePreviewRatio();
+        updateResolutionInfo();
+        updatePreviewShape();
+        updateStats();
+
     });
 
 });
 
 
-document.querySelectorAll(".res-chip").forEach(button => {
+/* =========================================================
+   PROMPT RATIO
+========================================================= */
+
+document.querySelectorAll(
+    "[data-prompt-ratio]"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll(".res-chip")
-            .forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(
+            "[data-prompt-ratio]"
+        ).forEach(x => x.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.promptRatio =
+            button.dataset.promptRatio;
+
+    });
+
+});
+
+
+/* =========================================================
+   RESOLUTION
+========================================================= */
+
+document.querySelectorAll(
+    "[data-resolution]"
+).forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(
+            "[data-resolution]"
+        ).forEach(x => x.classList.remove("active"));
 
         button.classList.add("active");
 
         state.resolution =
-            Number(button.dataset.res);
+            Number(button.dataset.resolution);
 
-        updateUI();
+        updateResolutionInfo();
+        updateStats();
+
     });
 
 });
 
 
-document.querySelectorAll("[data-fps]").forEach(button => {
+/* =========================================================
+   FPS
+========================================================= */
+
+document.querySelectorAll(
+    "[data-fps]"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll("[data-fps]")
-            .forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(
+            "[data-fps]"
+        ).forEach(x => x.classList.remove("active"));
 
         button.classList.add("active");
 
         state.fps =
             Number(button.dataset.fps);
 
-        updateUI();
+        updateStats();
+
     });
 
 });
 
 
-document.querySelectorAll(".quality-chip").forEach(button => {
+/* =========================================================
+   QUALITY
+========================================================= */
+
+const qualityMap = {
+
+    low: 4_000_000,
+
+    medium: 8_000_000,
+
+    high: 12_000_000,
+
+    ultra: 20_000_000
+
+};
+
+document.querySelectorAll(
+    "[data-quality]"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll(".quality-chip")
-            .forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(
+            "[data-quality]"
+        ).forEach(x => x.classList.remove("active"));
 
         button.classList.add("active");
 
         state.quality =
             button.dataset.quality;
 
-        state.bitrate = getBitrate();
+        state.bitrate =
+            qualityMap[state.quality];
 
-        updateUI();
     });
 
 });
 
 
-$("durationRange").addEventListener("input", e => {
+/* =========================================================
+   DURATION
+========================================================= */
 
-    state.duration =
-        Number(e.target.value);
+durationInput.addEventListener(
+    "input",
+    () => {
 
-    $("durationValue").textContent =
-        `${state.duration}s`;
+        let value =
+            Number(durationInput.value);
 
-    $("genDuration").value =
-        state.duration;
+        if(!Number.isFinite(value))
+            value = 10;
 
-    updateUI();
-    drawTimeline();
-});
+        value =
+            Math.max(1,Math.min(60,value));
 
+        state.duration = value;
 
-$("safeArea").addEventListener("change", e => {
+        previewRange.max = value;
 
-    $("safeAreaOverlay")
-        .classList.toggle(
-            "visible",
-            e.target.checked
-        );
-});
+        updateTimeline();
 
+        updateStats();
 
-$("transparentPreview").addEventListener("change", e => {
-
-    previewShell.style.background =
-        e.target.checked
-            ? "transparent"
-            : "#020305";
-});
+    }
+);
 
 
 /* =========================================================
-   UI
-   ========================================================= */
+   PREVIEW SHAPE
+========================================================= */
 
-function updateUI(){
+function updatePreviewShape(){
 
-    const d = getDimensions();
-
-    resolutionInfo.textContent =
-        `${d.width} × ${d.height}`;
-
-    fpsInfo.textContent =
-        `${state.fps} FPS`;
-
-    durationInfo.textContent =
-        `${state.duration}s`;
-
-    hudResolution.textContent =
-        `${d.width}×${d.height}`;
-
-    hudFps.textContent =
-        `${state.fps} FPS`;
-
-    durationInfo.textContent =
-        `${state.duration}s`;
-
-    $("timelineDuration").textContent =
-        formatTime(state.duration);
-
-    $("timelineCenter").textContent =
-        formatTime(state.duration / 2);
-
-    $("timelineEnd").textContent =
-        formatTime(state.duration);
-
-    state.bitrate = getBitrate();
-
-    drawTimeline();
-}
-
-
-function updatePreviewRatio(){
-
-    previewShell.classList.toggle(
+    previewStage.classList.toggle(
         "vertical",
         state.ratio === "9:16"
     );
 
-    if(state.ratio === "16:9"){
+    $("previewInfo").textContent =
+        getDimensions().width +
+        " × " +
+        getDimensions().height;
 
-        previewShell.style.width =
-            "min(100%,1000px)";
-
-        previewShell.style.height =
-            "";
-    }
 }
 
 
 /* =========================================================
-   PROMPT ENGINE
-   ========================================================= */
+   DIMENSIONS
+========================================================= */
 
-document.querySelectorAll(".mode").forEach(button => {
+function getDimensions(){
+
+    if(state.ratio === "16:9"){
+
+        return state.resolution === 1080
+            ? {width:1920,height:1080}
+            : {width:1280,height:720};
+
+    }
+
+    return state.resolution === 1080
+        ? {width:1080,height:1920}
+        : {width:720,height:1280};
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    const frames =
+        Math.ceil(
+            state.duration *
+            state.fps
+        );
+
+    $("statFrames").textContent =
+        frames.toLocaleString("en-US");
+
+    $("statResolution").textContent =
+        state.resolution + "p";
+
+    $("statFPS").textContent =
+        state.fps;
+
+    $("statCodec").textContent =
+        "VP9";
+
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+function updateTimeline(){
+
+    previewRange.max =
+        state.duration;
+
+    const middle =
+        state.duration / 2;
+
+    timelineMiddle.textContent =
+        formatTime(middle);
+
+    timelineEnd.textContent =
+        formatTime(state.duration);
+
+    updateTimelinePosition(
+        state.previewTime
+    );
+
+}
+
+function formatTime(seconds){
+
+    return Number(seconds).toFixed(2) + "s";
+
+}
+
+function updateTimelinePosition(time){
+
+    const ratio =
+        state.duration > 0
+            ? Math.max(
+                0,
+                Math.min(
+                    1,
+                    time / state.duration
+                )
+            )
+            : 0;
+
+    timelineProgress.style.right =
+        (100 - ratio * 100) + "%";
+
+    previewTimeLabel.textContent =
+        formatTime(time);
+
+}
+
+previewRange.addEventListener(
+    "input",
+    () => {
+
+        state.previewTime =
+            Number(previewRange.value);
+
+        updateTimelinePosition(
+            state.previewTime
+        );
+
+        if(state.animations.length){
+
+            setTimelineTime(
+                state.animations,
+                state.previewTime * 1000
+            );
+
+        }
+
+    }
+);
+
+$("previewResetBtn").addEventListener(
+    "click",
+    () => {
+
+        previewRange.value = 0;
+
+        state.previewTime = 0;
+
+        updateTimelinePosition(0);
+
+        if(state.animations.length){
+
+            setTimelineTime(
+                state.animations,
+                0
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MODE
+========================================================= */
+
+document.querySelectorAll(
+    "[data-mode]"
+).forEach(button => {
 
     button.addEventListener("click", () => {
 
-        document.querySelectorAll(".mode")
-            .forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(
+            "[data-mode]"
+        ).forEach(x =>
+            x.classList.remove("active")
+        );
 
         button.classList.add("active");
 
-        state.mode = button.dataset.mode;
+        state.mode =
+            button.dataset.mode;
 
-        $("manualOptions")
-            .classList.toggle(
-                "hidden",
-                state.mode !== "manual"
-            );
+        $("manualDirectionGroup").style.display =
+            state.mode === "manual"
+                ? ""
+                : "none";
 
-        $("creativeOptions")
-            .classList.toggle(
-                "hidden",
-                state.mode !== "creative"
-            );
     });
 
 });
 
 
-$("creativityRange").addEventListener("input", e => {
+/* =========================================================
+   GENERATE STRICT PROMPT
+========================================================= */
 
-    $("creativityValue").textContent =
-        `${e.target.value}/10`;
+function generatePrompt(){
 
-});
+    const subject =
+        $("subjectInput").value.trim();
 
+    const title =
+        $("titleInput").value.trim();
 
-document.querySelectorAll(".pacing").forEach(button => {
+    const duration =
+        Number(
+            $("promptDurationInput").value
+        ) || 10;
 
-    button.addEventListener("click", () => {
+    const ratio =
+        state.promptRatio;
 
-        document.querySelectorAll(".pacing")
-            .forEach(b => b.classList.remove("active"));
+    const creativity =
+        $("creativityInput").value;
 
-        button.classList.add("active");
-    });
+    const visualDirection =
+        $("visualDirectionInput")
+            .value
+            .trim();
 
-});
+    const extra =
+        $("extraRequirementsInput")
+            .value
+            .trim();
 
+    if(!subject){
 
-function buildStrictContract(){
+        toast(
+            "اكتب موضوع الموشن أولًا",
+            "bad"
+        );
 
-return `
-============================================================
-MANDATORY TECHNICAL CONTRACT — DO NOT VIOLATE
-============================================================
+        $("subjectInput").focus();
 
-OUTPUT:
+        return;
 
-Return ONE complete standalone HTML document only.
+    }
 
-Do not return Markdown.
+    const creativeMode =
+        state.mode === "creative";
 
-Do not wrap the HTML in \`\`\`.
+    const prompt = `أنت Motion Graphics Developer محترف جدًا، ومهمتك إنشاء تجربة موشن جرافيك سينمائية كاملة تعمل داخل المتصفح باستخدام HTML وCSS وJavaScript.
 
-Do not explain the code.
+المشروع:
+الموضوع: ${subject}
+العنوان: ${title || subject}
+المدة: ${duration} ثانية
+النسبة: ${ratio}
+مستوى الإبداع: ${creativity}
 
-The result must run immediately when opened in a modern browser.
+${creativeMode
+? `
+الوضع الإبداعي:
+"دع الذكاء يبدع".
 
-------------------------------------------------------------
-1. ANIMATION ENGINE
-------------------------------------------------------------
+لديك حرية كاملة في:
+- اختيار الهوية البصرية.
+- اختيار لوحة الألوان.
+- اختيار الخطوط المناسبة مع توفير fallbacks.
+- تحديد عدد المشاهد.
+- تحديد ترتيب المشاهد.
+- اختيار أسلوب الانتقالات.
+- اختيار أسلوب الإضاءة والظلال.
+- اختيار الأشكال والعناصر الزخرفية.
+- ابتكار الحركة والإيقاع.
+- بناء افتتاحية قوية.
+- بناء ذروة بصرية.
+- بناء نهاية مقصودة.
 
-ALL visual motion MUST use the Web Animations API:
+لا تجعل التصميم عبارة عن مجموعة Cards تقليدية.
+فكر كمصمم Motion Graphics وليس كمصمم Dashboard.
+استخدم التكوين، العمق، الطبقات، الإضاءة، الفراغ، الحركة، والـComposition بطريقة احترافية.
+`
+: `
+التوجيه البصري:
+${visualDirection || "اختر تنفيذًا احترافيًا متناسقًا مع الموضوع."}
+`}
 
+${extra
+? `
+متطلبات إضافية:
+${extra}
+`
+: ""}
+
+==================================================
+العقد التقني الإلزامي — لا يجوز مخالفته
+==================================================
+
+1. أرجع ملف HTML واحدًا مستقلًا كاملًا.
+
+2. يجب أن يبدأ الملف بـ:
+<!doctype html>
+
+3. لا تستخدم Markdown خارج الملف.
+لا تضع الكود داخل Markdown.
+الناتج النهائي يجب أن يكون HTML فقط.
+
+4. جميع الحركة الزمنية يجب أن تعتمد على:
 Element.animate()
 
-Do NOT use:
-
+5. ممنوع استخدام:
 @keyframes
-CSS animation
 animation:
 animation-name:
 animation-duration:
-animation-delay:
 transition:
-setInterval()
-setTimeout() for animation timing
-Date.now() as animation time
-performance.now() as animation time
-requestAnimationFrame() as animation time
-Math.random() for visual motion
-
-The renderer will control animation.currentTime.
-
-Every important animation must therefore be externally controllable.
-
-Expose animation objects through:
-
-window.motionAnimations = [...]
-
-or:
-
-window.motionTimeline = [...]
-
-The renderer must be able to discover all animation objects.
-
-------------------------------------------------------------
-2. DETERMINISTIC RENDERING
-------------------------------------------------------------
-
-The same document at the same timeline time MUST produce the same visual frame.
-
-Never make visual state depend on:
-
+setInterval
+setTimeout للحركة
 Date.now()
 performance.now()
-random numbers
-real elapsed time
-user interaction
-scroll position
-mouse position
-device orientation
+requestAnimationFrame كمصدر للزمن
+Math.random()
 
-Unless those values are completely fixed and deterministic.
+6. لا تستخدم CSS Animation للحركة الأساسية.
 
-If randomness is visually required, use fixed seeded values.
+7. لا تستخدم JavaScript Timer كمصدر للحركة.
 
-------------------------------------------------------------
-3. TIMELINE
-------------------------------------------------------------
+8. كل عنصر متحرك يجب أن يكون قابلًا للتحكم بزمنه بشكل مباشر.
 
-Build a deliberate timeline.
+9. يجب إنشاء جميع Web Animations بحيث يمكن إيقافها والتحكم فيها من الخارج.
 
-The animation should have:
+10. يجب أن تعرض الحركة عبر أحد الشكلين التاليين:
+
+window.motionAnimations = [
+    animation1,
+    animation2
+];
+
+أو:
+
+window.motionTimeline = [
+    animation1,
+    animation2
+];
+
+ويجب أن تحتوي القائمة على جميع animations الأساسية.
+
+11. يجب أن يكون:
+animation.currentTime
+هو مصدر الحقيقة لحالة الحركة.
+
+12. عند إعطاء نفس currentTime يجب أن تظهر نفس النتيجة دائمًا.
+
+13. لا تعتمد على الزمن الحقيقي للمتصفح في تحديد حالة التصميم.
+
+14. لا تستخدم Math.random().
+
+15. لا تستخدم عناصر فيديو خارجية كأساس للحركة.
+
+16. لا تعتمد على WebGL في العناصر الأساسية.
+
+17. إذا استخدمت Canvas فيجب أن يكون deterministic وقابلًا لإعادة الرسم عند نفس الزمن.
+
+18. يجب أن تكون جميع الصور الخارجية CORS-safe قدر الإمكان.
+
+19. لا تعتمد على صور خارجية غير موثوقة في العناصر الأساسية.
+
+20. إذا استخدمت Google Fonts أو أي خط خارجي، ضع fallback مناسبًا.
+
+21. لا تجعل تحميل خط أو صورة سببًا في انهيار التصميم.
+
+22. يجب أن يعمل التصميم داخل:
+16:9
+و
+9:16
+
+23. التصميم يجب أن يتحمل:
+1280×720
+1920×1080
+720×1280
+1080×1920
+
+24. لا تضع عناصر مهمة خارج الـSafe Area.
+
+25. لا تجعل النصوص تخرج خارج الشاشة.
+
+26. لا تعتمد على Hover حتى تعمل التجربة على الهاتف.
+
+27. التصميم يجب أن يكون responsive.
+
+28. لا تستخدم Scroll داخل المشهد إلا إذا كان جزءًا مقصودًا من التصميم.
+
+29. لا تستخدم عناصر UI تقليدية كثيرة.
+
+30. لا تجعل التصميم يبدو كصفحة ويب تقليدية.
+المطلوب فيديو Motion Graphics.
+
+==================================================
+بنية الحركة المطلوبة
+==================================================
+
+قسّم التجربة منطقيًا إلى:
 
 OPENING
 DEVELOPMENT
 PEAK
 ENDING
 
-The final frame must be intentional.
+ويجب أن يكون لكل مرحلة معنى بصري.
 
-Do not create an accidental extra second.
+لا تجعل جميع العناصر تظهر في نفس اللحظة.
 
-The total composition must work cleanly from:
+استخدم:
+- Stagger
+- Scale
+- Opacity
+- Position
+- Rotation
+- Blur
+- Clip / Mask
+- Parallax
+- Depth
+- Light
+- Particles
+- Shape transformations
 
-0ms
+بحسب ما يناسب الموضوع.
 
-to:
+لكن لا تفرط في المؤثرات.
 
-durationMs
+==================================================
+جودة التصميم
+==================================================
 
-------------------------------------------------------------
-4. FRAME CONTROL
-------------------------------------------------------------
+أريد نتيجة تبدو وكأنها Motion Graphics احترافي حقيقي.
 
-Treat time as milliseconds.
+تجنب:
+- Cards مكررة.
+- أزرار.
+- Dashboard.
+- Grid ممل.
+- نصوص كثيرة.
+- زخارف عشوائية.
+- Emoji.
+- عناصر لا علاقة لها بالموضوع.
 
-Do not build animation logic around frame numbers.
+ركز على:
+- Composition
+- Typography
+- Cinematic lighting
+- Depth
+- Negative space
+- Rhythm
+- Visual hierarchy
+- Motion choreography
 
-Use:
+==================================================
+قاعدة مهمة جدًا للزمن
+==================================================
 
-duration
-delay
-endDelay
-easing
-fill
+إذا كانت مدة الفيديو ${duration} ثانية:
 
-inside Web Animations API objects.
+0ms = بداية الفيديو
+${Math.round(duration * 1000)}ms = نهاية الفيديو
 
-The renderer may set:
+يجب أن تكون جميع animations قابلة للوصول إلى هذه الحالات.
 
-animation.currentTime = timeMs
+مثال:
 
-at any point.
-
-------------------------------------------------------------
-5. RESOLUTION
-------------------------------------------------------------
-
-Do not rely on viewport dimensions changing the composition.
-
-Use percentage, vw/vh, or explicit proportional layouts carefully.
-
-The composition must remain visually stable at:
-
-16:9
-9:16
-
-and at:
-
-720p
-1080p
-
-------------------------------------------------------------
-6. SAFE AREA
-------------------------------------------------------------
-
-Keep important text and graphics away from the outer edges.
-
-Maintain a professional safe area.
-
-------------------------------------------------------------
-7. RESOURCES
-------------------------------------------------------------
-
-External images must be:
-
-CORS-safe
-
-or:
-
-embedded as data URLs
-
-or:
-
-loaded from resources that allow canvas access.
-
-Do not make the composition dependent on resources that can randomly fail.
-
-Fonts must have a sensible fallback.
-
-------------------------------------------------------------
-8. CANVAS
-------------------------------------------------------------
-
-If Canvas is used:
-
-it must be deterministic.
-
-It must be redrawable from a known timeline state.
-
-Do not use real-time animation loops.
-
-------------------------------------------------------------
-9. WEBGL
-------------------------------------------------------------
-
-Do not make essential visual information depend on WebGL.
-
-The renderer may capture using Canvas-based rendering.
-
-------------------------------------------------------------
-10. VIDEO
-------------------------------------------------------------
-
-Do not rely on external video for essential visual information.
-
-If video is absolutely necessary, it must have deterministic seeking.
-
-------------------------------------------------------------
-11. PERFORMANCE
-------------------------------------------------------------
-
-Avoid thousands of DOM elements.
-
-Avoid huge filters.
-
-Avoid continuous infinite animations.
-
-Use transform and opacity whenever possible.
-
-------------------------------------------------------------
-12. DESIGN
-------------------------------------------------------------
-
-Use strong visual hierarchy.
-
-Do not move everything simultaneously.
-
-Use:
-
-entrances
-exits
-pauses
-accents
-camera-like movement
-scale
-opacity
-position
-rotation
-blur only when useful
-
-The motion should feel designed, not random.
-
-------------------------------------------------------------
-13. ACCESS TO ANIMATIONS
-------------------------------------------------------------
-
-At the end of initialization expose:
-
-window.motionAnimations
-
-as an array containing every important Animation object.
-
-Example:
-
-const a = element.animate(...);
+const a = element.animate(
+    [
+        { opacity: 0, transform: "translateY(80px)" },
+        { opacity: 1, transform: "translateY(0)" }
+    ],
+    {
+        duration: 1000,
+        fill: "both",
+        easing: "cubic-bezier(.2,.8,.2,1)"
+    }
+);
 
 window.motionAnimations = [a];
 
-Do not hide the animation objects inside inaccessible closures.
-
-------------------------------------------------------------
-14. INITIAL STATE
-------------------------------------------------------------
-
-Animations should use:
-
-fill: "both"
-
-or:
-
-fill: "forwards"
-
-as appropriate.
-
-The initial state at time 0 must render correctly.
-
-------------------------------------------------------------
-15. FINAL STATE
-------------------------------------------------------------
-
-At durationMs the composition must intentionally reach its final state.
-
-No animation may depend on browser playback timing.
-
-------------------------------------------------------------
-16. CODE QUALITY
-------------------------------------------------------------
-
-No framework is required.
-
-Prefer clean vanilla HTML/CSS/JS.
-
-Keep the generated document self-contained.
-
-============================================================
-END OF MANDATORY CONTRACT
-============================================================
-`;
-}
-
-
-function buildPrompt(){
-
-    const subject =
-        $("subjectInput").value.trim() ||
-        "موضوع إبداعي يحدده الذكاء الاصطناعي";
-
-    const title =
-        $("titleInput").value.trim();
-
-    const duration =
-        Number($("genDuration").value) || 10;
-
-    const ratio =
-        state.ratio;
-
-    let artistic;
-
-    if(state.mode === "creative"){
-
-        const creativity =
-            $("creativityRange").value;
-
-        artistic = `
-CREATIVE MODE — LET AI CREATE
-
-Creativity level: ${creativity}/10.
-
-The AI has broad artistic freedom.
-
-It may independently choose:
-
-visual identity
-color palette
-typography
-composition
-scene count
-scene transitions
-motion language
-camera simulation
-lighting
-shapes
-particles
-textures
-graphic metaphors
-pacing
-visual storytelling
-opening
-climax
-ending
-
-However, artistic freedom NEVER overrides the technical contract.
-
-The AI must obey every mandatory technical rule below.
-
-The result should feel original rather than like a generic template.
-`;
-
-    }else{
-
-        const style =
-            $("visualStyle").value.trim() ||
-            "احترافي";
-
-        const colors =
-            $("colorsInput").value.trim() ||
-            "يحددها المصمم";
-
-        const pacing =
-            document.querySelector(".pacing.active")?.dataset.value ||
-            "cinematic";
-
-        artistic = `
-MANUAL ART DIRECTION
-
-Visual style:
-${style}
-
-Color direction:
-${colors}
-
-Pacing:
-${pacing}
-
-Follow these artistic directions while preserving the technical contract.
-`;
-    }
-
-    const extras =
-        $("extraRequirements").value.trim() ||
-        "لا توجد متطلبات إضافية.";
-
-    const aiChoices = state.mode === "creative"
-        ? `
-AI DECISION AUTHORITY
-
-Colors:
-${$("aiColors").checked ? "AI DECIDES" : "USER CONTROLLED"}
-
-Typography:
-${$("aiTypography").checked ? "AI DECIDES" : "USER CONTROLLED"}
-
-Scenes:
-${$("aiScenes").checked ? "AI DECIDES" : "USER CONTROLLED"}
-
-Motion:
-${$("aiMotion").checked ? "AI DECIDES" : "USER CONTROLLED"}
-`
-        : "";
-
-return `
-You are a senior Motion Graphics Developer, Creative Director,
-Animation Engineer, and WebCodecs-aware front-end engineer.
-
-Create a premium cinematic motion graphics composition.
-
-============================================================
-PROJECT
-============================================================
-
-Subject:
-${subject}
-
-Title:
-${title || "AI may choose an appropriate title"}
-
-Duration:
-${duration} seconds
-
-Aspect ratio:
-${ratio}
-
-${artistic}
-
-${aiChoices}
-
-Additional requirements:
-${extras}
-
-============================================================
-STORYBOARD REQUIREMENT
-============================================================
-
-Before writing the implementation internally, design a coherent
-timeline.
-
-The final composition should contain intentional scenes.
-
-Possible structure:
-
-0%–15%:
-Opening / visual hook
-
-15%–55%:
-Development
-
-55%–80%:
-Peak / strongest visual moment
-
-80%–100%:
-Resolution / ending
-
-Do not blindly follow these percentages if another structure is
-artistically better.
-
-The animation must feel like one continuous designed piece.
-
-============================================================
-STRICT TECHNICAL CONTRACT
-============================================================
-
-${buildStrictContract()}
-
-============================================================
-FINAL OUTPUT RULE
-============================================================
-
-Return ONLY the complete HTML document.
-
-No Markdown.
-
-No explanation.
-
-No commentary before or after the HTML.
-
-The HTML must expose:
-
-window.motionAnimations
-
-containing all important Web Animation API Animation objects.
-
-The renderer must be able to control them with:
-
-animation.currentTime = timeMs;
-
-Do not require a start button.
-
-The animation must render correctly when the renderer manually
-sets the timeline time.
-
-============================================================
-QUALITY BAR
-============================================================
-
-Do not create a generic card-based UI.
-
-Do not use emojis as the primary visual design.
-
-Do not fill the composition with unnecessary elements.
-
-Prioritize:
-
-cinematic composition
-typography
-depth
-lighting
-layering
-controlled motion
-negative space
-visual hierarchy
-rhythm
-strong opening
-memorable climax
-intentional ending
-
-Make it look like professional motion design rather than a
-webpage with moving elements.
-`;
-}
-
-
-$("generatePromptBtn").addEventListener("click", () => {
-
-    const prompt = buildPrompt();
+==================================================
+الاستقرار
+==================================================
+
+لا تستخدم:
+- random
+- real-time clock
+- browser animation loop
+- timers للحركة
+
+النتيجة عند نفس الزمن يجب أن تكون نفسها.
+
+==================================================
+المعاينة والتصدير
+==================================================
+
+المنصة الخارجية ستقوم بتغيير:
+
+animation.currentTime
+
+ثم تلتقط Frame.
+
+لذلك لا تبنِ الحركة على:
+Date.now()
+performance.now()
+requestAnimationFrame()
+setInterval()
+setTimeout()
+
+لأن ذلك سيؤدي إلى عدم تطابق المعاينة مع التصدير.
+
+==================================================
+الإخراج النهائي
+==================================================
+
+أريد HTML واحدًا كاملًا.
+
+يجب أن يكون التصميم:
+احترافيًا جدًا
+سينمائيًا
+متناسقًا
+سلسًا
+مبتكرًا
+ومناسبًا تمامًا للموضوع.
+
+لا تشرح.
+لا تضف مقدمة.
+لا تضف Markdown.
+أرجع HTML فقط.`;
 
     state.prompt = prompt;
 
-    promptOutput.value = prompt;
+    promptOutput.value =
+        prompt;
 
-    toastMessage("تم إنشاء الـPrompt الاحترافي");
+    updatePromptStats();
 
-});
-
-
-$("copyPromptBtn").addEventListener("click", async () => {
-
-    if(!promptOutput.value.trim()){
-
-        toastMessage("ولّد Prompt أولاً");
-        return;
-    }
-
-    await navigator.clipboard.writeText(
-        promptOutput.value
+    toast(
+        "تم إنشاء الـ Prompt الاحترافي",
+        "good"
     );
 
-    toastMessage("تم النسخ");
-});
-
-
-$("clearPromptBtn").addEventListener("click", () => {
-
-    promptOutput.value = "";
-    state.prompt = "";
-
-});
-
-
-$("loadPromptBtn").addEventListener("click", () => {
-
-    if(!promptOutput.value.trim()){
-
-        toastMessage("لا يوجد Prompt");
-        return;
-    }
-
-    navigator.clipboard.writeText(
-        promptOutput.value
-    );
-
-    toastMessage(
-        "تم نسخ الـPrompt — الصقه في نموذج الذكاء الاصطناعي"
-    );
-});
-
-
-$("presetNational").addEventListener("click", () => {
-
-    $("subjectInput").value =
-        "اليوم الوطني السعودي 96 — قصة وطن وهوية وذاكرة مستقبلية";
-
-    $("titleInput").value =
-        "اليوم الوطني السعودي 96";
-
-    $("visualStyle").value =
-        "سينمائي فخم، غامض، تاريخي، معاصر";
-
-    $("colorsInput").value =
-        "أخضر سعودي عميق، أسود، ذهبي معدني، أبيض";
-
-    document.querySelector(
-        '.pacing[data-value="cinematic"]'
-    ).click();
-
-});
-
-
-$("presetHistory").addEventListener("click", () => {
-
-    $("subjectInput").value =
-        "موضوع تاريخي سعودي بأسلوب فيلم وثائقي سينمائي";
-
-    $("titleInput").value =
-        "حكاية من التاريخ";
-
-    $("visualStyle").value =
-        "تاريخي فاخر، وثائقي، درامي، غامض";
-
-    $("colorsInput").value =
-        "أخضر داكن، بني ترابي، ذهبي معتق، أسود";
-
-    document.querySelector(
-        '.pacing[data-value="dramatic"]'
-    ).click();
-
-});
-
-
-/* =========================================================
-   VALIDATOR
-   ========================================================= */
-
-function stripComments(code){
-
-    return code
-        .replace(/\/\*[\s\S]*?\*\//g,"")
-        .replace(/<!--[\s\S]*?-->/g,"")
-        .replace(/\/\/[^\n\r]*/g,"");
 }
 
 
-function validateMotionCode(code){
-
-    const clean = stripComments(code);
-
-    const results = [];
-
-    const checks = [
-
-        {
-            name:"DOCTYPE",
-            test:/<!doctype\s+html/i,
-            type:"error",
-            message:"يجب أن يكون الملف HTML كاملًا."
-        },
-
-        {
-            name:"Element.animate",
-            test:/\.animate\s*\(/,
-            type:"error",
-            message:"لم يتم العثور على Element.animate()."
-        },
-
-        {
-            name:"motionAnimations",
-            test:/window\s*\.\s*motionAnimations/,
-            type:"error",
-            message:"يجب كشف Animation objects عبر window.motionAnimations."
-        },
-
-        {
-            name:"CSS animation",
-            test:/\banimation\s*:/i,
-            type:"error",
-            message:"تم العثور على CSS animation."
-        },
-
-        {
-            name:"@keyframes",
-            test:/@keyframes/i,
-            type:"error",
-            message:"@keyframes ممنوع."
-        },
-
-        {
-            name:"transition",
-            test:/\btransition\s*:/i,
-            type:"error",
-            message:"CSS transitions ممنوعة."
-        },
-
-        {
-            name:"setInterval",
-            test:/setInterval\s*\(/i,
-            type:"error",
-            message:"setInterval ممنوع في منطق الحركة."
-        },
-
-        {
-            name:"Date.now",
-            test:/Date\s*\.\s*now\s*\(/i,
-            type:"error",
-            message:"Date.now ممنوع كمصدر للزمن."
-        },
-
-        {
-            name:"performance.now",
-            test:/performance\s*\.\s*now\s*\(/i,
-            type:"error",
-            message:"performance.now ممنوع كمصدر للزمن."
-        },
-
-        {
-            name:"random",
-            test:/Math\s*\.\s*random\s*\(/i,
-            type:"warn",
-            message:"Math.random قد يجعل الرندر غير حتمي."
-        },
-
-        {
-            name:"requestAnimationFrame",
-            test:/requestAnimationFrame\s*\(/i,
-            type:"warn",
-            message:"requestAnimationFrame لا يجب أن يكون مصدر زمن الحركة."
-        },
-
-        {
-            name:"external video",
-            test:/<video\b/i,
-            type:"warn",
-            message:"الفيديو الخارجي قد لا يكون قابلًا للتحكم Frame-by-Frame."
-        },
-
-        {
-            name:"WebGL",
-            test:/webgl|webgl2|getContext\s*\(\s*['"]webgl/i,
-            type:"warn",
-            message:"WebGL قد يجعل الالتقاط غير حتمي حسب التنفيذ."
-        }
-
-    ];
-
-    for(const check of checks){
-
-        if(check.test.test(clean)){
-
-            results.push({
-                ...check,
-                passed:false
-            });
-
-        }else{
-
-            results.push({
-                ...check,
-                passed:true
-            });
-        }
-    }
-
-    return results;
-}
-
-
-function showValidation(results){
-
-    const list = $("validationList");
-
-    list.innerHTML = "";
-
-    let errors = 0;
-    let warnings = 0;
-
-    for(const item of results){
-
-        if(item.passed){
-
-            list.insertAdjacentHTML(
-                "beforeend",
-                `<div class="validation-item ok">
-                    ✓ ${escapeHTML(item.name)}
-                </div>`
-            );
-
-        }else{
-
-            if(item.type === "error") errors++;
-            if(item.type === "warn") warnings++;
-
-            list.insertAdjacentHTML(
-                "beforeend",
-                `<div class="validation-item ${item.type}">
-                    ${item.type === "error" ? "✕" : "!"}
-                    ${escapeHTML(item.name)}
-                    —
-                    ${escapeHTML(item.message)}
-                </div>`
-            );
-        }
-    }
-
-    $("validationModal").classList.add("show");
-
-    return {
-        errors,
-        warnings
-    };
-}
-
-
-$("validateBtn").addEventListener("click", () => {
-
-    const results =
-        validateMotionCode(
-            codeInput.value
-        );
-
-    const summary =
-        showValidation(results);
-
-    log(
-        `Validation: ${summary.errors} errors, ${summary.warnings} warnings`
-    );
-});
-
-
-$("closeValidation").addEventListener("click", () => {
-
-    $("validationModal")
-        .classList.remove("show");
-});
-
-
-$("forceExport").addEventListener("click", () => {
-
-    state.forceExport = true;
-
-    $("validationModal")
-        .classList.remove("show");
-
-    startRender();
-});
-
-
-/* =========================================================
-   PREVIEW
-   ========================================================= */
-
-async function previewCode(){
-
-    const code =
-        codeInput.value;
-
-    state.code = code;
-
-    previewFrame.srcdoc = code;
-
-    await new Promise(resolve => {
-
-        previewFrame.addEventListener(
-            "load",
-            resolve,
-            {once:true}
-        );
-
-    });
-
-    setStatus("المعاينة جاهزة");
-
-    log("Preview loaded");
-
-    drawTimeline();
-}
-
-
-$("previewBtn").addEventListener(
+$("generatePromptBtn").addEventListener(
     "click",
-    previewCode
+    generatePrompt
 );
 
 
 /* =========================================================
-   TIMELINE
-   ========================================================= */
+   PROMPT STATS
+========================================================= */
 
-function drawTimeline(){
+function updatePromptStats(){
 
-    timelineScenes.innerHTML = "";
+    const count =
+        promptOutput.value.length;
 
-    const sceneCount =
-        Math.max(
-            3,
-            Math.min(
-                8,
-                Math.round(state.duration / 2)
-            )
-        );
+    promptStats.textContent =
+        count.toLocaleString("en-US") +
+        " حرف";
 
-    for(let i=0;i<sceneCount;i++){
-
-        const left =
-            i / sceneCount * 100;
-
-        const width =
-            100 / sceneCount - .8;
-
-        const scene =
-            document.createElement("div");
-
-        scene.className =
-            "scene";
-
-        scene.style.left =
-            `${left}%`;
-
-        scene.style.width =
-            `${width}%`;
-
-        const labels = [
-            "OPENING",
-            "BUILD",
-            "DEVELOPMENT",
-            "PEAK",
-            "RESOLUTION",
-            "ENDING"
-        ];
-
-        scene.textContent =
-            labels[
-                Math.min(
-                    i,
-                    labels.length - 1
-                )
-            ];
-
-        timelineScenes.appendChild(
-            scene
-        );
-    }
 }
 
+promptOutput.addEventListener(
+    "input",
+    updatePromptStats
+);
 
-function updatePlayhead(time){
 
-    const percent =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                time / state.duration * 100
-            )
+/* =========================================================
+   COPY PROMPT
+========================================================= */
+
+$("copyPromptBtn").addEventListener(
+    "click",
+    async () => {
+
+        const value =
+            promptOutput.value.trim();
+
+        if(!value){
+
+            toast(
+                "لا يوجد Prompt لنسخه",
+                "bad"
+            );
+
+            return;
+        }
+
+        try{
+
+            await navigator.clipboard.writeText(
+                value
+            );
+
+            toast(
+                "تم نسخ الـ Prompt",
+                "good"
+            );
+
+        }catch{
+
+            promptOutput.select();
+
+            document.execCommand("copy");
+
+            toast(
+                "تم نسخ الـ Prompt",
+                "good"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLEAR PROMPT
+========================================================= */
+
+$("clearPromptBtn").addEventListener(
+    "click",
+    () => {
+
+        $("subjectInput").value = "";
+        $("titleInput").value = "";
+        $("promptDurationInput").value = 10;
+        $("visualDirectionInput").value = "";
+        $("extraRequirementsInput").value = "";
+
+        promptOutput.value = "";
+
+        updatePromptStats();
+
+        toast(
+            "تم مسح إعدادات المولد"
         );
 
-    playhead.style.left =
-        `${percent}%`;
+    }
+);
 
-    hudTime.textContent =
-        `${time.toFixed(2)}s`;
+
+/* =========================================================
+   SEND TO EXPORT
+========================================================= */
+
+$("sendToExportBtn").addEventListener(
+    "click",
+    () => {
+
+        setView("export");
+
+        codeInput.focus();
+
+    }
+);
+
+
+/* =========================================================
+   UPDATE PREVIEW
+========================================================= */
+
+$("updatePreviewBtn").addEventListener(
+    "click",
+    updatePreview
+);
+
+function updatePreview(){
+
+    const code =
+        codeInput.value.trim();
+
+    if(!code){
+
+        toast(
+            "ألصق كود HTML أولًا",
+            "bad"
+        );
+
+        return;
+
+    }
+
+    state.code = code;
+
+    previewFrame.srcdoc =
+        code;
+
+    setStatus(
+        "جاري تحميل المعاينة..."
+    );
+
+    previewFrame.onload =
+        async () => {
+
+            await preparePreviewFrame();
+
+            setStatus("المعاينة جاهزة");
+
+            toast(
+                "تم تحديث المعاينة",
+                "good"
+            );
+
+        };
+
 }
 
 
 /* =========================================================
-   RESOURCE WAITING
-   ========================================================= */
+   PREPARE PREVIEW
+========================================================= */
 
-async function waitForImages(doc){
+async function preparePreviewFrame(){
+
+    const doc =
+        previewFrame.contentDocument;
+
+    if(!doc)
+        return;
+
+    await waitForImages(doc);
+
+    if(doc.fonts && doc.fonts.ready){
+
+        try{
+            await doc.fonts.ready;
+        }catch{}
+
+    }
+
+    const animations =
+        collectAnimations(
+            doc.defaultView
+        );
+
+    state.animations =
+        animations;
+
+    setTimelineTime(
+        animations,
+        state.previewTime * 1000
+    );
+
+}
+
+
+/* =========================================================
+   COLLECT ANIMATIONS
+========================================================= */
+
+function collectAnimations(win){
+
+    let animations = [];
+
+    try{
+
+        if(
+            Array.isArray(
+                win.motionAnimations
+            )
+        ){
+
+            animations =
+                win.motionAnimations
+                    .filter(Boolean);
+
+        }
+
+        if(
+            !animations.length &&
+            Array.isArray(
+                win.motionTimeline
+            )
+        ){
+
+            animations =
+                win.motionTimeline
+                    .filter(Boolean);
+
+        }
+
+        if(!animations.length){
+
+            const doc =
+                win.document;
+
+            animations =
+                doc.getAnimations
+                    ? doc.getAnimations()
+                    : [];
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Animation collection error:",
+            error
+        );
+
+    }
+
+    return animations;
+
+}
+
+
+/* =========================================================
+   SET TIMELINE TIME
+========================================================= */
+
+function setTimelineTime(
+    animations,
+    timeMs
+){
+
+    for(
+        const animation of animations
+    ){
+
+        try{
+
+            animation.pause();
+
+            animation.currentTime =
+                timeMs;
+
+        }catch{}
+
+    }
+
+}
+
+
+/* =========================================================
+   WAIT IMAGES
+========================================================= */
+
+function waitForImages(doc){
 
     const images =
-        [...doc.images];
+        Array.from(
+            doc.images || []
+        );
 
-    await Promise.all(
+    if(!images.length)
+        return Promise.resolve();
+
+    return Promise.all(
         images.map(img => {
 
-            if(img.complete){
-
-                return img.decode
-                    ? img.decode().catch(()=>{})
-                    : Promise.resolve();
-            }
+            if(img.complete)
+                return Promise.resolve();
 
             return new Promise(resolve => {
 
+                const done = () => {
+
+                    img.removeEventListener(
+                        "load",
+                        done
+                    );
+
+                    img.removeEventListener(
+                        "error",
+                        done
+                    );
+
+                    resolve();
+
+                };
+
                 img.addEventListener(
                     "load",
-                    resolve,
-                    {once:true}
+                    done
                 );
 
                 img.addEventListener(
                     "error",
-                    resolve,
-                    {once:true}
+                    done
                 );
+
             });
 
         })
     );
+
 }
 
 
-async function waitForFonts(doc){
+/* =========================================================
+   VALIDATOR
+========================================================= */
+
+function validateCode(){
+
+    const code =
+        codeInput.value.trim();
+
+    if(!code){
+
+        toast(
+            "ألصق الكود أولًا",
+            "bad"
+        );
+
+        return false;
+
+    }
+
+    const checks = [
+
+        {
+            name:"HTML مستقل",
+            ok:/<!doctype\s+html/i.test(code)
+        },
+
+        {
+            name:"Web Animations API",
+            ok:/\.animate\s*\(/.test(code)
+        },
+
+        {
+            name:"كشف الحركة للمنصة",
+            ok:/window\.motionAnimations|window\.motionTimeline/.test(code)
+        },
+
+        {
+            name:"لا توجد CSS Keyframes",
+            ok:!/@keyframes/i.test(code)
+        },
+
+        {
+            name:"لا توجد CSS Animation",
+            ok:!/(^|[;{\s])animation\s*:/i.test(code)
+        },
+
+        {
+            name:"لا توجد CSS Transition",
+            ok:!/(^|[;{\s])transition\s*:/i.test(code)
+        },
+
+        {
+            name:"لا يوجد setInterval",
+            ok:!/setInterval\s*\(/i.test(code)
+        },
+
+        {
+            name:"لا يوجد Date.now",
+            ok:!/Date\.now\s*\(/i.test(code)
+        },
+
+        {
+            name:"لا يوجد performance.now",
+            ok:!/performance\.now\s*\(/i.test(code)
+        },
+
+        {
+            name:"لا يوجد Math.random",
+            ok:!/Math\.random\s*\(/i.test(code)
+        },
+
+        {
+            name:"لا يوجد requestAnimationFrame للحركة",
+            ok:!/requestAnimationFrame\s*\(/i.test(code)
+        },
+
+        {
+            name:"لا يوجد فيديو خارجي",
+            ok:!/<video[\s>]/i.test(code)
+        },
+
+        {
+            name:"لا يوجد WebGL أساسي",
+            ok:!/(webgl|webgl2)/i.test(code)
+        }
+
+    ];
+
+    validationList.innerHTML = "";
+
+    let passed = 0;
+
+    checks.forEach(check => {
+
+        if(check.ok)
+            passed++;
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "validation-item " +
+            (check.ok ? "ok" : "bad");
+
+        row.innerHTML =
+            '<span class="dot-check"></span>' +
+            escapeHTML(check.name);
+
+        validationList.appendChild(row);
+
+    });
+
+    const perfect =
+        passed === checks.length;
+
+    validationStatus.textContent =
+        passed + "/" + checks.length;
+
+    validationStatus.className =
+        "validation-status " +
+        (perfect ? "ok" : "bad");
+
+    if(perfect){
+
+        toast(
+            "الكود اجتاز الفحص",
+            "good"
+        );
+
+    }else{
+
+        toast(
+            "يوجد " +
+            (checks.length - passed) +
+            " ملاحظات على الكود",
+            "bad"
+        );
+
+    }
+
+    return perfect;
+
+}
+
+$("validateBtn").addEventListener(
+    "click",
+    validateCode
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+    return value
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   TEST FRAME
+========================================================= */
+
+$("testFrameBtn").addEventListener(
+    "click",
+    async () => {
+
+        if(!state.code){
+
+            updatePreview();
+
+            if(!state.code)
+                return;
+
+        }
+
+        try{
+
+            await preparePreviewFrame();
+
+            setTimelineTime(
+                state.animations,
+                state.previewTime * 1000
+            );
+
+            toast(
+                "تم اختبار الإطار الحالي",
+                "good"
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            toast(
+                "تعذر اختبار الإطار",
+                "bad"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLEAR CODE
+========================================================= */
+
+$("clearCodeBtn").addEventListener(
+    "click",
+    () => {
+
+        if(state.rendering)
+            return;
+
+        codeInput.value = "";
+
+        previewFrame.srcdoc = "";
+
+        state.code = "";
+
+        state.animations = [];
+
+        validationList.innerHTML =
+            '<div class="validation-item">' +
+            '<span class="dot-check"></span>' +
+            'بانتظار الفحص' +
+            '</div>';
+
+        validationStatus.textContent =
+            "لم يتم الفحص";
+
+        validationStatus.className =
+            "validation-status";
+
+        setStatus("جاهز");
+
+    }
+);
+
+
+/* =========================================================
+   RENDER DIMENSIONS
+========================================================= */
+
+function getRenderDimensions(){
+
+    return getDimensions();
+
+}
+
+
+/* =========================================================
+   CODEC SUPPORT
+========================================================= */
+
+async function checkCodec(){
+
+    if(
+        typeof VideoEncoder ===
+        "undefined"
+    ){
+
+        throw new Error(
+            "هذا المتصفح لا يدعم VideoEncoder."
+        );
+
+    }
+
+    const config = {
+
+        codec:"vp09.00.10.08",
+
+        width:getRenderDimensions().width,
+
+        height:getRenderDimensions().height,
+
+        bitrate:state.bitrate,
+
+        framerate:state.fps
+
+    };
 
     try{
 
-        if(doc.fonts?.ready){
+        const support =
+            await VideoEncoder.isConfigSupported(
+                config
+            );
 
-            await doc.fonts.ready;
+        if(
+            !support ||
+            !support.supported
+        ){
+
+            throw new Error(
+                "ترميز VP9 غير مدعوم بهذه الإعدادات."
+            );
+
         }
 
-    }catch{}
-}
+    }catch(error){
 
+        throw error;
 
-async function waitForResources(iframe){
-
-    const doc =
-        iframe.contentDocument;
-
-    await waitForImages(doc);
-    await waitForFonts(doc);
-
-    const deadline =
-        performance.now() + 5000;
-
-    while(
-        performance.now() < deadline
-    ){
-
-        const pendingImages =
-            [...doc.images]
-                .filter(
-                    img => !img.complete
-                );
-
-        if(!pendingImages.length){
-            break;
-        }
-
-        await nextFrame();
     }
+
 }
 
 
 /* =========================================================
    RENDER IFRAME
-   ========================================================= */
+========================================================= */
 
-function createRenderIframe(width,height){
+function createRenderIframe(){
 
     const iframe =
         document.createElement("iframe");
@@ -2883,10 +3831,12 @@ function createRenderIframe(width,height){
         "0";
 
     iframe.style.width =
-        `${width}px`;
+        getRenderDimensions().width +
+        "px";
 
     iframe.style.height =
-        `${height}px`;
+        getRenderDimensions().height +
+        "px";
 
     iframe.style.border =
         "0";
@@ -2897,167 +3847,100 @@ function createRenderIframe(width,height){
     iframe.style.pointerEvents =
         "none";
 
-    document.body.appendChild(
-        iframe
-    );
+    iframe.style.zIndex =
+        "-1";
+
+    document.body.appendChild(iframe);
 
     return iframe;
+
 }
 
 
-async function loadRenderIframe(
+/* =========================================================
+   LOAD RENDER IFRAME
+========================================================= */
+
+function loadRenderIframe(
     iframe,
     code
 ){
 
-    await new Promise((resolve,reject) => {
+    return new Promise(
+        (resolve,reject) => {
 
-        let done = false;
+            let settled = false;
 
-        const finish = () => {
+            const finish = (
+                callback,
+                value
+            ) => {
 
-            if(done) return;
+                if(settled)
+                    return;
 
-            done = true;
+                settled = true;
 
-            iframe.removeEventListener(
-                "load",
-                finish
-            );
+                callback(value);
 
-            resolve();
-        };
+            };
 
-        iframe.addEventListener(
-            "load",
-            finish
-        );
+            iframe.onload = () => {
 
-        iframe.srcdoc = code;
+                finish(resolve);
 
-        setTimeout(() => {
+            };
 
-            if(!done){
+            iframe.onerror = () => {
 
-                finish();
-            }
+                finish(
+                    reject,
+                    new Error(
+                        "فشل تحميل مشهد التصيير."
+                    )
+                );
 
-        }, 10000);
+            };
 
-    });
+            iframe.srcdoc = code;
 
-    await waitForResources(
-        iframe
+        }
     );
+
 }
 
 
 /* =========================================================
-   ANIMATION DISCOVERY
-   ========================================================= */
+   WAIT FOR RENDER RESOURCES
+========================================================= */
 
-function collectAnimations(doc){
-
-    let animations = [];
-
-    try{
-
-        if(
-            Array.isArray(
-                doc.defaultView.motionAnimations
-            )
-        ){
-
-            animations =
-                doc.defaultView.motionAnimations
-                    .filter(Boolean);
-        }
-
-    }catch(e){
-
-        log(
-            "Could not access motionAnimations",
-            "warn"
-        );
-    }
-
-    if(!animations.length){
-
-        try{
-
-            animations =
-                doc.getAnimations
-                    ? doc.getAnimations({
-                        subtree:true
-                    })
-                    : [];
-
-        }catch{
-
-            animations = [];
-        }
-    }
-
-    return animations;
-}
-
-
-/* =========================================================
-   TIMELINE CONTROL
-   ========================================================= */
-
-function setTimelineTime(
-    animations,
-    timeMs
+async function waitForRenderResources(
+    doc
 ){
 
-    for(const animation of animations){
+    await waitForImages(doc);
+
+    if(
+        doc.fonts &&
+        doc.fonts.ready
+    ){
 
         try{
 
-            animation.pause();
+            await doc.fonts.ready;
 
-            animation.currentTime =
-                timeMs;
+        }catch{}
 
-        }catch(e){
-
-            console.warn(
-                "Animation time failed",
-                e
-            );
-        }
     }
+
 }
 
 
 /* =========================================================
-   PAINT
-   ========================================================= */
+   CAPTURE FRAME
+========================================================= */
 
-function nextFrame(){
-
-    return new Promise(resolve => {
-
-        requestAnimationFrame(
-            () => resolve()
-        );
-    });
-}
-
-
-async function waitForPaint(){
-
-    await nextFrame();
-    await nextFrame();
-}
-
-
-/* =========================================================
-   CANVAS CAPTURE
-   ========================================================= */
-
-async function captureIframe(
+async function captureFrame(
     iframe,
     width,
     height
@@ -3066,19 +3949,24 @@ async function captureIframe(
     const doc =
         iframe.contentDocument;
 
+    if(!doc)
+        throw new Error(
+            "Render document unavailable."
+        );
+
     const canvas =
         await html2canvas(
             doc.documentElement,
             {
-                backgroundColor:
-                    $("transparentPreview").checked
-                        ? null
-                        : "#000000",
+
+                backgroundColor:null,
 
                 width,
+
                 height,
 
                 windowWidth:width,
+
                 windowHeight:height,
 
                 scale:1,
@@ -3089,264 +3977,332 @@ async function captureIframe(
 
                 logging:false,
 
-                imageTimeout:10000,
+                imageTimeout:15000,
 
-                removeContainer:true
+                foreignObjectRendering:false
+
             }
         );
 
     return canvas;
+
 }
 
 
 /* =========================================================
-   CODEC SUPPORT
-   ========================================================= */
-
-async function chooseVP9(
-    width,
-    height
-){
-
-    if(
-        typeof VideoEncoder ===
-        "undefined"
-    ){
-
-        throw new Error(
-            "VideoEncoder غير مدعوم."
-        );
-    }
-
-    const candidates = [
-
-        "vp09.00.40.08",
-        "vp09.00.10.08",
-        "vp09.00.10.08.00"
-    ];
-
-    for(const codec of candidates){
-
-        try{
-
-            const support =
-                await VideoEncoder
-                    .isConfigSupported({
-
-                        codec,
-
-                        width,
-                        height,
-
-                        bitrate:
-                            state.bitrate,
-
-                        framerate:
-                            state.fps
-                    });
-
-            if(support.supported){
-
-                return codec;
-            }
-
-        }catch{}
-    }
-
-    throw new Error(
-        "لا يوجد VP9 VideoEncoder مناسب."
-    );
-}
-
-
-/* =========================================================
-   ENCODER QUEUE
-   ========================================================= */
+   ENCODER WAIT
+========================================================= */
 
 async function waitForEncoderQueue(
-    encoder,
-    maxQueue = 3
+    encoder
 ){
 
     while(
-        encoder.encodeQueueSize >
-        maxQueue
+        encoder &&
+        encoder.encodeQueueSize > 3
     ){
 
-        if(state.cancelRequested){
+        if(state.cancelRequested)
+            return;
 
-            throw new Error(
-                "CANCELLED"
-            );
-        }
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    0
+                )
+        );
 
-        await nextFrame();
     }
+
 }
 
 
 /* =========================================================
-   WEBM EXPORT
-   ========================================================= */
+   UPDATE PROGRESS
+========================================================= */
 
-async function exportWebM(){
+function updateRenderProgress(
+    current,
+    total
+){
+
+    const percent =
+        total > 0
+            ? (current / total) * 100
+            : 0;
+
+    progressFill.style.width =
+        percent + "%";
+
+    progressPercent.textContent =
+        Math.round(percent) + "%";
+
+    progressText.textContent =
+        "تصيير الإطار " +
+        current.toLocaleString("en-US") +
+        " من " +
+        total.toLocaleString("en-US");
+
+}
+
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+$("exportBtn").addEventListener(
+    "click",
+    exportVideo
+);
+
+
+$("cancelBtn").addEventListener(
+    "click",
+    () => {
+
+        if(!state.rendering)
+            return;
+
+        state.cancelRequested =
+            true;
+
+        setStatus(
+            "جاري إيقاف التصدير...",
+            "rendering"
+        );
+
+    }
+);
+
+
+async function exportVideo(){
+
+    if(state.rendering)
+        return;
+
+    const code =
+        codeInput.value.trim();
+
+    if(!code){
+
+        toast(
+            "ألصق كود HTML أولًا",
+            "bad"
+        );
+
+        return;
+
+    }
+
+    state.code = code;
+
+    const passed =
+        validateCode();
+
+    if(!passed){
+
+        const proceed =
+            confirm(
+                "الكود يحتوي على مخالفات للعقد التقني.\n\nهل تريد المتابعة رغم ذلك؟"
+            );
+
+        if(!proceed)
+            return;
+
+    }
+
+    if(
+        typeof html2canvas ===
+        "undefined"
+    ){
+
+        toast(
+            "html2canvas لم يتم تحميله",
+            "bad"
+        );
+
+        return;
+
+    }
 
     if(
         typeof WebMMuxer ===
         "undefined"
     ){
 
-        throw new Error(
-            "webm-muxer غير محمل."
+        toast(
+            "مكتبة WebM Muxer لم يتم تحميلها",
+            "bad"
         );
+
+        return;
+
     }
 
-    const dimensions =
-        getDimensions();
+    state.rendering = true;
 
-    const width =
-        dimensions.width;
+    state.cancelRequested = false;
 
-    const height =
-        dimensions.height;
+    $("cancelBtn").disabled = false;
 
-    const totalFrames =
-        Math.ceil(
-            state.duration *
-            state.fps
-        );
+    $("exportBtn").disabled = true;
 
-    const frameDurationUs =
-        Math.round(
-            1_000_000 /
-            state.fps
-        );
-
-    const codec =
-        await chooseVP9(
-            width,
-            height
-        );
-
-    log(
-        `VP9 selected: ${codec}`
+    renderProgress.classList.add(
+        "active"
     );
 
-    const muxer =
-        new WebMMuxer.Muxer({
+    setStatus(
+        "جاري التصدير...",
+        "rendering"
+    );
 
-            target:
-                new WebMMuxer.ArrayBufferTarget(),
-
-            video:{
-                codec:"V_VP9",
-
-                width,
-
-                height,
-
-                frameRate:
-                    state.fps
-            },
-
-            firstTimestampBehavior:
-                "offset"
-        });
-
-    state.muxer =
-        muxer;
-
-    let encoderError = null;
-
-    const encoder =
-        new VideoEncoder({
-
-            output:(chunk,metadata) => {
-
-                try{
-
-                    muxer.addVideoChunk(
-                        chunk,
-                        metadata
-                    );
-
-                }catch(error){
-
-                    encoderError =
-                        error;
-                }
-            },
-
-            error:error => {
-
-                encoderError =
-                    error;
-            }
-
-        });
-
-    state.encoder =
-        encoder;
-
-    encoder.configure({
-
-        codec,
-
-        width,
-
-        height,
-
-        bitrate:
-            state.bitrate,
-
-        framerate:
-            state.fps,
-
-        latencyMode:
-            "quality"
-    });
-
-    const iframe =
-        createRenderIframe(
-            width,
-            height
-        );
-
-    state.renderIframe =
-        iframe;
+    let iframe = null;
+    let encoder = null;
+    let muxer = null;
 
     try{
 
+        await checkCodec();
+
+        const {
+            width,
+            height
+        } = getRenderDimensions();
+
+        const totalFrames =
+            Math.ceil(
+                state.duration *
+                state.fps
+            );
+
+        const frameDurationUs =
+            Math.round(
+                1_000_000 /
+                state.fps
+            );
+
+
+        /* =========================
+           CREATE MUXER
+        ========================= */
+
+        muxer =
+            new WebMMuxer.Muxer({
+
+                target:
+                    new WebMMuxer.ArrayBufferTarget(),
+
+                video:{
+                    codec:"V_VP9",
+                    width,
+                    height,
+                    frameRate:state.fps
+                }
+
+            });
+
+
+        /* =========================
+           CREATE ENCODER
+        ========================= */
+
+        encoder =
+            new VideoEncoder({
+
+                output:
+                    (chunk,metadata) => {
+
+                        muxer.addVideoChunk(
+                            chunk,
+                            metadata
+                        );
+
+                    },
+
+                error:
+                    error => {
+
+                        console.error(
+                            "VideoEncoder:",
+                            error
+                        );
+
+                    }
+
+            });
+
+
+        encoder.configure({
+
+            codec:"vp09.00.10.08",
+
+            width,
+
+            height,
+
+            bitrate:state.bitrate,
+
+            framerate:state.fps,
+
+            latency:"quality"
+
+        });
+
+
+        state.encoder =
+            encoder;
+
+        state.muxer =
+            muxer;
+
+
+        /* =========================
+           CREATE HIDDEN RENDERER
+        ========================= */
+
+        iframe =
+            createRenderIframe();
+
+        state.renderIframe =
+            iframe;
+
         await loadRenderIframe(
             iframe,
-            state.code
+            code
         );
 
-        const doc =
+
+        const renderDoc =
             iframe.contentDocument;
+
+        await waitForRenderResources(
+            renderDoc
+        );
+
 
         const animations =
             collectAnimations(
-                doc
+                iframe.contentWindow
             );
 
         state.animations =
             animations;
 
-        log(
-            `Animations discovered: ${animations.length}`
-        );
 
         if(!animations.length){
 
-            log(
-                "No explicit animations found; static frames will be rendered.",
-                "warn"
+            toast(
+                "لم يتم العثور على Web Animations في المشهد",
+                "bad"
             );
+
         }
 
-        const startTime =
-            performance.now();
+
+        /* =========================
+           FRAME LOOP
+        ========================= */
 
         for(
             let frameIndex = 0;
@@ -3354,55 +4310,54 @@ async function exportWebM(){
             frameIndex++
         ){
 
-            if(
-                state.cancelRequested
-            ){
+            if(state.cancelRequested){
 
                 throw new Error(
-                    "CANCELLED"
+                    "__CANCELLED__"
                 );
+
             }
 
-            if(
-                encoderError
-            ){
-
-                throw encoderError;
-            }
-
-            await waitForEncoderQueue(
-                encoder,
-                3
-            );
 
             const timeMs =
-                frameIndex /
-                state.fps *
+                (frameIndex /
+                 state.fps) *
                 1000;
 
-            const timestamp =
-                Math.round(
-                    frameIndex *
-                    frameDurationUs
-                );
+
+            /* deterministic timeline */
 
             setTimelineTime(
                 animations,
                 timeMs
             );
 
-            updatePlayhead(
-                timeMs / 1000
+
+            /*
+             * Give the document one microtask
+             * to settle after currentTime.
+             *
+             * This is NOT used as the motion clock.
+             */
+
+            await new Promise(
+                resolve =>
+                    queueMicrotask(resolve)
             );
 
-            await waitForPaint();
 
             const canvas =
-                await captureIframe(
+                await captureFrame(
                     iframe,
                     width,
                     height
                 );
+
+
+            const timestamp =
+                frameIndex *
+                frameDurationUs;
+
 
             const videoFrame =
                 new VideoFrame(
@@ -3414,206 +4369,88 @@ async function exportWebM(){
                     }
                 );
 
-            const keyFrame =
-                frameIndex === 0 ||
-                frameIndex %
-                    Math.max(
-                        1,
-                        Math.round(
-                            state.fps * 2
-                        )
-                    ) === 0;
+
+            await waitForEncoderQueue(
+                encoder
+            );
+
 
             encoder.encode(
                 videoFrame,
                 {
-                    keyFrame
+                    keyFrame:
+                        frameIndex === 0 ||
+                        frameIndex %
+                        Math.max(
+                            1,
+                            Math.round(
+                                state.fps * 2
+                            )
+                        ) === 0
                 }
             );
 
+
             videoFrame.close();
 
-            const progress =
-                (frameIndex + 1) /
-                totalFrames;
 
-            progressBar.style.width =
-                `${progress * 100}%`;
-
-            const elapsed =
-                performance.now() -
-                startTime;
-
-            const estimated =
-                progress > 0
-                    ? elapsed *
-                      (1 / progress - 1)
-                    : 0;
-
-            const eta =
-                Math.max(
-                    0,
-                    Math.round(
-                        estimated / 1000
-                    )
-                );
-
-            setStatus(
-                `تصدير ${Math.round(progress*100)}% — ${eta}s`
+            updateRenderProgress(
+                frameIndex + 1,
+                totalFrames
             );
 
-            if(
-                frameIndex % 5 === 0 ||
-                frameIndex ===
-                    totalFrames - 1
-            ){
-
-                log(
-                    `Frame ${frameIndex + 1}/${totalFrames} — queue ${encoder.encodeQueueSize}`
-                );
-            }
         }
+
+
+        /* =========================
+           FLUSH
+        ========================= */
+
+        progressText.textContent =
+            "جاري إنهاء الفيديو...";
 
         await encoder.flush();
 
-        if(encoderError){
 
-            throw encoderError;
+        if(state.cancelRequested){
+
+            throw new Error(
+                "__CANCELLED__"
+            );
+
         }
 
+
         muxer.finalize();
+
 
         const buffer =
             muxer.target.buffer;
 
-        if(!buffer){
-
-            throw new Error(
-                "لم يتم إنشاء ملف WebM."
-            );
-        }
-
-        return new Blob(
-            [buffer],
-            {
-                type:"video/webm"
-            }
-        );
-
-    }finally{
-
-        try{
-
-            if(
-                encoder.state !==
-                "closed"
-            ){
-
-                encoder.close();
-            }
-
-        }catch{}
-
-        state.encoder = null;
-
-        state.muxer = null;
-
-        if(
-            state.renderIframe
-        ){
-
-            state.renderIframe.remove();
-
-            state.renderIframe =
-                null;
-        }
-
-    }
-}
-
-
-/* =========================================================
-   RENDER ENTRY
-   ========================================================= */
-
-async function startRender(){
-
-    if(state.rendering){
-
-        toastMessage(
-            "هناك تصدير يعمل حاليًا"
-        );
-
-        return;
-    }
-
-    state.code =
-        codeInput.value;
-
-    if(!state.code.trim()){
-
-        toastMessage(
-            "أدخل كود HTML أولاً"
-        );
-
-        return;
-    }
-
-    state.cancelRequested =
-        false;
-
-    state.rendering =
-        true;
-
-    progressBar.style.width =
-        "0%";
-
-    setStatus(
-        "جاري تجهيز التصدير..."
-    );
-
-    try{
-
-        const results =
-            validateMotionCode(
-                state.code
-            );
-
-        const errors =
-            results.filter(
-                r => !r.passed &&
-                r.type === "error"
-            );
-
-        if(
-            errors.length &&
-            !state.forceExport
-        ){
-
-            showValidation(
-                results
-            );
-
-            return;
-        }
-
-        state.forceExport =
-            false;
 
         const blob =
-            await exportWebM();
+            new Blob(
+                [buffer],
+                {
+                    type:"video/webm"
+                }
+            );
+
 
         if(state.lastBlobUrl){
 
             URL.revokeObjectURL(
                 state.lastBlobUrl
             );
+
         }
+
 
         state.lastBlobUrl =
             URL.createObjectURL(
                 blob
             );
+
 
         const link =
             document.createElement("a");
@@ -3622,355 +4459,259 @@ async function startRender(){
             state.lastBlobUrl;
 
         link.download =
-            `motion-${Date.now()}.webm`;
+            "motion-" +
+            Date.now() +
+            ".webm";
 
-        document.body.appendChild(link);
+        document.body.appendChild(
+            link
+        );
 
         link.click();
 
         link.remove();
 
-        progressBar.style.width =
+
+        progressFill.style.width =
             "100%";
 
+        progressPercent.textContent =
+            "100%";
+
+        progressText.textContent =
+            "اكتمل التصدير";
+
+
         setStatus(
-            "تم التصدير بنجاح"
+            "تم التصدير",
+            ""
         );
 
-        toastMessage(
-            "تم إنشاء الفيديو"
+
+        toast(
+            "تم إنشاء ملف WebM بنجاح",
+            "good"
         );
 
-        log(
-            `Export complete: ${(blob.size / 1024 / 1024).toFixed(2)} MB`
-        );
 
     }catch(error){
 
+        console.error(
+            "Export error:",
+            error
+        );
+
+
         if(
+            error &&
             error.message ===
-            "CANCELLED"
+            "__CANCELLED__"
         ){
 
             setStatus(
-                "تم إيقاف التصدير"
+                "تم إيقاف التصدير",
+                ""
             );
 
-            toastMessage(
-                "تم إيقاف التصدير"
-            );
+            progressText.textContent =
+                "تم الإيقاف";
 
-            log(
-                "Render cancelled",
-                "warn"
+            toast(
+                "تم إيقاف التصدير",
+                ""
             );
 
         }else{
 
-            console.error(error);
-
             setStatus(
-                "فشل التصدير"
-            );
-
-            toastMessage(
-                "حدث خطأ أثناء التصدير"
-            );
-
-            log(
-                error?.message ||
-                String(error),
+                "حدث خطأ",
                 "error"
             );
+
+            progressText.textContent =
+                "فشل التصدير";
+
+            toast(
+                error?.message ||
+                "حدث خطأ أثناء التصدير",
+                "bad"
+            );
+
         }
 
     }finally{
+
+        try{
+
+            if(encoder){
+
+                try{
+                    encoder.close();
+                }catch{}
+
+            }
+
+        }catch{}
+
+
+        if(iframe){
+
+            try{
+                iframe.remove();
+            }catch{}
+
+        }
+
+
+        state.encoder =
+            null;
+
+        state.muxer =
+            null;
+
+        state.renderIframe =
+            null;
 
         state.rendering =
             false;
 
-        state.cancelRequested =
+        $("cancelBtn").disabled =
+            true;
+
+        $("exportBtn").disabled =
             false;
+
+        setTimeout(
+            () => {
+
+                renderProgress.classList.remove(
+                    "active"
+                );
+
+            },
+            1000
+        );
+
     }
+
 }
 
 
-$("exportBtn").addEventListener(
-    "click",
-    startRender
-);
-
-
 /* =========================================================
-   STOP
-   ========================================================= */
+   RESOLUTION INFO
+========================================================= */
 
-function stopRender(){
+function updateResolutionInfo(){
 
-    if(!state.rendering){
+    const {
+        width,
+        height
+    } = getDimensions();
 
-        return;
-    }
+    $("previewInfo").textContent =
+        width +
+        " × " +
+        height;
 
-    state.cancelRequested =
-        true;
-
-    try{
-
-        if(
-            state.encoder &&
-            state.encoder.state !==
-            "closed"
-        ){
-
-            state.encoder.close();
-        }
-
-    }catch{}
-
-    setStatus(
-        "جاري الإيقاف..."
-    );
-}
-
-
-$("stopBtn").addEventListener(
-    "click",
-    stopRender
-);
-
-
-/* =========================================================
-   TEST FRAME
-   ========================================================= */
-
-async function renderTestFrame(){
-
-    if(state.rendering){
-
-        toastMessage(
-            "أوقف التصدير أولاً"
-        );
-
-        return;
-    }
-
-    state.code =
-        codeInput.value;
-
-    const results =
-        validateMotionCode(
-            state.code
-        );
-
-    const hardErrors =
-        results.filter(
-            r => !r.passed &&
-            r.type === "error"
-        );
-
-    if(hardErrors.length){
-
-        showValidation(
-            results
-        );
-
-        return;
-    }
-
-    const d =
-        getDimensions();
-
-    const iframe =
-        createRenderIframe(
-            d.width,
-            d.height
-        );
-
-    try{
-
-        setStatus(
-            "جاري إنشاء Test Frame..."
-        );
-
-        await loadRenderIframe(
-            iframe,
-            state.code
-        );
-
-        const animations =
-            collectAnimations(
-                iframe.contentDocument
-            );
-
-        const time =
-            Math.min(
-                state.duration / 2,
-                state.duration
-            );
-
-        setTimelineTime(
-            animations,
-            time * 1000
-        );
-
-        await waitForPaint();
-
-        const canvas =
-            await captureIframe(
-                iframe,
-                d.width,
-                d.height
-            );
-
-        const dataUrl =
-            canvas.toDataURL(
-                "image/png"
-            );
-
-        const win =
-            window.open(
-                "",
-                "_blank"
-            );
-
-        if(win){
-
-            win.document.write(`
-                <!doctype html>
-                <html>
-                <body style="
-                    margin:0;
-                    background:#05070b;
-                    display:grid;
-                    place-items:center;
-                    min-height:100vh;
-                ">
-                <img
-                    src="${dataUrl}"
-                    style="
-                        max-width:95vw;
-                        max-height:95vh;
-                        object-fit:contain;
-                    "
-                >
-                </body>
-                </html>
-            `);
-
-            win.document.close();
-        }
-
-        setStatus(
-            "Test Frame جاهز"
-        );
-
-        updatePlayhead(time);
-
-    }catch(error){
-
-        console.error(error);
-
-        toastMessage(
-            "فشل Test Frame"
-        );
-
-        log(
-            error?.message ||
-            String(error),
-            "error"
-        );
-
-    }finally{
-
-        iframe.remove();
-    }
-}
-
-
-$("testFrameBtn").addEventListener(
-    "click",
-    renderTestFrame
-);
-
-
-/* =========================================================
-   DIAGNOSTICS
-   ========================================================= */
-
-async function runDiagnostics(){
-
-    const hasWebCodecs =
-        "VideoEncoder" in window &&
-        "VideoFrame" in window;
-
-    $("diagWebCodecs").textContent =
-        hasWebCodecs
-            ? "مدعوم"
-            : "غير مدعوم";
-
-    $("diagWebCodecs").className =
-        hasWebCodecs
-            ? "ok"
-            : "bad";
-
-    const hasEncoder =
-        "VideoEncoder" in window;
-
-    $("diagEncoder").textContent =
-        hasEncoder
-            ? "متوفر"
-            : "غير متوفر";
-
-    $("diagEncoder").className =
-        hasEncoder
-            ? "ok"
-            : "bad";
-
-    const hasMuxer =
-        typeof WebMMuxer !==
-        "undefined";
-
-    $("diagMuxer").textContent =
-        hasMuxer
-            ? "WebM Muxer"
-            : "غير متوفر";
-
-    $("diagMuxer").className =
-        hasMuxer
-            ? "ok"
-            : "bad";
-
-    log(
-        `Diagnostics: WebCodecs=${hasWebCodecs}, Encoder=${hasEncoder}, Muxer=${hasMuxer}`
-    );
 }
 
 
 /* =========================================================
    INITIALIZATION
-   ========================================================= */
+========================================================= */
 
-async function initialize(){
+function initialize(){
 
-    state.bitrate =
-        getBitrate();
+    state.duration =
+        Number(
+            durationInput.value
+        ) || 10;
 
-    updateUI();
+    previewRange.max =
+        state.duration;
 
-    drawTimeline();
+    updatePreviewShape();
 
-    await previewCode();
+    updateTimeline();
 
-    await runDiagnostics();
+    updateStats();
 
-    log(
-        "Motion Graphics Studio V3 initialized"
-    );
+    $("manualDirectionGroup").style.display =
+        "none";
+
+
+    /*
+     * Detect basic WebCodecs availability.
+     */
+
+    if(
+        typeof VideoEncoder ===
+        "undefined"
+    ){
+
+        setStatus(
+            "المتصفح لا يدعم VideoEncoder",
+            "error"
+        );
+
+    }else{
+
+        setStatus(
+            "جاهز"
+        );
+
+    }
+
 }
 
-
 initialize();
+
+
+/* =========================================================
+   HANDLE PAGE VISIBILITY
+========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        /*
+         * Do not alter the render timeline.
+         * Rendering itself is deterministic.
+         */
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            if(!state.rendering)
+                setStatus("جاهز");
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   BEFORE UNLOAD
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    event => {
+
+        if(state.rendering){
+
+            event.preventDefault();
+
+            event.returnValue = "";
+
+        }
+
+    }
+);
 
 </script>
 
