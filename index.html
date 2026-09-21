@@ -1,540 +1,3978 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة الموشن جرافيك الذكية</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#080a0f">
+<title>منصة الموشن جرافيك الذكية — V3</title>
 
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/webm-muxer@5.1.4/build/webm-muxer.js"></script>
 
-        .header { text-align: center; margin-bottom: 15px; width: 100%; }
-        .header h2 { margin: 0; color: #f8fafc; font-size: 24px; }
+<style>
+*{
+    box-sizing:border-box;
+}
 
-        .top-nav {
-            display: flex; justify-content: center; gap: 10px;
-            margin-bottom: 20px; width: 100%; max-width: 700px;
-        }
+:root{
+    --bg:#07090e;
+    --panel:#0d1119;
+    --panel2:#111722;
+    --panel3:#151c29;
+    --border:rgba(255,255,255,.09);
+    --border2:rgba(255,255,255,.15);
+    --text:#f4f7fb;
+    --muted:#8d98aa;
+    --accent:#8b7cff;
+    --accent2:#5c8cff;
+    --good:#3ddc97;
+    --warn:#ffbd55;
+    --bad:#ff5d73;
+    --radius:18px;
+}
 
-        .nav-btn {
-            flex: 1; background: #1e293b; color: #94a3b8; border: 2px solid #334155;
-            padding: 12px 5px; border-radius: 8px; font-size: 14px; font-weight: bold;
-            cursor: pointer; transition: .3s; text-align: center;
-        }
-        .nav-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
-        .nav-btn:hover:not(.active) { background: #334155; color: #f8fafc; }
+html,body{
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        "SF Pro Display",
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+}
 
-        .main-container { width: 100%; max-width: 700px; display: flex; flex-direction: column; }
-        .box-panel {
-            background: #1e293b; border-radius: 12px; padding: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,.5); border: 1px solid #334155; width: 100%; margin-bottom: 15px;
-        }
+button,
+input,
+select,
+textarea{
+    font:inherit;
+}
 
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; width: 100%; }
-        label { margin-bottom: 8px; font-weight: bold; font-size: 13px; color: #94a3b8; }
-        
-        input, select, textarea {
-            width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155;
-            border-radius: 8px; font-size: 14px; font-family: inherit; color: #f8fafc; transition: .2s;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
-        input:disabled, select:disabled { opacity: .5; cursor: not-allowed; text-decoration: line-through; }
+button{
+    border:0;
+    cursor:pointer;
+}
 
-        .req-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; }
-        .req-row input[type="text"] { flex: 1; }
-        
-        .toggle-req {
-            background: #334155; border: none; color: #f8fafc; border-radius: 6px;
-            padding: 12px 0; cursor: pointer; transition: .2s; font-size: 14px;
-            width: 45px; text-align: center; flex-shrink: 0;
-        }
-        .toggle-req.disabled { background: #7f1d1d; color: #fca5a5; }
+.app{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
 
-        .textarea-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; flex-wrap: wrap; }
-        .action-btns { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end; }
-        .action-btns button {
-            background: #334155; color: #e2e8f0; border: none; padding: 8px 10px;
-            border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: .2s; flex: 1; text-align: center; white-space: nowrap;
-        }
-        .action-btns button.clear-btn { background: #7f1d1d; color: #fca5a5; }
-        .action-btns button:hover { background: #475569; }
-        .action-btns button.clear-btn:hover { background: #991b1b; color: #fef2f2; }
+/* TOPBAR */
 
-        textarea { min-height: 200px; resize: vertical; direction: ltr; font-family: monospace; background: #020617; font-size: 13px; line-height: 1.6; }
-        .row { display: flex; gap: 12px; width: 100%; }
-        .row .form-group { flex: 1; min-width: 0; }
+.topbar{
+    height:72px;
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    border-bottom:1px solid var(--border);
+    background:rgba(7,9,14,.92);
+    backdrop-filter:blur(20px);
+    z-index:10;
+}
 
-        .export-btn {
-            background: #2563eb; color: white; border: none; padding: 16px;
-            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: .2s; width: 100%;
-        }
-        .export-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
-        .export-btn.record-active { background: #dc2626; animation: pulse 1.5s infinite; }
-        
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-        .tab-content { display: none; }
-        .tab-content.active-tab { display: flex; }
+.brand-mark{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:
+        radial-gradient(circle at 30% 25%,#fff 0 3%,transparent 4%),
+        linear-gradient(135deg,#8b7cff,#4f73ff);
+    box-shadow:0 8px 30px rgba(102,94,255,.25);
+    position:relative;
+    overflow:hidden;
+}
 
-        .ai-prompts {
-            background: #022c22; border: 1px dashed #059669; padding: 15px;
-            border-radius: 10px; margin-bottom: 20px; width: 100%;
-        }
-        .ai-prompts p { margin: 0 0 10px; font-size: 13px; color: #34d399; font-weight: bold; text-align: center; }
-        
-        .prompt-btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .prompt-btn {
-            flex: 1 1 calc(33.333% - 8px); background: #1e293b; border: 1px solid #059669;
-            color: #34d399; padding: 10px 5px; border-radius: 8px; font-size: 11px;
-            font-weight: bold; cursor: pointer; transition: .2s; text-align: center; white-space: nowrap;
-        }
-        .prompt-btn:hover { background: #059669; color: #fff; }
+.brand-mark:after{
+    content:"";
+    position:absolute;
+    width:50px;
+    height:10px;
+    background:rgba(255,255,255,.25);
+    transform:rotate(-45deg);
+    top:18px;
+    right:-14px;
+}
 
-        .history-box { background: #0f172a; border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 180px; overflow-y: auto; width: 100%; }
-        .history-item {
-            padding: 8px 10px; background: #1e293b; margin: 5px 0; border-radius: 4px;
-            font-size: 12px; color: #94a3b8; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .history-item:hover { background: #334155; color: #f8fafc; }
+.brand-title{
+    font-weight:800;
+    font-size:16px;
+}
 
-        /* Preview Area */
-        .preview-wrapper {
-            position: relative; width: 100%; background: #000; border-radius: 8px; overflow: hidden;
-            border: 2px solid #334155; display: flex; align-items: center; justify-content: center; margin-top: 15px; transition: 0.3s;
-        }
-        .preview-wrapper.ratio-169 { aspect-ratio: 16 / 9; }
-        .preview-wrapper.ratio-916 { aspect-ratio: 9 / 16; max-width: 380px; margin: 15px auto 0 auto; }
-        iframe { border: none; width: 100%; height: 100%; background: #020409; }
-        
-        .password-reset-btn {
-            width: 100%; margin-top: 10px; background: transparent; border: 1px solid #475569;
-            color: #94a3b8; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; transition: .2s;
-        }
-        .password-reset-btn:hover { background: #334155; color: #f8fafc; }
+.brand-sub{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
 
-        @media (max-width: 600px) {
-            .row { flex-direction: column; gap: 0; }
-            .prompt-btn { flex: 1 1 calc(50% - 8px); }
-            .action-btns { width: 100%; justify-content: space-between; }
-        }
-    </style>
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.status-pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:12px;
+    padding:9px 12px;
+    border:1px solid var(--border);
+    background:#0b0e15;
+    border-radius:999px;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--good);
+    box-shadow:0 0 12px var(--good);
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    min-height:0;
+    display:grid;
+    grid-template-columns:390px minmax(0,1fr);
+    gap:0;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    min-width:0;
+    overflow:auto;
+    border-left:1px solid var(--border);
+    background:#090c12;
+    padding:18px;
+}
+
+.tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    padding:5px;
+    background:#0e131c;
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:16px;
+}
+
+.tab{
+    color:var(--muted);
+    background:transparent;
+    padding:11px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:12px;
+}
+
+.tab.active{
+    background:#191f2c;
+    color:#fff;
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+}
+
+.section{
+    margin-bottom:16px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:9px;
+    color:#dfe5ee;
+    font-size:12px;
+    font-weight:800;
+}
+
+.section-title span{
+    color:var(--muted);
+    font-size:10px;
+    font-weight:500;
+}
+
+label.small{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:6px;
+}
+
+textarea,
+input,
+select{
+    width:100%;
+    background:#0c1018;
+    border:1px solid var(--border);
+    color:#fff;
+    border-radius:12px;
+    outline:none;
+}
+
+textarea{
+    resize:vertical;
+    min-height:120px;
+    padding:12px;
+    line-height:1.7;
+    font-size:12px;
+}
+
+input,
+select{
+    height:40px;
+    padding:0 11px;
+    font-size:12px;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+    border-color:rgba(139,124,255,.55);
+    box-shadow:0 0 0 3px rgba(139,124,255,.08);
+}
+
+.grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.grid3{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:7px;
+}
+
+.mode-switch{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.mode{
+    padding:13px 8px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:#0c1018;
+    color:var(--muted);
+    text-align:center;
+    font-size:11px;
+    font-weight:800;
+}
+
+.mode strong{
+    display:block;
+    color:inherit;
+    margin-bottom:3px;
+}
+
+.mode small{
+    font-weight:500;
+    opacity:.7;
+}
+
+.mode.active{
+    color:#fff;
+    border-color:rgba(139,124,255,.55);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139,124,255,.17),
+            rgba(92,140,255,.08)
+        );
+}
+
+.chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.chip{
+    padding:7px 9px;
+    border-radius:999px;
+    background:#0c1018;
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-size:10px;
+}
+
+.chip.active{
+    color:#fff;
+    border-color:rgba(139,124,255,.45);
+    background:rgba(139,124,255,.12);
+}
+
+.check-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.check{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#0c1018;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.check input{
+    width:auto;
+    height:auto;
+    accent-color:var(--accent);
+}
+
+.primary{
+    width:100%;
+    height:43px;
+    border-radius:12px;
+    color:#fff;
+    font-weight:800;
+    background:linear-gradient(135deg,#8b7cff,#5d82ff);
+    box-shadow:0 10px 30px rgba(91,102,255,.18);
+}
+
+.secondary{
+    width:100%;
+    height:40px;
+    border-radius:11px;
+    color:#e9edf5;
+    background:#111722;
+    border:1px solid var(--border);
+}
+
+.danger{
+    color:#ff8a9a;
+    border-color:rgba(255,93,115,.18);
+}
+
+.button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.range-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.range-row input{
+    flex:1;
+}
+
+.range-value{
+    min-width:45px;
+    text-align:center;
+    font-size:11px;
+    color:#fff;
+}
+
+/* WORKSPACE */
+
+.workspace{
+    min-width:0;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    background:
+        radial-gradient(circle at 60% 20%,rgba(92,140,255,.06),transparent 30%),
+        #080b11;
+}
+
+.workspace-head{
+    height:60px;
+    min-height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    border-bottom:1px solid var(--border);
+}
+
+.workspace-title{
+    font-size:12px;
+    font-weight:800;
+}
+
+.workspace-info{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.preview-area{
+    flex:1;
+    min-height:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    position:relative;
+}
+
+.preview-shell{
+    position:relative;
+    width:min(100%,1000px);
+    aspect-ratio:16/9;
+    background:#020305;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.5),
+        0 0 0 1px rgba(255,255,255,.02);
+    overflow:hidden;
+}
+
+.preview-shell.vertical{
+    width:auto;
+    height:min(100%,780px);
+    aspect-ratio:9/16;
+}
+
+#previewFrame{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    background:#000;
+}
+
+.preview-overlay{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.safe-area{
+    position:absolute;
+    inset:7%;
+    border:1px dashed rgba(255,255,255,.08);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .2s;
+}
+
+.safe-area.visible{
+    opacity:1;
+}
+
+.preview-hud{
+    position:absolute;
+    bottom:14px;
+    left:14px;
+    display:flex;
+    gap:6px;
+}
+
+.hud{
+    padding:7px 9px;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.09);
+    color:#dfe5ee;
+    border-radius:8px;
+    font-size:9px;
+}
+
+/* TIMELINE */
+
+.timeline{
+    height:145px;
+    min-height:145px;
+    border-top:1px solid var(--border);
+    background:#090c12;
+    padding:12px 16px;
+}
+
+.timeline-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:9px;
+}
+
+.timeline-head strong{
+    font-size:11px;
+}
+
+.timeline-head span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.timeline-track{
+    height:72px;
+    position:relative;
+    border:1px solid var(--border);
+    background:#0b0f16;
+    border-radius:11px;
+    overflow:hidden;
+}
+
+.timeline-grid{
+    position:absolute;
+    inset:0;
+    background-image:
+        linear-gradient(to right,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:5% 100%;
+}
+
+.playhead{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:1px;
+    background:#fff;
+    box-shadow:0 0 10px rgba(255,255,255,.7);
+    left:0;
+}
+
+.scene{
+    position:absolute;
+    top:15px;
+    bottom:15px;
+    border-radius:7px;
+    background:linear-gradient(135deg,rgba(139,124,255,.5),rgba(92,140,255,.25));
+    border:1px solid rgba(139,124,255,.45);
+    padding:7px;
+    overflow:hidden;
+    white-space:nowrap;
+    color:#fff;
+    font-size:9px;
+}
+
+.timeline-footer{
+    margin-top:9px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* GENERATOR */
+
+.generator{
+    display:none;
+    flex:1;
+    min-height:0;
+    overflow:auto;
+    padding:24px;
+}
+
+.generator.active{
+    display:block;
+}
+
+.export.active{
+    display:flex;
+}
+
+.export{
+    display:none;
+    flex-direction:column;
+    flex:1;
+    min-height:0;
+}
+
+.generator-card{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.hero{
+    padding:24px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:
+        radial-gradient(circle at 80% 20%,rgba(139,124,255,.13),transparent 35%),
+        #0c1018;
+    margin-bottom:14px;
+}
+
+.hero h1{
+    margin:0 0 7px;
+    font-size:24px;
+}
+
+.hero p{
+    margin:0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+}
+
+.prompt-output{
+    min-height:340px;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+    direction:ltr;
+    text-align:left;
+    font-size:11px;
+    line-height:1.65;
+}
+
+.output-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:7px;
+    margin-top:9px;
+}
+
+/* DIAGNOSTICS */
+
+.diagnostics{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.diag{
+    padding:10px;
+    background:#0c1018;
+    border:1px solid var(--border);
+    border-radius:11px;
+}
+
+.diag b{
+    display:block;
+    font-size:10px;
+    margin-bottom:3px;
+}
+
+.diag span{
+    font-size:9px;
+    color:var(--muted);
+}
+
+.ok{
+    color:var(--good)!important;
+}
+
+.bad{
+    color:var(--bad)!important;
+}
+
+.warn{
+    color:var(--warn)!important;
+}
+
+/* LOG */
+
+.log{
+    height:90px;
+    overflow:auto;
+    margin-top:10px;
+    padding:9px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#070a0f;
+    color:#7f8b9d;
+    font:9px/1.7 ui-monospace,monospace;
+    direction:ltr;
+    text-align:left;
+}
+
+.progress{
+    height:5px;
+    background:#111722;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#8b7cff,#5c8cff);
+    transition:width .15s;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    background:#151b26;
+    color:#fff;
+    border:1px solid var(--border2);
+    padding:11px 15px;
+    border-radius:12px;
+    font-size:11px;
+    z-index:9999;
+    transition:.2s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(12px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(560px,calc(100% - 30px));
+    background:#0d1119;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+}
+
+.modal-box h3{
+    margin:0 0 7px;
+    font-size:15px;
+}
+
+.modal-box p{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.7;
+}
+
+.validation-list{
+    max-height:300px;
+    overflow:auto;
+    margin:12px 0;
+}
+
+.validation-item{
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    margin-bottom:6px;
+    font-size:10px;
+}
+
+.validation-item.error{
+    border-color:rgba(255,93,115,.3);
+    color:#ff91a0;
+}
+
+.validation-item.warn{
+    border-color:rgba(255,189,85,.25);
+    color:#ffd17d;
+}
+
+.validation-item.ok{
+    border-color:rgba(61,220,151,.2);
+    color:#78eab9;
+}
+
+.hidden{
+    display:none!important;
+}
+
+@media(max-width:950px){
+    .main{
+        grid-template-columns:330px minmax(0,1fr);
+    }
+}
+
+@media(max-width:750px){
+    .main{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .preview-area{
+        padding:12px;
+    }
+
+    .timeline{
+        height:120px;
+        min-height:120px;
+    }
+
+    .topbar{
+        padding:0 12px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<!-- =========================================================
-     شاشة كلمة المرور (نفس الحماية السابقة)
-     ========================================================= -->
-<div id="password-overlay" style="position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
-    <div style="background:#1e293b;padding:30px;border-radius:12px;box-shadow:0 10px 25px -5px rgba(0,0,0,.5);border:1px solid #334155;text-align:center;width:100%;max-width:350px;">
-        <h3 style="margin-top:0;color:#f8fafc;font-size:22px;">🔒 حماية المنصة</h3>
-        <p style="font-size:13px;color:#94a3b8;margin-bottom:25px;">الرجاء إدخال كلمة المرور للوصول.</p>
-        <div class="form-group" style="margin-bottom:20px;">
-            <input type="password" id="pass-input" placeholder="كلمة المرور..." autocomplete="off" autocapitalize="none" spellcheck="false" style="text-align:center;letter-spacing:3px;font-size:16px;" onkeydown="if(event.key==='Enter'){event.preventDefault();checkPassword();}">
-        </div>
-        <button onclick="checkPassword()" class="export-btn" style="margin-top:0;">تسجيل الدخول</button>
-        <p id="pass-error" style="color:#ef4444;font-size:13px;display:none;margin-top:15px;font-weight:bold;margin-bottom:0;">❌ كلمة المرور غير صحيحة!</p>
-        <button type="button" class="password-reset-btn" onclick="resetLoginSession()">🔄 مسح جلسة الدخول</button>
-    </div>
-</div>
+<div class="app">
 
-<div class="header">
-    <h2>🎬 استوديو الموشن جرافيك</h2>
-</div>
-
-<div class="top-nav">
-    <button class="nav-btn active" id="btn-studio" onclick="switchTab('studio')">⚙️ مساحة العمل والتصدير</button>
-    <button class="nav-btn" id="btn-prompts" onclick="switchTab('prompts')">🧠 المولد الذكي</button>
-</div>
-
-<!-- =========================================================
-     تبويب الاستوديو والتصدير
-     ========================================================= -->
-<div id="studio-tab" class="main-container tab-content active-tab">
-    <div class="box-panel">
-        
-        <div class="ai-prompts">
-            <p>🤖 أوامر جاهزة لاستوديو الموشن جرافيك:</p>
-            <div class="prompt-btns">
-                <button class="prompt-btn" onclick="copyQuickPrompt('tech',this)">🚀 منتج تقني</button>
-                <button class="prompt-btn" onclick="copyQuickPrompt('intro',this)">📺 مقدمة يوتيوب</button>
-                <button class="prompt-btn" onclick="copyQuickPrompt('tiktok',this)">📱 ريلز / تيك توك</button>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>اسم المقطع المستخرج (بدون صيغة):</label>
-            <input type="text" id="file-name" value="موشن_جرافيك_جديد" placeholder="اكتب اسم الملف هنا...">
-        </div>
-
-        <div class="form-group">
-            <div class="textarea-header">
-                <label style="margin:0;">كود الـ HTML / JS:</label>
-                <div class="action-btns">
-                    <button class="clear-btn" onclick="clearCode()">🗑️ مسح</button>
-                    <button onclick="updatePreview()">👁️ معاينة</button>
-                    <button onclick="saveToHistory()">💾 حفظ</button>
-                </div>
-            </div>
-            <textarea id="html-input" placeholder="الصق كود الموشن جرافيك المولد من الذكاء الاصطناعي هنا..."></textarea>
-            
-            <div id="history-container" style="margin-top:15px;">
-                <label style="font-size:12px;color:#94a3b8;">📂 آخر الأكواد المحفوظة:</label>
-                <div id="history-list" class="history-box"></div>
-            </div>
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+            <div class="brand-title">منصة الموشن جرافيك الذكية</div>
+            <div class="brand-sub">Deterministic Motion Rendering Studio V3</div>
         </div>
     </div>
 
-    <div class="box-panel">
-        <div class="row">
-            <div class="form-group">
-                <label>مقاس شاشة العرض:</label>
-                <select id="preview-ratio" onchange="updatePreviewRatio()">
-                    <option value="ratio-169">16:9 (عرض شاشات / يوتيوب)</option>
-                    <option value="ratio-916">9:16 (جوال / تيك توك)</option>
-                </select>
-            </div>
+    <div class="top-actions">
+        <div class="status-pill">
+            <span class="status-dot"></span>
+            <span id="systemStatus">جاهز</span>
         </div>
-
-        <!-- شاشة العرض -->
-        <div id="preview-container" class="preview-wrapper ratio-169">
-            <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
-        </div>
-
-        <div style="margin-top: 15px; padding: 12px; background: #022c22; border-radius: 8px; border: 1px dashed #059669; font-size:12px; line-height: 1.6; color:#34d399;">
-            <strong>نصيحة التصدير:</strong> اضغط بدء التسجيل، اختر نافذة "Chrome Tab"، فعّل خيار "Share Audio"، ثم شغّل المقطع داخل الشاشة. عند الانتهاء اضغط "إيقاف وحفظ".
-        </div>
-
-        <button id="record-btn" class="export-btn" onclick="toggleRecording()">
-            🎥 بدء تسجيل وتصدير الفيديو
-        </button>
     </div>
-</div>
+</header>
 
-<!-- =========================================================
-     تبويب المولد الذكي
-     ========================================================= -->
-<div id="prompts-tab" class="main-container tab-content">
-    <div class="box-panel">
+<main class="main">
 
-        <div class="form-group">
-            <label>المقاس المطلوب للمقطع:</label>
-            <select id="prompt-ratio" onchange="generatePromptText()">
-                <option value="16:9">🖥️ عرض أفقي (16:9)</option>
-                <option value="9:16">📱 عرض طولي (9:16)</option>
-            </select>
-        </div>
+<aside class="sidebar">
 
-        <div class="row">
-            <div class="form-group">
-                <label>الطابع العام (المزاج):</label>
-                <select id="prompt-mood" onchange="generatePromptText()">
-                    <option value="سينمائي فخم وغامض">سينمائي فخم</option>
-                    <option value="تقني سايبربانك (Neon)">تقني سايبربانك</option>
-                    <option value="حيوي وسريع الإيقاع">حيوي وسريع</option>
-                    <option value="إبداعي ومليء بالألوان">إبداعي وملون</option>
-                </select>
+    <div class="tabs">
+        <button class="tab active" data-tab="export">مساحة التصدير</button>
+        <button class="tab" data-tab="generator">المولد الذكي</button>
+    </div>
+
+    <div id="exportSidebar">
+
+        <div class="section">
+            <div class="section-title">
+                كود الموشن
+                <span>HTML / CSS / JS</span>
             </div>
-            <div class="form-group">
-                <label>مدة المقطع التقريبية:</label>
-                <select id="prompt-duration" onchange="generatePromptText()">
-                    <option value="15-20 ثانية">15-20 ثانية</option>
-                    <option value="10 ثوانٍ">10 ثوانٍ (سريع)</option>
-                    <option value="30 ثانية">30 ثانية (مفصل)</option>
-                </select>
-            </div>
-        </div>
 
-        <label style="margin-top:10px;">متطلبات المحتوى (اضغط 👁️ لشطب المتطلب):</label>
+            <textarea id="codeInput" spellcheck="false"><!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#080b12;
+    font-family:Arial,sans-serif;
+}
+.stage{
+    width:100%;
+    height:100%;
+    display:grid;
+    place-items:center;
+    color:white;
+}
+.title{
+    font-size:clamp(40px,7vw,100px);
+    font-weight:900;
+    opacity:0;
+    transform:translateY(40px) scale(.94);
+}
+.line{
+    width:0;
+    height:3px;
+    background:#8b7cff;
+    margin:25px auto 0;
+}
+</style>
+</head>
 
-        <div class="req-row">
-            <button class="toggle-req" onclick="toggleInput(this,'req-subject')">👁️</button>
-            <input type="text" id="req-subject" placeholder="فكرة المقطع (مثال: إعلان إطلاق منتج تقني)" oninput="generatePromptText()">
-        </div>
-
-        <div class="req-row">
-            <button class="toggle-req" onclick="toggleInput(this,'req-title')">👁️</button>
-            <input type="text" id="req-title" placeholder="العنوان الرئيسي / الشعار" oninput="generatePromptText()">
-        </div>
-
-        <div class="req-row">
-            <button class="toggle-req" onclick="toggleInput(this,'req-text1')">👁️</button>
-            <input type="text" id="req-text1" placeholder="النص للمشهد الأول" oninput="generatePromptText()">
-        </div>
-
-        <div class="req-row">
-            <button class="toggle-req" onclick="toggleInput(this,'req-text2')">👁️</button>
-            <input type="text" id="req-text2" placeholder="النص للمشهد الثاني" oninput="generatePromptText()">
-        </div>
-
-        <div class="req-row">
-            <button class="toggle-req" onclick="toggleInput(this,'req-ending')">👁️</button>
-            <input type="text" id="req-ending" placeholder="الخاتمة (Call to Action)" oninput="generatePromptText()">
-        </div>
-
-        <label style="margin-top:15px;">✨ الأمر النهائي للذكاء الاصطناعي:</label>
-        <textarea id="final-prompt-output" readonly style="min-height:220px;margin-bottom:10px;"></textarea>
-
-        <button class="export-btn" style="background:#059669;" onclick="copyGeneratedPrompt()">
-            نسخ الأمر 📋
-        </button>
-
+<body>
+<div class="stage">
+    <div>
+        <div class="title">موشن جرافيك</div>
+        <div class="line"></div>
     </div>
 </div>
 
 <script>
-/* =========================================================
-   إعدادات الحماية
-   ========================================================= */
-const SECRET_PASSWORD = "ayman";
-const AUTH_KEY = "motion_auth_token";
-const AUTH_VALUE = "authenticated";
+const title = document.querySelector('.title');
+const line = document.querySelector('.line');
 
-window.addEventListener("load", () => {
-    if (localStorage.getItem(AUTH_KEY) === AUTH_VALUE) {
-        document.getElementById("password-overlay").style.display = "none";
+window.motionAnimations = [
+    title.animate(
+        [
+            {
+                opacity:0,
+                transform:'translateY(40px) scale(.94)'
+            },
+            {
+                opacity:1,
+                transform:'translateY(0) scale(1)'
+            }
+        ],
+        {
+            duration:1200,
+            delay:200,
+            easing:'cubic-bezier(.16,1,.3,1)',
+            fill:'both'
+        }
+    ),
+
+    line.animate(
+        [
+            {width:'0'},
+            {width:'260px'}
+        ],
+        {
+            duration:900,
+            delay:850,
+            easing:'cubic-bezier(.16,1,.3,1)',
+            fill:'both'
+        }
+    )
+];
+</script>
+</body>
+</html></textarea>
+        </div>
+
+        <div class="section">
+            <div class="section-title">نسبة العرض</div>
+
+            <div class="chips">
+                <button class="chip active ratio-chip" data-ratio="16:9">16:9</button>
+                <button class="chip ratio-chip" data-ratio="9:16">9:16</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">الدقة</div>
+
+            <div class="chips">
+                <button class="chip active res-chip" data-res="720">720p</button>
+                <button class="chip res-chip" data-res="1080">1080p</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">FPS</div>
+
+            <div class="chips">
+                <button class="chip" data-fps="24">24</button>
+                <button class="chip active" data-fps="30">30</button>
+                <button class="chip" data-fps="60">60</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">المدة</div>
+
+            <div class="range-row">
+                <input id="durationRange" type="range" min="1" max="60" step=".5" value="10">
+                <div class="range-value" id="durationValue">10s</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">الجودة</div>
+
+            <div class="chips">
+                <button class="chip quality-chip" data-quality="low">خفيفة</button>
+                <button class="chip active quality-chip" data-quality="medium">متوازنة</button>
+                <button class="chip quality-chip" data-quality="high">عالية</button>
+                <button class="chip quality-chip" data-quality="ultra">قصوى</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="check-row">
+
+                <label class="check">
+                    <input id="safeArea" type="checkbox">
+                    <span>إظهار Safe Area</span>
+                </label>
+
+                <label class="check">
+                    <input id="transparentPreview" type="checkbox">
+                    <span>خلفية شفافة</span>
+                </label>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="button-row">
+                <button class="secondary" id="previewBtn">تحديث المعاينة</button>
+                <button class="secondary" id="validateBtn">فحص الكود</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="button-row">
+                <button class="primary" id="testFrameBtn">اختبار Frame</button>
+                <button class="secondary danger" id="stopBtn">إيقاف</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <button class="primary" id="exportBtn">تصدير الفيديو</button>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">تشخيص المتصفح</div>
+
+            <div class="diagnostics">
+
+                <div class="diag">
+                    <b>WebCodecs</b>
+                    <span id="diagWebCodecs">...</span>
+                </div>
+
+                <div class="diag">
+                    <b>VideoEncoder</b>
+                    <span id="diagEncoder">...</span>
+                </div>
+
+                <div class="diag">
+                    <b>Muxer</b>
+                    <span id="diagMuxer">...</span>
+                </div>
+
+            </div>
+
+            <div class="log" id="log"></div>
+        </div>
+
+    </div>
+
+    <div id="generatorSidebar" class="hidden">
+
+        <div class="section">
+            <div class="section-title">طريقة بناء الموشن</div>
+
+            <div class="mode-switch">
+
+                <button class="mode active" data-mode="manual">
+                    <strong>توجيه دقيق</strong>
+                    <small>أنت تحدد الهوية</small>
+                </button>
+
+                <button class="mode" data-mode="creative">
+                    <strong>دع الذكاء يبدع</strong>
+                    <small>AI يقرر الهوية</small>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">الموضوع</div>
+
+            <textarea
+                id="subjectInput"
+                style="min-height:80px"
+                placeholder="مثال: اليوم الوطني السعودي 96، بأسلوب سينمائي فخم وغامض..."
+            ></textarea>
+        </div>
+
+        <div class="section">
+            <div class="grid2">
+
+                <div>
+                    <label class="small">العنوان</label>
+                    <input id="titleInput" placeholder="اختياري">
+                </div>
+
+                <div>
+                    <label class="small">المدة</label>
+                    <input id="genDuration" type="number" min="1" max="60" value="10">
+                </div>
+
+            </div>
+        </div>
+
+        <div id="manualOptions">
+
+            <div class="section">
+                <div class="section-title">الهوية البصرية</div>
+
+                <input id="visualStyle" placeholder="مثال: سينمائي فاخر، تاريخي، غامض">
+            </div>
+
+            <div class="section">
+                <div class="section-title">الألوان</div>
+
+                <input id="colorsInput" placeholder="مثال: أخضر داكن، ذهبي، أسود">
+            </div>
+
+            <div class="section">
+                <div class="section-title">الإيقاع</div>
+
+                <div class="chips">
+                    <button class="chip pacing active" data-value="cinematic">سينمائي</button>
+                    <button class="chip pacing" data-value="dynamic">سريع</button>
+                    <button class="chip pacing" data-value="calm">هادئ</button>
+                    <button class="chip pacing" data-value="dramatic">درامي</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="creativeOptions" class="hidden">
+
+            <div class="section">
+                <div class="section-title">مستوى الحرية الإبداعية</div>
+
+                <div class="range-row">
+                    <input id="creativityRange" type="range" min="1" max="10" value="9">
+                    <span class="range-value" id="creativityValue">9/10</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">ما الذي يقرره الذكاء؟</div>
+
+                <div class="check-row">
+
+                    <label class="check">
+                        <input type="checkbox" checked id="aiColors">
+                        <span>الألوان</span>
+                    </label>
+
+                    <label class="check">
+                        <input type="checkbox" checked id="aiTypography">
+                        <span>الخطوط</span>
+                    </label>
+
+                    <label class="check">
+                        <input type="checkbox" checked id="aiScenes">
+                        <span>المشاهد</span>
+                    </label>
+
+                    <label class="check">
+                        <input type="checkbox" checked id="aiMotion">
+                        <span>الحركة</span>
+                    </label>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-title">متطلبات إضافية</div>
+
+            <textarea
+                id="extraRequirements"
+                style="min-height:90px"
+                placeholder="أي تفاصيل إضافية تريدها..."
+            ></textarea>
+        </div>
+
+        <div class="section">
+            <div class="button-row">
+                <button class="secondary" id="presetNational">اليوم الوطني</button>
+                <button class="secondary" id="presetHistory">تاريخي</button>
+            </div>
+        </div>
+
+        <button class="primary" id="generatePromptBtn">
+            توليد Prompt احترافي
+        </button>
+
+    </div>
+
+</aside>
+
+<section class="workspace">
+
+    <div class="workspace-head">
+
+        <div>
+            <div class="workspace-title" id="workspaceTitle">
+                مساحة التصدير
+            </div>
+        </div>
+
+        <div class="workspace-info">
+            <span id="resolutionInfo">1280 × 720</span>
+            <span>•</span>
+            <span id="fpsInfo">30 FPS</span>
+            <span>•</span>
+            <span id="durationInfo">10s</span>
+        </div>
+
+    </div>
+
+    <div class="export active" id="exportWorkspace">
+
+        <div class="preview-area">
+
+            <div class="preview-shell" id="previewShell">
+
+                <iframe
+                    id="previewFrame"
+                    sandbox="allow-scripts allow-same-origin"
+                ></iframe>
+
+                <div class="safe-area" id="safeAreaOverlay"></div>
+                <div class="preview-overlay"></div>
+
+                <div class="preview-hud">
+                    <span class="hud" id="hudResolution">1280×720</span>
+                    <span class="hud" id="hudFps">30 FPS</span>
+                    <span class="hud" id="hudTime">0.00s</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="timeline">
+
+            <div class="timeline-head">
+                <strong>Timeline</strong>
+                <span id="timelineDuration">00:10.00</span>
+            </div>
+
+            <div class="timeline-track" id="timelineTrack">
+                <div class="timeline-grid"></div>
+                <div id="timelineScenes"></div>
+                <div class="playhead" id="playhead"></div>
+            </div>
+
+            <div class="timeline-footer">
+                <span>00:00</span>
+                <span id="timelineCenter">00:05</span>
+                <span id="timelineEnd">00:10</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="generator" id="generatorWorkspace">
+
+        <div class="generator-card">
+
+            <div class="hero">
+                <h1>مولد الموشن جرافيك</h1>
+                <p>
+                    يصنع لك Prompt تقني صارم يوجّه الذكاء الاصطناعي
+                    لبناء Motion Graphics قابل للتحكم Frame-by-Frame.
+                    في وضع «دع الذكاء يبدع» نعطيه حرية فنية واسعة
+                    مع إبقاء القيود التقنية إلزامية.
+                </p>
+            </div>
+
+            <textarea
+                id="promptOutput"
+                class="prompt-output"
+                spellcheck="false"
+                placeholder="سيظهر الـPrompt هنا..."
+            ></textarea>
+
+            <div class="output-actions">
+                <button class="secondary" id="copyPromptBtn">نسخ</button>
+                <button class="secondary" id="loadPromptBtn">إرسال للمساحة</button>
+                <button class="secondary" id="clearPromptBtn">مسح</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="validationModal">
+
+    <div class="modal-box">
+
+        <h3>نتيجة فحص الكود</h3>
+        <p>
+            الفحص يبحث عن أنماط قد تجعل التصدير غير حتمي
+            أو تتعارض مع نظام التحكم بالزمن.
+        </p>
+
+        <div class="validation-list" id="validationList"></div>
+
+        <div class="button-row">
+            <button class="primary" id="closeValidation">إغلاق</button>
+            <button class="secondary" id="forceExport">تصدير رغم التحذيرات</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+/* =========================================================
+   MOTION GRAPHICS STUDIO V3
+   ========================================================= */
+
+const state = {
+
+    tab: "export",
+
+    mode: "manual",
+
+    ratio: "16:9",
+
+    resolution: 720,
+
+    fps: 30,
+
+    duration: 10,
+
+    quality: "medium",
+
+    bitrate: 8_000_000,
+
+    code: "",
+
+    rendering: false,
+
+    cancelRequested: false,
+
+    previewTime: 0,
+
+    renderIframe: null,
+
+    animations: [],
+
+    muxer: null,
+
+    encoder: null,
+
+    lastBlobUrl: null,
+
+    prompt: "",
+
+    forceExport: false
+
+};
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const codeInput = $("codeInput");
+const previewFrame = $("previewFrame");
+const previewShell = $("previewShell");
+const promptOutput = $("promptOutput");
+
+const systemStatus = $("systemStatus");
+const progressBar = $("progressBar");
+
+const resolutionInfo = $("resolutionInfo");
+const fpsInfo = $("fpsInfo");
+const durationInfo = $("durationInfo");
+
+const hudResolution = $("hudResolution");
+const hudFps = $("hudFps");
+const hudTime = $("hudTime");
+
+const playhead = $("playhead");
+const timelineScenes = $("timelineScenes");
+
+const toast = $("toast");
+const logBox = $("log");
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+function log(message, type = "info"){
+
+    const time = new Date().toLocaleTimeString("ar-SA", {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+    });
+
+    const prefix =
+        type === "error" ? "[ERROR]" :
+        type === "warn" ? "[WARN]" :
+        "[INFO]";
+
+    logBox.textContent += `${time} ${prefix} ${message}\n`;
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+
+function toastMessage(message){
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(window.__toastTimer);
+
+    window.__toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
+}
+
+
+function setStatus(text){
+
+    systemStatus.textContent = text;
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+function formatTime(seconds){
+
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+
+    return `${String(min).padStart(2,"0")}:${sec
+        .toFixed(2)
+        .padStart(5,"0")}`;
+}
+
+
+function getDimensions(){
+
+    if(state.ratio === "16:9"){
+
+        if(state.resolution === 1080){
+            return {
+                width:1920,
+                height:1080
+            };
+        }
+
+        return {
+            width:1280,
+            height:720
+        };
     }
-    renderHistory();
-    generatePromptText();
+
+    if(state.resolution === 1080){
+
+        return {
+            width:1080,
+            height:1920
+        };
+    }
+
+    return {
+        width:720,
+        height:1280
+    };
+}
+
+
+function getBitrate(){
+
+    const base = {
+
+        low: 4_000_000,
+
+        medium: 8_000_000,
+
+        high: 14_000_000,
+
+        ultra: 22_000_000
+
+    }[state.quality];
+
+    const resolutionFactor =
+        state.resolution === 1080 ? 1.6 : 1;
+
+    const fpsFactor =
+        state.fps === 60 ? 1.25 :
+        state.fps === 24 ? .85 :
+        1;
+
+    return Math.round(
+        base *
+        resolutionFactor *
+        fpsFactor
+    );
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+document.querySelectorAll(".tab").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".tab")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.tab = button.dataset.tab;
+
+        $("exportWorkspace")
+            .classList.toggle(
+                "active",
+                state.tab === "export"
+            );
+
+        $("generatorWorkspace")
+            .classList.toggle(
+                "active",
+                state.tab === "generator"
+            );
+
+        $("exportSidebar")
+            .classList.toggle(
+                "hidden",
+                state.tab !== "export"
+            );
+
+        $("generatorSidebar")
+            .classList.toggle(
+                "hidden",
+                state.tab !== "generator"
+            );
+
+        $("workspaceTitle").textContent =
+            state.tab === "export"
+                ? "مساحة التصدير"
+                : "المولد الذكي";
+    });
+
 });
 
-function checkPassword() {
-    const input = document.getElementById("pass-input").value;
-    const error = document.getElementById("pass-error");
-    if (input === SECRET_PASSWORD) {
-        localStorage.setItem(AUTH_KEY, AUTH_VALUE);
-        document.getElementById("password-overlay").style.display = "none";
-        document.getElementById("pass-input").value = "";
-    } else {
-        error.style.display = "block";
-        document.getElementById("pass-input").value = "";
-    }
-}
-
-function resetLoginSession() {
-    localStorage.removeItem(AUTH_KEY);
-    document.getElementById("password-overlay").style.display = "flex";
-    document.getElementById("pass-error").style.display = "none";
-}
 
 /* =========================================================
-   واجهة المستخدم والتبويبات
+   RENDER SETTINGS
    ========================================================= */
-function switchTab(tab) {
-    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active-tab"));
-    document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
-    document.getElementById(tab + "-tab").classList.add("active-tab");
-    document.getElementById("btn-" + tab).classList.add("active");
-}
 
-function toggleInput(button, id) {
-    const input = document.getElementById(id);
-    if (!input) return;
-    input.disabled = !input.disabled;
-    button.innerText = input.disabled ? "🚫" : "👁️";
-    button.classList.toggle("disabled", input.disabled);
-    generatePromptText();
-}
+document.querySelectorAll(".ratio-chip").forEach(button => {
 
-/* =========================================================
-   توليد الأوامر الذكية
-   ========================================================= */
-function generatePromptText() {
-    const ratio = document.getElementById("prompt-ratio").value;
-    const mood = document.getElementById("prompt-mood").value;
-    const duration = document.getElementById("prompt-duration").value;
-    
-    let p = "أنت خبير محترف في تصميم الموشن جرافيك للويب (Motion Graphics Developer) ومختص في HTML, CSS, JS و Web Audio API.\n\n";
-    p += `قم بإنشاء كود HTML متكامل (ملف واحد) لمقطع موشن جرافيك بالمواصفات التالية:\n`;
-    p += `- المقاس: ${ratio}\n- الطابع والمزاج: ${mood}\n- المدة التقريبية: ${duration}\n\n`;
-    
-    const fields = [
-        { id: "req-subject", label: "موضوع المقطع" },
-        { id: "req-title", label: "العنوان الرئيسي" },
-        { id: "req-text1", label: "مشهد 1" },
-        { id: "req-text2", label: "مشهد 2" },
-        { id: "req-ending", label: "الخاتمة" }
-    ];
-    
-    let hasContent = false;
-    fields.forEach(f => {
-        const el = document.getElementById(f.id);
-        if (el && !el.disabled && el.value.trim() !== "") {
-            p += `* ${f.label}: ${el.value}\n`;
-            hasContent = true;
-        }
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".ratio-chip")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.ratio = button.dataset.ratio;
+
+        updateUI();
+        updatePreviewRatio();
     });
-    
-    if(!hasContent) p += "* المحتوى: قم بتأليف نصوص إبداعية من عندك تناسب الطابع المذكور.\n";
 
-    p += "\n**الشروط التقنية الصارمة:**\n";
-    p += "1. الإبداع: استخدم Web Animations API لعمل انتقالات احترافية ودقيقة بين المشاهد.\n";
-    p += "2. الصوت: استخدم Web Audio API لإنشاء مؤثرات صوتية (Synth, Whoosh) متزامنة مع ظهور العناصر.\n";
-    p += "3. واجهة البداية: يجب أن يبدأ المقطع بشاشة انتظار تحتوي على زر 'تشغيل' (Play) لتفعيل الصوت برمجياً.\n";
-    p += "4. الهيكلة: قسم الكود لمشاهد (Scenes) تظهر وتختفي بتسلسل زمني نظيف.\n";
-    p += "5. التصميم: اعتمد CSS نقية مع تأثيرات مثل Particles أو Glowing Objects لتناسب الطابع المذكور.\n";
-    p += "اكتب الكود كاملاً ومباشرة بدون شروحات.";
+});
 
-    document.getElementById("final-prompt-output").value = p;
-}
 
-async function copyGeneratedPrompt() {
-    const text = document.getElementById("final-prompt-output").value;
-    try {
-        await navigator.clipboard.writeText(text);
-        alert("✅ تم نسخ الأمر بنجاح!");
-    } catch { alert("تعذر النسخ تلقائيًا."); }
-}
+document.querySelectorAll(".res-chip").forEach(button => {
 
-async function copyQuickPrompt(type, button) {
-    const base = "أنت خبير موشن جرافيك ويب. صمم كود HTML/CSS/JS متكامل لـ ";
-    const rules = "استخدم Web Animations API للانتقالات و Web Audio API للصوتيات. ابدأ بشاشة زر تشغيل لتفعيل الصوت. قسمه لمشاهد.";
-    const prompts = {
-        tech: base + "إعلان منتج تقني، طابع سايبربانك ومقاس 16:9. " + rules,
-        intro: base + "مقدمة يوتيوب سينمائية فخمة مقاس 16:9. " + rules,
-        tiktok: base + "إعلان سريع وحيوي مقاس 9:16 للتيك توك. " + rules
-    };
-    try {
-        await navigator.clipboard.writeText(prompts[type] || "");
-        const oldText = button.innerText;
-        button.innerText = "✅ تم!";
-        setTimeout(() => { button.innerText = oldText; }, 2000);
-    } catch { alert("تعذر النسخ."); }
-}
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".res-chip")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.resolution =
+            Number(button.dataset.res);
+
+        updateUI();
+    });
+
+});
+
+
+document.querySelectorAll("[data-fps]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll("[data-fps]")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.fps =
+            Number(button.dataset.fps);
+
+        updateUI();
+    });
+
+});
+
+
+document.querySelectorAll(".quality-chip").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".quality-chip")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.quality =
+            button.dataset.quality;
+
+        state.bitrate = getBitrate();
+
+        updateUI();
+    });
+
+});
+
+
+$("durationRange").addEventListener("input", e => {
+
+    state.duration =
+        Number(e.target.value);
+
+    $("durationValue").textContent =
+        `${state.duration}s`;
+
+    $("genDuration").value =
+        state.duration;
+
+    updateUI();
+    drawTimeline();
+});
+
+
+$("safeArea").addEventListener("change", e => {
+
+    $("safeAreaOverlay")
+        .classList.toggle(
+            "visible",
+            e.target.checked
+        );
+});
+
+
+$("transparentPreview").addEventListener("change", e => {
+
+    previewShell.style.background =
+        e.target.checked
+            ? "transparent"
+            : "#020305";
+});
+
 
 /* =========================================================
-   إدارة الكود والمحفوظات
+   UI
    ========================================================= */
-function clearCode() {
-    if (confirm("هل تريد مسح الكود الحالي؟")) {
-        document.getElementById("html-input").value = "";
-        document.getElementById("preview-frame").srcdoc = "";
+
+function updateUI(){
+
+    const d = getDimensions();
+
+    resolutionInfo.textContent =
+        `${d.width} × ${d.height}`;
+
+    fpsInfo.textContent =
+        `${state.fps} FPS`;
+
+    durationInfo.textContent =
+        `${state.duration}s`;
+
+    hudResolution.textContent =
+        `${d.width}×${d.height}`;
+
+    hudFps.textContent =
+        `${state.fps} FPS`;
+
+    durationInfo.textContent =
+        `${state.duration}s`;
+
+    $("timelineDuration").textContent =
+        formatTime(state.duration);
+
+    $("timelineCenter").textContent =
+        formatTime(state.duration / 2);
+
+    $("timelineEnd").textContent =
+        formatTime(state.duration);
+
+    state.bitrate = getBitrate();
+
+    drawTimeline();
+}
+
+
+function updatePreviewRatio(){
+
+    previewShell.classList.toggle(
+        "vertical",
+        state.ratio === "9:16"
+    );
+
+    if(state.ratio === "16:9"){
+
+        previewShell.style.width =
+            "min(100%,1000px)";
+
+        previewShell.style.height =
+            "";
     }
 }
 
-function updatePreview() {
-    const code = document.getElementById("html-input").value;
-    document.getElementById("preview-frame").srcdoc = code;
-}
-
-function updatePreviewRatio() {
-    const ratio = document.getElementById("preview-ratio").value;
-    const container = document.getElementById("preview-container");
-    container.className = "preview-wrapper " + ratio;
-}
-
-function saveToHistory() {
-    const code = document.getElementById("html-input").value;
-    if (!code.trim()) return;
-    let history = JSON.parse(localStorage.getItem("motion_history") || "[]");
-    history.unshift({ code, date: new Date().toLocaleString("ar-SA") });
-    history = history.slice(0, 5); // الاحتفاظ بآخر 5
-    localStorage.setItem("motion_history", JSON.stringify(history));
-    renderHistory();
-    alert("✅ تم حفظ الكود في السجل");
-}
-
-function renderHistory() {
-    const history = JSON.parse(localStorage.getItem("motion_history") || "[]");
-    const container = document.getElementById("history-list");
-    container.innerHTML = history.map((item, index) => {
-        const preview = item.code.substring(0, 80).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return `<div class="history-item" onclick="loadFromHistory(${index})" title="استعادة الكود">${item.date} - ${preview}...</div>`;
-    }).join("");
-}
-
-function loadFromHistory(index) {
-    const history = JSON.parse(localStorage.getItem("motion_history") || "[]");
-    if (history[index]) {
-        document.getElementById("html-input").value = history[index].code;
-        updatePreview();
-    }
-}
 
 /* =========================================================
-   محرك تسجيل وتصدير الفيديو (Screen Capture API)
+   PROMPT ENGINE
    ========================================================= */
-let mediaRecorder;
-let recordedChunks = [];
-let isRecording = false;
 
-async function toggleRecording() {
-    const btn = document.getElementById("record-btn");
-    
-    if (isRecording) {
-        // إيقاف التسجيل
-        if (mediaRecorder && mediaRecorder.state === "recording") {
-            mediaRecorder.stop();
-        }
+document.querySelectorAll(".mode").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".mode")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+
+        state.mode = button.dataset.mode;
+
+        $("manualOptions")
+            .classList.toggle(
+                "hidden",
+                state.mode !== "manual"
+            );
+
+        $("creativeOptions")
+            .classList.toggle(
+                "hidden",
+                state.mode !== "creative"
+            );
+    });
+
+});
+
+
+$("creativityRange").addEventListener("input", e => {
+
+    $("creativityValue").textContent =
+        `${e.target.value}/10`;
+
+});
+
+
+document.querySelectorAll(".pacing").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".pacing")
+            .forEach(b => b.classList.remove("active"));
+
+        button.classList.add("active");
+    });
+
+});
+
+
+function buildStrictContract(){
+
+return `
+============================================================
+MANDATORY TECHNICAL CONTRACT — DO NOT VIOLATE
+============================================================
+
+OUTPUT:
+
+Return ONE complete standalone HTML document only.
+
+Do not return Markdown.
+
+Do not wrap the HTML in \`\`\`.
+
+Do not explain the code.
+
+The result must run immediately when opened in a modern browser.
+
+------------------------------------------------------------
+1. ANIMATION ENGINE
+------------------------------------------------------------
+
+ALL visual motion MUST use the Web Animations API:
+
+Element.animate()
+
+Do NOT use:
+
+@keyframes
+CSS animation
+animation:
+animation-name:
+animation-duration:
+animation-delay:
+transition:
+setInterval()
+setTimeout() for animation timing
+Date.now() as animation time
+performance.now() as animation time
+requestAnimationFrame() as animation time
+Math.random() for visual motion
+
+The renderer will control animation.currentTime.
+
+Every important animation must therefore be externally controllable.
+
+Expose animation objects through:
+
+window.motionAnimations = [...]
+
+or:
+
+window.motionTimeline = [...]
+
+The renderer must be able to discover all animation objects.
+
+------------------------------------------------------------
+2. DETERMINISTIC RENDERING
+------------------------------------------------------------
+
+The same document at the same timeline time MUST produce the same visual frame.
+
+Never make visual state depend on:
+
+Date.now()
+performance.now()
+random numbers
+real elapsed time
+user interaction
+scroll position
+mouse position
+device orientation
+
+Unless those values are completely fixed and deterministic.
+
+If randomness is visually required, use fixed seeded values.
+
+------------------------------------------------------------
+3. TIMELINE
+------------------------------------------------------------
+
+Build a deliberate timeline.
+
+The animation should have:
+
+OPENING
+DEVELOPMENT
+PEAK
+ENDING
+
+The final frame must be intentional.
+
+Do not create an accidental extra second.
+
+The total composition must work cleanly from:
+
+0ms
+
+to:
+
+durationMs
+
+------------------------------------------------------------
+4. FRAME CONTROL
+------------------------------------------------------------
+
+Treat time as milliseconds.
+
+Do not build animation logic around frame numbers.
+
+Use:
+
+duration
+delay
+endDelay
+easing
+fill
+
+inside Web Animations API objects.
+
+The renderer may set:
+
+animation.currentTime = timeMs
+
+at any point.
+
+------------------------------------------------------------
+5. RESOLUTION
+------------------------------------------------------------
+
+Do not rely on viewport dimensions changing the composition.
+
+Use percentage, vw/vh, or explicit proportional layouts carefully.
+
+The composition must remain visually stable at:
+
+16:9
+9:16
+
+and at:
+
+720p
+1080p
+
+------------------------------------------------------------
+6. SAFE AREA
+------------------------------------------------------------
+
+Keep important text and graphics away from the outer edges.
+
+Maintain a professional safe area.
+
+------------------------------------------------------------
+7. RESOURCES
+------------------------------------------------------------
+
+External images must be:
+
+CORS-safe
+
+or:
+
+embedded as data URLs
+
+or:
+
+loaded from resources that allow canvas access.
+
+Do not make the composition dependent on resources that can randomly fail.
+
+Fonts must have a sensible fallback.
+
+------------------------------------------------------------
+8. CANVAS
+------------------------------------------------------------
+
+If Canvas is used:
+
+it must be deterministic.
+
+It must be redrawable from a known timeline state.
+
+Do not use real-time animation loops.
+
+------------------------------------------------------------
+9. WEBGL
+------------------------------------------------------------
+
+Do not make essential visual information depend on WebGL.
+
+The renderer may capture using Canvas-based rendering.
+
+------------------------------------------------------------
+10. VIDEO
+------------------------------------------------------------
+
+Do not rely on external video for essential visual information.
+
+If video is absolutely necessary, it must have deterministic seeking.
+
+------------------------------------------------------------
+11. PERFORMANCE
+------------------------------------------------------------
+
+Avoid thousands of DOM elements.
+
+Avoid huge filters.
+
+Avoid continuous infinite animations.
+
+Use transform and opacity whenever possible.
+
+------------------------------------------------------------
+12. DESIGN
+------------------------------------------------------------
+
+Use strong visual hierarchy.
+
+Do not move everything simultaneously.
+
+Use:
+
+entrances
+exits
+pauses
+accents
+camera-like movement
+scale
+opacity
+position
+rotation
+blur only when useful
+
+The motion should feel designed, not random.
+
+------------------------------------------------------------
+13. ACCESS TO ANIMATIONS
+------------------------------------------------------------
+
+At the end of initialization expose:
+
+window.motionAnimations
+
+as an array containing every important Animation object.
+
+Example:
+
+const a = element.animate(...);
+
+window.motionAnimations = [a];
+
+Do not hide the animation objects inside inaccessible closures.
+
+------------------------------------------------------------
+14. INITIAL STATE
+------------------------------------------------------------
+
+Animations should use:
+
+fill: "both"
+
+or:
+
+fill: "forwards"
+
+as appropriate.
+
+The initial state at time 0 must render correctly.
+
+------------------------------------------------------------
+15. FINAL STATE
+------------------------------------------------------------
+
+At durationMs the composition must intentionally reach its final state.
+
+No animation may depend on browser playback timing.
+
+------------------------------------------------------------
+16. CODE QUALITY
+------------------------------------------------------------
+
+No framework is required.
+
+Prefer clean vanilla HTML/CSS/JS.
+
+Keep the generated document self-contained.
+
+============================================================
+END OF MANDATORY CONTRACT
+============================================================
+`;
+}
+
+
+function buildPrompt(){
+
+    const subject =
+        $("subjectInput").value.trim() ||
+        "موضوع إبداعي يحدده الذكاء الاصطناعي";
+
+    const title =
+        $("titleInput").value.trim();
+
+    const duration =
+        Number($("genDuration").value) || 10;
+
+    const ratio =
+        state.ratio;
+
+    let artistic;
+
+    if(state.mode === "creative"){
+
+        const creativity =
+            $("creativityRange").value;
+
+        artistic = `
+CREATIVE MODE — LET AI CREATE
+
+Creativity level: ${creativity}/10.
+
+The AI has broad artistic freedom.
+
+It may independently choose:
+
+visual identity
+color palette
+typography
+composition
+scene count
+scene transitions
+motion language
+camera simulation
+lighting
+shapes
+particles
+textures
+graphic metaphors
+pacing
+visual storytelling
+opening
+climax
+ending
+
+However, artistic freedom NEVER overrides the technical contract.
+
+The AI must obey every mandatory technical rule below.
+
+The result should feel original rather than like a generic template.
+`;
+
+    }else{
+
+        const style =
+            $("visualStyle").value.trim() ||
+            "احترافي";
+
+        const colors =
+            $("colorsInput").value.trim() ||
+            "يحددها المصمم";
+
+        const pacing =
+            document.querySelector(".pacing.active")?.dataset.value ||
+            "cinematic";
+
+        artistic = `
+MANUAL ART DIRECTION
+
+Visual style:
+${style}
+
+Color direction:
+${colors}
+
+Pacing:
+${pacing}
+
+Follow these artistic directions while preserving the technical contract.
+`;
+    }
+
+    const extras =
+        $("extraRequirements").value.trim() ||
+        "لا توجد متطلبات إضافية.";
+
+    const aiChoices = state.mode === "creative"
+        ? `
+AI DECISION AUTHORITY
+
+Colors:
+${$("aiColors").checked ? "AI DECIDES" : "USER CONTROLLED"}
+
+Typography:
+${$("aiTypography").checked ? "AI DECIDES" : "USER CONTROLLED"}
+
+Scenes:
+${$("aiScenes").checked ? "AI DECIDES" : "USER CONTROLLED"}
+
+Motion:
+${$("aiMotion").checked ? "AI DECIDES" : "USER CONTROLLED"}
+`
+        : "";
+
+return `
+You are a senior Motion Graphics Developer, Creative Director,
+Animation Engineer, and WebCodecs-aware front-end engineer.
+
+Create a premium cinematic motion graphics composition.
+
+============================================================
+PROJECT
+============================================================
+
+Subject:
+${subject}
+
+Title:
+${title || "AI may choose an appropriate title"}
+
+Duration:
+${duration} seconds
+
+Aspect ratio:
+${ratio}
+
+${artistic}
+
+${aiChoices}
+
+Additional requirements:
+${extras}
+
+============================================================
+STORYBOARD REQUIREMENT
+============================================================
+
+Before writing the implementation internally, design a coherent
+timeline.
+
+The final composition should contain intentional scenes.
+
+Possible structure:
+
+0%–15%:
+Opening / visual hook
+
+15%–55%:
+Development
+
+55%–80%:
+Peak / strongest visual moment
+
+80%–100%:
+Resolution / ending
+
+Do not blindly follow these percentages if another structure is
+artistically better.
+
+The animation must feel like one continuous designed piece.
+
+============================================================
+STRICT TECHNICAL CONTRACT
+============================================================
+
+${buildStrictContract()}
+
+============================================================
+FINAL OUTPUT RULE
+============================================================
+
+Return ONLY the complete HTML document.
+
+No Markdown.
+
+No explanation.
+
+No commentary before or after the HTML.
+
+The HTML must expose:
+
+window.motionAnimations
+
+containing all important Web Animation API Animation objects.
+
+The renderer must be able to control them with:
+
+animation.currentTime = timeMs;
+
+Do not require a start button.
+
+The animation must render correctly when the renderer manually
+sets the timeline time.
+
+============================================================
+QUALITY BAR
+============================================================
+
+Do not create a generic card-based UI.
+
+Do not use emojis as the primary visual design.
+
+Do not fill the composition with unnecessary elements.
+
+Prioritize:
+
+cinematic composition
+typography
+depth
+lighting
+layering
+controlled motion
+negative space
+visual hierarchy
+rhythm
+strong opening
+memorable climax
+intentional ending
+
+Make it look like professional motion design rather than a
+webpage with moving elements.
+`;
+}
+
+
+$("generatePromptBtn").addEventListener("click", () => {
+
+    const prompt = buildPrompt();
+
+    state.prompt = prompt;
+
+    promptOutput.value = prompt;
+
+    toastMessage("تم إنشاء الـPrompt الاحترافي");
+
+});
+
+
+$("copyPromptBtn").addEventListener("click", async () => {
+
+    if(!promptOutput.value.trim()){
+
+        toastMessage("ولّد Prompt أولاً");
         return;
     }
 
-    // بدء التسجيل
-    try {
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: { displaySurface: "browser", frameRate: { ideal: 60 } },
-            audio: { echoCancellation: false, noiseSuppression: false, sampleRate: 48000 }
-        });
+    await navigator.clipboard.writeText(
+        promptOutput.value
+    );
 
-        let options = { mimeType: 'video/webm; codecs=vp9,opus' };
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            options = { mimeType: 'video/webm' };
+    toastMessage("تم النسخ");
+});
+
+
+$("clearPromptBtn").addEventListener("click", () => {
+
+    promptOutput.value = "";
+    state.prompt = "";
+
+});
+
+
+$("loadPromptBtn").addEventListener("click", () => {
+
+    if(!promptOutput.value.trim()){
+
+        toastMessage("لا يوجد Prompt");
+        return;
+    }
+
+    navigator.clipboard.writeText(
+        promptOutput.value
+    );
+
+    toastMessage(
+        "تم نسخ الـPrompt — الصقه في نموذج الذكاء الاصطناعي"
+    );
+});
+
+
+$("presetNational").addEventListener("click", () => {
+
+    $("subjectInput").value =
+        "اليوم الوطني السعودي 96 — قصة وطن وهوية وذاكرة مستقبلية";
+
+    $("titleInput").value =
+        "اليوم الوطني السعودي 96";
+
+    $("visualStyle").value =
+        "سينمائي فخم، غامض، تاريخي، معاصر";
+
+    $("colorsInput").value =
+        "أخضر سعودي عميق، أسود، ذهبي معدني، أبيض";
+
+    document.querySelector(
+        '.pacing[data-value="cinematic"]'
+    ).click();
+
+});
+
+
+$("presetHistory").addEventListener("click", () => {
+
+    $("subjectInput").value =
+        "موضوع تاريخي سعودي بأسلوب فيلم وثائقي سينمائي";
+
+    $("titleInput").value =
+        "حكاية من التاريخ";
+
+    $("visualStyle").value =
+        "تاريخي فاخر، وثائقي، درامي، غامض";
+
+    $("colorsInput").value =
+        "أخضر داكن، بني ترابي، ذهبي معتق، أسود";
+
+    document.querySelector(
+        '.pacing[data-value="dramatic"]'
+    ).click();
+
+});
+
+
+/* =========================================================
+   VALIDATOR
+   ========================================================= */
+
+function stripComments(code){
+
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g,"")
+        .replace(/<!--[\s\S]*?-->/g,"")
+        .replace(/\/\/[^\n\r]*/g,"");
+}
+
+
+function validateMotionCode(code){
+
+    const clean = stripComments(code);
+
+    const results = [];
+
+    const checks = [
+
+        {
+            name:"DOCTYPE",
+            test:/<!doctype\s+html/i,
+            type:"error",
+            message:"يجب أن يكون الملف HTML كاملًا."
+        },
+
+        {
+            name:"Element.animate",
+            test:/\.animate\s*\(/,
+            type:"error",
+            message:"لم يتم العثور على Element.animate()."
+        },
+
+        {
+            name:"motionAnimations",
+            test:/window\s*\.\s*motionAnimations/,
+            type:"error",
+            message:"يجب كشف Animation objects عبر window.motionAnimations."
+        },
+
+        {
+            name:"CSS animation",
+            test:/\banimation\s*:/i,
+            type:"error",
+            message:"تم العثور على CSS animation."
+        },
+
+        {
+            name:"@keyframes",
+            test:/@keyframes/i,
+            type:"error",
+            message:"@keyframes ممنوع."
+        },
+
+        {
+            name:"transition",
+            test:/\btransition\s*:/i,
+            type:"error",
+            message:"CSS transitions ممنوعة."
+        },
+
+        {
+            name:"setInterval",
+            test:/setInterval\s*\(/i,
+            type:"error",
+            message:"setInterval ممنوع في منطق الحركة."
+        },
+
+        {
+            name:"Date.now",
+            test:/Date\s*\.\s*now\s*\(/i,
+            type:"error",
+            message:"Date.now ممنوع كمصدر للزمن."
+        },
+
+        {
+            name:"performance.now",
+            test:/performance\s*\.\s*now\s*\(/i,
+            type:"error",
+            message:"performance.now ممنوع كمصدر للزمن."
+        },
+
+        {
+            name:"random",
+            test:/Math\s*\.\s*random\s*\(/i,
+            type:"warn",
+            message:"Math.random قد يجعل الرندر غير حتمي."
+        },
+
+        {
+            name:"requestAnimationFrame",
+            test:/requestAnimationFrame\s*\(/i,
+            type:"warn",
+            message:"requestAnimationFrame لا يجب أن يكون مصدر زمن الحركة."
+        },
+
+        {
+            name:"external video",
+            test:/<video\b/i,
+            type:"warn",
+            message:"الفيديو الخارجي قد لا يكون قابلًا للتحكم Frame-by-Frame."
+        },
+
+        {
+            name:"WebGL",
+            test:/webgl|webgl2|getContext\s*\(\s*['"]webgl/i,
+            type:"warn",
+            message:"WebGL قد يجعل الالتقاط غير حتمي حسب التنفيذ."
         }
 
-        mediaRecorder = new MediaRecorder(stream, options);
+    ];
 
-        mediaRecorder.ondataavailable = function(e) {
-            if (e.data.size > 0) recordedChunks.push(e.data);
+    for(const check of checks){
+
+        if(check.test.test(clean)){
+
+            results.push({
+                ...check,
+                passed:false
+            });
+
+        }else{
+
+            results.push({
+                ...check,
+                passed:true
+            });
+        }
+    }
+
+    return results;
+}
+
+
+function showValidation(results){
+
+    const list = $("validationList");
+
+    list.innerHTML = "";
+
+    let errors = 0;
+    let warnings = 0;
+
+    for(const item of results){
+
+        if(item.passed){
+
+            list.insertAdjacentHTML(
+                "beforeend",
+                `<div class="validation-item ok">
+                    ✓ ${escapeHTML(item.name)}
+                </div>`
+            );
+
+        }else{
+
+            if(item.type === "error") errors++;
+            if(item.type === "warn") warnings++;
+
+            list.insertAdjacentHTML(
+                "beforeend",
+                `<div class="validation-item ${item.type}">
+                    ${item.type === "error" ? "✕" : "!"}
+                    ${escapeHTML(item.name)}
+                    —
+                    ${escapeHTML(item.message)}
+                </div>`
+            );
+        }
+    }
+
+    $("validationModal").classList.add("show");
+
+    return {
+        errors,
+        warnings
+    };
+}
+
+
+$("validateBtn").addEventListener("click", () => {
+
+    const results =
+        validateMotionCode(
+            codeInput.value
+        );
+
+    const summary =
+        showValidation(results);
+
+    log(
+        `Validation: ${summary.errors} errors, ${summary.warnings} warnings`
+    );
+});
+
+
+$("closeValidation").addEventListener("click", () => {
+
+    $("validationModal")
+        .classList.remove("show");
+});
+
+
+$("forceExport").addEventListener("click", () => {
+
+    state.forceExport = true;
+
+    $("validationModal")
+        .classList.remove("show");
+
+    startRender();
+});
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+async function previewCode(){
+
+    const code =
+        codeInput.value;
+
+    state.code = code;
+
+    previewFrame.srcdoc = code;
+
+    await new Promise(resolve => {
+
+        previewFrame.addEventListener(
+            "load",
+            resolve,
+            {once:true}
+        );
+
+    });
+
+    setStatus("المعاينة جاهزة");
+
+    log("Preview loaded");
+
+    drawTimeline();
+}
+
+
+$("previewBtn").addEventListener(
+    "click",
+    previewCode
+);
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+function drawTimeline(){
+
+    timelineScenes.innerHTML = "";
+
+    const sceneCount =
+        Math.max(
+            3,
+            Math.min(
+                8,
+                Math.round(state.duration / 2)
+            )
+        );
+
+    for(let i=0;i<sceneCount;i++){
+
+        const left =
+            i / sceneCount * 100;
+
+        const width =
+            100 / sceneCount - .8;
+
+        const scene =
+            document.createElement("div");
+
+        scene.className =
+            "scene";
+
+        scene.style.left =
+            `${left}%`;
+
+        scene.style.width =
+            `${width}%`;
+
+        const labels = [
+            "OPENING",
+            "BUILD",
+            "DEVELOPMENT",
+            "PEAK",
+            "RESOLUTION",
+            "ENDING"
+        ];
+
+        scene.textContent =
+            labels[
+                Math.min(
+                    i,
+                    labels.length - 1
+                )
+            ];
+
+        timelineScenes.appendChild(
+            scene
+        );
+    }
+}
+
+
+function updatePlayhead(time){
+
+    const percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                time / state.duration * 100
+            )
+        );
+
+    playhead.style.left =
+        `${percent}%`;
+
+    hudTime.textContent =
+        `${time.toFixed(2)}s`;
+}
+
+
+/* =========================================================
+   RESOURCE WAITING
+   ========================================================= */
+
+async function waitForImages(doc){
+
+    const images =
+        [...doc.images];
+
+    await Promise.all(
+        images.map(img => {
+
+            if(img.complete){
+
+                return img.decode
+                    ? img.decode().catch(()=>{})
+                    : Promise.resolve();
+            }
+
+            return new Promise(resolve => {
+
+                img.addEventListener(
+                    "load",
+                    resolve,
+                    {once:true}
+                );
+
+                img.addEventListener(
+                    "error",
+                    resolve,
+                    {once:true}
+                );
+            });
+
+        })
+    );
+}
+
+
+async function waitForFonts(doc){
+
+    try{
+
+        if(doc.fonts?.ready){
+
+            await doc.fonts.ready;
+        }
+
+    }catch{}
+}
+
+
+async function waitForResources(iframe){
+
+    const doc =
+        iframe.contentDocument;
+
+    await waitForImages(doc);
+    await waitForFonts(doc);
+
+    const deadline =
+        performance.now() + 5000;
+
+    while(
+        performance.now() < deadline
+    ){
+
+        const pendingImages =
+            [...doc.images]
+                .filter(
+                    img => !img.complete
+                );
+
+        if(!pendingImages.length){
+            break;
+        }
+
+        await nextFrame();
+    }
+}
+
+
+/* =========================================================
+   RENDER IFRAME
+   ========================================================= */
+
+function createRenderIframe(width,height){
+
+    const iframe =
+        document.createElement("iframe");
+
+    iframe.setAttribute(
+        "sandbox",
+        "allow-scripts allow-same-origin"
+    );
+
+    iframe.style.position =
+        "fixed";
+
+    iframe.style.left =
+        "-100000px";
+
+    iframe.style.top =
+        "0";
+
+    iframe.style.width =
+        `${width}px`;
+
+    iframe.style.height =
+        `${height}px`;
+
+    iframe.style.border =
+        "0";
+
+    iframe.style.opacity =
+        "1";
+
+    iframe.style.pointerEvents =
+        "none";
+
+    document.body.appendChild(
+        iframe
+    );
+
+    return iframe;
+}
+
+
+async function loadRenderIframe(
+    iframe,
+    code
+){
+
+    await new Promise((resolve,reject) => {
+
+        let done = false;
+
+        const finish = () => {
+
+            if(done) return;
+
+            done = true;
+
+            iframe.removeEventListener(
+                "load",
+                finish
+            );
+
+            resolve();
         };
 
-        mediaRecorder.onstop = function() {
-            const blob = new Blob(recordedChunks, { type: options.mimeType });
-            const fileName = document.getElementById("file-name").value || "motion_graphic";
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = `${fileName}.webm`;
-            document.body.appendChild(a);
-            a.click();
-            
-            setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
-            
-            recordedChunks = [];
-            isRecording = false;
-            btn.innerText = "🎥 بدء تسجيل وتصدير الفيديو";
-            btn.classList.remove("record-active");
-            stream.getTracks().forEach(track => track.stop());
-        };
+        iframe.addEventListener(
+            "load",
+            finish
+        );
 
-        mediaRecorder.start();
-        isRecording = true;
-        btn.innerText = "⏹️ إيقاف التسجيل وحفظ المقطع";
-        btn.classList.add("record-active");
+        iframe.srcdoc = code;
 
-        stream.getVideoTracks()[0].onended = () => {
-            if(mediaRecorder.state === "recording") mediaRecorder.stop();
-        };
+        setTimeout(() => {
 
-    } catch (err) {
-        console.error("Recording error: ", err);
-        if (err.name === 'NotAllowedError') {
-            alert("❌ تم إلغاء التسجيل. يجب الموافقة على المشاركة لتتمكن من تصدير الفيديو.");
+            if(!done){
+
+                finish();
+            }
+
+        }, 10000);
+
+    });
+
+    await waitForResources(
+        iframe
+    );
+}
+
+
+/* =========================================================
+   ANIMATION DISCOVERY
+   ========================================================= */
+
+function collectAnimations(doc){
+
+    let animations = [];
+
+    try{
+
+        if(
+            Array.isArray(
+                doc.defaultView.motionAnimations
+            )
+        ){
+
+            animations =
+                doc.defaultView.motionAnimations
+                    .filter(Boolean);
+        }
+
+    }catch(e){
+
+        log(
+            "Could not access motionAnimations",
+            "warn"
+        );
+    }
+
+    if(!animations.length){
+
+        try{
+
+            animations =
+                doc.getAnimations
+                    ? doc.getAnimations({
+                        subtree:true
+                    })
+                    : [];
+
+        }catch{
+
+            animations = [];
+        }
+    }
+
+    return animations;
+}
+
+
+/* =========================================================
+   TIMELINE CONTROL
+   ========================================================= */
+
+function setTimelineTime(
+    animations,
+    timeMs
+){
+
+    for(const animation of animations){
+
+        try{
+
+            animation.pause();
+
+            animation.currentTime =
+                timeMs;
+
+        }catch(e){
+
+            console.warn(
+                "Animation time failed",
+                e
+            );
         }
     }
 }
+
+
+/* =========================================================
+   PAINT
+   ========================================================= */
+
+function nextFrame(){
+
+    return new Promise(resolve => {
+
+        requestAnimationFrame(
+            () => resolve()
+        );
+    });
+}
+
+
+async function waitForPaint(){
+
+    await nextFrame();
+    await nextFrame();
+}
+
+
+/* =========================================================
+   CANVAS CAPTURE
+   ========================================================= */
+
+async function captureIframe(
+    iframe,
+    width,
+    height
+){
+
+    const doc =
+        iframe.contentDocument;
+
+    const canvas =
+        await html2canvas(
+            doc.documentElement,
+            {
+                backgroundColor:
+                    $("transparentPreview").checked
+                        ? null
+                        : "#000000",
+
+                width,
+                height,
+
+                windowWidth:width,
+                windowHeight:height,
+
+                scale:1,
+
+                useCORS:true,
+
+                allowTaint:false,
+
+                logging:false,
+
+                imageTimeout:10000,
+
+                removeContainer:true
+            }
+        );
+
+    return canvas;
+}
+
+
+/* =========================================================
+   CODEC SUPPORT
+   ========================================================= */
+
+async function chooseVP9(
+    width,
+    height
+){
+
+    if(
+        typeof VideoEncoder ===
+        "undefined"
+    ){
+
+        throw new Error(
+            "VideoEncoder غير مدعوم."
+        );
+    }
+
+    const candidates = [
+
+        "vp09.00.40.08",
+        "vp09.00.10.08",
+        "vp09.00.10.08.00"
+    ];
+
+    for(const codec of candidates){
+
+        try{
+
+            const support =
+                await VideoEncoder
+                    .isConfigSupported({
+
+                        codec,
+
+                        width,
+                        height,
+
+                        bitrate:
+                            state.bitrate,
+
+                        framerate:
+                            state.fps
+                    });
+
+            if(support.supported){
+
+                return codec;
+            }
+
+        }catch{}
+    }
+
+    throw new Error(
+        "لا يوجد VP9 VideoEncoder مناسب."
+    );
+}
+
+
+/* =========================================================
+   ENCODER QUEUE
+   ========================================================= */
+
+async function waitForEncoderQueue(
+    encoder,
+    maxQueue = 3
+){
+
+    while(
+        encoder.encodeQueueSize >
+        maxQueue
+    ){
+
+        if(state.cancelRequested){
+
+            throw new Error(
+                "CANCELLED"
+            );
+        }
+
+        await nextFrame();
+    }
+}
+
+
+/* =========================================================
+   WEBM EXPORT
+   ========================================================= */
+
+async function exportWebM(){
+
+    if(
+        typeof WebMMuxer ===
+        "undefined"
+    ){
+
+        throw new Error(
+            "webm-muxer غير محمل."
+        );
+    }
+
+    const dimensions =
+        getDimensions();
+
+    const width =
+        dimensions.width;
+
+    const height =
+        dimensions.height;
+
+    const totalFrames =
+        Math.ceil(
+            state.duration *
+            state.fps
+        );
+
+    const frameDurationUs =
+        Math.round(
+            1_000_000 /
+            state.fps
+        );
+
+    const codec =
+        await chooseVP9(
+            width,
+            height
+        );
+
+    log(
+        `VP9 selected: ${codec}`
+    );
+
+    const muxer =
+        new WebMMuxer.Muxer({
+
+            target:
+                new WebMMuxer.ArrayBufferTarget(),
+
+            video:{
+                codec:"V_VP9",
+
+                width,
+
+                height,
+
+                frameRate:
+                    state.fps
+            },
+
+            firstTimestampBehavior:
+                "offset"
+        });
+
+    state.muxer =
+        muxer;
+
+    let encoderError = null;
+
+    const encoder =
+        new VideoEncoder({
+
+            output:(chunk,metadata) => {
+
+                try{
+
+                    muxer.addVideoChunk(
+                        chunk,
+                        metadata
+                    );
+
+                }catch(error){
+
+                    encoderError =
+                        error;
+                }
+            },
+
+            error:error => {
+
+                encoderError =
+                    error;
+            }
+
+        });
+
+    state.encoder =
+        encoder;
+
+    encoder.configure({
+
+        codec,
+
+        width,
+
+        height,
+
+        bitrate:
+            state.bitrate,
+
+        framerate:
+            state.fps,
+
+        latencyMode:
+            "quality"
+    });
+
+    const iframe =
+        createRenderIframe(
+            width,
+            height
+        );
+
+    state.renderIframe =
+        iframe;
+
+    try{
+
+        await loadRenderIframe(
+            iframe,
+            state.code
+        );
+
+        const doc =
+            iframe.contentDocument;
+
+        const animations =
+            collectAnimations(
+                doc
+            );
+
+        state.animations =
+            animations;
+
+        log(
+            `Animations discovered: ${animations.length}`
+        );
+
+        if(!animations.length){
+
+            log(
+                "No explicit animations found; static frames will be rendered.",
+                "warn"
+            );
+        }
+
+        const startTime =
+            performance.now();
+
+        for(
+            let frameIndex = 0;
+            frameIndex < totalFrames;
+            frameIndex++
+        ){
+
+            if(
+                state.cancelRequested
+            ){
+
+                throw new Error(
+                    "CANCELLED"
+                );
+            }
+
+            if(
+                encoderError
+            ){
+
+                throw encoderError;
+            }
+
+            await waitForEncoderQueue(
+                encoder,
+                3
+            );
+
+            const timeMs =
+                frameIndex /
+                state.fps *
+                1000;
+
+            const timestamp =
+                Math.round(
+                    frameIndex *
+                    frameDurationUs
+                );
+
+            setTimelineTime(
+                animations,
+                timeMs
+            );
+
+            updatePlayhead(
+                timeMs / 1000
+            );
+
+            await waitForPaint();
+
+            const canvas =
+                await captureIframe(
+                    iframe,
+                    width,
+                    height
+                );
+
+            const videoFrame =
+                new VideoFrame(
+                    canvas,
+                    {
+                        timestamp,
+                        duration:
+                            frameDurationUs
+                    }
+                );
+
+            const keyFrame =
+                frameIndex === 0 ||
+                frameIndex %
+                    Math.max(
+                        1,
+                        Math.round(
+                            state.fps * 2
+                        )
+                    ) === 0;
+
+            encoder.encode(
+                videoFrame,
+                {
+                    keyFrame
+                }
+            );
+
+            videoFrame.close();
+
+            const progress =
+                (frameIndex + 1) /
+                totalFrames;
+
+            progressBar.style.width =
+                `${progress * 100}%`;
+
+            const elapsed =
+                performance.now() -
+                startTime;
+
+            const estimated =
+                progress > 0
+                    ? elapsed *
+                      (1 / progress - 1)
+                    : 0;
+
+            const eta =
+                Math.max(
+                    0,
+                    Math.round(
+                        estimated / 1000
+                    )
+                );
+
+            setStatus(
+                `تصدير ${Math.round(progress*100)}% — ${eta}s`
+            );
+
+            if(
+                frameIndex % 5 === 0 ||
+                frameIndex ===
+                    totalFrames - 1
+            ){
+
+                log(
+                    `Frame ${frameIndex + 1}/${totalFrames} — queue ${encoder.encodeQueueSize}`
+                );
+            }
+        }
+
+        await encoder.flush();
+
+        if(encoderError){
+
+            throw encoderError;
+        }
+
+        muxer.finalize();
+
+        const buffer =
+            muxer.target.buffer;
+
+        if(!buffer){
+
+            throw new Error(
+                "لم يتم إنشاء ملف WebM."
+            );
+        }
+
+        return new Blob(
+            [buffer],
+            {
+                type:"video/webm"
+            }
+        );
+
+    }finally{
+
+        try{
+
+            if(
+                encoder.state !==
+                "closed"
+            ){
+
+                encoder.close();
+            }
+
+        }catch{}
+
+        state.encoder = null;
+
+        state.muxer = null;
+
+        if(
+            state.renderIframe
+        ){
+
+            state.renderIframe.remove();
+
+            state.renderIframe =
+                null;
+        }
+
+    }
+}
+
+
+/* =========================================================
+   RENDER ENTRY
+   ========================================================= */
+
+async function startRender(){
+
+    if(state.rendering){
+
+        toastMessage(
+            "هناك تصدير يعمل حاليًا"
+        );
+
+        return;
+    }
+
+    state.code =
+        codeInput.value;
+
+    if(!state.code.trim()){
+
+        toastMessage(
+            "أدخل كود HTML أولاً"
+        );
+
+        return;
+    }
+
+    state.cancelRequested =
+        false;
+
+    state.rendering =
+        true;
+
+    progressBar.style.width =
+        "0%";
+
+    setStatus(
+        "جاري تجهيز التصدير..."
+    );
+
+    try{
+
+        const results =
+            validateMotionCode(
+                state.code
+            );
+
+        const errors =
+            results.filter(
+                r => !r.passed &&
+                r.type === "error"
+            );
+
+        if(
+            errors.length &&
+            !state.forceExport
+        ){
+
+            showValidation(
+                results
+            );
+
+            return;
+        }
+
+        state.forceExport =
+            false;
+
+        const blob =
+            await exportWebM();
+
+        if(state.lastBlobUrl){
+
+            URL.revokeObjectURL(
+                state.lastBlobUrl
+            );
+        }
+
+        state.lastBlobUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+        const link =
+            document.createElement("a");
+
+        link.href =
+            state.lastBlobUrl;
+
+        link.download =
+            `motion-${Date.now()}.webm`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        progressBar.style.width =
+            "100%";
+
+        setStatus(
+            "تم التصدير بنجاح"
+        );
+
+        toastMessage(
+            "تم إنشاء الفيديو"
+        );
+
+        log(
+            `Export complete: ${(blob.size / 1024 / 1024).toFixed(2)} MB`
+        );
+
+    }catch(error){
+
+        if(
+            error.message ===
+            "CANCELLED"
+        ){
+
+            setStatus(
+                "تم إيقاف التصدير"
+            );
+
+            toastMessage(
+                "تم إيقاف التصدير"
+            );
+
+            log(
+                "Render cancelled",
+                "warn"
+            );
+
+        }else{
+
+            console.error(error);
+
+            setStatus(
+                "فشل التصدير"
+            );
+
+            toastMessage(
+                "حدث خطأ أثناء التصدير"
+            );
+
+            log(
+                error?.message ||
+                String(error),
+                "error"
+            );
+        }
+
+    }finally{
+
+        state.rendering =
+            false;
+
+        state.cancelRequested =
+            false;
+    }
+}
+
+
+$("exportBtn").addEventListener(
+    "click",
+    startRender
+);
+
+
+/* =========================================================
+   STOP
+   ========================================================= */
+
+function stopRender(){
+
+    if(!state.rendering){
+
+        return;
+    }
+
+    state.cancelRequested =
+        true;
+
+    try{
+
+        if(
+            state.encoder &&
+            state.encoder.state !==
+            "closed"
+        ){
+
+            state.encoder.close();
+        }
+
+    }catch{}
+
+    setStatus(
+        "جاري الإيقاف..."
+    );
+}
+
+
+$("stopBtn").addEventListener(
+    "click",
+    stopRender
+);
+
+
+/* =========================================================
+   TEST FRAME
+   ========================================================= */
+
+async function renderTestFrame(){
+
+    if(state.rendering){
+
+        toastMessage(
+            "أوقف التصدير أولاً"
+        );
+
+        return;
+    }
+
+    state.code =
+        codeInput.value;
+
+    const results =
+        validateMotionCode(
+            state.code
+        );
+
+    const hardErrors =
+        results.filter(
+            r => !r.passed &&
+            r.type === "error"
+        );
+
+    if(hardErrors.length){
+
+        showValidation(
+            results
+        );
+
+        return;
+    }
+
+    const d =
+        getDimensions();
+
+    const iframe =
+        createRenderIframe(
+            d.width,
+            d.height
+        );
+
+    try{
+
+        setStatus(
+            "جاري إنشاء Test Frame..."
+        );
+
+        await loadRenderIframe(
+            iframe,
+            state.code
+        );
+
+        const animations =
+            collectAnimations(
+                iframe.contentDocument
+            );
+
+        const time =
+            Math.min(
+                state.duration / 2,
+                state.duration
+            );
+
+        setTimelineTime(
+            animations,
+            time * 1000
+        );
+
+        await waitForPaint();
+
+        const canvas =
+            await captureIframe(
+                iframe,
+                d.width,
+                d.height
+            );
+
+        const dataUrl =
+            canvas.toDataURL(
+                "image/png"
+            );
+
+        const win =
+            window.open(
+                "",
+                "_blank"
+            );
+
+        if(win){
+
+            win.document.write(`
+                <!doctype html>
+                <html>
+                <body style="
+                    margin:0;
+                    background:#05070b;
+                    display:grid;
+                    place-items:center;
+                    min-height:100vh;
+                ">
+                <img
+                    src="${dataUrl}"
+                    style="
+                        max-width:95vw;
+                        max-height:95vh;
+                        object-fit:contain;
+                    "
+                >
+                </body>
+                </html>
+            `);
+
+            win.document.close();
+        }
+
+        setStatus(
+            "Test Frame جاهز"
+        );
+
+        updatePlayhead(time);
+
+    }catch(error){
+
+        console.error(error);
+
+        toastMessage(
+            "فشل Test Frame"
+        );
+
+        log(
+            error?.message ||
+            String(error),
+            "error"
+        );
+
+    }finally{
+
+        iframe.remove();
+    }
+}
+
+
+$("testFrameBtn").addEventListener(
+    "click",
+    renderTestFrame
+);
+
+
+/* =========================================================
+   DIAGNOSTICS
+   ========================================================= */
+
+async function runDiagnostics(){
+
+    const hasWebCodecs =
+        "VideoEncoder" in window &&
+        "VideoFrame" in window;
+
+    $("diagWebCodecs").textContent =
+        hasWebCodecs
+            ? "مدعوم"
+            : "غير مدعوم";
+
+    $("diagWebCodecs").className =
+        hasWebCodecs
+            ? "ok"
+            : "bad";
+
+    const hasEncoder =
+        "VideoEncoder" in window;
+
+    $("diagEncoder").textContent =
+        hasEncoder
+            ? "متوفر"
+            : "غير متوفر";
+
+    $("diagEncoder").className =
+        hasEncoder
+            ? "ok"
+            : "bad";
+
+    const hasMuxer =
+        typeof WebMMuxer !==
+        "undefined";
+
+    $("diagMuxer").textContent =
+        hasMuxer
+            ? "WebM Muxer"
+            : "غير متوفر";
+
+    $("diagMuxer").className =
+        hasMuxer
+            ? "ok"
+            : "bad";
+
+    log(
+        `Diagnostics: WebCodecs=${hasWebCodecs}, Encoder=${hasEncoder}, Muxer=${hasMuxer}`
+    );
+}
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+async function initialize(){
+
+    state.bitrate =
+        getBitrate();
+
+    updateUI();
+
+    drawTimeline();
+
+    await previewCode();
+
+    await runDiagnostics();
+
+    log(
+        "Motion Graphics Studio V3 initialized"
+    );
+}
+
+
+initialize();
+
 </script>
+
 </body>
 </html>
