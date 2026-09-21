@@ -2,34 +2,32 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>منصة المشاريع المرئية المتحركة</title>
 
 <style>
 :root{
-    --bg:#071014;
-    --panel:#0d191e;
-    --panel2:#101f25;
+    --bg:#071013;
+    --panel:#0d191d;
+    --panel2:#111f24;
     --line:rgba(255,255,255,.09);
-    --text:#eef5f4;
-    --muted:#8fa5aa;
-    --gold:#c7a75a;
-    --green:#45c49a;
-    --red:#e46d6d;
-    --blue:#5aa9e6;
-    --radius:20px;
+    --text:#edf4f3;
+    --muted:#8ea3a8;
+    --gold:#c9a85a;
+    --green:#45c69a;
+    --red:#df7474;
+    --blue:#5da9df;
+    --radius:18px;
 }
 
 *{
     box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
     margin:0;
     padding:0;
-    width:100%;
     min-height:100%;
     background:var(--bg);
     color:var(--text);
@@ -57,230 +55,189 @@ button{
 
 .app{
     min-height:100vh;
-    display:flex;
 }
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
+/* =========================
+   TOP BAR
+========================= */
 
-.sidebar{
-    width:280px;
-    min-height:100vh;
-    background:
-        linear-gradient(180deg,#0b171c,#071014);
-    border-left:1px solid var(--line);
-    padding:24px 18px;
-    position:fixed;
-    right:0;
+.topbar{
+    position:sticky;
     top:0;
-    bottom:0;
     z-index:50;
+    height:68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    background:rgba(7,16,19,.92);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(18px);
 }
 
 .brand{
     display:flex;
     align-items:center;
-    gap:13px;
-    margin-bottom:32px;
+    gap:11px;
 }
 
-.brand-mark{
-    width:44px;
-    height:44px;
-    border-radius:14px;
-    background:
-        linear-gradient(135deg,var(--gold),#8e7131);
+.logo{
+    width:40px;
+    height:40px;
+    border-radius:12px;
     display:grid;
     place-items:center;
+    background:linear-gradient(135deg,#e1c678,#9e7b31);
     color:#111;
     font-weight:900;
-    box-shadow:0 8px 30px rgba(199,167,90,.18);
 }
 
-.brand-title{
-    font-size:16px;
+.brand-name{
+    font-size:14px;
     font-weight:900;
 }
 
 .brand-sub{
+    font-size:10px;
     color:var(--muted);
-    font-size:11px;
-    margin-top:3px;
+    margin-top:2px;
 }
 
-.nav{
+.top-status{
     display:flex;
-    flex-direction:column;
+    align-items:center;
+    gap:7px;
+    font-size:10px;
+    color:var(--muted);
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px rgba(69,198,154,.7);
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav{
+    max-width:1180px;
+    margin:20px auto 0;
+    padding:0 18px;
+    display:flex;
     gap:8px;
 }
 
 .nav button{
-    border:1px solid transparent;
-    background:transparent;
+    border:1px solid var(--line);
+    background:var(--panel);
     color:var(--muted);
-    text-align:right;
-    padding:14px 15px;
-    border-radius:14px;
-    transition:.2s;
-}
-
-.nav button:hover{
-    background:rgba(255,255,255,.04);
-    color:var(--text);
+    padding:10px 16px;
+    border-radius:12px;
+    font-size:11px;
 }
 
 .nav button.active{
-    background:rgba(199,167,90,.10);
-    border-color:rgba(199,167,90,.25);
+    background:rgba(201,168,90,.11);
+    border-color:rgba(201,168,90,.32);
     color:#fff;
 }
 
-.side-info{
-    position:absolute;
-    right:18px;
-    left:18px;
-    bottom:20px;
-    padding:15px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:rgba(255,255,255,.025);
-}
-
-.side-info-title{
-    font-size:12px;
-    font-weight:800;
-}
-
-.side-info-text{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.7;
-    margin-top:6px;
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main{
-    width:calc(100% - 280px);
-    margin-right:280px;
-    min-height:100vh;
-}
-
-.topbar{
-    height:76px;
-    border-bottom:1px solid var(--line);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 28px;
-    position:sticky;
-    top:0;
-    background:rgba(7,16,20,.88);
-    backdrop-filter:blur(18px);
-    z-index:30;
-}
-
-.top-title{
-    font-size:17px;
-    font-weight:900;
-}
-
-.status{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:var(--muted);
-    font-size:12px;
-}
-
-.status-dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 15px rgba(69,196,154,.7);
-}
+/* =========================
+   PAGES
+========================= */
 
 .page{
     display:none;
-    padding:30px;
+    max-width:1180px;
+    margin:auto;
+    padding:22px 18px 60px;
 }
 
 .page.active{
     display:block;
 }
 
-/* =========================================================
-   GENERATOR
-========================================================= */
+/* =========================
+   HERO
+========================= */
 
 .hero{
-    max-width:1100px;
-    margin:0 auto 25px;
-    padding:34px;
+    padding:28px;
     border:1px solid var(--line);
-    border-radius:28px;
+    border-radius:24px;
     background:
-        radial-gradient(circle at 85% 15%,rgba(199,167,90,.11),transparent 28%),
-        radial-gradient(circle at 10% 90%,rgba(69,196,154,.08),transparent 25%),
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(201,168,90,.12),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(69,198,154,.08),
+            transparent 28%
+        ),
         var(--panel);
+    margin-bottom:18px;
 }
 
-.hero-kicker{
+.kicker{
     color:var(--gold);
-    font-size:12px;
+    font-size:10px;
     font-weight:900;
-    margin-bottom:10px;
+    margin-bottom:9px;
 }
 
 .hero h1{
     margin:0;
-    font-size:clamp(28px,4vw,48px);
-    line-height:1.2;
+    font-size:clamp(27px,5vw,46px);
+    line-height:1.18;
 }
 
 .hero p{
+    margin:13px 0 0;
     max-width:780px;
     color:var(--muted);
+    font-size:12px;
     line-height:1.9;
-    margin:14px 0 0;
-    font-size:14px;
 }
 
-.generator{
-    max-width:1100px;
-    margin:auto;
+/* =========================
+   GENERATOR
+========================= */
+
+.generator-grid{
     display:grid;
-    grid-template-columns:1.15fr .85fr;
-    gap:20px;
+    grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+    gap:16px;
 }
 
 .panel{
     background:var(--panel);
     border:1px solid var(--line);
-    border-radius:22px;
-    padding:22px;
+    border-radius:20px;
+    padding:18px;
 }
 
 .panel-title{
-    font-size:15px;
+    font-size:13px;
     font-weight:900;
-    margin-bottom:18px;
+    margin-bottom:15px;
 }
 
-.grid{
+.fields{
     display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:13px;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
 }
 
 .field{
     display:flex;
     flex-direction:column;
-    gap:7px;
+    gap:6px;
 }
 
 .field.full{
@@ -288,31 +245,30 @@ button{
 }
 
 .field label{
-    color:#b7c8cb;
-    font-size:12px;
+    color:#b7c7ca;
+    font-size:10px;
     font-weight:700;
 }
 
 .field input,
-.field textarea,
-.field select{
+.field textarea{
     width:100%;
     border:1px solid var(--line);
-    outline:none;
-    color:var(--text);
-    background:#081317;
-    border-radius:13px;
-    padding:12px 13px;
+    background:#071114;
+    color:#fff;
+    border-radius:11px;
+    outline:0;
+    padding:11px 12px;
+    font-size:11px;
 }
 
 .field input:focus,
-.field textarea:focus,
-.field select:focus{
-    border-color:rgba(199,167,90,.55);
+.field textarea:focus{
+    border-color:rgba(201,168,90,.5);
 }
 
 .field textarea{
-    min-height:115px;
+    min-height:90px;
     resize:vertical;
     line-height:1.8;
 }
@@ -320,314 +276,259 @@ button{
 .orientation{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:8px;
 }
 
 .orientation button{
-    min-height:80px;
-    border-radius:15px;
     border:1px solid var(--line);
-    background:#081317;
+    background:#071114;
     color:var(--muted);
-    text-align:right;
+    border-radius:12px;
     padding:13px;
+    text-align:right;
 }
 
 .orientation button.active{
-    border-color:rgba(199,167,90,.6);
-    background:rgba(199,167,90,.09);
     color:#fff;
+    border-color:rgba(201,168,90,.55);
+    background:rgba(201,168,90,.08);
 }
 
-.orient-title{
-    font-weight:900;
-    font-size:13px;
+.orientation strong{
+    display:block;
+    font-size:12px;
 }
 
-.orient-meta{
+.orientation span{
+    display:block;
+    margin-top:4px;
+    font-size:9px;
     color:var(--muted);
-    font-size:11px;
-    margin-top:5px;
 }
 
-.creative-box{
-    border:1px solid rgba(199,167,90,.3);
+.creative{
+    height:100%;
+    border:1px solid rgba(201,168,90,.25);
     background:
         linear-gradient(
-            135deg,
-            rgba(199,167,90,.10),
-            rgba(69,196,154,.04)
+            145deg,
+            rgba(201,168,90,.10),
+            rgba(69,198,154,.035)
         );
     border-radius:18px;
-    padding:18px;
-    height:100%;
+    padding:20px;
 }
 
 .creative-badge{
-    display:inline-flex;
-    padding:7px 10px;
+    display:inline-block;
+    padding:6px 9px;
     border-radius:999px;
-    border:1px solid rgba(199,167,90,.35);
+    border:1px solid rgba(201,168,90,.3);
     color:var(--gold);
-    font-size:11px;
+    font-size:9px;
     font-weight:900;
 }
 
-.creative-box h2{
-    margin:16px 0 7px;
-    font-size:23px;
+.creative h2{
+    margin:16px 0 8px;
+    font-size:24px;
 }
 
-.creative-box p{
+.creative p{
     color:var(--muted);
-    font-size:12px;
+    font-size:11px;
     line-height:1.9;
+    margin:0;
 }
 
-.creative-list{
-    margin-top:18px;
+.creative-items{
+    margin-top:17px;
     display:grid;
-    gap:10px;
+    gap:9px;
 }
 
 .creative-item{
     display:flex;
     align-items:flex-start;
-    gap:10px;
-    color:#cbd8da;
-    font-size:12px;
+    gap:8px;
+    font-size:10px;
+    color:#cad5d7;
     line-height:1.7;
 }
 
 .creative-item i{
-    width:20px;
-    height:20px;
-    border-radius:7px;
-    background:rgba(69,196,154,.10);
-    border:1px solid rgba(69,196,154,.2);
+    width:16px;
+    height:16px;
     flex:none;
+    border-radius:5px;
+    border:1px solid rgba(69,198,154,.25);
+    background:rgba(69,198,154,.08);
 }
 
-.duration-box{
-    display:grid;
-    grid-template-columns:1fr auto;
-    align-items:center;
-    gap:12px;
-}
-
-.duration-note{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.7;
-}
-
-.duration-input{
-    width:110px !important;
-    text-align:center;
-}
-
-.generate-area{
-    max-width:1100px;
-    margin:20px auto 0;
-}
-
-.generate-btn{
+.generate{
     width:100%;
-    min-height:58px;
+    margin-top:16px;
+    height:54px;
     border:0;
-    border-radius:17px;
-    color:#111;
-    font-weight:1000;
-    background:
-        linear-gradient(135deg,#e3c77c,#b9943e);
-    box-shadow:0 12px 40px rgba(199,167,90,.16);
+    border-radius:15px;
+    background:linear-gradient(135deg,#e2c675,#a9873c);
+    color:#101010;
+    font-weight:900;
+    font-size:12px;
 }
 
-.generate-btn:active{
-    transform:translateY(1px);
-}
+/* =========================
+   PROMPT
+========================= */
 
-/* =========================================================
-   PROMPT RESULT
-========================================================= */
-
-.prompt-result{
+.prompt-box{
     display:none;
-    max-width:1100px;
-    margin:20px auto 0;
+    margin-top:16px;
 }
 
-.prompt-result.show{
+.prompt-box.show{
     display:block;
 }
 
 .prompt-head{
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     gap:10px;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .prompt-head strong{
-    font-size:14px;
+    font-size:12px;
 }
 
-.small-actions{
-    display:flex;
-    gap:7px;
-}
-
-.small-btn{
+.copy{
     border:1px solid var(--line);
-    background:#0b171c;
-    color:#dbe5e6;
+    background:var(--panel);
+    color:#fff;
     border-radius:10px;
-    padding:8px 11px;
-    font-size:11px;
+    padding:8px 12px;
+    font-size:10px;
 }
 
-.prompt-output{
+#prompt{
     width:100%;
-    min-height:430px;
+    min-height:440px;
     resize:vertical;
-    border-radius:17px;
+    background:#040b0e;
+    color:#dce8e8;
     border:1px solid var(--line);
-    background:#050c0f;
-    color:#dfe9e9;
-    padding:16px;
-    direction:rtl;
-    line-height:1.85;
-    outline:none;
+    border-radius:14px;
+    padding:14px;
+    outline:0;
+    line-height:1.8;
+    font-size:10px;
 }
 
-/* =========================================================
+/* =========================
    WORKSPACE
-========================================================= */
+========================= */
 
 .workspace{
-    max-width:1450px;
-    margin:auto;
-}
-
-.workspace-grid{
     display:grid;
-    grid-template-columns:minmax(0,1fr) 340px;
-    gap:20px;
+    grid-template-columns:minmax(0,1fr) 330px;
+    gap:16px;
 }
 
 .preview-panel{
     min-width:0;
 }
 
-.preview-shell{
-    background:#030708;
+.preview{
+    background:#030607;
     border:1px solid var(--line);
-    border-radius:22px;
-    padding:14px;
+    border-radius:20px;
+    padding:12px;
 }
 
-.preview-top{
+.preview-head{
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    margin-bottom:12px;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:10px;
 }
 
-.preview-meta{
+.chips{
     display:flex;
     flex-wrap:wrap;
-    gap:7px;
+    gap:5px;
 }
 
 .chip{
     border:1px solid var(--line);
-    border-radius:999px;
-    padding:6px 9px;
-    font-size:10px;
     color:var(--muted);
+    border-radius:999px;
+    padding:5px 8px;
+    font-size:9px;
 }
 
-.preview-stage{
-    width:100%;
+.stage{
+    min-height:420px;
     display:grid;
     place-items:center;
-    background:
-        radial-gradient(circle,#15262c 1px,transparent 1px);
-    background-size:16px 16px;
-    border-radius:15px;
+    border-radius:14px;
     overflow:hidden;
-    min-height:400px;
+    background:
+        radial-gradient(
+            circle,
+            #18282c 1px,
+            transparent 1px
+        );
+    background-size:15px 15px;
 }
 
-.preview-frame-wrap{
-    position:relative;
-    max-width:100%;
-    max-height:75vh;
+.frame-wrap{
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
+    max-width:100%;
+    max-height:72vh;
 }
 
-.preview-frame{
-    border:0;
+#preview{
     display:block;
-    background:#fff;
-    width:100%;
-    height:100%;
+    border:0;
+    background:#000;
 }
 
-.workspace-side{
+/* =========================
+   SIDE
+========================= */
+
+.side{
     display:flex;
     flex-direction:column;
-    gap:15px;
+    gap:12px;
 }
 
 .side-panel{
     background:var(--panel);
     border:1px solid var(--line);
-    border-radius:20px;
-    padding:17px;
+    border-radius:18px;
+    padding:15px;
 }
 
 .side-panel h3{
-    margin:0 0 13px;
-    font-size:13px;
+    margin:0 0 11px;
+    font-size:12px;
 }
 
-.project-facts{
-    display:grid;
-    gap:8px;
-}
-
-.fact{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    font-size:11px;
-    border-bottom:1px solid rgba(255,255,255,.05);
-    padding-bottom:8px;
-}
-
-.fact span:first-child{
-    color:var(--muted);
-}
-
-.fact span:last-child{
-    color:#eaf1f1;
-    font-weight:800;
-    text-align:left;
-}
-
-textarea.code-input{
+#code{
     width:100%;
-    min-height:330px;
+    height:270px;
     resize:vertical;
+    background:#040b0e;
+    color:#dce8e8;
     border:1px solid var(--line);
-    border-radius:14px;
-    background:#050c0f;
-    color:#dce7e8;
-    padding:13px;
+    border-radius:12px;
+    outline:0;
+    padding:11px;
     direction:ltr;
     text-align:left;
     font-family:
@@ -636,20 +537,19 @@ textarea.code-input{
         Menlo,
         Consolas,
         monospace;
-    font-size:11px;
-    line-height:1.7;
-    outline:none;
+    font-size:9px;
+    line-height:1.65;
 }
 
 .btn{
     width:100%;
     border:1px solid var(--line);
-    background:#0b171c;
+    background:#091419;
     color:#e8eeee;
-    padding:12px;
-    border-radius:13px;
+    border-radius:11px;
+    padding:11px;
+    font-size:10px;
     font-weight:800;
-    font-size:12px;
 }
 
 .btn.primary{
@@ -659,66 +559,100 @@ textarea.code-input{
 }
 
 .btn.green{
-    background:rgba(69,196,154,.12);
-    border-color:rgba(69,196,154,.3);
-    color:#8ee0c3;
+    color:#8ee0c1;
+    border-color:rgba(69,198,154,.25);
+    background:rgba(69,198,154,.08);
 }
 
 .btn.red{
-    background:rgba(228,109,109,.08);
-    border-color:rgba(228,109,109,.25);
-    color:#f09b9b;
+    color:#f1a0a0;
+    border-color:rgba(223,116,116,.25);
+    background:rgba(223,116,116,.07);
 }
 
-.btn-row{
+.btns{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
+    gap:7px;
 }
 
-.btn-row.three{
-    grid-template-columns:repeat(3,1fr);
-}
-
-.export-settings{
+.info{
     display:grid;
-    gap:9px;
+    gap:7px;
 }
 
-.setting-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.info-row{
+    display:flex;
+    justify-content:space-between;
     gap:8px;
-}
-
-.setting{
-    background:#081317;
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:10px;
-}
-
-.setting label{
-    display:block;
+    padding-bottom:7px;
+    border-bottom:1px solid rgba(255,255,255,.05);
     font-size:10px;
-    color:var(--muted);
-    margin-bottom:6px;
 }
 
-.setting select{
-    width:100%;
-    border:0;
-    outline:0;
-    background:transparent;
-    color:#fff;
-    font-size:11px;
+.info-row span:first-child{
+    color:var(--muted);
+}
+
+.info-row span:last-child{
+    font-weight:800;
+    text-align:left;
+}
+
+/* =========================
+   VALIDATION
+========================= */
+
+.validation{
+    display:grid;
+    gap:6px;
+}
+
+.validation-item{
+    display:flex;
+    gap:7px;
+    padding:8px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    font-size:9px;
+    line-height:1.7;
+}
+
+.validation-item.ok{
+    border-color:rgba(69,198,154,.2);
+}
+
+.validation-item.warn{
+    border-color:rgba(201,168,90,.25);
+}
+
+.validation-item.bad{
+    border-color:rgba(223,116,116,.25);
+}
+
+.validation-icon{
+    width:17px;
+    height:17px;
+    flex:none;
+    display:grid;
+    place-items:center;
+    border-radius:5px;
+    background:rgba(255,255,255,.04);
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline-panel{
+    margin-top:12px;
 }
 
 .timeline{
-    height:72px;
+    height:64px;
     border:1px solid var(--line);
-    border-radius:14px;
-    background:#081216;
+    border-radius:12px;
+    background:#071114;
     position:relative;
     overflow:hidden;
     direction:ltr;
@@ -726,92 +660,47 @@ textarea.code-input{
 
 .timeline-track{
     position:absolute;
-    inset:18px 10px 18px;
+    inset:16px 8px;
     display:flex;
     gap:2px;
 }
 
-.scene-block{
-    height:100%;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(199,167,90,.12);
-    border-radius:7px;
+.scene{
     position:relative;
-    min-width:3px;
+    min-width:2px;
+    border-radius:5px;
+    background:rgba(201,168,90,.12);
+    border:1px solid rgba(201,168,90,.25);
 }
 
-.scene-block span{
+.scene span{
     position:absolute;
+    left:6px;
     top:50%;
-    left:7px;
     transform:translateY(-50%);
-    font-size:9px;
-    color:#d7c38d;
-    white-space:nowrap;
+    font-size:8px;
+    color:#d7c38c;
     direction:rtl;
+    white-space:nowrap;
 }
 
 .playhead{
     position:absolute;
     top:0;
     bottom:0;
+    left:0;
     width:2px;
     background:#fff;
-    left:0;
-    box-shadow:0 0 12px rgba(255,255,255,.7);
-    pointer-events:none;
+    box-shadow:0 0 12px #fff;
 }
 
-/* =========================================================
-   VALIDATION
-========================================================= */
-
-.validation{
-    display:grid;
-    gap:7px;
-}
-
-.check{
-    display:flex;
-    gap:9px;
-    align-items:flex-start;
-    border:1px solid var(--line);
-    border-radius:11px;
-    padding:9px;
-    font-size:10px;
-    line-height:1.7;
-}
-
-.check.ok{
-    border-color:rgba(69,196,154,.2);
-}
-
-.check.warn{
-    border-color:rgba(199,167,90,.25);
-}
-
-.check.bad{
-    border-color:rgba(228,109,109,.25);
-}
-
-.check-icon{
-    width:18px;
-    height:18px;
-    flex:none;
-    border-radius:6px;
-    display:grid;
-    place-items:center;
-    font-size:9px;
-    background:rgba(255,255,255,.05);
-}
-
-/* =========================================================
+/* =========================
    PROGRESS
-========================================================= */
+========================= */
 
 .progress-wrap{
     display:none;
-    margin-top:10px;
+    margin-top:9px;
 }
 
 .progress-wrap.show{
@@ -819,122 +708,102 @@ textarea.code-input{
 }
 
 .progress{
-    height:8px;
+    height:7px;
     border-radius:99px;
-    background:#071014;
+    background:#050b0d;
     overflow:hidden;
-    border:1px solid var(--line);
 }
 
 .progress-bar{
-    width:0%;
     height:100%;
-    background:linear-gradient(90deg,var(--gold),#ead18b);
-    transition:width .12s linear;
+    width:0;
+    background:linear-gradient(90deg,var(--gold),#ecd68f);
 }
 
 .progress-text{
+    margin-top:6px;
+    text-align:center;
     color:var(--muted);
-    font-size:10px;
-    margin-top:7px;
+    font-size:9px;
+}
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+.download{
+    display:none;
+    margin-top:10px;
+}
+
+.download.show{
+    display:block;
+}
+
+.download a{
+    display:block;
+    text-decoration:none;
     text-align:center;
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:24px;
-    transform:translate(-50%,20px);
-    opacity:0;
-    pointer-events:none;
-    background:#111e23;
-    border:1px solid var(--line);
-    border-radius:13px;
-    padding:11px 15px;
-    font-size:11px;
-    z-index:200;
-    transition:.22s;
-    max-width:min(90vw,500px);
-    text-align:center;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-/* =========================================================
-   MOBILE NAV
-========================================================= */
+/* =========================
+   MOBILE
+========================= */
 
 .mobile-nav{
     display:none;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+@media(max-width:900px){
 
-@media(max-width:1050px){
-    .generator{
+    .generator-grid{
         grid-template-columns:1fr;
     }
 
-    .workspace-grid{
+    .workspace{
         grid-template-columns:1fr;
     }
 
-    .workspace-side{
+    .side{
         display:grid;
         grid-template-columns:1fr 1fr;
     }
 }
 
-@media(max-width:760px){
+@media(max-width:650px){
+
     body{
-        padding-bottom:74px;
-    }
-
-    .sidebar{
-        display:none;
-    }
-
-    .main{
-        width:100%;
-        margin:0;
+        padding-bottom:68px;
     }
 
     .topbar{
-        height:64px;
-        padding:
-            0
-            16px
-            0
-            16px;
+        height:62px;
+        padding:0 13px;
     }
 
-    .top-title{
-        font-size:14px;
+    .brand-name{
+        font-size:12px;
     }
 
-    .status{
-        font-size:10px;
+    .brand-sub{
+        font-size:8px;
+    }
+
+    .top-status{
+        font-size:8px;
+    }
+
+    .nav{
+        display:none;
     }
 
     .page{
-        padding:
-            15px
-            12px
-            20px;
+        padding:13px 11px 30px;
     }
 
     .hero{
-        padding:22px 18px;
-        border-radius:20px;
+        padding:21px 17px;
+        border-radius:18px;
     }
 
     .hero h1{
@@ -942,11 +811,10 @@ textarea.code-input{
     }
 
     .hero p{
-        font-size:12px;
-        line-height:1.85;
+        font-size:11px;
     }
 
-    .grid{
+    .fields{
         grid-template-columns:1fr;
     }
 
@@ -955,83 +823,64 @@ textarea.code-input{
     }
 
     .panel{
-        padding:16px;
-        border-radius:18px;
-    }
-
-    .workspace-side{
-        display:flex;
-    }
-
-    .preview-stage{
-        min-height:250px;
-    }
-
-    .preview-frame-wrap{
-        width:100%;
-    }
-
-    .btn-row.three{
-        grid-template-columns:1fr;
-    }
-
-    .mobile-nav{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        position:fixed;
-        right:0;
-        left:0;
-        bottom:0;
-        height:70px;
-        padding:
-            8px
-            10px
-            calc(8px + env(safe-area-inset-bottom));
-        background:rgba(7,16,20,.96);
-        border-top:1px solid var(--line);
-        backdrop-filter:blur(18px);
-        z-index:100;
-    }
-
-    .mobile-nav button{
-        border:0;
-        background:transparent;
-        color:var(--muted);
-        border-radius:13px;
-        font-size:11px;
-    }
-
-    .mobile-nav button.active{
-        background:rgba(199,167,90,.10);
-        color:#fff;
-    }
-
-    .prompt-output{
-        min-height:350px;
-        font-size:11px;
-    }
-
-    textarea.code-input{
-        min-height:260px;
-        font-size:10px;
-    }
-}
-
-@media(max-width:430px){
-    .duration-box{
-        grid-template-columns:1fr;
-    }
-
-    .duration-input{
-        width:100% !important;
+        padding:14px;
+        border-radius:17px;
     }
 
     .orientation{
         grid-template-columns:1fr;
     }
 
-    .preview-stage{
-        min-height:220px;
+    .side{
+        display:flex;
+    }
+
+    .stage{
+        min-height:240px;
+    }
+
+    .frame-wrap{
+        max-width:100%;
+        max-height:62vh;
+    }
+
+    #code{
+        height:230px;
+    }
+
+    .mobile-nav{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:100;
+        height:68px;
+        padding:
+            7px
+            8px
+            calc(7px + env(safe-area-inset-bottom));
+        background:rgba(7,16,19,.97);
+        border-top:1px solid var(--line);
+        backdrop-filter:blur(18px);
+    }
+
+    .mobile-nav button{
+        border:0;
+        background:transparent;
+        color:var(--muted);
+        border-radius:11px;
+        font-size:10px;
+    }
+
+    .mobile-nav button.active{
+        color:#fff;
+        background:rgba(201,168,90,.09);
+    }
+
+    .btns{
+        grid-template-columns:1fr;
     }
 }
 </style>
@@ -1039,327 +888,357 @@ textarea.code-input{
 
 <body>
 
-<div class="app">
+<header class="topbar">
 
-    <!-- =====================================================
-         DESKTOP SIDEBAR
-    ====================================================== -->
-    <aside class="sidebar">
+    <div class="brand">
 
-        <div class="brand">
-            <div class="brand-mark">م</div>
-            <div>
-                <div class="brand-title">مشاريع موشن</div>
-                <div class="brand-sub">منصة المشاريع المرئية المتحركة</div>
+        <div class="logo">م</div>
+
+        <div>
+            <div class="brand-name">
+                منصة المشاريع المرئية
+            </div>
+
+            <div class="brand-sub">
+                مشاريع دراسية بأسلوب الموشن
             </div>
         </div>
 
-        <nav class="nav">
-            <button class="active" data-page="generator">
-                إنشاء المشروع
-            </button>
+    </div>
 
-            <button data-page="workspace">
-                مساحة المشروع
-            </button>
-        </nav>
+    <div class="top-status">
+        <span class="status-dot"></span>
+        جاهز
+    </div>
 
-        <div class="side-info">
-            <div class="side-info-title">
-                طريقة العمل
-            </div>
+</header>
 
-            <div class="side-info-text">
-                اكتب بيانات مشروعك، دع الذكاء يبدع،
-                ثم الصق HTML الناتج ليتم تشغيله
-                وتصديره كفيديو.
-            </div>
+
+<nav class="nav">
+
+    <button
+        class="active"
+        data-page="generator"
+    >
+        إنشاء المشروع
+    </button>
+
+    <button
+        data-page="workspace"
+    >
+        مساحة المشروع
+    </button>
+
+</nav>
+
+
+<!-- =========================================================
+     GENERATOR
+========================================================= -->
+
+<section
+    class="page active"
+    id="page-generator"
+>
+
+    <div class="hero">
+
+        <div class="kicker">
+            EDUCATIONAL MOTION PROJECT
         </div>
 
-    </aside>
+        <h1>
+            مشروع دراسي كامل
+            <br>
+            بطريقة الموشن.
+        </h1>
 
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
+        <p>
+            الذكاء الاصطناعي يبني المحتوى والمشاهد والهوية
+            البصرية والحركة، ثم تحصل على مشروع مرئي متكامل
+            يمكن تشغيله وتصديره كفيديو.
+        </p>
 
-    <main class="main">
+    </div>
 
-        <header class="topbar">
 
-            <div class="top-title" id="topTitle">
-                إنشاء المشروع
+    <div class="generator-grid">
+
+        <div class="panel">
+
+            <div class="panel-title">
+                بيانات المشروع
             </div>
 
-            <div class="status">
-                <span class="status-dot"></span>
-                جاهز
-            </div>
+            <div class="fields">
 
-        </header>
-
-
-        <!-- =================================================
-             GENERATOR PAGE
-        ================================================== -->
-
-        <section class="page active" id="page-generator">
-
-            <div class="hero">
-
-                <div class="hero-kicker">
-                    AI PROJECT STUDIO
+                <div class="field full">
+                    <label>عنوان المشروع</label>
+                    <input
+                        id="title"
+                        placeholder="مثال: أنظمة التشغيل"
+                    >
                 </div>
 
-                <h1>
-                    مشروع دراسي كامل...
-                    <br>
-                    لكن بأسلوب موشن.
-                </h1>
+                <div class="field">
+                    <label>اسم الطالب</label>
+                    <input
+                        id="student"
+                        placeholder="أيمن"
+                    >
+                </div>
 
-                <p>
-                    المنصة لا تطلب من الذكاء الاصطناعي صناعة
-                    مشهد متحرك فقط. بل تطلب منه بناء مشروع
-                    دراسي مترابط بمحتوى واضح، ومشاهد متسلسلة،
-                    وصور وعناصر مرئية وانتقالات وحركة ناعمة،
-                    ثم إخراجه كصفحات متحركة داخل فيديو.
-                </p>
+                <div class="field">
+                    <label>اسم المعلم / المعلمة</label>
+                    <input
+                        id="teacher"
+                        placeholder="أ. تهاني"
+                    >
+                </div>
 
-            </div>
+                <div class="field">
+                    <label>المادة</label>
+                    <input
+                        id="subject"
+                        placeholder="التقنية الرقمية"
+                    >
+                </div>
 
+                <div class="field">
+                    <label>الصف</label>
+                    <input
+                        id="grade"
+                        placeholder="أول ثانوي"
+                    >
+                </div>
 
-            <div class="generator">
+                <div class="field">
+                    <label>الفصل الدراسي</label>
+                    <input
+                        id="semester"
+                        placeholder="الفصل الأول"
+                    >
+                </div>
 
-                <!-- PROJECT DATA -->
+                <div class="field">
+                    <label>الدرس / الوحدة</label>
+                    <input
+                        id="lesson"
+                        placeholder="أنظمة التشغيل"
+                    >
+                </div>
 
-                <div class="panel">
+                <div class="field">
+                    <label>المدة بالثواني</label>
+                    <input
+                        id="duration"
+                        type="number"
+                        min="5"
+                        max="600"
+                        value="60"
+                    >
+                </div>
 
-                    <div class="panel-title">
-                        بيانات المشروع
-                    </div>
+                <div class="field full">
+                    <label>
+                        متطلبات أو معلومات إضافية
+                    </label>
 
-                    <div class="grid">
+                    <textarea
+                        id="extra"
+                        placeholder="مثال: ركز على أنواع أنظمة التشغيل واستخداماتها..."
+                    ></textarea>
+                </div>
 
-                        <div class="field full">
-                            <label>
-                                عنوان المشروع
-                            </label>
+                <div class="field full">
 
-                            <input
-                                id="projectTitle"
-                                placeholder="مثال: أنظمة التشغيل"
-                            >
-                        </div>
+                    <label>
+                        اتجاه المشروع
+                    </label>
 
+                    <div class="orientation">
 
-                        <div class="field">
-                            <label>
-                                اسم الطالب
-                            </label>
+                        <button
+                            type="button"
+                            class="active"
+                            data-orientation="landscape"
+                        >
+                            <strong>أفقي</strong>
+                            <span>16:9 — شاشات وعروض</span>
+                        </button>
 
-                            <input
-                                id="studentName"
-                                placeholder="مثال: أيمن"
-                            >
-                        </div>
-
-
-                        <div class="field">
-                            <label>
-                                اسم المعلم / المعلمة
-                            </label>
-
-                            <input
-                                id="teacherName"
-                                placeholder="مثال: أ. تهاني"
-                            >
-                        </div>
-
-
-                        <div class="field">
-                            <label>
-                                المادة
-                            </label>
-
-                            <input
-                                id="subject"
-                                placeholder="مثال: التقنية الرقمية"
-                            >
-                        </div>
-
-
-                        <div class="field">
-                            <label>
-                                الصف
-                            </label>
-
-                            <input
-                                id="grade"
-                                placeholder="مثال: أول ثانوي"
-                            >
-                        </div>
-
-
-                        <div class="field">
-                            <label>
-                                الفصل الدراسي
-                            </label>
-
-                            <input
-                                id="semester"
-                                placeholder="مثال: الفصل الأول"
-                            >
-                        </div>
-
-
-                        <div class="field">
-                            <label>
-                                الدرس / الوحدة
-                            </label>
-
-                            <input
-                                id="lesson"
-                                placeholder="مثال: أنظمة التشغيل"
-                            >
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label>
-                                معلومات إضافية عن المطلوب
-                            </label>
-
-                            <textarea
-                                id="extra"
-                                placeholder="اكتب أي متطلبات خاصة بالمشروع، مثل نقاط معينة تريد تضمينها أو معلومات أعطاها المعلم..."
-                            ></textarea>
-
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label>
-                                اتجاه المشروع
-                            </label>
-
-                            <div class="orientation">
-
-                                <button
-                                    class="active"
-                                    data-orientation="landscape"
-                                    type="button"
-                                >
-                                    <div class="orient-title">
-                                        أفقي
-                                    </div>
-
-                                    <div class="orient-meta">
-                                        16:9 — مناسب للشاشات والعروض
-                                    </div>
-                                </button>
-
-                                <button
-                                    data-orientation="portrait"
-                                    type="button"
-                                >
-                                    <div class="orient-title">
-                                        عمودي
-                                    </div>
-
-                                    <div class="orient-meta">
-                                        9:16 — مناسب للجوال
-                                    </div>
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label>
-                                مدة المشروع
-                            </label>
-
-                            <div class="duration-box">
-
-                                <div class="duration-note">
-                                    هذه المدة تدخل داخل الـPrompt والـHTML.
-                                    عند لصق المشروع في مساحة التصدير سيتم
-                                    اكتشافها تلقائيًا.
-                                </div>
-
-                                <input
-                                    id="duration"
-                                    class="duration-input"
-                                    type="number"
-                                    min="5"
-                                    max="600"
-                                    value="60"
-                                >
-
-                            </div>
-
-                        </div>
+                        <button
+                            type="button"
+                            data-orientation="portrait"
+                        >
+                            <strong>عمودي</strong>
+                            <span>9:16 — جوال</span>
+                        </button>
 
                     </div>
 
                 </div>
 
+            </div>
 
-                <!-- CREATIVE MODE -->
+        </div>
 
-                <div class="creative-box">
 
-                    <span class="creative-badge">
-                        الوضع الإبداعي
+        <div class="creative">
+
+            <span class="creative-badge">
+                الوضع الوحيد
+            </span>
+
+            <h2>
+                دع الذكاء يبدع
+            </h2>
+
+            <p>
+                لا نعطي الذكاء قالبًا جاهزًا. نعطيه الموضوع
+                والقواعد، وهو يختار الشكل المناسب للمشروع.
+            </p>
+
+            <div class="creative-items">
+
+                <div class="creative-item">
+                    <i></i>
+                    يبني محتوى تعليميًا مترابطًا
+                </div>
+
+                <div class="creative-item">
+                    <i></i>
+                    يقسم المحتوى إلى مشاهد
+                </div>
+
+                <div class="creative-item">
+                    <i></i>
+                    يصمم الهوية البصرية
+                </div>
+
+                <div class="creative-item">
+                    <i></i>
+                    يحرك العناصر بطريقة موشن
+                </div>
+
+                <div class="creative-item">
+                    <i></i>
+                    يحافظ على وضوح العربية
+                </div>
+
+                <div class="creative-item">
+                    <i></i>
+                    يمنع ازدحام العناصر
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="generate"
+        id="generate"
+    >
+        إنشاء Prompt المشروع
+    </button>
+
+
+    <div
+        class="prompt-box"
+        id="promptBox"
+    >
+
+        <div class="prompt-head">
+
+            <strong>
+                Prompt المشروع
+            </strong>
+
+            <button
+                class="copy"
+                id="copyPrompt"
+            >
+                نسخ
+            </button>
+
+        </div>
+
+        <textarea
+            id="prompt"
+            readonly
+        ></textarea>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     WORKSPACE
+========================================================= -->
+
+<section
+    class="page"
+    id="page-workspace"
+>
+
+    <div class="workspace">
+
+        <div class="preview-panel">
+
+            <div class="preview">
+
+                <div class="preview-head">
+
+                    <div class="chips">
+
+                        <span
+                            class="chip"
+                            id="orientationInfo"
+                        >
+                            أفقي 16:9
+                        </span>
+
+                        <span
+                            class="chip"
+                            id="durationInfo"
+                        >
+                            —
+                        </span>
+
+                        <span
+                            class="chip"
+                            id="formatInfo"
+                        >
+                            تلقائي
+                        </span>
+
+                    </div>
+
+                    <span
+                        class="chip"
+                        id="stateInfo"
+                    >
+                        لا يوجد مشروع
                     </span>
 
-                    <h2>
-                        دع الذكاء يبدع
-                    </h2>
+                </div>
 
-                    <p>
-                        لا نقيّد الذكاء بتصميم جاهز.
-                        نعطيه معلومات المشروع والقواعد التقنية،
-                        وهو يقرر الهوية البصرية، توزيع المشاهد،
-                        الألوان، الصور، الحركة، الانتقالات
-                        وطريقة سرد المحتوى.
-                    </p>
 
-                    <div class="creative-list">
+                <div class="stage">
 
-                        <div class="creative-item">
-                            <i></i>
-                            يبني تسلسلًا منطقيًا للمشروع
-                        </div>
+                    <div
+                        class="frame-wrap"
+                        id="frameWrap"
+                    >
 
-                        <div class="creative-item">
-                            <i></i>
-                            يحول المعلومات إلى مشاهد بصرية
-                        </div>
-
-                        <div class="creative-item">
-                            <i></i>
-                            يستخدم الحركة لخدمة المعلومة
-                        </div>
-
-                        <div class="creative-item">
-                            <i></i>
-                            يحافظ على وضوح النص العربي
-                        </div>
-
-                        <div class="creative-item">
-                            <i></i>
-                            يمنع ازدحام العناصر والتداخل
-                        </div>
-
-                        <div class="creative-item">
-                            <i></i>
-                            يخرج HTML واحدًا جاهزًا للتشغيل
-                        </div>
+                        <iframe
+                            id="preview"
+                            sandbox="allow-scripts allow-same-origin"
+                        ></iframe>
 
                     </div>
 
@@ -1368,390 +1247,198 @@ textarea.code-input{
             </div>
 
 
-            <div class="generate-area">
+            <div class="panel timeline-panel">
+
+                <div class="panel-title">
+                    الخط الزمني
+                </div>
+
+                <div class="timeline">
+
+                    <div
+                        class="timeline-track"
+                        id="timelineTrack"
+                    ></div>
+
+                    <div
+                        class="playhead"
+                        id="playhead"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <aside class="side">
+
+            <div class="side-panel">
+
+                <h3>
+                    معلومات المشروع
+                </h3>
+
+                <div class="info">
+
+                    <div class="info-row">
+                        <span>العنوان</span>
+                        <span id="infoTitle">—</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>المادة</span>
+                        <span id="infoSubject">—</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>الصف</span>
+                        <span id="infoGrade">—</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>الاتجاه</span>
+                        <span id="infoOrientation">—</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>المدة</span>
+                        <span id="infoDuration">—</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="side-panel">
+
+                <h3>
+                    HTML المشروع
+                </h3>
+
+                <textarea
+                    id="code"
+                    spellcheck="false"
+                    placeholder="الصق HTML الذي أعاده الذكاء الاصطناعي هنا..."
+                ></textarea>
+
+                <div style="height:8px"></div>
+
+                <div class="btns">
+
+                    <button
+                        class="btn primary"
+                        id="load"
+                    >
+                        تشغيل
+                    </button>
+
+                    <button
+                        class="btn"
+                        id="clear"
+                    >
+                        مسح
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="side-panel">
+
+                <h3>
+                    الفحص
+                </h3>
+
+                <div
+                    class="validation"
+                    id="validation"
+                >
+                    <div class="validation-item warn">
+                        <div class="validation-icon">—</div>
+                        لم يتم فحص المشروع
+                    </div>
+                </div>
+
+                <div style="height:8px"></div>
 
                 <button
-                    class="generate-btn"
-                    id="generatePrompt"
+                    class="btn green"
+                    id="validate"
                 >
-                    إنشاء Prompt المشروع
+                    فحص المشروع
                 </button>
 
             </div>
 
 
-            <!-- PROMPT -->
+            <div class="side-panel">
 
-            <div
-                class="prompt-result"
-                id="promptResult"
-            >
+                <h3>
+                    التصدير
+                </h3>
 
-                <div class="prompt-head">
+                <button
+                    class="btn"
+                    id="test"
+                >
+                    اختبار Frame
+                </button>
 
-                    <strong>
-                        Prompt جاهز للذكاء الاصطناعي
-                    </strong>
+                <div style="height:7px"></div>
 
-                    <div class="small-actions">
+                <button
+                    class="btn primary"
+                    id="export"
+                >
+                    تصدير الفيديو
+                </button>
 
-                        <button
-                            class="small-btn"
-                            id="copyPrompt"
-                        >
-                            نسخ
-                        </button>
+                <button
+                    class="btn red"
+                    id="stop"
+                    style="display:none;margin-top:7px;"
+                >
+                    إيقاف
+                </button>
 
-                        <button
-                            class="small-btn"
-                            id="openWorkspace"
-                        >
-                            مساحة المشروع
-                        </button>
+                <div
+                    class="progress-wrap"
+                    id="progressWrap"
+                >
 
-                    </div>
-
-                </div>
-
-                <textarea
-                    class="prompt-output"
-                    id="promptOutput"
-                    readonly
-                ></textarea>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             WORKSPACE PAGE
-        ================================================== -->
-
-        <section class="page" id="page-workspace">
-
-            <div class="workspace">
-
-                <div class="workspace-grid">
-
-                    <!-- PREVIEW -->
-
-                    <div class="preview-panel">
-
-                        <div class="preview-shell">
-
-                            <div class="preview-top">
-
-                                <div class="preview-meta">
-
-                                    <span
-                                        class="chip"
-                                        id="metaOrientation"
-                                    >
-                                        أفقي 16:9
-                                    </span>
-
-                                    <span
-                                        class="chip"
-                                        id="metaDuration"
-                                    >
-                                        —
-                                    </span>
-
-                                    <span
-                                        class="chip"
-                                        id="metaResolution"
-                                    >
-                                        1080p
-                                    </span>
-
-                                </div>
-
-                                <span
-                                    class="chip"
-                                    id="projectState"
-                                >
-                                    لم يتم تحميل مشروع
-                                </span>
-
-                            </div>
-
-
-                            <div class="preview-stage">
-
-                                <div
-                                    class="preview-frame-wrap"
-                                    id="previewFrameWrap"
-                                >
-
-                                    <iframe
-                                        class="preview-frame"
-                                        id="previewFrame"
-                                        sandbox="allow-scripts allow-same-origin"
-                                    ></iframe>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- TIMELINE -->
-
+                    <div class="progress">
                         <div
-                            class="side-panel"
-                            style="margin-top:15px;"
-                        >
-
-                            <h3>
-                                الخط الزمني
-                            </h3>
-
-                            <div
-                                class="timeline"
-                                id="timeline"
-                            >
-
-                                <div
-                                    class="timeline-track"
-                                    id="timelineTrack"
-                                ></div>
-
-                                <div
-                                    class="playhead"
-                                    id="playhead"
-                                ></div>
-
-                            </div>
-
-                        </div>
-
+                            class="progress-bar"
+                            id="progressBar"
+                        ></div>
                     </div>
 
-
-                    <!-- SIDE CONTROLS -->
-
-                    <div class="workspace-side">
-
-                        <!-- PROJECT INFO -->
-
-                        <div class="side-panel">
-
-                            <h3>
-                                معلومات المشروع
-                            </h3>
-
-                            <div class="project-facts">
-
-                                <div class="fact">
-                                    <span>العنوان</span>
-                                    <span id="factTitle">—</span>
-                                </div>
-
-                                <div class="fact">
-                                    <span>المادة</span>
-                                    <span id="factSubject">—</span>
-                                </div>
-
-                                <div class="fact">
-                                    <span>الصف</span>
-                                    <span id="factGrade">—</span>
-                                </div>
-
-                                <div class="fact">
-                                    <span>الاتجاه</span>
-                                    <span id="factOrientation">—</span>
-                                </div>
-
-                                <div class="fact">
-                                    <span>المدة</span>
-                                    <span id="factDuration">—</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- HTML -->
-
-                        <div class="side-panel">
-
-                            <h3>
-                                HTML المشروع
-                            </h3>
-
-                            <textarea
-                                id="codeInput"
-                                class="code-input"
-                                spellcheck="false"
-                                placeholder="الصق هنا HTML المشروع الذي أنشأه الذكاء الاصطناعي..."
-                            ></textarea>
-
-                            <div style="height:9px"></div>
-
-                            <div class="btn-row">
-
-                                <button
-                                    class="btn primary"
-                                    id="loadProject"
-                                >
-                                    تشغيل المشروع
-                                </button>
-
-                                <button
-                                    class="btn"
-                                    id="clearProject"
-                                >
-                                    مسح
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- VALIDATION -->
-
-                        <div class="side-panel">
-
-                            <h3>
-                                فحص المشروع
-                            </h3>
-
-                            <div
-                                class="validation"
-                                id="validation"
-                            >
-                                <div class="check warn">
-                                    <div class="check-icon">—</div>
-                                    لم يتم فحص المشروع بعد
-                                </div>
-                            </div>
-
-                            <div style="height:9px"></div>
-
-                            <button
-                                class="btn green"
-                                id="validateProject"
-                            >
-                                فحص المشروع
-                            </button>
-
-                        </div>
-
-
-                        <!-- EXPORT -->
-
-                        <div class="side-panel">
-
-                            <h3>
-                                التصدير
-                            </h3>
-
-                            <div class="export-settings">
-
-                                <div class="setting-row">
-
-                                    <div class="setting">
-
-                                        <label>
-                                            الجودة
-                                        </label>
-
-                                        <select id="quality">
-                                            <option value="1080">
-                                                1080p
-                                            </option>
-                                            <option value="720">
-                                                720p
-                                            </option>
-                                        </select>
-
-                                    </div>
-
-                                    <div class="setting">
-
-                                        <label>
-                                            الإطارات
-                                        </label>
-
-                                        <select id="fps">
-                                            <option value="30">
-                                                30 FPS
-                                            </option>
-                                            <option value="60">
-                                                60 FPS
-                                            </option>
-                                        </select>
-
-                                    </div>
-
-                                </div>
-
-
-                                <button
-                                    class="btn"
-                                    id="testFrame"
-                                >
-                                    اختبار Frame
-                                </button>
-
-                                <button
-                                    class="btn primary"
-                                    id="exportVideo"
-                                >
-                                    تصدير الفيديو
-                                </button>
-
-                                <button
-                                    class="btn red"
-                                    id="stopExport"
-                                    style="display:none;"
-                                >
-                                    إيقاف التصدير
-                                </button>
-
-                                <div
-                                    class="progress-wrap"
-                                    id="progressWrap"
-                                >
-
-                                    <div class="progress">
-                                        <div
-                                            class="progress-bar"
-                                            id="progressBar"
-                                        ></div>
-                                    </div>
-
-                                    <div
-                                        class="progress-text"
-                                        id="progressText"
-                                    >
-                                        تجهيز المشروع...
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                    <div
+                        class="progress-text"
+                        id="progressText"
+                    >
+                        تجهيز...
                     </div>
 
                 </div>
 
+                <div
+                    class="download"
+                    id="download"
+                ></div>
+
             </div>
 
-        </section>
+        </aside>
 
-    </main>
+    </div>
 
-</div>
+</section>
 
-
-<!-- MOBILE NAV -->
 
 <nav class="mobile-nav">
 
@@ -1771,92 +1458,40 @@ textarea.code-input{
 </nav>
 
 
-<div
-    class="toast"
-    id="toast"
-></div>
-
-
-<!-- =========================================================
-     LIBRARIES
-========================================================= -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/build/mp4-muxer.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/webm-muxer@5.1.4/build/webm-muxer.js"></script>
 
 
 <script>
+"use strict";
+
 /* =========================================================
-   GLOBAL STATE
+   STATE
 ========================================================= */
 
-const state = {
-
-    orientation: "landscape",
-
-    project: {
-        title: "",
-        student: "",
-        teacher: "",
-        subject: "",
-        grade: "",
-        semester: "",
-        lesson: "",
-        extra: "",
-        duration: 60
-    },
-
-    html: "",
-
-    loaded: false,
-
-    durationMs: 60000,
-
-    exporting: false,
-
-    stopRequested: false,
-
-    iframeLoaded: false,
-
-    projectMeta: null
-
+const APP = {
+    orientation:"landscape",
+    html:"",
+    loaded:false,
+    durationMs:0,
+    title:"",
+    subject:"",
+    grade:"",
+    student:"",
+    teacher:"",
+    stop:false,
+    exporting:false
 };
 
 
 /* =========================================================
-   HELPERS
+   SHORTCUTS
 ========================================================= */
 
 const $ = id => document.getElementById(id);
-
-function escapeText(value){
-
-    return String(value ?? "")
-        .replace(/\\/g,"\\\\")
-        .replace(/"/g,'\\"')
-        .replace(/\n/g,"\\n")
-        .replace(/\r/g,"");
-
-}
-
-
-function showToast(message){
-
-    const el = $("toast");
-
-    el.textContent = message;
-
-    el.classList.add("show");
-
-    clearTimeout(window.__toastTimer);
-
-    window.__toastTimer = setTimeout(() => {
-
-        el.classList.remove("show");
-
-    },2400);
-}
 
 
 /* =========================================================
@@ -1865,7 +1500,8 @@ function showToast(message){
 
 function openPage(name){
 
-    document.querySelectorAll(".page")
+    document
+        .querySelectorAll(".page")
         .forEach(page => {
 
             page.classList.toggle(
@@ -1875,7 +1511,8 @@ function openPage(name){
 
         });
 
-    document.querySelectorAll("[data-page]")
+    document
+        .querySelectorAll("[data-page]")
         .forEach(button => {
 
             button.classList.toggle(
@@ -1885,26 +1522,22 @@ function openPage(name){
 
         });
 
-    $("topTitle").textContent =
-        name === "generator"
-            ? "إنشاء المشروع"
-            : "مساحة المشروع";
-
     window.scrollTo({
         top:0,
         behavior:"smooth"
     });
 }
 
-
-document.querySelectorAll("[data-page]")
+document
+    .querySelectorAll("[data-page]")
     .forEach(button => {
 
-        button.addEventListener("click",() => {
-
-            openPage(button.dataset.page);
-
-        });
+        button.addEventListener(
+            "click",
+            () => openPage(
+                button.dataset.page
+            )
+        );
 
     });
 
@@ -1913,120 +1546,108 @@ document.querySelectorAll("[data-page]")
    ORIENTATION
 ========================================================= */
 
-document.querySelectorAll("[data-orientation]")
+document
+    .querySelectorAll("[data-orientation]")
     .forEach(button => {
 
-        button.addEventListener("click",() => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            state.orientation =
-                button.dataset.orientation;
+                APP.orientation =
+                    button.dataset.orientation;
 
-            document.querySelectorAll(
-                "[data-orientation]"
-            ).forEach(btn => {
+                document
+                    .querySelectorAll(
+                        "[data-orientation]"
+                    )
+                    .forEach(item => {
 
-                btn.classList.toggle(
-                    "active",
-                    btn === button
-                );
+                        item.classList.toggle(
+                            "active",
+                            item === button
+                        );
 
-            });
+                    });
 
-        });
+            }
+        );
 
     });
 
 
 /* =========================================================
-   READ FORM
+   PROJECT DATA
 ========================================================= */
 
-function readProjectForm(){
+function getForm(){
 
-    const duration =
-        Math.max(
+    return {
+        title:$("title").value.trim(),
+        student:$("student").value.trim(),
+        teacher:$("teacher").value.trim(),
+        subject:$("subject").value.trim(),
+        grade:$("grade").value.trim(),
+        semester:$("semester").value.trim(),
+        lesson:$("lesson").value.trim(),
+        extra:$("extra").value.trim(),
+        duration:Math.max(
             5,
             Math.min(
                 600,
                 Number($("duration").value) || 60
             )
-        );
-
-    state.project = {
-
-        title:$("projectTitle").value.trim(),
-
-        student:$("studentName").value.trim(),
-
-        teacher:$("teacherName").value.trim(),
-
-        subject:$("subject").value.trim(),
-
-        grade:$("grade").value.trim(),
-
-        semester:$("semester").value.trim(),
-
-        lesson:$("lesson").value.trim(),
-
-        extra:$("extra").value.trim(),
-
-        duration
-
+        )
     };
-
-    return state.project;
 }
 
 
 /* =========================================================
-   STRONG AI PROMPT
+   PROMPT
 ========================================================= */
 
-function buildPrompt(){
+function makePrompt(){
 
-    const p = readProjectForm();
+    const p = getForm();
 
-    const orientation =
-        state.orientation === "landscape"
-            ? "أفقي 16:9"
-            : "عمودي 9:16";
+    const portrait =
+        APP.orientation === "portrait";
 
     const width =
-        state.orientation === "landscape"
-            ? 1280
-            : 720;
+        portrait ? 1080 : 1920;
 
     const height =
-        state.orientation === "landscape"
-            ? 720
-            : 1280;
+        portrait ? 1920 : 1080;
 
-    const durationMs =
-        p.duration * 1000;
+    const seconds =
+        p.duration;
+
+    const ms =
+        seconds * 1000;
 
     return `
-أنت الآن مخرج فني ومصمم Motion Graphics ومطور Front-End ومصمم عروض تعليمية محترف.
+أنت مخرج مشاريع تعليمية ومصمم Motion Graphics ومطور HTML/CSS/JavaScript محترف.
 
-مهمتك إنشاء مشروع دراسي مرئي متكامل يعمل كصفحات/مشاهد متحركة داخل فيديو.
+أنشئ مشروعًا دراسيًا مرئيًا متكاملًا، لكن طريقة تقديمه تكون بأسلوب Motion Graphics.
 
-هذا ليس مجرد "موشن جرافيك قصير".
-وهذا ليس صفحة ويب عادية.
-وهذا ليس قالب PowerPoint ثابت.
+المشروع ليس صفحة ويب عادية.
+وليس مجموعة بطاقات ثابتة.
+وليس مشهدًا قصيرًا فقط.
 
-المطلوب هو:
-"مشروع دراسي كامل بطريقة الموشن جرافيك".
+المطلوب:
+مشروع دراسي مترابط يشبه مشروع PowerPoint أو Canva Video من ناحية بناء المحتوى، لكن جميع عناصره ومشاهده وحركاته تعمل كموشن داخل فيديو.
 
-============================================================
+==================================================
 بيانات المشروع
-============================================================
+==================================================
 
 العنوان:
 ${p.title || "غير محدد"}
 
-اسم الطالب:
+الطالب:
 ${p.student || "غير محدد"}
 
-اسم المعلم / المعلمة:
+المعلم:
 ${p.teacher || "غير محدد"}
 
 المادة:
@@ -2035,474 +1656,296 @@ ${p.subject || "غير محددة"}
 الصف:
 ${p.grade || "غير محدد"}
 
-الفصل الدراسي:
+الفصل:
 ${p.semester || "غير محدد"}
 
 الدرس / الوحدة:
 ${p.lesson || "غير محدد"}
 
 الاتجاه:
-${orientation}
+${portrait ? "عمودي 9:16" : "أفقي 16:9"}
 
-الأبعاد:
+أبعاد المشروع:
 ${width} × ${height}
 
-مدة الفيديو:
-${p.duration} ثانية
+المدة:
+${seconds} ثانية
 
 المدة بالميلي ثانية:
-${durationMs}
+${ms}
 
 متطلبات إضافية:
-${p.extra || "لا توجد متطلبات إضافية."}
+${p.extra || "لا توجد"}
 
-============================================================
-الفكرة الإبداعية
-============================================================
-
-الوضع الوحيد هو:
+==================================================
+الوضع الإبداعي
+==================================================
 
 "دع الذكاء يبدع"
 
-لديك حرية كاملة في:
+أنت حر في:
 - الهوية البصرية
 - الألوان
-- نوع الخلفيات
-- أسلوب الصور
-- أسلوب الرسومات
+- الخلفيات
+- الصور
+- الرسومات
 - توزيع المشاهد
 - الانتقالات
 - الحركة
-- الإيقاع البصري
-- الزخارف
-- طريقة عرض المعلومات
+- الإيقاع
+- الأسلوب البصري
 
-لكن هذه الحرية لا تعني مخالفة الشروط التقنية الموجودة في هذا الـPrompt.
+لكن يجب الالتزام بجميع القواعد التقنية التالية.
 
-صمم المشروع كما لو أنه مشروع مدرسي احترافي تم إخراجه كفيديو موشن جرافيك.
+==================================================
+بناء المشروع
+==================================================
 
-============================================================
-بناء المحتوى
-============================================================
+افهم موضوع المشروع أولًا.
 
-أولًا افهم الموضوع.
+ثم أنشئ محتوى تعليميًا حقيقيًا ومترابطًا.
 
-ثم أنشئ محتوى تعليميًا مترابطًا وليس مجرد عبارات عامة.
+قسّم المحتوى إلى مشاهد مناسبة للمدة.
 
-قسّم المشروع إلى عدد مناسب من المشاهد بحسب كمية المعلومات والمدة.
+المشروع يجب أن يحتوي على بداية وشرح وتطور وخلاصة وخاتمة.
 
-التسلسل المقترح:
+لا تجعل جميع المشاهد متشابهة.
 
-1. افتتاحية / غلاف
-2. تمهيد بصري
-3. تعريف أو مفهوم أساسي
-4. شرح الأفكار الرئيسية
-5. أمثلة أو تطبيقات
-6. معلومات إضافية عند الحاجة
-7. خلاصة
-8. خاتمة تتضمن بيانات المشروع
+لا تجعل المشروع عبارة عن عناوين فقط.
 
-لا تستخدم هذا العدد حرفيًا إذا كان الموضوع يحتاج عددًا مختلفًا.
+استخدم المعلومات والتعريفات والأمثلة والمقارنات أو التطبيقات عندما تكون مناسبة للموضوع.
 
-المهم أن يكون هناك:
-بداية واضحة
-ثم شرح منطقي
-ثم انتقال
-ثم خاتمة.
+كل مشهد يجب أن يركز على فكرة واضحة.
 
-كل مشهد يجب أن يخدم فكرة واحدة أو مجموعة صغيرة مترابطة من الأفكار.
-
-لا تحشر كمية ضخمة من النص في مشهد واحد.
-
-============================================================
+==================================================
 أسلوب الموشن
-============================================================
+==================================================
 
-المشروع يجب أن يشعر بأنه فيديو وليس صفحة ثابتة.
+اجعل المشروع يبدو كفيديو.
 
 استخدم:
-- دخول العناصر تدريجيًا
-- حركة العناوين
+- دخول تدريجي
+- خروج تدريجي
+- تحريك العناوين
 - تحريك الصور
-- ظهور المعلومات على مراحل
+- تحريك الأشكال
 - انتقالات بين المشاهد
 - تكبير وتصغير خفيف
-- تحريك الخلفيات
-- خطوط وأشكال زخرفية متحركة
-- Parallax بسيط عند الحاجة
-- تغيرات بصرية ناعمة
-- توقيتات متناسقة
+- Parallax بسيط
+- ظهور المعلومات على مراحل
+- تحريك الخلفيات عند الحاجة
 
-الحركة يجب أن تكون ناعمة واحترافية.
+الحركة يجب أن تخدم المعلومة.
 
-لا تجعل كل عنصر يتحرك بطريقة مختلفة بلا سبب.
+لا تجعل كل شيء يتحرك في الوقت نفسه.
 
-لا تستخدم حركات مبالغًا فيها تؤثر على القراءة.
+لا تستخدم حركة سريعة أو مزعجة.
 
-لا تجعل المشاهد تبدو كأنها لعبة.
+==================================================
+التخطيط
+==================================================
 
-الهدف:
-عرض تعليمي سينمائي أنيق.
+هذه قاعدة صارمة جدًا.
 
-============================================================
-أهم شرط: التخطيط وعدم التداخل
-============================================================
+ممنوع تداخل:
+- العنوان مع النص
+- النص مع الصورة
+- الصور مع بعضها
+- العناصر المهمة مع بعضها
 
-هذه قاعدة صارمة.
-
-يجب ألا تتداخل العناصر الأساسية مع بعضها.
-
-لا تجعل:
-- العنوان فوق النص
-- النص فوق الصورة
-- الصورة فوق عنوان
-- بطاقة فوق بطاقة
-- العناصر تخرج من حدود المشروع
-- النص يلامس الحواف
-- الزخارف تغطي المعلومات
-
-استخدم Grid واضح.
+استخدم Grid وContainers واضحة.
 
 استخدم Safe Area.
 
-اترك مسافات تنفس حقيقية بين:
-العنوان
-النص
-الصور
-الأشكال
-العناصر التوضيحية.
+اترك مساحات تنفس.
 
-لا تستخدم position:absolute بشكل عشوائي للعناصر الأساسية.
+لا تضع كل العناصر باستخدام absolute بشكل عشوائي.
 
-يمكن استخدام absolute للعناصر الزخرفية والخلفيات والعناصر التي تحتاج تموضعًا دقيقًا.
+absolute مسموح للخلفيات والزخارف والعناصر التي تحتاج تموضعًا خاصًا فقط.
 
-لكن المحتوى الأساسي يجب أن يكون منظمًا داخل Containers واضحة.
-
-============================================================
-قواعد النص العربي — صارمة جدًا
-============================================================
-
-هذه القواعد لا يجوز مخالفتها.
+==================================================
+العربية
+==================================================
 
 يجب أن يكون:
 
 <html lang="ar" dir="rtl">
 
-وجميع مناطق النص العربي يجب أن تستخدم RTL.
-
-استخدم:
-
-direction: rtl;
-
-unicode-bidi: plaintext;
-
-أو إعدادًا مناسبًا يحافظ على ترتيب العربية.
-
-ممنوع منعًا باتًا:
+ممنوع تمامًا:
 
 letter-spacing
-
-أي قيمة له حتى لو كانت 0.
 
 ممنوع:
 
 text-transform
 
-ممنوع تقسيم الكلمات العربية إلى حروف منفصلة.
+ممنوع تفكيك العربية إلى حروف.
 
-ممنوع إنشاء:
+ممنوع كتابة كلمة عربية على شكل حروف منفصلة.
 
-ا
-ل
-و
-ط
-ن
+ممنوع إضافة مسافات بين الحروف.
 
-كعناصر منفصلة.
+النص العربي يجب أن يبقى نصًا طبيعيًا داخل عناصر HTML.
 
-النص العربي يجب أن يبقى نصًا طبيعيًا داخل عنصر HTML.
+استخدم خطًا عربيًا حقيقيًا.
 
-ممنوع إضافة مسافات بين حروف الكلمات.
-
-ممنوع معالجة النص العربي باستخدام JavaScript لتفكيك الحروف.
-
-ممنوع استخدام خطوط غير مناسبة للعربية.
-
-استخدم خطًا عربيًا حقيقيًا مثل:
-
+الخطوط المسموحة مثل:
 Tajawal
 Noto Sans Arabic
 Cairo
-IBM Plex Sans Arabic
 Almarai
+IBM Plex Sans Arabic
 Amiri
 
-اختر خطًا مناسبًا للتصميم ولا تستخدم أكثر من خطين إلا عند وجود سبب بصري واضح.
+استخدم خطًا أو خطين فقط.
 
-============================================================
-قواعد الخطوط
-============================================================
-
-إذا استخدمت Google Fonts أو أي خط خارجي:
-
-يجب تضمين الرابط داخل HTML.
-
-ويجب الانتظار حتى:
+يجب انتظار:
 
 document.fonts.ready
 
-قبل اعتبار المشروع جاهزًا.
+قبل بدء المشروع.
 
-يجب ألا يعتمد التصميم على fallback مختلف بشكل يغير التخطيط.
-
-لا تجعل حجم الخط صغيرًا جدًا.
-
-النص التعليمي الأساسي يجب أن يكون واضحًا عند مشاهدة الفيديو على الجوال.
-
-============================================================
-قواعد الصور
-============================================================
+==================================================
+الصور
+==================================================
 
 يمكن استخدام:
-- صور من روابط مباشرة
-- صور Unsplash/Pexels أو مصادر مناسبة
+- img
 - SVG inline
 - CSS shapes
 - رسومات HTML/CSS
-
-لكن:
 
 لا تستخدم video.
 
 لا تستخدم WebGL.
 
-لا تستخدم Canvas كعنصر أساسي للمحتوى.
+لا تجعل المعلومات الأساسية داخل Canvas.
 
-لا تجعل معلومة مهمة موجودة فقط داخل Canvas.
+استخدم الصور بشكل صحيح دون تشويه.
 
-لا تجعل الصورة الأساسية تعتمد على مورد قد يمنع تحميله بسبب CORS.
+==================================================
+التحكم الزمني
+==================================================
 
-كل صورة يجب أن تكون داخل:
+المشروع سيتم تصديره Frame-by-Frame.
 
-<img>
-
-مع:
-
-loading="eager"
-
-ويفضل:
-
-decoding="async"
-
-ولا تستخدم صورًا ضخمة بلا داعٍ.
-
-استخدم object-fit بشكل صحيح.
-
-لا تمدد الصور بشكل مشوه.
-
-============================================================
-قواعد التوافق مع محرك التصدير
-============================================================
-
-المشروع سيُلتقط Frame-by-Frame.
-
-لذلك يجب ألا تعتمد الحركة على:
+لذلك لا تعتمد على:
 
 setTimeout
 setInterval
-Date.now()
-performance.now()
+Date.now
+performance.now
 requestAnimationFrame
-randomness
+Math.random
 
-كمصدر أساسي للزمن.
+كمصدر أساسي للحركة.
 
-لا تستخدم CSS animation كمصدر أساسي للحركة.
+لا تعتمد على CSS animation للحركة الأساسية.
 
-لا تستخدم CSS transition كمصدر أساسي للحركة.
+لا تعتمد على CSS transition للحركة الأساسية.
 
-كل الحركة يجب أن تكون قابلة للتحكم بواسطة الزمن.
+يجب أن يكون المشروع قابلًا للتحكم بالزمن.
 
-استخدم Web Animations API:
-
-element.animate(...)
-
-أو نظام زمني مركزي.
-
-ويجب أن يحتوي المشروع على:
-
-window.__PROJECT__
-
-بهذا الشكل المنطقي:
+يجب إنشاء:
 
 window.__PROJECT__ = {
-    duration: ${durationMs},
-    orientation: "${state.orientation}",
-    metadata: {...},
-    setTime: function(timeMs) {
+
+    duration:${ms},
+
+    orientation:"${APP.orientation}",
+
+    setTime:function(timeMs){
         ...
     }
+
 };
 
-مهم جدًا:
+عند استدعاء:
 
-setTime(timeMs)
+window.__PROJECT__.setTime(0)
 
-يجب أن يستطيع وضع المشروع في أي لحظة زمنية محددة.
+يجب أن يظهر المشروع عند بداية الفيديو.
 
-مثال:
+وعند:
 
-window.__PROJECT__.setTime(0);
+window.__PROJECT__.setTime(5000)
 
-ثم:
-
-window.__PROJECT__.setTime(5000);
-
-ثم:
-
-window.__PROJECT__.setTime(25000);
+يجب أن يظهر المشروع عند الثانية الخامسة.
 
 وهكذا.
 
-============================================================
-مدة المشروع
-============================================================
+يمكن استخدام Web Animations API، لكن يجب أن تكون الحركة قابلة للتحكم من المنصة.
 
-يجب أن تكون مدة المشروع موجودة داخل HTML.
+==================================================
+مدة المشروع
+==================================================
 
 أضف:
 
-<meta name="project-duration" content="${p.duration}">
+<meta name="project-duration" content="${seconds}">
 
-وأضف:
+<meta name="project-duration-ms" content="${ms}">
 
-<meta name="project-duration-ms" content="${durationMs}">
-
-وأضف:
-
-<meta name="project-orientation" content="${state.orientation}">
-
-وأضف:
+<meta name="project-orientation" content="${APP.orientation}">
 
 <meta name="project-type" content="educational-motion-project">
 
-ويجب أيضًا أن تكون موجودة في:
+<meta name="project-title" content="${p.title || ""}">
+
+ويجب أن تكون المدة أيضًا في:
 
 window.__PROJECT__.duration
 
-المنصة ستقرأ هذه البيانات تلقائيًا.
-
-لا تجعل مدة المشروع تعتمد على إدخال المستخدم في منصة التصدير.
-
-============================================================
+==================================================
 المشاهد
-============================================================
+==================================================
 
-من الأفضل إعطاء كل مشهد معرفًا واضحًا مثل:
+كل مشهد يجب أن يحتوي:
 
-<section data-scene="1">
+data-scene
 
-أو:
+ويفضل:
 
-<div data-scene="1">
+data-scene-name
 
-ويمكن إعطاء اسم للمشهد:
+ويمكن تحديد:
 
-data-scene-name="المقدمة"
+data-scene-start
 
-وهكذا.
+data-scene-end
 
-يجب أن تكون المشاهد مستقلة بصريًا.
+مثال:
 
-لا تعتمد على انتقالات CSS التي لا يستطيع محرك التصدير التحكم بها.
+<section
+    data-scene="1"
+    data-scene-name="المقدمة"
+    data-scene-start="0"
+    data-scene-end="8000"
+>
 
-============================================================
-النظام البصري
-============================================================
+...
 
-اختر هوية بصرية متناسبة مع موضوع المشروع.
+</section>
 
-إذا كان الموضوع:
-علميًا → استخدم أسلوبًا علميًا حديثًا.
+==================================================
+الخطوط والتخطيط
+==================================================
 
-تاريخيًا → استخدم أسلوبًا تراثيًا مناسبًا.
+لا تستخدم خطًا يتغير بعد تحميل المشروع.
 
-تقنيًا → استخدم أسلوبًا تقنيًا.
+لا تبدأ الحركة قبل تحميل الخطوط.
 
-أدبيًا → استخدم أسلوبًا بصريًا هادئًا.
+لا تبدأ التصوير قبل تحميل الصور.
 
-وهكذا.
+لا تجعل تحميل الخطوط يؤدي إلى تغير مكان العناصر.
 
-لا تستخدم نفس التصميم لكل المواضيع.
+==================================================
+إخراج HTML
+==================================================
 
-دع الذكاء يبدع في الهوية.
+أخرج ملف HTML واحدًا كاملًا.
 
-لكن حافظ على:
-- الاتساق
-- الوضوح
-- التوازن
-- التسلسل البصري.
-
-============================================================
-عدم الاعتماد على الكروت
-============================================================
-
-لا تحول المشروع إلى مجموعة ضخمة من البطاقات.
-
-استخدم:
-- تكوينات بصرية
-- خطوط
-- أشكال
-- صور
-- مساحات
-- عناوين كبيرة
-- أرقام
-- مخططات
-- Illustrations
-- تقسيمات بصرية
-
-البطاقات تستخدم فقط عندما تخدم المحتوى.
-
-============================================================
-الجودة
-============================================================
-
-التصميم يجب أن يبدو كعمل مصمم محترف.
-
-تجنب:
-- الفراغات العشوائية
-- الزحام
-- النصوص الصغيرة
-- الألوان العشوائية
-- الظلال المبالغ فيها
-- كثرة الحدود
-- كثرة البطاقات
-- كثرة المؤثرات
-- الحركة السريعة جدًا.
-
-============================================================
-الطبقات
-============================================================
-
-رتب الطبقات منطقيًا:
-
-1. الخلفية
-2. الإضاءة والخامات
-3. الزخارف
-4. الصور والرسومات
-5. المحتوى
-6. العناوين
-7. العناصر الأمامية
-
-ولا تجعل أي طبقة زخرفية تغطي النص.
-
-============================================================
-الاستجابة النهائية
-============================================================
-
-أخرج HTML واحدًا كاملًا فقط.
-
-يجب أن يبدأ بـ:
+يبدأ بـ:
 
 <!doctype html>
 
@@ -2510,217 +1953,170 @@ data-scene-name="المقدمة"
 
 <html lang="ar" dir="rtl">
 
-ويجب أن يكون:
+ويحتوي على:
+HTML
+CSS
+JavaScript
 
-- HTML
-- CSS
-- JavaScript
+كلها داخل الملف نفسه.
 
-في ملف واحد.
-
-لا تضع Markdown حول HTML.
+لا تستخدم Markdown.
 
 لا تكتب شرحًا قبل HTML.
 
 لا تكتب شرحًا بعد HTML.
 
-لا تستخدم placeholders مثل:
+لا تستخدم Lorem ipsum.
 
-ضع الصورة هنا
-أضف النص هنا
-Lorem ipsum
+لا تضع placeholders.
 
-إذا كانت المعلومات غير موجودة، أنشئ محتوى مناسبًا من فهمك للموضوع بدل ترك فراغات.
+إذا كانت هناك معلومات ناقصة، استخدم فهمك للموضوع بدل ترك فراغات.
 
-============================================================
-الفحص الداخلي قبل إخراج الكود
-============================================================
+==================================================
+الفحص قبل الإخراج
+==================================================
 
-قبل إرسال HTML راجع المشروع بنفسك:
+راجع الكود داخليًا قبل إرساله:
 
-1. هل المحتوى متكامل؟
-2. هل هناك بداية وشرح وخاتمة؟
-3. هل المشاهد مترابطة؟
-4. هل النص العربي RTL؟
-5. هل يوجد letter-spacing؟
-6. هل تم تفكيك أي كلمة عربية؟
-7. هل العناصر متداخلة؟
-8. هل خرج أي عنصر عن مساحة المشروع؟
-9. هل الصور محملة بطريقة مناسبة؟
-10. هل الخطوط محددة؟
-11. هل document.fonts.ready مستخدم؟
-12. هل مدة المشروع موجودة في meta؟
-13. هل مدة المشروع موجودة في __PROJECT__؟
-14. هل orientation موجود؟
-15. هل setTime موجود؟
-16. هل الحركة قابلة للتحكم زمنيًا؟
-17. هل يوجد CSS animation للحركة الأساسية؟
-18. هل يوجد requestAnimationFrame للحركة الأساسية؟
-19. هل يوجد setInterval أو setTimeout للحركة؟
-20. هل يمكن لمحرك Frame-by-Frame التقاط أي لحظة من المشروع؟
+- هل المحتوى مترابط؟
+- هل المشروع فعليًا تعليمي؟
+- هل الحركة موجودة؟
+- هل الحركة قابلة للتحكم بالزمن؟
+- هل setTime موجود؟
+- هل duration موجود؟
+- هل orientation موجود؟
+- هل الخطوط عربية؟
+- هل document.fonts.ready موجود؟
+- هل يوجد letter-spacing؟
+- هل هناك تفكيك للحروف؟
+- هل يوجد تداخل؟
+- هل النص يخرج عن الإطار؟
+- هل الصور مناسبة؟
+- هل يوجد CSS animation للحركة الأساسية؟
+- هل يوجد requestAnimationFrame للحركة الأساسية؟
+- هل يعتمد المشروع على الوقت الحقيقي؟
+- هل يمكن للمنصة التقاط أي لحظة زمنية منه؟
 
-إذا كانت الإجابة على أي سؤال سلبيًا:
-أصلح المشروع قبل إخراج HTML.
+إذا وجدت مشكلة، أصلحها قبل إخراج HTML.
 
-هذه ليست اقتراحات.
-
-هذه شروط إلزامية.
-
-ابدأ الآن ببناء المشروع.
+أخرج HTML فقط.
 `.trim();
 }
 
 
 /* =========================================================
-   GENERATE PROMPT
+   GENERATE
 ========================================================= */
 
-$("generatePrompt").addEventListener("click",() => {
+$("generate").addEventListener(
+    "click",
+    () => {
 
-    const p = readProjectForm();
+        const data = getForm();
 
-    if(!p.title){
+        if(!data.title){
 
-        showToast("اكتب عنوان المشروع أولًا");
+            alert("اكتب عنوان المشروع أولًا");
 
-        $("projectTitle").focus();
+            $("title").focus();
 
-        return;
+            return;
+        }
+
+        $("prompt").value =
+            makePrompt();
+
+        $("promptBox")
+            .classList
+            .add("show");
+
     }
-
-    const prompt = buildPrompt();
-
-    $("promptOutput").value = prompt;
-
-    $("promptResult").classList.add("show");
-
-    showToast("تم إنشاء Prompt المشروع");
-
-});
+);
 
 
 /* =========================================================
-   COPY PROMPT
+   COPY
 ========================================================= */
 
-$("copyPrompt").addEventListener("click",async() => {
+$("copyPrompt").addEventListener(
+    "click",
+    async() => {
 
-    const value = $("promptOutput").value;
+        try{
 
-    if(!value){
+            await navigator.clipboard.writeText(
+                $("prompt").value
+            );
 
-        showToast("لا يوجد Prompt");
+        }catch{
 
-        return;
-    }
+            $("prompt").select();
 
-    try{
+            document.execCommand("copy");
 
-        await navigator.clipboard.writeText(value);
+        }
 
-        showToast("تم نسخ الـPrompt");
-
-    }catch{
-
-        $("promptOutput").select();
-
-        document.execCommand("copy");
-
-        showToast("تم نسخ الـPrompt");
+        alert("تم نسخ الـPrompt");
 
     }
-
-});
+);
 
 
 /* =========================================================
-   OPEN WORKSPACE
+   NORMALIZE HTML
 ========================================================= */
 
-$("openWorkspace").addEventListener("click",() => {
+function normalizeHTML(value){
 
-    openPage("workspace");
+    return String(value || "")
+        .trim()
+        .replace(/^```html/i,"")
+        .replace(/^```/i,"")
+        .replace(/```$/i,"")
+        .trim();
 
-});
+}
 
 
 /* =========================================================
-   META PARSER
+   READ META
 ========================================================= */
 
-function parseProjectMeta(doc){
+function readMeta(doc){
 
-    const meta = {};
-
-    const getMeta = name => {
+    function meta(name){
 
         const el =
             doc.querySelector(
                 'meta[name="' + name + '"]'
             );
 
-        return el ? el.content : "";
+        return el
+            ? el.content.trim()
+            : "";
+
+    }
+
+    return {
+
+        duration:
+            Number(
+                meta("project-duration")
+            ),
+
+        durationMs:
+            Number(
+                meta("project-duration-ms")
+            ),
+
+        orientation:
+            meta("project-orientation"),
+
+        title:
+            meta("project-title")
 
     };
 
-    meta.duration =
-        Number(
-            getMeta("project-duration")
-        );
-
-    meta.durationMs =
-        Number(
-            getMeta("project-duration-ms")
-        );
-
-    meta.orientation =
-        getMeta("project-orientation");
-
-    meta.type =
-        getMeta("project-type");
-
-    meta.title =
-        getMeta("project-title");
-
-    return meta;
-}
-
-
-function normalizeDuration(meta){
-
-    if(
-        Number.isFinite(meta.durationMs) &&
-        meta.durationMs > 0
-    ){
-        return meta.durationMs;
-    }
-
-    if(
-        Number.isFinite(meta.duration) &&
-        meta.duration > 0
-    ){
-        return meta.duration * 1000;
-    }
-
-    return 0;
-}
-
-
-/* =========================================================
-   PROJECT HTML CLEANUP
-========================================================= */
-
-function normalizeIncomingHTML(html){
-
-    let value = String(html || "").trim();
-
-    value = value
-        .replace(/^```html\s*/i,"")
-        .replace(/^```\s*/i,"")
-        .replace(/\s*```$/i,"")
-        .trim();
-
-    return value;
 }
 
 
@@ -2728,125 +2124,141 @@ function normalizeIncomingHTML(html){
    LOAD PROJECT
 ========================================================= */
 
-$("loadProject").addEventListener("click",async() => {
+$("load").addEventListener(
+    "click",
+    loadProject
+);
 
-    await loadProjectFromInput();
 
-});
-
-
-async function loadProjectFromInput(){
+async function loadProject(){
 
     const html =
-        normalizeIncomingHTML(
-            $("codeInput").value
+        normalizeHTML(
+            $("code").value
         );
 
     if(!html){
 
-        showToast("الصق HTML المشروع أولًا");
+        alert("الصق HTML المشروع أولًا");
 
         return;
     }
 
-    if(!/<html[\s>]/i.test(html)){
+    if(
+        !/<html[\s>]/i.test(html)
+    ){
 
-        showToast("الكود لا يبدو كملف HTML كامل");
+        alert(
+            "يجب أن يكون HTML كاملًا يبدأ بعنصر html"
+        );
 
         return;
     }
 
-    state.html = html;
+    APP.html = html;
 
-    state.loaded = false;
-
-    state.projectMeta = null;
-
-    $("projectState").textContent =
-        "جارٍ تحميل المشروع...";
+    $("stateInfo").textContent =
+        "جارٍ التحميل...";
 
     try{
 
-        await loadIntoIframe(html);
+        await setIframe(html);
+
+        const iframe =
+            $("preview");
 
         const doc =
-            $("previewFrame").contentDocument;
-
-        const meta =
-            parseProjectMeta(doc);
-
-        let durationMs =
-            normalizeDuration(meta);
-
-        /*
-         * Try __PROJECT__
-         */
+            iframe.contentDocument;
 
         const win =
-            $("previewFrame").contentWindow;
+            iframe.contentWindow;
+
+        await waitResources(doc);
+
+        const meta =
+            readMeta(doc);
+
+        let durationMs = 0;
 
         if(
-            (!durationMs || durationMs <= 0) &&
-            win &&
-            win.__PROJECT__ &&
-            Number(win.__PROJECT__.duration) > 0
+            Number.isFinite(
+                meta.durationMs
+            ) &&
+            meta.durationMs > 0
         ){
+
+            durationMs =
+                meta.durationMs;
+
+        }else if(
+            Number.isFinite(
+                meta.duration
+            ) &&
+            meta.duration > 0
+        ){
+
+            durationMs =
+                meta.duration * 1000;
+
+        }else if(
+            win.__PROJECT__ &&
+            Number(
+                win.__PROJECT__.duration
+            ) > 0
+        ){
+
             durationMs =
                 Number(
                     win.__PROJECT__.duration
                 );
+
         }
 
         if(!durationMs){
 
-            $("projectState").textContent =
-                "المدة غير موجودة";
-
-            showToast(
-                "أضف مدة المشروع داخل HTML ثم أعد المحاولة"
+            throw new Error(
+                "لم يتم العثور على مدة المشروع"
             );
 
-            state.loaded = false;
-
-            return;
         }
 
-        state.durationMs = durationMs;
+        APP.durationMs =
+            durationMs;
 
-        state.projectMeta = {
+        APP.loaded = true;
 
-            ...meta,
+        APP.title =
+            meta.title ||
+            $("title").value.trim();
 
-            durationMs
+        APP.orientation =
+            meta.orientation === "portrait"
+                ? "portrait"
+                : "landscape";
 
-        };
-
-        state.loaded = true;
-
-        updateProjectUI();
-
-        await prepareIframeForCapture();
+        updateWorkspace(meta);
 
         await buildTimeline();
 
-        await runValidation();
+        await validateProject();
 
-        $("projectState").textContent =
-            "المشروع جاهز";
+        await setProjectTime(0);
 
-        showToast(
-            "تم تحميل المشروع وقراءة مدته تلقائيًا"
-        );
+        $("stateInfo").textContent =
+            "جاهز";
 
     }catch(error){
 
         console.error(error);
 
-        $("projectState").textContent =
-            "فشل التحميل";
+        APP.loaded = false;
 
-        showToast(
-            "حدث خطأ أثناء تشغيل المشروع"
+        $("stateInfo").textContent =
+            "خطأ";
+
+        alert(
+            error.message ||
+            "حدث خطأ أثناء تحميل المشروع"
         );
 
     }
@@ -2855,275 +2267,96 @@ async function loadProjectFromInput(){
 
 
 /* =========================================================
-   IFRAME LOAD
+   IFRAME
 ========================================================= */
 
-function loadIntoIframe(html){
+function setIframe(html){
 
-    return new Promise((resolve,reject) => {
+    return new Promise(
+        (resolve,reject) => {
 
-        const iframe =
-            $("previewFrame");
+            const iframe =
+                $("preview");
 
-        let settled = false;
+            let finished = false;
 
-        const finish = () => {
+            const done = () => {
 
-            if(settled) return;
+                if(finished) return;
 
-            settled = true;
+                finished = true;
 
-            resolve();
+                resolve();
 
-        };
+            };
 
-        iframe.onload = () => {
+            iframe.onload =
+                () => {
 
-            setTimeout(() => {
+                    setTimeout(
+                        done,
+                        80
+                    );
 
-                finish();
+                };
 
-            },80);
+            iframe.srcdoc =
+                html;
 
-        };
+            setTimeout(
+                () => {
 
-        iframe.srcdoc = html;
+                    if(
+                        !finished &&
+                        iframe.contentDocument &&
+                        iframe.contentDocument.readyState !== "loading"
+                    ){
 
-        setTimeout(() => {
+                        done();
 
-            if(!settled){
+                    }
 
-                /*
-                 * Sometimes srcdoc may already have loaded.
-                 */
+                },
+                1000
+            );
 
-                if(
-                    iframe.contentDocument &&
-                    iframe.contentDocument.readyState !== "loading"
-                ){
-                    finish();
-                }
+            setTimeout(
+                () => {
 
-            }
+                    if(!finished){
 
-        },1500);
+                        reject(
+                            new Error(
+                                "انتهى وقت تحميل المشروع"
+                            )
+                        );
 
-        setTimeout(() => {
+                    }
 
-            if(!settled){
+                },
+                12000
+            );
 
-                settled = true;
-
-                reject(
-                    new Error(
-                        "iframe load timeout"
-                    )
-                );
-
-            }
-
-        },15000);
-
-    });
-
-}
-
-
-/* =========================================================
-   UPDATE UI
-========================================================= */
-
-function updateProjectUI(){
-
-    const p =
-        state.project;
-
-    const meta =
-        state.projectMeta || {};
-
-    const orientation =
-        meta.orientation ||
-        state.orientation;
-
-    $("metaOrientation").textContent =
-        orientation === "portrait"
-            ? "عمودي 9:16"
-            : "أفقي 16:9";
-
-    $("metaDuration").textContent =
-        formatDuration(
-            state.durationMs
-        );
-
-    $("metaResolution").textContent =
-        $("quality").value + "p";
-
-    $("factTitle").textContent =
-        p.title || meta.title || "—";
-
-    $("factSubject").textContent =
-        p.subject || "—";
-
-    $("factGrade").textContent =
-        p.grade || "—";
-
-    $("factOrientation").textContent =
-        orientation === "portrait"
-            ? "عمودي"
-            : "أفقي";
-
-    $("factDuration").textContent =
-        formatDuration(
-            state.durationMs
-        );
-
-    resizePreview();
-}
-
-
-/* =========================================================
-   FORMAT DURATION
-========================================================= */
-
-function formatDuration(ms){
-
-    const seconds =
-        Math.round(ms / 1000);
-
-    if(seconds < 60){
-
-        return seconds + " ثانية";
-
-    }
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const rest =
-        seconds % 60;
-
-    return (
-        minutes +
-        " د" +
-        (
-            rest
-                ? " " + rest + " ث"
-                : ""
-        )
+        }
     );
+
 }
 
 
 /* =========================================================
-   RESIZE PREVIEW
+   RESOURCES
 ========================================================= */
 
-function resizePreview(){
+async function waitResources(doc){
 
-    const orientation =
-        state.projectMeta?.orientation ||
-        state.orientation;
+    if(
+        doc.fonts &&
+        doc.fonts.ready
+    ){
 
-    const wrap =
-        $("previewFrameWrap");
-
-    const iframe =
-        $("previewFrame");
-
-    const stage =
-        $("previewStage");
-
-    const isMobile =
-        window.innerWidth <= 760;
-
-    const maxWidth =
-        isMobile
-            ? window.innerWidth - 50
-            : Math.min(
-                window.innerWidth - 420,
-                1100
-            );
-
-    const maxHeight =
-        isMobile
-            ? Math.min(
-                window.innerHeight * .58,
-                620
-            )
-            : Math.min(
-                window.innerHeight * .72,
-                720
-            );
-
-    let width;
-    let height;
-
-    if(orientation === "portrait"){
-
-        height = maxHeight;
-
-        width =
-            height * (720 / 1280);
-
-        if(width > maxWidth){
-
-            width = maxWidth;
-
-            height =
-                width * (1280 / 720);
-
-        }
-
-    }else{
-
-        width = maxWidth;
-
-        height =
-            width * (720 / 1280);
-
-        if(height > maxHeight){
-
-            height = maxHeight;
-
-            width =
-                height * (1280 / 720);
-
-        }
+        await doc.fonts.ready;
 
     }
-
-    wrap.style.width =
-        Math.round(width) + "px";
-
-    wrap.style.height =
-        Math.round(height) + "px";
-
-    iframe.style.width = "100%";
-    iframe.style.height = "100%";
-}
-
-
-window.addEventListener(
-    "resize",
-    resizePreview
-);
-
-
-/* =========================================================
-   WAIT FOR FONTS + IMAGES
-========================================================= */
-
-async function waitForResources(doc){
-
-    try{
-
-        if(doc.fonts && doc.fonts.ready){
-
-            await doc.fonts.ready;
-
-        }
-
-    }catch{}
 
     const images =
         Array.from(
@@ -3131,71 +2364,68 @@ async function waitForResources(doc){
         );
 
     await Promise.all(
-        images.map(async img => {
+        images.map(
+            img =>
+                new Promise(
+                    resolve => {
 
-            try{
+                        if(
+                            img.complete &&
+                            img.naturalWidth > 0
+                        ){
 
-                if(img.complete){
+                            if(img.decode){
 
-                    if(img.decode){
+                                img.decode()
+                                    .catch(
+                                        () => {}
+                                    )
+                                    .finally(
+                                        resolve
+                                    );
 
-                        await img.decode()
-                            .catch(()=>{});
+                            }else{
+
+                                resolve();
+
+                            }
+
+                            return;
+                        }
+
+                        let finished = false;
+
+                        const done = () => {
+
+                            if(finished) return;
+
+                            finished = true;
+
+                            resolve();
+
+                        };
+
+                        img.addEventListener(
+                            "load",
+                            done,
+                            {once:true}
+                        );
+
+                        img.addEventListener(
+                            "error",
+                            done,
+                            {once:true}
+                        );
+
+                        setTimeout(
+                            done,
+                            10000
+                        );
 
                     }
-
-                    return;
-
-                }
-
-                await new Promise(resolve => {
-
-                    let done = false;
-
-                    const finish = () => {
-
-                        if(done) return;
-
-                        done = true;
-
-                        resolve();
-
-                    };
-
-                    img.addEventListener(
-                        "load",
-                        finish,
-                        {once:true}
-                    );
-
-                    img.addEventListener(
-                        "error",
-                        finish,
-                        {once:true}
-                    );
-
-                    setTimeout(
-                        finish,
-                        10000
-                    );
-
-                });
-
-                if(img.decode){
-
-                    await img.decode()
-                        .catch(()=>{});
-
-                }
-
-            }catch{}
-
-        })
+                )
+        )
     );
-
-    /*
-     * Let browser finish layout.
-     */
 
     await nextFrame();
 
@@ -3206,99 +2436,24 @@ async function waitForResources(doc){
 
 function nextFrame(){
 
-    return new Promise(resolve => {
-
-        requestAnimationFrame(() => {
-
-            resolve();
-
-        });
-
-    });
+    return new Promise(
+        resolve =>
+            requestAnimationFrame(
+                resolve
+            )
+    );
 
 }
 
 
 /* =========================================================
-   PREPARE IFRAME
+   PROJECT TIME
 ========================================================= */
 
-async function prepareIframeForCapture(){
+async function setProjectTime(ms){
 
     const iframe =
-        $("previewFrame");
-
-    const doc =
-        iframe.contentDocument;
-
-    if(!doc){
-
-        throw new Error(
-            "No iframe document"
-        );
-
-    }
-
-    await waitForResources(doc);
-
-    /*
-     * Prevent transitions from interfering
-     * while the platform controls time.
-     */
-
-    const style =
-        doc.createElement("style");
-
-    style.id =
-        "__platform_capture_style";
-
-    style.textContent = `
-        html,
-        body{
-            margin:0 !important;
-            padding:0 !important;
-            overflow:hidden !important;
-        }
-
-        *,
-        *::before,
-        *::after{
-            box-sizing:border-box;
-        }
-
-        html{
-            -webkit-font-smoothing:antialiased;
-            text-rendering:optimizeLegibility;
-        }
-
-        body{
-            direction:rtl;
-        }
-    `;
-
-    doc.head.appendChild(style);
-
-    /*
-     * Make sure external fonts are ready again.
-     */
-
-    if(doc.fonts && doc.fonts.ready){
-
-        await doc.fonts.ready;
-
-    }
-
-}
-
-
-/* =========================================================
-   SET PROJECT TIME
-========================================================= */
-
-async function setProjectTime(timeMs){
-
-    const iframe =
-        $("previewFrame");
+        $("preview");
 
     const win =
         iframe.contentWindow;
@@ -3312,38 +2467,17 @@ async function setProjectTime(timeMs){
 
     }
 
-    /*
-     * Preferred deterministic API.
-     */
-
     if(
         win.__PROJECT__ &&
         typeof win.__PROJECT__.setTime === "function"
     ){
 
-        try{
-
-            win.__PROJECT__.setTime(
-                timeMs
-            );
-
-        }catch(error){
-
-            console.warn(
-                "PROJECT setTime error",
-                error
-            );
-
-        }
+        win.__PROJECT__.setTime(ms);
 
     }
 
-
     /*
-     * Also control Web Animations API.
-     *
-     * This is a fallback and also guarantees
-     * that WAAPI animations follow the same timeline.
+     * Also control all WAAPI animations.
      */
 
     let animations = [];
@@ -3366,41 +2500,20 @@ async function setProjectTime(timeMs){
 
     }
 
-    for(const animation of animations){
-
-        try{
-
-            if(
-                animation.effect &&
-                animation.effect.getComputedTiming
-            ){
-
-                animation.currentTime =
-                    timeMs;
-
-            }
-
-        }catch{}
-
-    }
-
-    /*
-     * Avoid browser animation progression.
-     */
-
-    for(const animation of animations){
+    for(
+        const animation of animations
+    ){
 
         try{
 
             animation.pause();
 
+            animation.currentTime =
+                ms;
+
         }catch{}
 
     }
-
-    /*
-     * Force layout.
-     */
 
     void doc.documentElement.offsetHeight;
 
@@ -3408,634 +2521,149 @@ async function setProjectTime(timeMs){
 
 
 /* =========================================================
-   CAPTURE FRAME
+   UPDATE WORKSPACE
 ========================================================= */
 
-async function captureFrame(timeMs){
+function updateWorkspace(meta){
+
+    const portrait =
+        APP.orientation === "portrait";
+
+    $("orientationInfo").textContent =
+        portrait
+            ? "عمودي 9:16"
+            : "أفقي 16:9";
+
+    $("durationInfo").textContent =
+        formatDuration(
+            APP.durationMs
+        );
+
+    $("infoTitle").textContent =
+        APP.title ||
+        "—";
+
+    $("infoSubject").textContent =
+        $("subject").value ||
+        "—";
+
+    $("infoGrade").textContent =
+        $("grade").value ||
+        "—";
+
+    $("infoOrientation").textContent =
+        portrait
+            ? "عمودي"
+            : "أفقي";
+
+    $("infoDuration").textContent =
+        formatDuration(
+            APP.durationMs
+        );
+
+    resizePreview();
+
+}
+
+
+/* =========================================================
+   PREVIEW SIZE
+========================================================= */
+
+function resizePreview(){
+
+    const wrap =
+        $("frameWrap");
 
     const iframe =
-        $("previewFrame");
+        $("preview");
 
-    const doc =
-        iframe.contentDocument;
+    const portrait =
+        APP.orientation === "portrait";
 
-    if(!doc){
+    const mobile =
+        window.innerWidth <= 650;
 
-        throw new Error(
-            "Project iframe unavailable"
-        );
-
-    }
-
-    await setProjectTime(timeMs);
-
-    /*
-     * Give custom setTime code a layout opportunity.
-     */
-
-    await nextFrame();
-
-    await nextFrame();
-
-    const root =
-        doc.documentElement;
-
-    const body =
-        doc.body;
-
-    const orientation =
-        state.projectMeta?.orientation ||
-        state.orientation;
-
-    const sourceWidth =
-        orientation === "portrait"
-            ? 720
-            : 1280;
-
-    const sourceHeight =
-        orientation === "portrait"
-            ? 1280
-            : 720;
-
-    /*
-     * Capture the actual document rather than
-     * the visible scaled iframe.
-     */
-
-    const canvas =
-        await html2canvas(
-            body,
-            {
-                backgroundColor:null,
-
-                width:sourceWidth,
-
-                height:sourceHeight,
-
-                windowWidth:sourceWidth,
-
-                windowHeight:sourceHeight,
-
-                scale:1,
-
-                useCORS:true,
-
-                allowTaint:false,
-
-                logging:false,
-
-                imageTimeout:15000,
-
-                foreignObjectRendering:false,
-
-                removeContainer:true,
-
-                onclone: clonedDoc => {
-
-                    /*
-                     * Ensure Arabic rendering direction.
-                     */
-
-                    clonedDoc.documentElement.dir =
-                        "rtl";
-
-                    clonedDoc.documentElement.lang =
-                        "ar";
-
-                    clonedDoc.body.style.margin =
-                        "0";
-
-                    clonedDoc.body.style.padding =
-                        "0";
-
-                    clonedDoc.body.style.overflow =
-                        "hidden";
-
-                }
-
-            }
-        );
-
-    return canvas;
-}
-
-
-/* =========================================================
-   TEST FRAME
-========================================================= */
-
-$("testFrame").addEventListener("click",async() => {
-
-    if(!state.loaded){
-
-        showToast(
-            "شغّل المشروع أولًا"
-        );
-
-        return;
-    }
-
-    try{
-
-        const canvas =
-            await captureFrame(0);
-
-        const win =
-            window.open();
-
-        if(!win){
-
-            showToast(
-                "المتصفح منع فتح المعاينة"
+    const maxWidth =
+        mobile
+            ? window.innerWidth - 35
+            : Math.min(
+                window.innerWidth - 390,
+                900
             );
 
-            return;
-        }
+    const maxHeight =
+        mobile
+            ? window.innerHeight * .55
+            : window.innerHeight * .68;
 
-        win.document.write(
-            "<title>Test Frame</title>" +
-            "<style>body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}img{max-width:100%;height:auto}</style>" +
-            "<img src='" +
-            canvas.toDataURL("image/png") +
-            "'>"
-        );
+    let width;
+    let height;
 
-        win.document.close();
+    if(portrait){
 
-        showToast(
-            "تم اختبار أول Frame"
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showToast(
-            "فشل اختبار الـFrame"
-        );
-
-    }
-
-});
-
-
-/* =========================================================
-   VALIDATION
-========================================================= */
-
-async function runValidation(){
-
-    const box =
-        $("validation");
-
-    box.innerHTML = "";
-
-    if(!state.loaded){
-
-        addCheck(
-            "warn",
-            "المشروع غير محمل"
-        );
-
-        return;
-
-    }
-
-    const iframe =
-        $("previewFrame");
-
-    const doc =
-        iframe.contentDocument;
-
-    const win =
-        iframe.contentWindow;
-
-
-    /*
-     * Duration
-     */
-
-    if(state.durationMs > 0){
-
-        addCheck(
-            "ok",
-            "مدة المشروع مكتشفة تلقائيًا: " +
-            formatDuration(state.durationMs)
-        );
-
-    }else{
-
-        addCheck(
-            "bad",
-            "لم يتم العثور على مدة المشروع"
-        );
-
-    }
-
-
-    /*
-     * Direction
-     */
-
-    if(
-        doc.documentElement.dir === "rtl"
-    ){
-
-        addCheck(
-            "ok",
-            "اتجاه HTML مضبوط على RTL"
-        );
-
-    }else{
-
-        addCheck(
-            "warn",
-            "HTML لا يحتوي dir=\"rtl\""
-        );
-
-    }
-
-
-    /*
-     * Fonts
-     */
-
-    try{
-
-        const fonts =
-            doc.fonts;
-
-        if(
-            fonts &&
-            fonts.status === "loaded"
-        ){
-
-            addCheck(
-                "ok",
-                "الخطوط تم تحميلها"
+        height =
+            Math.min(
+                maxHeight,
+                800
             );
 
-        }else{
+        width =
+            height *
+            9 / 16;
 
-            addCheck(
-                "warn",
-                "لم يتم التأكد من حالة الخطوط"
-            );
+        if(width > maxWidth){
+
+            width =
+                maxWidth;
+
+            height =
+                width *
+                16 / 9;
 
         }
 
-    }catch{
-
-        addCheck(
-            "warn",
-            "تعذر فحص الخطوط"
-        );
-
-    }
-
-
-    /*
-     * Letter spacing
-     */
-
-    const all =
-        Array.from(
-            doc.querySelectorAll("*")
-        );
-
-    let letterSpacingFound =
-        false;
-
-    for(const el of all){
-
-        try{
-
-            const style =
-                win.getComputedStyle(el);
-
-            if(
-                style.letterSpacing &&
-                style.letterSpacing !== "normal"
-            ){
-
-                letterSpacingFound = true;
-
-                break;
-
-            }
-
-        }catch{}
-
-    }
-
-    if(letterSpacingFound){
-
-        addCheck(
-            "bad",
-            "تم العثور على letter-spacing؛ قد يسبب مشكلة في العربية"
-        );
-
     }else{
 
-        addCheck(
-            "ok",
-            "لا يوجد letter-spacing مؤثر"
-        );
+        width =
+            maxWidth;
 
-    }
+        height =
+            width *
+            9 / 16;
 
+        if(height > maxHeight){
 
-    /*
-     * CSS animation
-     */
+            height =
+                maxHeight;
 
-    let cssAnimationFound =
-        false;
-
-    for(const el of all){
-
-        try{
-
-            const style =
-                win.getComputedStyle(el);
-
-            if(
-                style.animationName &&
-                style.animationName !== "none"
-            ){
-
-                cssAnimationFound = true;
-
-                break;
-
-            }
-
-        }catch{}
-
-    }
-
-    if(cssAnimationFound){
-
-        addCheck(
-            "warn",
-            "يوجد CSS animation؛ يفضل التحكم بالحركة عبر setTime / WAAPI"
-        );
-
-    }else{
-
-        addCheck(
-            "ok",
-            "لا توجد CSS animations أساسية ظاهرة"
-        );
-
-    }
-
-
-    /*
-     * Project controller
-     */
-
-    if(
-        win.__PROJECT__ &&
-        typeof win.__PROJECT__.setTime === "function"
-    ){
-
-        addCheck(
-            "ok",
-            "المشروع يحتوي على __PROJECT__.setTime()"
-        );
-
-    }else{
-
-        addCheck(
-            "warn",
-            "لا يوجد __PROJECT__.setTime؛ سيستخدم المحرك WAAPI كبديل"
-        );
-
-    }
-
-
-    /*
-     * Images
-     */
-
-    const images =
-        Array.from(doc.images || []);
-
-    const broken =
-        images.filter(
-            img =>
-                !img.complete ||
-                img.naturalWidth === 0
-        );
-
-    if(broken.length){
-
-        addCheck(
-            "warn",
-            "يوجد " +
-            broken.length +
-            " صورة لم يتم التأكد من تحميلها"
-        );
-
-    }else{
-
-        addCheck(
-            "ok",
-            "الصور الأساسية محملة"
-        );
-
-    }
-
-
-    /*
-     * Scene count
-     */
-
-    const scenes =
-        doc.querySelectorAll(
-            "[data-scene]"
-        );
-
-    if(scenes.length){
-
-        addCheck(
-            "ok",
-            "تم العثور على " +
-            scenes.length +
-            " مشاهد"
-        );
-
-    }else{
-
-        addCheck(
-            "warn",
-            "لم يتم العثور على data-scene؛ يمكن تشغيل المشروع لكنه لن يظهر كتسلسل مشاهد واضح"
-        );
-
-    }
-
-
-    /*
-     * Essential overlap check
-     */
-
-    const overlap =
-        detectOverlaps(doc,win);
-
-    if(overlap.length){
-
-        addCheck(
-            "warn",
-            "تم اكتشاف " +
-            overlap.length +
-            " احتمالات تداخل بين عناصر المحتوى"
-        );
-
-    }else{
-
-        addCheck(
-            "ok",
-            "لم يتم اكتشاف تداخل واضح بين عناصر المحتوى"
-        );
-
-    }
-
-}
-
-
-function addCheck(type,text){
-
-    const box =
-        $("validation");
-
-    const div =
-        document.createElement("div");
-
-    div.className =
-        "check " + type;
-
-    div.innerHTML =
-        '<div class="check-icon">' +
-        (
-            type === "ok"
-                ? "✓"
-                : type === "bad"
-                    ? "!"
-                    : "·"
-        ) +
-        '</div>' +
-        '<div>' +
-        escapeHTML(text) +
-        '</div>';
-
-    box.appendChild(div);
-}
-
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   OVERLAP DETECTION
-========================================================= */
-
-function detectOverlaps(doc,win){
-
-    const elements =
-        Array.from(
-            doc.querySelectorAll(
-                "[data-role='content'], [data-essential], [data-text]"
-            )
-        );
-
-    const visible =
-        elements.filter(el => {
-
-            try{
-
-                const r =
-                    el.getBoundingClientRect();
-
-                const s =
-                    win.getComputedStyle(el);
-
-                return (
-                    r.width > 5 &&
-                    r.height > 5 &&
-                    s.display !== "none" &&
-                    s.visibility !== "hidden" &&
-                    Number(s.opacity) > .01
-                );
-
-            }catch{
-
-                return false;
-
-            }
-
-        });
-
-    const result = [];
-
-    for(let i=0;i<visible.length;i++){
-
-        for(let j=i+1;j<visible.length;j++){
-
-            const a =
-                visible[i].getBoundingClientRect();
-
-            const b =
-                visible[j].getBoundingClientRect();
-
-            if(rectsOverlap(a,b)){
-
-                /*
-                 * Ignore nested parent/child relationships.
-                 */
-
-                if(
-                    visible[i].contains(visible[j]) ||
-                    visible[j].contains(visible[i])
-                ){
-
-                    continue;
-
-                }
-
-                result.push([
-                    visible[i],
-                    visible[j]
-                ]);
-
-            }
+            width =
+                height *
+                16 / 9;
 
         }
 
     }
 
-    return result;
+    wrap.style.width =
+        Math.round(width) + "px";
+
+    wrap.style.height =
+        Math.round(height) + "px";
+
+    iframe.style.width =
+        Math.round(width) + "px";
+
+    iframe.style.height =
+        Math.round(height) + "px";
+
 }
 
 
-function rectsOverlap(a,b){
-
-    return (
-        a.left < b.right &&
-        a.right > b.left &&
-        a.top < b.bottom &&
-        a.bottom > b.top
-    );
-}
+window.addEventListener(
+    "resize",
+    resizePreview
+);
 
 
 /* =========================================================
@@ -4049,15 +2677,13 @@ async function buildTimeline(){
 
     track.innerHTML = "";
 
-    const iframe =
-        $("previewFrame");
-
     const doc =
-        iframe.contentDocument;
+        $("preview").contentDocument;
 
     if(!doc){
 
         return;
+
     }
 
     const scenes =
@@ -4069,86 +2695,86 @@ async function buildTimeline(){
 
     if(!scenes.length){
 
-        const block =
+        const scene =
             document.createElement("div");
 
-        block.className =
-            "scene-block";
+        scene.className =
+            "scene";
 
-        block.style.width =
+        scene.style.width =
             "100%";
 
-        track.appendChild(block);
+        track.appendChild(scene);
 
         return;
 
     }
 
-    const total =
-        state.durationMs;
+    for(
+        let i = 0;
+        i < scenes.length;
+        i++
+    ){
 
-    for(let i=0;i<scenes.length;i++){
-
-        const scene =
+        const source =
             scenes[i];
 
         let start =
             Number(
-                scene.dataset.sceneStart
+                source.dataset.sceneStart
             );
 
         let end =
             Number(
-                scene.dataset.sceneEnd
+                source.dataset.sceneEnd
             );
 
         if(!Number.isFinite(start)){
 
             start =
-                (i / scenes.length) *
-                total;
+                APP.durationMs *
+                i /
+                scenes.length;
 
         }
 
         if(!Number.isFinite(end)){
 
             end =
-                ((i + 1) / scenes.length) *
-                total;
+                APP.durationMs *
+                (i + 1) /
+                scenes.length;
 
         }
 
-        const duration =
+        const width =
             Math.max(
-                1,
-                end - start
+                0.5,
+                (
+                    (end - start) /
+                    APP.durationMs
+                ) * 100
             );
 
-        const block =
+        const item =
             document.createElement("div");
 
-        block.className =
-            "scene-block";
+        item.className =
+            "scene";
 
-        block.style.width =
-            (
-                duration / total * 100
-            ) + "%";
+        item.style.width =
+            width + "%";
 
-        block.title =
-            scene.dataset.sceneName ||
-            "المشهد " + (i + 1);
-
-        const span =
+        const label =
             document.createElement("span");
 
-        span.textContent =
-            scene.dataset.sceneName ||
+        label.textContent =
+            source.dataset.sceneName ||
             "مشهد " + (i + 1);
 
-        block.appendChild(span);
+        item.appendChild(label);
 
-        track.appendChild(block);
+        track.appendChild(item);
 
     }
 
@@ -4159,23 +2785,442 @@ async function buildTimeline(){
    PLAYHEAD
 ========================================================= */
 
-function setPlayhead(timeMs){
+function setPlayhead(ms){
 
-    const percent =
-        state.durationMs
-            ? Math.max(
-                0,
-                Math.min(
-                    100,
-                    timeMs /
-                    state.durationMs *
-                    100
-                )
+    if(!APP.durationMs){
+
+        return;
+
+    }
+
+    const percentage =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                ms /
+                APP.durationMs *
+                100
             )
-            : 0;
+        );
 
     $("playhead").style.left =
-        percent + "%";
+        percentage + "%";
+
+}
+
+
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+async function validateProject(){
+
+    const box =
+        $("validation");
+
+    box.innerHTML = "";
+
+    if(!APP.loaded){
+
+        addValidation(
+            "warn",
+            "المشروع غير محمل"
+        );
+
+        return;
+
+    }
+
+    const iframe =
+        $("preview");
+
+    const doc =
+        iframe.contentDocument;
+
+    const win =
+        iframe.contentWindow;
+
+
+    addValidation(
+        "ok",
+        "تم اكتشاف مدة: " +
+        formatDuration(
+            APP.durationMs
+        )
+    );
+
+
+    if(
+        doc.documentElement.dir === "rtl"
+    ){
+
+        addValidation(
+            "ok",
+            "اتجاه العربية RTL مضبوط"
+        );
+
+    }else{
+
+        addValidation(
+            "bad",
+            "HTML لا يحتوي dir=\"rtl\""
+        );
+
+    }
+
+
+    if(
+        doc.documentElement.lang === "ar"
+    ){
+
+        addValidation(
+            "ok",
+            "لغة المشروع عربية"
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "لغة HTML ليست ar"
+        );
+
+    }
+
+
+    if(
+        doc.fonts &&
+        doc.fonts.status === "loaded"
+    ){
+
+        addValidation(
+            "ok",
+            "الخطوط محملة"
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "تعذر التأكد من حالة الخطوط"
+        );
+
+    }
+
+
+    let letterSpacing = false;
+
+    Array.from(
+        doc.querySelectorAll("*")
+    ).some(
+        el => {
+
+            const style =
+                win.getComputedStyle(el);
+
+            if(
+                style.letterSpacing !==
+                "normal"
+            ){
+
+                letterSpacing = true;
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+    );
+
+
+    if(letterSpacing){
+
+        addValidation(
+            "bad",
+            "يوجد letter-spacing؛ هذا ممنوع للمشروع العربي"
+        );
+
+    }else{
+
+        addValidation(
+            "ok",
+            "لا يوجد letter-spacing مؤثر"
+        );
+
+    }
+
+
+    if(
+        win.__PROJECT__ &&
+        typeof win.__PROJECT__.setTime === "function"
+    ){
+
+        addValidation(
+            "ok",
+            "__PROJECT__.setTime موجود"
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "لا يوجد setTime؛ سيتم الاعتماد على WAAPI إن وجد"
+        );
+
+    }
+
+
+    const images =
+        Array.from(
+            doc.images || []
+        );
+
+    const broken =
+        images.filter(
+            image =>
+                !image.complete ||
+                image.naturalWidth === 0
+        );
+
+    if(broken.length){
+
+        addValidation(
+            "warn",
+            "هناك " +
+            broken.length +
+            " صورة لم يكتمل تحميلها"
+        );
+
+    }else{
+
+        addValidation(
+            "ok",
+            "الصور محملة"
+        );
+
+    }
+
+
+    const scenes =
+        doc.querySelectorAll(
+            "[data-scene]"
+        );
+
+    if(scenes.length){
+
+        addValidation(
+            "ok",
+            "تم اكتشاف " +
+            scenes.length +
+            " مشاهد"
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "لم يتم تعريف data-scene"
+        );
+
+    }
+
+
+    const overflow =
+        checkOverflow(doc);
+
+    if(overflow){
+
+        addValidation(
+            "warn",
+            "تم العثور على عناصر قد تتجاوز حدود المشروع"
+        );
+
+    }else{
+
+        addValidation(
+            "ok",
+            "لا توجد عناصر واضحة خارج الإطار"
+        );
+
+    }
+
+
+    const overlaps =
+        checkOverlaps(doc,win);
+
+    if(overlaps > 0){
+
+        addValidation(
+            "warn",
+            "تم اكتشاف " +
+            overlaps +
+            " احتمالات تداخل"
+        );
+
+    }else{
+
+        addValidation(
+            "ok",
+            "لا يوجد تداخل واضح بين العناصر الأساسية"
+        );
+
+    }
+
+}
+
+
+function addValidation(type,text){
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "validation-item " +
+        type;
+
+    const icon =
+        type === "ok"
+            ? "✓"
+            : type === "bad"
+                ? "!"
+                : "·";
+
+    item.innerHTML =
+        '<div class="validation-icon">' +
+        icon +
+        '</div>' +
+        '<div>' +
+        escapeHTML(text) +
+        '</div>';
+
+    $("validation")
+        .appendChild(item);
+
+}
+
+
+/* =========================================================
+   OVERFLOW
+========================================================= */
+
+function checkOverflow(doc){
+
+    const root =
+        doc.documentElement;
+
+    const width =
+        root.scrollWidth;
+
+    const height =
+        root.scrollHeight;
+
+    const viewportWidth =
+        root.clientWidth;
+
+    const viewportHeight =
+        root.clientHeight;
+
+    return (
+        width >
+        viewportWidth + 5 ||
+        height >
+        viewportHeight + 5
+    );
+
+}
+
+
+/* =========================================================
+   OVERLAP
+========================================================= */
+
+function checkOverlaps(doc,win){
+
+    const elements =
+        Array.from(
+            doc.querySelectorAll(
+                "[data-role='content'],[data-essential]"
+            )
+        );
+
+    let count = 0;
+
+    for(
+        let i=0;
+        i<elements.length;
+        i++
+    ){
+
+        const a =
+            elements[i];
+
+        const ra =
+            a.getBoundingClientRect();
+
+        if(
+            ra.width < 3 ||
+            ra.height < 3
+        ){
+
+            continue;
+
+        }
+
+        for(
+            let j=i+1;
+            j<elements.length;
+            j++
+        ){
+
+            const b =
+                elements[j];
+
+            if(
+                a.contains(b) ||
+                b.contains(a)
+            ){
+
+                continue;
+
+            }
+
+            const rb =
+                b.getBoundingClientRect();
+
+            if(
+                ra.left < rb.right &&
+                ra.right > rb.left &&
+                ra.top < rb.bottom &&
+                ra.bottom > rb.top
+            ){
+
+                const sa =
+                    win.getComputedStyle(a);
+
+                const sb =
+                    win.getComputedStyle(b);
+
+                if(
+                    sa.visibility !== "hidden" &&
+                    sb.visibility !== "hidden" &&
+                    Number(sa.opacity) > .05 &&
+                    Number(sb.opacity) > .05
+                ){
+
+                    count++;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return count;
 
 }
 
@@ -4184,27 +3229,23 @@ function setPlayhead(timeMs){
    VALIDATE BUTTON
 ========================================================= */
 
-$("validateProject").addEventListener(
+$("validate").addEventListener(
     "click",
     async() => {
 
-        if(!state.loaded){
+        if(!APP.loaded){
 
-            showToast(
-                "شغّل المشروع أولًا"
-            );
+            alert("شغّل المشروع أولًا");
 
             return;
 
         }
 
-        await prepareIframeForCapture();
-
-        await runValidation();
-
-        showToast(
-            "تم فحص المشروع"
+        await waitResources(
+            $("preview").contentDocument
         );
+
+        await validateProject();
 
     }
 );
@@ -4214,37 +3255,43 @@ $("validateProject").addEventListener(
    CLEAR
 ========================================================= */
 
-$("clearProject").addEventListener(
+$("clear").addEventListener(
     "click",
     () => {
 
-        state.html = "";
+        APP.html = "";
 
-        state.loaded = false;
+        APP.loaded = false;
 
-        state.projectMeta = null;
+        APP.durationMs = 0;
 
-        state.durationMs = 0;
+        $("code").value = "";
 
-        $("codeInput").value = "";
+        $("preview").srcdoc = "";
 
-        $("previewFrame").srcdoc = "";
+        $("stateInfo").textContent =
+            "لا يوجد مشروع";
 
-        $("projectState").textContent =
-            "لم يتم تحميل مشروع";
-
-        $("metaDuration").textContent =
+        $("durationInfo").textContent =
             "—";
 
-        $("factDuration").textContent =
+        $("infoTitle").textContent =
             "—";
 
-        $("validation").innerHTML = "";
+        $("infoDuration").textContent =
+            "—";
 
-        $("timelineTrack").innerHTML = "";
+        $("timelineTrack").innerHTML =
+            "";
 
-        showToast(
-            "تم مسح المشروع"
+        $("validation").innerHTML =
+            "";
+
+        $("download").innerHTML =
+            "";
+
+        $("download").classList.remove(
+            "show"
         );
 
     }
@@ -4252,172 +3299,241 @@ $("clearProject").addEventListener(
 
 
 /* =========================================================
-   QUALITY / RESIZE
+   TEST FRAME
 ========================================================= */
 
-$("quality").addEventListener(
-    "change",
-    () => {
+$("test").addEventListener(
+    "click",
+    async() => {
 
-        $("metaResolution").textContent =
-            $("quality").value + "p";
+        if(!APP.loaded){
+
+            alert("شغّل المشروع أولًا");
+
+            return;
+
+        }
+
+        try{
+
+            await setProjectTime(0);
+
+            const canvas =
+                await renderFrame(0);
+
+            const url =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+            const win =
+                window.open();
+
+            if(!win){
+
+                alert(
+                    "المتصفح منع نافذة المعاينة"
+                );
+
+                return;
+
+            }
+
+            win.document.write(
+                "<title>Frame</title>" +
+                "<style>body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}img{max-width:100%;height:auto}</style>" +
+                "<img src='" +
+                url +
+                "'>"
+            );
+
+            win.document.close();
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "فشل اختبار Frame: " +
+                error.message
+            );
+
+        }
 
     }
 );
 
 
 /* =========================================================
-   EXPORT HELPERS
+   RENDER FRAME
+========================================================= */
+
+async function renderFrame(ms){
+
+    await setProjectTime(ms);
+
+    await nextFrame();
+
+    const iframe =
+        $("preview");
+
+    const doc =
+        iframe.contentDocument;
+
+    if(!doc){
+
+        throw new Error(
+            "تعذر الوصول إلى المشروع"
+        );
+
+    }
+
+    const sourceWidth =
+        APP.orientation === "portrait"
+            ? 1080
+            : 1920;
+
+    const sourceHeight =
+        APP.orientation === "portrait"
+            ? 1920
+            : 1080;
+
+    /*
+     * Force project root dimensions.
+     * This makes preview/export use the same
+     * logical canvas.
+     */
+
+    const root =
+        doc.body;
+
+    const oldWidth =
+        root.style.width;
+
+    const oldHeight =
+        root.style.height;
+
+    root.style.width =
+        sourceWidth + "px";
+
+    root.style.height =
+        sourceHeight + "px";
+
+    const canvas =
+        await html2canvas(
+            root,
+            {
+                width:sourceWidth,
+                height:sourceHeight,
+                windowWidth:sourceWidth,
+                windowHeight:sourceHeight,
+                scale:1,
+                backgroundColor:"#000",
+                useCORS:true,
+                allowTaint:false,
+                logging:false,
+                imageTimeout:15000,
+                foreignObjectRendering:false
+            }
+        );
+
+    root.style.width =
+        oldWidth;
+
+    root.style.height =
+        oldHeight;
+
+    return canvas;
+
+}
+
+
+/* =========================================================
+   EXPORT SIZE
 ========================================================= */
 
 function getExportSize(){
 
-    const orientation =
-        state.projectMeta?.orientation ||
-        state.orientation;
-
-    const quality =
-        Number(
-            $("quality").value
-        );
-
-    if(orientation === "portrait"){
-
-        return {
-
-            width:
-                quality === 1080
-                    ? 1080
-                    : 720,
-
-            height:
-                quality === 1080
-                    ? 1920
-                    : 1280
-
-        };
-
-    }
-
     return {
-
         width:
-            quality === 1080
-                ? 1920
-                : 1280,
+            APP.orientation === "portrait"
+                ? 1080
+                : 1920,
 
         height:
-            quality === 1080
-                ? 1080
-                : 720
-
+            APP.orientation === "portrait"
+                ? 1920
+                : 1080
     };
 
 }
 
 
 /* =========================================================
-   SCALE FRAME TO OUTPUT
+   ENCODER CONFIG
 ========================================================= */
 
-function scaleCanvas(source,width,height){
-
-    const canvas =
-        document.createElement("canvas");
-
-    canvas.width =
-        width;
-
-    canvas.height =
-        height;
-
-    const ctx =
-        canvas.getContext(
-            "2d",
-            {
-                alpha:false
-            }
-        );
-
-    ctx.fillStyle =
-        "#000";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-    ctx.drawImage(
-        source,
-        0,
-        0,
-        width,
-        height
-    );
-
-    return canvas;
-}
-
-
-/* =========================================================
-   WEB CODECS SUPPORT
-========================================================= */
-
-async function getVideoCodec(){
+async function findEncoder(width,height,fps){
 
     if(
-        typeof VideoEncoder === "undefined"
+        typeof VideoEncoder ===
+        "undefined"
     ){
 
         throw new Error(
-            "WebCodecs غير مدعوم في هذا المتصفح"
+            "WebCodecs غير متوفر في هذا المتصفح"
         );
 
     }
 
-    const candidates = [
+    const configs = [
 
         {
-            codec:"vp09.00.10.08",
-            name:"VP9"
+            type:"mp4",
+            codec:"avc1.42001f",
+            containerCodec:"avc",
+            mime:"video/mp4"
         },
 
         {
+            type:"mp4",
+            codec:"avc1.4d401f",
+            containerCodec:"avc",
+            mime:"video/mp4"
+        },
+
+        {
+            type:"webm",
             codec:"vp09.00.10.08",
-            name:"VP9"
+            containerCodec:"V_VP9",
+            mime:"video/webm"
         }
 
     ];
 
-    for(const candidate of candidates){
+    for(
+        const config of configs
+    ){
 
         try{
 
             const result =
-                await VideoEncoder.isConfigSupported({
-
-                    codec:
-                        candidate.codec,
-
-                    width:
-                        1920,
-
-                    height:
-                        1080,
-
-                    bitrate:
-                        8_000_000,
-
-                    framerate:
-                        30
-
-                });
+                await VideoEncoder.isConfigSupported(
+                    {
+                        codec:config.codec,
+                        width,
+                        height,
+                        bitrate:
+                            config.type === "mp4"
+                                ? 8_000_000
+                                : 8_000_000,
+                        framerate:fps
+                    }
+                );
 
             if(result.supported){
 
-                return candidate.codec;
+                return config;
 
             }
 
@@ -4426,271 +3542,227 @@ async function getVideoCodec(){
     }
 
     throw new Error(
-        "لم يتم العثور على VideoEncoder مناسب"
+        "لم يجد المتصفح Codec مناسبًا"
     );
 
 }
 
 
 /* =========================================================
-   EXPORT VIDEO
+   EXPORT
 ========================================================= */
 
-$("exportVideo").addEventListener(
+$("export").addEventListener(
     "click",
-    async() => {
-
-        await exportVideo();
-
-    }
+    exportVideo
 );
 
 
 async function exportVideo(){
 
-    if(state.exporting){
+    if(APP.exporting){
 
         return;
 
     }
 
-    if(!state.loaded){
+    if(!APP.loaded){
 
-        showToast(
-            "شغّل المشروع أولًا"
-        );
+        alert("شغّل المشروع أولًا");
 
         return;
 
     }
 
-    if(
-        typeof html2canvas === "undefined"
-    ){
+    APP.exporting = true;
 
-        showToast(
-            "html2canvas غير محمل"
-        );
+    APP.stop = false;
 
-        return;
-
-    }
-
-    if(
-        typeof VideoEncoder === "undefined"
-    ){
-
-        showToast(
-            "هذا المتصفح لا يدعم WebCodecs VideoEncoder"
-        );
-
-        return;
-
-    }
-
-    state.exporting = true;
-
-    state.stopRequested = false;
-
-    $("exportVideo").style.display =
+    $("export").style.display =
         "none";
 
-    $("stopExport").style.display =
+    $("stop").style.display =
         "block";
 
-    $("progressWrap").classList.add(
-        "show"
-    );
+    $("progressWrap")
+        .classList
+        .add("show");
 
-    updateProgress(
-        0,
-        "تهيئة التصدير..."
-    );
+    $("download")
+        .classList
+        .remove("show");
 
     try{
 
-        await prepareIframeForCapture();
-
-        const doc =
-            $("previewFrame").contentDocument;
-
-        const win =
-            $("previewFrame").contentWindow;
-
-        /*
-         * Refresh metadata in case project
-         * changed dynamically.
-         */
-
-        let durationMs =
-            normalizeDuration(
-                parseProjectMeta(doc)
-            );
-
-        if(
-            (!durationMs || durationMs <= 0) &&
-            win.__PROJECT__ &&
-            Number(win.__PROJECT__.duration) > 0
-        ){
-
-            durationMs =
-                Number(
-                    win.__PROJECT__.duration
-                );
-
-        }
-
-        if(!durationMs){
-
-            throw new Error(
-                "مدة المشروع غير موجودة داخل HTML"
-            );
-
-        }
-
-        state.durationMs =
-            durationMs;
-
-        updateProjectUI();
-
-        const fps =
-            Number(
-                $("fps").value
-            );
+        const fps = 30;
 
         const totalFrames =
             Math.ceil(
-                durationMs / 1000 * fps
+                APP.durationMs /
+                1000 *
+                fps
             );
 
         const size =
             getExportSize();
 
+        updateProgress(
+            0,
+            "فحص الترميز..."
+        );
+
         const codec =
-            await getVideoCodec();
-
-        /*
-         * WebM muxer.
-         */
-
-        if(
-            !window.WebMMuxer &&
-            !window.WebMMuxer.Muxer
-        ){
-
-            /*
-             * Library versions expose Muxer
-             * under WebMMuxer in common builds.
-             */
-
-        }
-
-        const muxerClass =
-            window.WebMMuxer?.Muxer ||
-            window.Muxer;
-
-        const targetClass =
-            window.WebMMuxer?.ArrayBufferTarget ||
-            window.ArrayBufferTarget;
-
-        if(
-            !muxerClass ||
-            !targetClass
-        ){
-
-            throw new Error(
-                "WebM Muxer غير متاح"
+            await findEncoder(
+                size.width,
+                size.height,
+                fps
             );
 
+        $("formatInfo").textContent =
+            codec.type === "mp4"
+                ? "MP4 / H.264"
+                : "WebM / VP9";
+
+
+        let muxer;
+        let target;
+
+
+        if(codec.type === "mp4"){
+
+            if(
+                !window.Mp4Muxer
+            ){
+
+                throw new Error(
+                    "MP4 Muxer غير محمل"
+                );
+
+            }
+
+            target =
+                new Mp4Muxer.ArrayBufferTarget();
+
+            muxer =
+                new Mp4Muxer.Muxer({
+
+                    target,
+
+                    video:{
+                        codec:"avc",
+                        width:size.width,
+                        height:size.height,
+                        frameRate:fps
+                    },
+
+                    fastStart:"in-memory"
+
+                });
+
+        }else{
+
+            if(
+                !window.WebMMuxer
+            ){
+
+                throw new Error(
+                    "WebM Muxer غير محمل"
+                );
+
+            }
+
+            target =
+                new WebMMuxer.ArrayBufferTarget();
+
+            muxer =
+                new WebMMuxer.Muxer({
+
+                    target,
+
+                    video:{
+                        codec:"V_VP9",
+                        width:size.width,
+                        height:size.height,
+                        frameRate:fps
+                    }
+
+                });
+
         }
 
-        const target =
-            new targetClass();
-
-        const muxer =
-            new muxerClass({
-
-                target,
-
-                video:{
-
-                    codec:"V_VP9",
-
-                    width:size.width,
-
-                    height:size.height
-
-                }
-
-            });
-
-
-        let encodedFrames = 0;
 
         let encoderError = null;
 
         const encoder =
             new VideoEncoder({
 
-                output: chunk => {
+                output:
+                    (chunk,metadata) => {
 
-                    muxer.addVideoChunk(
-                        chunk,
-                        {
-                            timestamp:
-                                chunk.timestamp,
-                            duration:
-                                chunk.duration
-                        }
-                    );
+                        muxer.addVideoChunk(
+                            chunk,
+                            metadata
+                        );
 
-                    encodedFrames++;
+                    },
 
-                },
+                error:
+                    error => {
 
-                error: error => {
+                        encoderError =
+                            error;
 
-                    encoderError =
-                        error;
-
-                }
+                    }
 
             });
 
 
         encoder.configure({
 
-            codec,
+            codec:codec.codec,
 
             width:size.width,
 
             height:size.height,
 
-            bitrate:
-                Number(
-                    $("quality").value
-                ) === 1080
-                    ? 10_000_000
-                    : 6_000_000,
+            bitrate:8_000_000,
 
-            framerate:fps,
-
-            latency:"quality"
+            framerate:fps
 
         });
 
 
         /*
-         * Frame-by-frame.
+         * Dedicated canvas.
          */
 
+        const outputCanvas =
+            document.createElement(
+                "canvas"
+            );
+
+        outputCanvas.width =
+            size.width;
+
+        outputCanvas.height =
+            size.height;
+
+        const outputContext =
+            outputCanvas.getContext(
+                "2d",
+                {
+                    alpha:false
+                }
+            );
+
+
         for(
-            let frameIndex = 0;
-            frameIndex < totalFrames;
-            frameIndex++
+            let frame = 0;
+            frame < totalFrames;
+            frame++
         ){
 
-            if(state.stopRequested){
+            if(APP.stop){
 
                 throw new Error(
                     "تم إيقاف التصدير"
@@ -4704,52 +3776,66 @@ async function exportVideo(){
 
             }
 
+
+            /*
+             * Backpressure.
+             */
+
+            while(
+                encoder.encodeQueueSize > 3
+            ){
+
+                await sleep(2);
+
+            }
+
+
             const timeMs =
                 Math.min(
-                    durationMs - 1,
-                    frameIndex *
+                    APP.durationMs - 1,
+                    frame *
                     1000 /
                     fps
                 );
 
-            setPlayhead(timeMs);
+            setPlayhead(
+                timeMs
+            );
+
 
             const source =
-                await captureFrame(
+                await renderFrame(
                     timeMs
                 );
 
-            const canvas =
-                scaleCanvas(
-                    source,
-                    size.width,
-                    size.height
-                );
 
-            const ctx =
-                canvas.getContext("2d");
+            outputContext.clearRect(
+                0,
+                0,
+                size.width,
+                size.height
+            );
 
-            const imageData =
-                ctx.getImageData(
-                    0,
-                    0,
-                    size.width,
-                    size.height
-                );
+            outputContext.drawImage(
+                source,
+                0,
+                0,
+                size.width,
+                size.height
+            );
 
-            const frame =
+
+            const videoFrame =
                 new VideoFrame(
-                    imageData.data.buffer,
+                    outputCanvas,
                     {
-                        format:"RGBA",
-                        codedWidth:size.width,
-                        codedHeight:size.height,
                         timestamp:
                             Math.round(
-                                frameIndex *
+                                frame *
                                 1_000_000 /
                                 fps
                             ),
+
                         duration:
                             Math.round(
                                 1_000_000 /
@@ -4758,63 +3844,38 @@ async function exportVideo(){
                     }
                 );
 
-            /*
-             * Prevent encoder queue from
-             * growing indefinitely.
-             */
-
-            while(
-                encoder.encodeQueueSize > 4
-            ){
-
-                await waitShort();
-
-            }
 
             encoder.encode(
-                frame,
+                videoFrame,
                 {
                     keyFrame:
-                        frameIndex % Math.max(
-                            1,
-                            fps * 2
-                        ) === 0
+                        frame === 0 ||
+                        frame % (fps * 2) === 0
                 }
             );
 
-            frame.close();
+
+            videoFrame.close();
+
 
             updateProgress(
                 (
-                    frameIndex + 1
-                ) /
-                totalFrames *
-                100,
+                    (frame + 1) /
+                    totalFrames
+                ) * 100,
 
-                "تصدير Frame " +
-                (frameIndex + 1) +
+                "تصدير " +
+                (frame + 1) +
                 " / " +
                 totalFrames
             );
-
-            /*
-             * Give browser memory a chance.
-             */
-
-            if(
-                frameIndex % 4 === 0
-            ){
-
-                await waitShort();
-
-            }
 
         }
 
 
         updateProgress(
             100,
-            "إنهاء الفيديو..."
+            "إنهاء الملف..."
         );
 
 
@@ -4828,75 +3889,95 @@ async function exportVideo(){
 
         }
 
+
         muxer.finalize();
+
 
         const buffer =
             target.buffer;
+
+        if(!buffer){
+
+            throw new Error(
+                "لم يتم إنشاء ملف الفيديو"
+            );
+
+        }
+
+
+        const mime =
+            codec.type === "mp4"
+                ? "video/mp4"
+                : "video/webm";
+
+        const extension =
+            codec.type === "mp4"
+                ? "mp4"
+                : "webm";
+
 
         const blob =
             new Blob(
                 [buffer],
                 {
-                    type:"video/webm"
+                    type:mime
                 }
             );
 
+
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
+
 
         const filename =
-            createSafeFilename(
-                state.project.title ||
-                state.projectMeta?.title ||
+            safeName(
+                APP.title ||
                 "مشروع-موشن"
             ) +
-            ".webm";
+            "." +
+            extension;
 
-        showDownloadResult(
-            url,
-            filename,
-            blob.size
+
+        $("download").innerHTML = `
+            <a
+                class="btn primary"
+                href="${url}"
+                download="${escapeHTML(filename)}"
+            >
+                حفظ ${extension.toUpperCase()}
+            </a>
+        `;
+
+        $("download")
+            .classList
+            .add("show");
+
+
+        updateProgress(
+            100,
+            "اكتمل التصدير"
         );
 
-        showToast(
-            "اكتمل تصدير الفيديو"
-        );
 
     }catch(error){
 
         console.error(error);
 
-        if(
-            String(error.message || "")
-                .includes("تم إيقاف")
-        ){
-
-            showToast(
-                "تم إيقاف التصدير"
-            );
-
-        }else{
-
-            showToast(
-                "فشل التصدير: " +
-                (
-                    error.message ||
-                    "خطأ غير معروف"
-                )
-            );
-
-        }
+        alert(
+            error.message ||
+            "حدث خطأ أثناء التصدير"
+        );
 
     }finally{
 
-        state.exporting = false;
+        APP.exporting = false;
 
-        state.stopRequested = false;
-
-        $("exportVideo").style.display =
+        $("export").style.display =
             "block";
 
-        $("stopExport").style.display =
+        $("stop").style.display =
             "none";
 
         setPlayhead(0);
@@ -4907,23 +3988,20 @@ async function exportVideo(){
 
 
 /* =========================================================
-   WAIT
+   STOP
 ========================================================= */
 
-function waitShort(){
+$("stop").addEventListener(
+    "click",
+    () => {
 
-    return new Promise(
-        resolve => {
+        APP.stop = true;
 
-            setTimeout(
-                resolve,
-                0
-            );
+        $("progressText").textContent =
+            "جارٍ إيقاف التصدير...";
 
-        }
-    );
-
-}
+    }
+);
 
 
 /* =========================================================
@@ -4948,481 +4026,105 @@ function updateProgress(percent,text){
 
 
 /* =========================================================
-   STOP
+   UTILITIES
 ========================================================= */
 
-$("stopExport").addEventListener(
-    "click",
-    () => {
-
-        if(!state.exporting){
-
-            return;
-
-        }
-
-        state.stopRequested =
-            true;
-
-        $("progressText").textContent =
-            "جارٍ إيقاف التصدير...";
-
-    }
-);
-
-
-/* =========================================================
-   DOWNLOAD RESULT
-========================================================= */
-
-function showDownloadResult(
-    url,
-    filename,
-    bytes
-){
-
-    const existing =
-        document.getElementById(
-            "downloadResult"
-        );
-
-    if(existing){
-
-        existing.remove();
-
-    }
-
-    const panel =
-        document.createElement("div");
-
-    panel.id =
-        "downloadResult";
-
-    panel.className =
-        "side-panel";
-
-    panel.style.marginTop =
-        "10px";
-
-    panel.innerHTML = `
-        <h3>الفيديو جاهز</h3>
-
-        <div style="
-            color:#8fa5aa;
-            font-size:10px;
-            line-height:1.8;
-            margin-bottom:10px;
-        ">
-            الحجم التقريبي:
-            ${formatBytes(bytes)}
-        </div>
-
-        <a
-            href="${url}"
-            download="${escapeHTML(filename)}"
-            class="btn primary"
-            style="
-                display:block;
-                text-align:center;
-                text-decoration:none;
-            "
-        >
-            حفظ الفيديو
-        </a>
-    `;
-
-    document
-        .querySelector(".workspace-side")
-        .appendChild(panel);
-
-}
-
-
-/* =========================================================
-   FILE SIZE
-========================================================= */
-
-function formatBytes(bytes){
-
-    if(bytes < 1024){
-
-        return bytes + " B";
-
-    }
-
-    if(bytes < 1024 * 1024){
-
-        return (
-            bytes / 1024
-        ).toFixed(1) +
-        " KB";
-
-    }
-
-    return (
-        bytes /
-        (1024 * 1024)
-    ).toFixed(1) +
-    " MB";
-
-}
-
-
-/* =========================================================
-   SAFE FILENAME
-========================================================= */
-
-function createSafeFilename(name){
-
-    return String(name || "project")
-        .replace(/[\\/:*?"<>|]/g," ")
-        .replace(/\s+/g," ")
-        .trim()
-        .slice(0,80)
-        .replace(/ /g,"-");
-
-}
-
-
-/* =========================================================
-   INITIAL EXAMPLE
-========================================================= */
-
-function insertExample(){
-
-    const example = `
-<!doctype html>
-<html lang="ar" dir="rtl">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1">
-
-<meta name="project-duration"
-      content="20">
-
-<meta name="project-duration-ms"
-      content="20000">
-
-<meta name="project-orientation"
-      content="landscape">
-
-<meta name="project-type"
-      content="educational-motion-project">
-
-<meta name="project-title"
-      content="مثال مشروع موشن">
-
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com">
-
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin>
-
-<link
-    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
-    rel="stylesheet">
-
-<style>
-
-*{
-    box-sizing:border-box;
-}
-
-html,
-body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-}
-
-body{
-    direction:rtl;
-    font-family:"Tajawal",sans-serif;
-    background:#071014;
-    color:white;
-}
-
-.project{
-    width:1280px;
-    height:720px;
-    overflow:hidden;
-    position:relative;
-    background:
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(199,167,90,.18),
-            transparent 25%
-        ),
-        #071014;
-}
-
-.scene{
-    position:absolute;
-    inset:0;
-    padding:80px;
-}
-
-.scene-content{
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:flex-start;
-}
-
-.kicker{
-    color:#c7a75a;
-    font-size:22px;
-    font-weight:800;
-    margin-bottom:18px;
-}
-
-.title{
-    font-size:76px;
-    line-height:1.1;
-    font-weight:900;
-    max-width:900px;
-}
-
-.subtitle{
-    font-size:27px;
-    color:#a9bec2;
-    margin-top:24px;
-}
-
-.circle{
-    position:absolute;
-    width:300px;
-    height:300px;
-    border:1px solid rgba(199,167,90,.3);
-    border-radius:50%;
-    left:70px;
-    bottom:70px;
-}
-
-.line{
-    position:absolute;
-    width:400px;
-    height:1px;
-    background:#c7a75a;
-    left:80px;
-    top:100px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="project">
-
-    <div
-        class="scene"
-        data-scene="1"
-        data-scene-name="الغلاف"
-        data-scene-start="0"
-        data-scene-end="10000"
-    >
-
-        <div class="line"></div>
-        <div class="circle"></div>
-
-        <div class="scene-content">
-
-            <div
-                class="kicker"
-                data-role="content"
-            >
-                مشروع دراسي
-            </div>
-
-            <div
-                class="title"
-                data-role="content"
-            >
-                مثال على مشروع
-                بطريقة الموشن
-            </div>
-
-            <div
-                class="subtitle"
-                data-role="content"
-            >
-                مشروع مرئي متحرك
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div
-        class="scene"
-        data-scene="2"
-        data-scene-name="المحتوى"
-        data-scene-start="10000"
-        data-scene-end="20000"
-    >
-
-        <div class="scene-content">
-
-            <div
-                class="kicker"
-                data-role="content"
-            >
-                الفكرة
-            </div>
-
-            <div
-                class="title"
-                data-role="content"
-                style="font-size:58px;"
-            >
-                الحركة تخدم
-                المعلومة
-            </div>
-
-            <div
-                class="subtitle"
-                data-role="content"
-            >
-                وليس الهدف أن تتحرك جميع العناصر بلا سبب.
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-window.__PROJECT__ = {
-
-    duration:20000,
-
-    orientation:"landscape",
-
-    metadata:{
-        title:"مثال مشروع موشن"
-    },
-
-    setTime:function(timeMs){
-
-        const scenes =
-            document.querySelectorAll(
-                ".scene"
-            );
-
-        scenes.forEach(
-            (scene,index) => {
-
-                const start =
-                    Number(
-                        scene.dataset.sceneStart
-                    );
-
-                const end =
-                    Number(
-                        scene.dataset.sceneEnd
-                    );
-
-                const visible =
-                    timeMs >= start &&
-                    timeMs < end;
-
-                scene.style.opacity =
-                    visible
-                        ? "1"
-                        : "0";
-
-                scene.style.pointerEvents =
-                    visible
-                        ? "auto"
-                        : "none";
-
-            }
-        );
-
-    }
-
-};
-
-document.fonts.ready.then(() => {
-
-    window.__PROJECT__.setTime(0);
-
-});
-
-</script>
-
-</body>
-
-</html>
-`.trim();
-
-    return example;
-}
-
-
-/* =========================================================
-   OPTIONAL: EXAMPLE IF EMPTY
-========================================================= */
-
-$("codeInput").addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.ctrlKey &&
-            event.shiftKey &&
-            event.key.toLowerCase() === "e"
-        ){
-
-            event.preventDefault();
-
-            $("codeInput").value =
-                insertExample();
-
-            showToast(
-                "تم إدخال مشروع تجريبي"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   STARTUP
-========================================================= */
-
-(function init(){
-
-    /*
-     * Keep preview empty.
-     * User pastes the actual AI project.
-     */
-
-    resizePreview();
-
-    $("quality").dispatchEvent(
-        new Event("change")
+function sleep(ms){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
     );
 
-})();
+}
+
+
+function formatDuration(ms){
+
+    const seconds =
+        Math.round(
+            ms / 1000
+        );
+
+    if(seconds < 60){
+
+        return seconds + " ثانية";
+
+    }
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+    const rest =
+        seconds % 60;
+
+    return (
+        minutes +
+        " د" +
+        (
+            rest
+                ? " " + rest + " ث"
+                : ""
+        )
+    );
+
+}
+
+
+function safeName(name){
+
+    return String(name)
+        .replace(
+            /[\\/:*?"<>|]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            "-"
+        )
+        .slice(0,70)
+        || "مشروع-موشن";
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+resizePreview();
 
 </script>
 
