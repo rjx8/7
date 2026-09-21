@@ -1,342 +1,540 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ستوديو الموشن جرافيك الذكي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة الموشن جرافيك الذكية</title>
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
             background: #0f172a;
             color: #e2e8f0;
-            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .header { text-align: center; margin-bottom: 25px; width: 100%; }
-        .header h2 { color: #f8fafc; font-size: 26px; font-weight: 800; }
-        .header p { color: #94a3b8; font-size: 14px; margin-top: 5px; }
+        .header { text-align: center; margin-bottom: 15px; width: 100%; }
+        .header h2 { margin: 0; color: #f8fafc; font-size: 24px; }
 
-        .top-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 900px; }
+        .top-nav {
+            display: flex; justify-content: center; gap: 10px;
+            margin-bottom: 20px; width: 100%; max-width: 700px;
+        }
+
         .nav-btn {
             flex: 1; background: #1e293b; color: #94a3b8; border: 2px solid #334155;
-            padding: 12px 5px; border-radius: 8px; font-size: 15px; font-weight: bold;
+            padding: 12px 5px; border-radius: 8px; font-size: 14px; font-weight: bold;
             cursor: pointer; transition: .3s; text-align: center;
         }
         .nav-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
         .nav-btn:hover:not(.active) { background: #334155; color: #f8fafc; }
 
-        .main-container { width: 100%; max-width: 900px; display: none; flex-direction: column; gap: 20px; }
-        .main-container.active-tab { display: flex; }
-
+        .main-container { width: 100%; max-width: 700px; display: flex; flex-direction: column; }
         .box-panel {
-            background: #1e293b; border-radius: 12px; padding: 25px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,.5); border: 1px solid #334155;
+            background: #1e293b; border-radius: 12px; padding: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,.5); border: 1px solid #334155; width: 100%; margin-bottom: 15px;
         }
 
         .form-group { margin-bottom: 15px; display: flex; flex-direction: column; width: 100%; }
-        .row { display: flex; gap: 15px; width: 100%; flex-wrap: wrap; }
-        .row .form-group { flex: 1; min-width: 250px; }
-
-        label { margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #cbd5e1; }
+        label { margin-bottom: 8px; font-weight: bold; font-size: 13px; color: #94a3b8; }
+        
         input, select, textarea {
             width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155;
             border-radius: 8px; font-size: 14px; font-family: inherit; color: #f8fafc; transition: .2s;
         }
         input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
-        
-        textarea.code-input { min-height: 250px; direction: ltr; font-family: monospace; background: #020617; font-size: 13px; line-height: 1.6; }
-        
-        .primary-btn {
-            background: #2563eb; color: white; border: none; padding: 16px; border-radius: 8px;
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: .2s; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .primary-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
-        .success-btn { background: #059669; }
-        .success-btn:hover { background: #047857; }
-        .danger-btn { background: #dc2626; }
-        .danger-btn:hover { background: #b91c1c; }
+        input:disabled, select:disabled { opacity: .5; cursor: not-allowed; text-decoration: line-through; }
 
+        .req-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; width: 100%; }
+        .req-row input[type="text"] { flex: 1; }
+        
+        .toggle-req {
+            background: #334155; border: none; color: #f8fafc; border-radius: 6px;
+            padding: 12px 0; cursor: pointer; transition: .2s; font-size: 14px;
+            width: 45px; text-align: center; flex-shrink: 0;
+        }
+        .toggle-req.disabled { background: #7f1d1d; color: #fca5a5; }
+
+        .textarea-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; flex-wrap: wrap; }
+        .action-btns { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end; }
+        .action-btns button {
+            background: #334155; color: #e2e8f0; border: none; padding: 8px 10px;
+            border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: .2s; flex: 1; text-align: center; white-space: nowrap;
+        }
+        .action-btns button.clear-btn { background: #7f1d1d; color: #fca5a5; }
+        .action-btns button:hover { background: #475569; }
+        .action-btns button.clear-btn:hover { background: #991b1b; color: #fef2f2; }
+
+        textarea { min-height: 200px; resize: vertical; direction: ltr; font-family: monospace; background: #020617; font-size: 13px; line-height: 1.6; }
+        .row { display: flex; gap: 12px; width: 100%; }
+        .row .form-group { flex: 1; min-width: 0; }
+
+        .export-btn {
+            background: #2563eb; color: white; border: none; padding: 16px;
+            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: .2s; width: 100%;
+        }
+        .export-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .export-btn.record-active { background: #dc2626; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
+
+        .tab-content { display: none; }
+        .tab-content.active-tab { display: flex; }
+
+        .ai-prompts {
+            background: #022c22; border: 1px dashed #059669; padding: 15px;
+            border-radius: 10px; margin-bottom: 20px; width: 100%;
+        }
+        .ai-prompts p { margin: 0 0 10px; font-size: 13px; color: #34d399; font-weight: bold; text-align: center; }
+        
+        .prompt-btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .prompt-btn {
+            flex: 1 1 calc(33.333% - 8px); background: #1e293b; border: 1px solid #059669;
+            color: #34d399; padding: 10px 5px; border-radius: 8px; font-size: 11px;
+            font-weight: bold; cursor: pointer; transition: .2s; text-align: center; white-space: nowrap;
+        }
+        .prompt-btn:hover { background: #059669; color: #fff; }
+
+        .history-box { background: #0f172a; border-radius: 8px; padding: 10px; margin-top: 8px; max-height: 180px; overflow-y: auto; width: 100%; }
+        .history-item {
+            padding: 8px 10px; background: #1e293b; margin: 5px 0; border-radius: 4px;
+            font-size: 12px; color: #94a3b8; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .history-item:hover { background: #334155; color: #f8fafc; }
+
+        /* Preview Area */
         .preview-wrapper {
-            position: relative; width: 100%; background: #000; border-radius: 12px; overflow: hidden;
-            border: 2px solid #334155; display: flex; align-items: center; justify-content: center;
+            position: relative; width: 100%; background: #000; border-radius: 8px; overflow: hidden;
+            border: 2px solid #334155; display: flex; align-items: center; justify-content: center; margin-top: 15px; transition: 0.3s;
         }
         .preview-wrapper.ratio-169 { aspect-ratio: 16 / 9; }
-        .preview-wrapper.ratio-916 { aspect-ratio: 9 / 16; max-width: 450px; margin: 0 auto; }
-        
+        .preview-wrapper.ratio-916 { aspect-ratio: 9 / 16; max-width: 380px; margin: 15px auto 0 auto; }
         iframe { border: none; width: 100%; height: 100%; background: #020409; }
-
-        .recording-overlay {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(220, 38, 38, 0.95); color: white; padding: 15px 30px;
-            border-radius: 50px; font-weight: bold; display: none; align-items: center; gap: 15px;
-            z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: pulse 2s infinite;
+        
+        .password-reset-btn {
+            width: 100%; margin-top: 10px; background: transparent; border: 1px solid #475569;
+            color: #94a3b8; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; transition: .2s;
         }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
+        .password-reset-btn:hover { background: #334155; color: #f8fafc; }
 
-        .stop-record-btn {
-            background: white; color: #dc2626; border: none; padding: 8px 15px; border-radius: 20px;
-            font-weight: bold; cursor: pointer; font-size: 14px;
+        @media (max-width: 600px) {
+            .row { flex-direction: column; gap: 0; }
+            .prompt-btn { flex: 1 1 calc(50% - 8px); }
+            .action-btns { width: 100%; justify-content: space-between; }
         }
-        .stop-record-btn:hover { background: #f8fafc; }
     </style>
 </head>
 <body>
 
-    <!-- Recording Indicator -->
-    <div class="recording-overlay" id="recording-indicator">
-        <span>🔴 جاري تسجيل الشاشة والصوت... (قم بتشغيل العرض الآن)</span>
-        <button class="stop-record-btn" onclick="stopRecording()">⏹️ إيقاف وحفظ</button>
-    </div>
-
-    <div class="header">
-        <h2>🎬 ستوديو الموشن جرافيك</h2>
-        <p>توليد، معاينة، وتصدير مقاطع الموشن جرافيك بالذكاء الاصطناعي</p>
-    </div>
-
-    <div class="top-nav">
-        <button class="nav-btn active" onclick="switchTab('studio', this)">⚙️ مساحة العمل والتصدير</button>
-        <button class="nav-btn" onclick="switchTab('prompt', this)">🧠 المولد الذكي للأوامر</button>
-    </div>
-
-    <!-- TAB 1: AI PROMPT GENERATOR -->
-    <div id="prompt-tab" class="main-container">
-        <div class="box-panel">
-            <h3 style="margin-bottom: 20px; color: #34d399;">🤖 إعدادات المشهد</h3>
-            
-            <div class="row">
-                <div class="form-group">
-                    <label>مقاس الفيديو:</label>
-                    <select id="vid-ratio" onchange="generatePrompt()">
-                        <option value="16:9">16:9 (يوتيوب / شاشات عرض)</option>
-                        <option value="9:16">9:16 (تيك توك / ريلز / شورتس)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>الطابع والمزاج العام:</label>
-                    <select id="vid-mood" onchange="generatePrompt()">
-                        <option value="سينمائي فخم وغامض">سينمائي فخم وغامض</option>
-                        <option value="تقني ومستقبلي (سايبر)">تقني ومستقبلي (سايبر)</option>
-                        <option value="حيوي وسريع الإيقاع">حيوي وسريع الإيقاع</option>
-                        <option value="هادئ ومريح">هادئ ومريح</option>
-                        <option value="مرح ومليء بالألوان">مرح ومليء بالألوان</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>موضوع المقطع (الفكرة العامة):</label>
-                <input type="text" id="vid-subject" placeholder="مثال: إطلاق منتج تقني جديد، عرض خدمات شركة، مقدمة يوتيوب..." oninput="generatePrompt()">
-            </div>
-
-            <div class="form-group">
-                <label>العناوين الرئيسية المطلوبة في العرض (مفصولة بفاصلة):</label>
-                <input type="text" id="vid-titles" placeholder="مثال: البداية هنا, المستقبل بين يديك, انضم إلينا" oninput="generatePrompt()">
-            </div>
-
-            <div class="form-group">
-                <label>الأمر النهائي (انسخه وقدمه للذكاء الاصطناعي):</label>
-                <textarea id="final-prompt" readonly style="min-height: 280px;"></textarea>
-            </div>
-
-            <button class="primary-btn success-btn" onclick="copyPrompt()">📋 نسخ الأمر الذكي</button>
+<!-- =========================================================
+     شاشة كلمة المرور (نفس الحماية السابقة)
+     ========================================================= -->
+<div id="password-overlay" style="position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#1e293b;padding:30px;border-radius:12px;box-shadow:0 10px 25px -5px rgba(0,0,0,.5);border:1px solid #334155;text-align:center;width:100%;max-width:350px;">
+        <h3 style="margin-top:0;color:#f8fafc;font-size:22px;">🔒 حماية المنصة</h3>
+        <p style="font-size:13px;color:#94a3b8;margin-bottom:25px;">الرجاء إدخال كلمة المرور للوصول.</p>
+        <div class="form-group" style="margin-bottom:20px;">
+            <input type="password" id="pass-input" placeholder="كلمة المرور..." autocomplete="off" autocapitalize="none" spellcheck="false" style="text-align:center;letter-spacing:3px;font-size:16px;" onkeydown="if(event.key==='Enter'){event.preventDefault();checkPassword();}">
         </div>
+        <button onclick="checkPassword()" class="export-btn" style="margin-top:0;">تسجيل الدخول</button>
+        <p id="pass-error" style="color:#ef4444;font-size:13px;display:none;margin-top:15px;font-weight:bold;margin-bottom:0;">❌ كلمة المرور غير صحيحة!</p>
+        <button type="button" class="password-reset-btn" onclick="resetLoginSession()">🔄 مسح جلسة الدخول</button>
     </div>
+</div>
 
-    <!-- TAB 2: STUDIO & EXPORT -->
-    <div id="studio-tab" class="main-container active-tab">
+<div class="header">
+    <h2>🎬 استوديو الموشن جرافيك</h2>
+</div>
+
+<div class="top-nav">
+    <button class="nav-btn active" id="btn-studio" onclick="switchTab('studio')">⚙️ مساحة العمل والتصدير</button>
+    <button class="nav-btn" id="btn-prompts" onclick="switchTab('prompts')">🧠 المولد الذكي</button>
+</div>
+
+<!-- =========================================================
+     تبويب الاستوديو والتصدير
+     ========================================================= -->
+<div id="studio-tab" class="main-container tab-content active-tab">
+    <div class="box-panel">
         
-        <div class="box-panel">
-            <h3 style="margin-bottom: 15px;">💻 محرر الكود (HTML/CSS/JS)</h3>
-            <textarea id="code-editor" class="code-input" placeholder="الصق كود الموشن جرافيك هنا..."></textarea>
-            <div class="row" style="margin-top: 15px;">
-                <div class="form-group">
-                    <select id="preview-ratio" style="padding: 16px;">
-                        <option value="ratio-169">معاينة بمقاس 16:9</option>
-                        <option value="ratio-916">معاينة بمقاس 9:16</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button class="primary-btn" onclick="updatePreview()">👁️ تحديث المعاينة</button>
-                </div>
+        <div class="ai-prompts">
+            <p>🤖 أوامر جاهزة لاستوديو الموشن جرافيك:</p>
+            <div class="prompt-btns">
+                <button class="prompt-btn" onclick="copyQuickPrompt('tech',this)">🚀 منتج تقني</button>
+                <button class="prompt-btn" onclick="copyQuickPrompt('intro',this)">📺 مقدمة يوتيوب</button>
+                <button class="prompt-btn" onclick="copyQuickPrompt('tiktok',this)">📱 ريلز / تيك توك</button>
             </div>
         </div>
 
-        <div class="box-panel">
-            <h3 style="margin-bottom: 15px;">📺 شاشة العرض</h3>
-            <div id="preview-container" class="preview-wrapper ratio-169">
-                <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        <div class="form-group">
+            <label>اسم المقطع المستخرج (بدون صيغة):</label>
+            <input type="text" id="file-name" value="موشن_جرافيك_جديد" placeholder="اكتب اسم الملف هنا...">
+        </div>
+
+        <div class="form-group">
+            <div class="textarea-header">
+                <label style="margin:0;">كود الـ HTML / JS:</label>
+                <div class="action-btns">
+                    <button class="clear-btn" onclick="clearCode()">🗑️ مسح</button>
+                    <button onclick="updatePreview()">👁️ معاينة</button>
+                    <button onclick="saveToHistory()">💾 حفظ</button>
+                </div>
             </div>
+            <textarea id="html-input" placeholder="الصق كود الموشن جرافيك المولد من الذكاء الاصطناعي هنا..."></textarea>
             
-            <div style="margin-top: 20px; padding: 15px; background: #0f172a; border-radius: 8px; border: 1px dashed #3b82f6;">
-                <h4 style="color: #60a5fa; margin-bottom: 10px;">نصائح التصدير عالي الجودة:</h4>
-                <ul style="color: #94a3b8; font-size: 13px; padding-right: 20px; line-height: 1.8;">
-                    <li>عند الضغط على "تسجيل"، ستظهر نافذة من المتصفح. اختر <strong>"علامة التبويب الحالية" (Current Tab)</strong>.</li>
-                    <li>تأكد من تفعيل زر <strong>"مشاركة الصوت" (Share Audio)</strong> في النافذة المنبثقة.</li>
-                    <li>بعد بدء التسجيل، قم بتشغيل العرض داخل شاشة المعاينة أعلاه، وعند انتهائه اضغط "إيقاف وحفظ".</li>
-                </ul>
+            <div id="history-container" style="margin-top:15px;">
+                <label style="font-size:12px;color:#94a3b8;">📂 آخر الأكواد المحفوظة:</label>
+                <div id="history-list" class="history-box"></div>
             </div>
-
-            <button class="primary-btn danger-btn" style="margin-top: 15px;" onclick="startRecording()">
-                🎥 بدء تسجيل وتصدير الفيديو (WebM/MP4)
-            </button>
         </div>
-
     </div>
 
-    <script>
-        // --- UI Logic ---
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.main-container').forEach(el => el.classList.remove('active-tab'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId + '-tab').classList.add('active-tab');
-            btn.classList.add('active');
+    <div class="box-panel">
+        <div class="row">
+            <div class="form-group">
+                <label>مقاس شاشة العرض:</label>
+                <select id="preview-ratio" onchange="updatePreviewRatio()">
+                    <option value="ratio-169">16:9 (عرض شاشات / يوتيوب)</option>
+                    <option value="ratio-916">9:16 (جوال / تيك توك)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- شاشة العرض -->
+        <div id="preview-container" class="preview-wrapper ratio-169">
+            <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+
+        <div style="margin-top: 15px; padding: 12px; background: #022c22; border-radius: 8px; border: 1px dashed #059669; font-size:12px; line-height: 1.6; color:#34d399;">
+            <strong>نصيحة التصدير:</strong> اضغط بدء التسجيل، اختر نافذة "Chrome Tab"، فعّل خيار "Share Audio"، ثم شغّل المقطع داخل الشاشة. عند الانتهاء اضغط "إيقاف وحفظ".
+        </div>
+
+        <button id="record-btn" class="export-btn" onclick="toggleRecording()">
+            🎥 بدء تسجيل وتصدير الفيديو
+        </button>
+    </div>
+</div>
+
+<!-- =========================================================
+     تبويب المولد الذكي
+     ========================================================= -->
+<div id="prompts-tab" class="main-container tab-content">
+    <div class="box-panel">
+
+        <div class="form-group">
+            <label>المقاس المطلوب للمقطع:</label>
+            <select id="prompt-ratio" onchange="generatePromptText()">
+                <option value="16:9">🖥️ عرض أفقي (16:9)</option>
+                <option value="9:16">📱 عرض طولي (9:16)</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>الطابع العام (المزاج):</label>
+                <select id="prompt-mood" onchange="generatePromptText()">
+                    <option value="سينمائي فخم وغامض">سينمائي فخم</option>
+                    <option value="تقني سايبربانك (Neon)">تقني سايبربانك</option>
+                    <option value="حيوي وسريع الإيقاع">حيوي وسريع</option>
+                    <option value="إبداعي ومليء بالألوان">إبداعي وملون</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>مدة المقطع التقريبية:</label>
+                <select id="prompt-duration" onchange="generatePromptText()">
+                    <option value="15-20 ثانية">15-20 ثانية</option>
+                    <option value="10 ثوانٍ">10 ثوانٍ (سريع)</option>
+                    <option value="30 ثانية">30 ثانية (مفصل)</option>
+                </select>
+            </div>
+        </div>
+
+        <label style="margin-top:10px;">متطلبات المحتوى (اضغط 👁️ لشطب المتطلب):</label>
+
+        <div class="req-row">
+            <button class="toggle-req" onclick="toggleInput(this,'req-subject')">👁️</button>
+            <input type="text" id="req-subject" placeholder="فكرة المقطع (مثال: إعلان إطلاق منتج تقني)" oninput="generatePromptText()">
+        </div>
+
+        <div class="req-row">
+            <button class="toggle-req" onclick="toggleInput(this,'req-title')">👁️</button>
+            <input type="text" id="req-title" placeholder="العنوان الرئيسي / الشعار" oninput="generatePromptText()">
+        </div>
+
+        <div class="req-row">
+            <button class="toggle-req" onclick="toggleInput(this,'req-text1')">👁️</button>
+            <input type="text" id="req-text1" placeholder="النص للمشهد الأول" oninput="generatePromptText()">
+        </div>
+
+        <div class="req-row">
+            <button class="toggle-req" onclick="toggleInput(this,'req-text2')">👁️</button>
+            <input type="text" id="req-text2" placeholder="النص للمشهد الثاني" oninput="generatePromptText()">
+        </div>
+
+        <div class="req-row">
+            <button class="toggle-req" onclick="toggleInput(this,'req-ending')">👁️</button>
+            <input type="text" id="req-ending" placeholder="الخاتمة (Call to Action)" oninput="generatePromptText()">
+        </div>
+
+        <label style="margin-top:15px;">✨ الأمر النهائي للذكاء الاصطناعي:</label>
+        <textarea id="final-prompt-output" readonly style="min-height:220px;margin-bottom:10px;"></textarea>
+
+        <button class="export-btn" style="background:#059669;" onclick="copyGeneratedPrompt()">
+            نسخ الأمر 📋
+        </button>
+
+    </div>
+</div>
+
+<script>
+/* =========================================================
+   إعدادات الحماية
+   ========================================================= */
+const SECRET_PASSWORD = "Sa12345678@";
+const AUTH_KEY = "motion_auth_token";
+const AUTH_VALUE = "authenticated";
+
+window.addEventListener("load", () => {
+    if (localStorage.getItem(AUTH_KEY) === AUTH_VALUE) {
+        document.getElementById("password-overlay").style.display = "none";
+    }
+    renderHistory();
+    generatePromptText();
+});
+
+function checkPassword() {
+    const input = document.getElementById("pass-input").value;
+    const error = document.getElementById("pass-error");
+    if (input === SECRET_PASSWORD) {
+        localStorage.setItem(AUTH_KEY, AUTH_VALUE);
+        document.getElementById("password-overlay").style.display = "none";
+        document.getElementById("pass-input").value = "";
+    } else {
+        error.style.display = "block";
+        document.getElementById("pass-input").value = "";
+    }
+}
+
+function resetLoginSession() {
+    localStorage.removeItem(AUTH_KEY);
+    document.getElementById("password-overlay").style.display = "flex";
+    document.getElementById("pass-error").style.display = "none";
+}
+
+/* =========================================================
+   واجهة المستخدم والتبويبات
+   ========================================================= */
+function switchTab(tab) {
+    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active-tab"));
+    document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
+    document.getElementById(tab + "-tab").classList.add("active-tab");
+    document.getElementById("btn-" + tab).classList.add("active");
+}
+
+function toggleInput(button, id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.disabled = !input.disabled;
+    button.innerText = input.disabled ? "🚫" : "👁️";
+    button.classList.toggle("disabled", input.disabled);
+    generatePromptText();
+}
+
+/* =========================================================
+   توليد الأوامر الذكية
+   ========================================================= */
+function generatePromptText() {
+    const ratio = document.getElementById("prompt-ratio").value;
+    const mood = document.getElementById("prompt-mood").value;
+    const duration = document.getElementById("prompt-duration").value;
+    
+    let p = "أنت خبير محترف في تصميم الموشن جرافيك للويب (Motion Graphics Developer) ومختص في HTML, CSS, JS و Web Audio API.\n\n";
+    p += `قم بإنشاء كود HTML متكامل (ملف واحد) لمقطع موشن جرافيك بالمواصفات التالية:\n`;
+    p += `- المقاس: ${ratio}\n- الطابع والمزاج: ${mood}\n- المدة التقريبية: ${duration}\n\n`;
+    
+    const fields = [
+        { id: "req-subject", label: "موضوع المقطع" },
+        { id: "req-title", label: "العنوان الرئيسي" },
+        { id: "req-text1", label: "مشهد 1" },
+        { id: "req-text2", label: "مشهد 2" },
+        { id: "req-ending", label: "الخاتمة" }
+    ];
+    
+    let hasContent = false;
+    fields.forEach(f => {
+        const el = document.getElementById(f.id);
+        if (el && !el.disabled && el.value.trim() !== "") {
+            p += `* ${f.label}: ${el.value}\n`;
+            hasContent = true;
+        }
+    });
+    
+    if(!hasContent) p += "* المحتوى: قم بتأليف نصوص إبداعية من عندك تناسب الطابع المذكور.\n";
+
+    p += "\n**الشروط التقنية الصارمة:**\n";
+    p += "1. الإبداع: استخدم Web Animations API لعمل انتقالات احترافية ودقيقة بين المشاهد.\n";
+    p += "2. الصوت: استخدم Web Audio API لإنشاء مؤثرات صوتية (Synth, Whoosh) متزامنة مع ظهور العناصر.\n";
+    p += "3. واجهة البداية: يجب أن يبدأ المقطع بشاشة انتظار تحتوي على زر 'تشغيل' (Play) لتفعيل الصوت برمجياً.\n";
+    p += "4. الهيكلة: قسم الكود لمشاهد (Scenes) تظهر وتختفي بتسلسل زمني نظيف.\n";
+    p += "5. التصميم: اعتمد CSS نقية مع تأثيرات مثل Particles أو Glowing Objects لتناسب الطابع المذكور.\n";
+    p += "اكتب الكود كاملاً ومباشرة بدون شروحات.";
+
+    document.getElementById("final-prompt-output").value = p;
+}
+
+async function copyGeneratedPrompt() {
+    const text = document.getElementById("final-prompt-output").value;
+    try {
+        await navigator.clipboard.writeText(text);
+        alert("✅ تم نسخ الأمر بنجاح!");
+    } catch { alert("تعذر النسخ تلقائيًا."); }
+}
+
+async function copyQuickPrompt(type, button) {
+    const base = "أنت خبير موشن جرافيك ويب. صمم كود HTML/CSS/JS متكامل لـ ";
+    const rules = "استخدم Web Animations API للانتقالات و Web Audio API للصوتيات. ابدأ بشاشة زر تشغيل لتفعيل الصوت. قسمه لمشاهد.";
+    const prompts = {
+        tech: base + "إعلان منتج تقني، طابع سايبربانك ومقاس 16:9. " + rules,
+        intro: base + "مقدمة يوتيوب سينمائية فخمة مقاس 16:9. " + rules,
+        tiktok: base + "إعلان سريع وحيوي مقاس 9:16 للتيك توك. " + rules
+    };
+    try {
+        await navigator.clipboard.writeText(prompts[type] || "");
+        const oldText = button.innerText;
+        button.innerText = "✅ تم!";
+        setTimeout(() => { button.innerText = oldText; }, 2000);
+    } catch { alert("تعذر النسخ."); }
+}
+
+/* =========================================================
+   إدارة الكود والمحفوظات
+   ========================================================= */
+function clearCode() {
+    if (confirm("هل تريد مسح الكود الحالي؟")) {
+        document.getElementById("html-input").value = "";
+        document.getElementById("preview-frame").srcdoc = "";
+    }
+}
+
+function updatePreview() {
+    const code = document.getElementById("html-input").value;
+    document.getElementById("preview-frame").srcdoc = code;
+}
+
+function updatePreviewRatio() {
+    const ratio = document.getElementById("preview-ratio").value;
+    const container = document.getElementById("preview-container");
+    container.className = "preview-wrapper " + ratio;
+}
+
+function saveToHistory() {
+    const code = document.getElementById("html-input").value;
+    if (!code.trim()) return;
+    let history = JSON.parse(localStorage.getItem("motion_history") || "[]");
+    history.unshift({ code, date: new Date().toLocaleString("ar-SA") });
+    history = history.slice(0, 5); // الاحتفاظ بآخر 5
+    localStorage.setItem("motion_history", JSON.stringify(history));
+    renderHistory();
+    alert("✅ تم حفظ الكود في السجل");
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem("motion_history") || "[]");
+    const container = document.getElementById("history-list");
+    container.innerHTML = history.map((item, index) => {
+        const preview = item.code.substring(0, 80).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return `<div class="history-item" onclick="loadFromHistory(${index})" title="استعادة الكود">${item.date} - ${preview}...</div>`;
+    }).join("");
+}
+
+function loadFromHistory(index) {
+    const history = JSON.parse(localStorage.getItem("motion_history") || "[]");
+    if (history[index]) {
+        document.getElementById("html-input").value = history[index].code;
+        updatePreview();
+    }
+}
+
+/* =========================================================
+   محرك تسجيل وتصدير الفيديو (Screen Capture API)
+   ========================================================= */
+let mediaRecorder;
+let recordedChunks = [];
+let isRecording = false;
+
+async function toggleRecording() {
+    const btn = document.getElementById("record-btn");
+    
+    if (isRecording) {
+        // إيقاف التسجيل
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+        }
+        return;
+    }
+
+    // بدء التسجيل
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: { displaySurface: "browser", frameRate: { ideal: 60 } },
+            audio: { echoCancellation: false, noiseSuppression: false, sampleRate: 48000 }
+        });
+
+        let options = { mimeType: 'video/webm; codecs=vp9,opus' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options = { mimeType: 'video/webm' };
         }
 
-        // --- Prompt Generator Logic ---
-        function generatePrompt() {
-            const ratio = document.getElementById('vid-ratio').value;
-            const mood = document.getElementById('vid-mood').value;
-            const subject = document.getElementById('vid-subject').value || '[موضوع عام]';
-            const titles = document.getElementById('vid-titles').value || '[عناوين ابتكارية من عندك]';
+        mediaRecorder = new MediaRecorder(stream, options);
+
+        mediaRecorder.ondataavailable = function(e) {
+            if (e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = function() {
+            const blob = new Blob(recordedChunks, { type: options.mimeType });
+            const fileName = document.getElementById("file-name").value || "motion_graphic";
+            const url = URL.createObjectURL(blob);
             
-            const promptText = `أنت خبير محترف في تصميم الموشن جرافيك للويب (Motion Graphics Developer) ومختص في استخدام HTML, CSS, JavaScript, و Web Audio API.
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `${fileName}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+            
+            recordedChunks = [];
+            isRecording = false;
+            btn.innerText = "🎥 بدء تسجيل وتصدير الفيديو";
+            btn.classList.remove("record-active");
+            stream.getTracks().forEach(track => track.stop());
+        };
 
-المطلوب:
-كتابة ملف HTML واحد متكامل لإنشاء مقطع موشن جرافيك إبداعي يعمل في المتصفح.
+        mediaRecorder.start();
+        isRecording = true;
+        btn.innerText = "⏹️ إيقاف التسجيل وحفظ المقطع";
+        btn.classList.add("record-active");
 
-البيانات الأساسية للمقطع:
-- الموضوع: ${subject}
-- الطابع والمزاج العام: ${mood}
-- المقاس: ${ratio}
-- النصوص والعناوين المطلوبة: ${titles}
+        stream.getVideoTracks()[0].onended = () => {
+            if(mediaRecorder.state === "recording") mediaRecorder.stop();
+        };
 
-الشروط التقنية الصارمة:
-1. الإبداع والانتقالات: أطلق العنان لإبداعك. استخدم Web Animations API (element.animate) أو GSAP/CSS لعمل انتقالات احترافية بين المشاهد (Scenes). لا تسألني عن نوع الانتقالات، ابتكرها بنفسك بناءً على الطابع المطلوب.
-2. الصوتيات (Audio): استخدم Web Audio API لإنشاء مؤثرات صوتية (Tones, Whooshes, Synth) متزامنة تماماً مع ظهور النصوص والحركات.
-3. التفاعل: اجعل المقطع يبدأ عبر شاشة افتتاحية تحتوي على زر "تشغيل" (Play) لضمان تفاعل المستخدم وتفعيل الصوت في المتصفح.
-4. الهيكلة: صمم المشاهد بحيث تظهر وتختفي بتسلسل زمني دقيق. اجعل مدة المقطع كافية لعرض المحتوى بشكل مريح (مثلاً 15-20 ثانية).
-5. التصميم: استخدم CSS نقية مع خلفيات متقدمة (Gradients, Particles, Glowing orbs) تناسب الطابع المذكور أعلاه.
-
-اكتب الكود كاملاً ومباشرة دون أي شروحات إضافية.`;
-
-            document.getElementById('final-prompt').value = promptText;
+    } catch (err) {
+        console.error("Recording error: ", err);
+        if (err.name === 'NotAllowedError') {
+            alert("❌ تم إلغاء التسجيل. يجب الموافقة على المشاركة لتتمكن من تصدير الفيديو.");
         }
-
-        function copyPrompt() {
-            const text = document.getElementById('final-prompt').value;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("✅ تم نسخ الأمر! قم بلصقه الآن في ChatGPT أو Claude.");
-            });
-        }
-
-        // Initialize prompt on load
-        generatePrompt();
-
-        // --- Studio Logic ---
-        function updatePreview() {
-            const code = document.getElementById('code-editor').value;
-            const iframe = document.getElementById('preview-frame');
-            const container = document.getElementById('preview-container');
-            const ratio = document.getElementById('preview-ratio').value;
-
-            // Set Ratio
-            container.className = 'preview-wrapper ' + ratio;
-
-            // Inject Code
-            iframe.srcdoc = code;
-        }
-
-        // --- Screen Capture & Export Logic ---
-        let mediaRecorder;
-        let recordedChunks = [];
-
-        async function startRecording() {
-            try {
-                // Request Screen + Audio
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: { 
-                        displaySurface: "browser", // Prefers capturing the current browser tab
-                        frameRate: { ideal: 60 }
-                    },
-                    audio: {
-                        echoCancellation: false,
-                        noiseSuppression: false,
-                        sampleRate: 44100
-                    }
-                });
-
-                // Set up recorder
-                // Fallback to webm if mp4 is not natively supported by MediaRecorder in the browser
-                let options = { mimeType: 'video/webm; codecs=vp9,opus' };
-                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                    options = { mimeType: 'video/webm' };
-                }
-
-                mediaRecorder = new MediaRecorder(stream, options);
-
-                mediaRecorder.ondataavailable = function(e) {
-                    if (e.data.size > 0) {
-                        recordedChunks.push(e.data);
-                    }
-                };
-
-                mediaRecorder.onstop = function() {
-                    // Create Video Blob
-                    const blob = new Blob(recordedChunks, { type: options.mimeType });
-                    const url = URL.createObjectURL(blob);
-                    
-                    // Trigger Download
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = `Motion_Graphic_${new Date().getTime()}.webm`;
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    // Cleanup
-                    setTimeout(() => {
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                    }, 100);
-                    
-                    recordedChunks = [];
-                    document.getElementById('recording-indicator').style.display = 'none';
-
-                    // Stop all tracks to release the screen sharing icon
-                    stream.getTracks().forEach(track => track.stop());
-                };
-
-                // Start recording
-                mediaRecorder.start();
-                
-                // Show UI indicator
-                document.getElementById('recording-indicator').style.display = 'flex';
-
-                // Listen for manual stream stop (if user clicks "Stop Sharing" on browser bar)
-                stream.getVideoTracks()[0].onended = () => {
-                    if(mediaRecorder.state === "recording") {
-                        stopRecording();
-                    }
-                };
-
-            } catch (err) {
-                console.error("Error capturing screen: ", err);
-                if (err.name === 'NotAllowedError') {
-                    alert("❌ تم إلغاء التسجيل. يجب الموافقة على مشاركة الشاشة للتصدير.");
-                }
-            }
-        }
-
-        function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-            }
-        }
-    </script>
+    }
+}
+</script>
 </body>
 </html>
