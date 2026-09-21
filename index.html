@@ -14,28 +14,22 @@
     box-sizing:border-box;
 }
 
-:root{
-    --bg:#080a0d;
-    --panel:#101318;
-    --panel2:#151920;
-    --line:#252a33;
-    --text:#f4f6f8;
-    --muted:#89919d;
-    --accent:#d8b36a;
-    --accent2:#f1d99d;
-    --danger:#ff5f5f;
-    --success:#43d99a;
-    --radius:18px;
-}
-
-html,body{
+html,
+body{
     margin:0;
     padding:0;
     width:100%;
     min-height:100%;
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;
+    background:#080a0d;
+    color:#f5f6f8;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
 }
 
 body{
@@ -54,88 +48,97 @@ button{
     -webkit-tap-highlight-color:transparent;
 }
 
+:root{
+    --bg:#080a0d;
+    --panel:#101318;
+    --panel2:#151920;
+    --line:#252b34;
+    --line2:#303640;
+    --text:#f5f6f8;
+    --muted:#8d96a3;
+    --gold:#d5b16c;
+    --gold2:#f0d59b;
+    --green:#49d99c;
+    --red:#ff6868;
+    --radius:18px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
 .app{
-    width:100%;
     min-height:100vh;
     display:flex;
 }
 
-/* =========================
+/* =========================================================
    SIDEBAR
-========================= */
+========================================================= */
 
 .sidebar{
-    width:260px;
-    flex:0 0 260px;
+    width:245px;
+    flex:0 0 245px;
     min-height:100vh;
-    border-left:1px solid var(--line);
-    background:#0c0f13;
-    padding:22px 16px;
     position:sticky;
     top:0;
     height:100vh;
+    background:#0c0f13;
+    border-left:1px solid var(--line);
+    padding:22px 15px;
 }
 
-.logo{
-    padding:8px 10px 25px;
+.brand{
+    padding:7px 10px 25px;
 }
 
-.logo strong{
-    display:block;
+.brand-title{
     font-size:20px;
     font-weight:800;
 }
 
-.logo span{
-    display:block;
-    margin-top:5px;
+.brand-sub{
     color:var(--muted);
-    font-size:12px;
+    font-size:11px;
+    margin-top:5px;
 }
 
 .nav{
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:7px;
 }
 
-.nav button{
-    width:100%;
+.nav-btn{
     border:1px solid transparent;
     background:transparent;
-    color:#aab1bc;
-    text-align:right;
+    color:#9da5b0;
     padding:14px;
     border-radius:13px;
+    text-align:right;
     cursor:pointer;
-    transition:.2s;
 }
 
-.nav button:hover{
-    background:#151920;
-    color:white;
-}
-
-.nav button.active{
+.nav-btn.active{
     background:#191d24;
     border-color:#303640;
-    color:white;
+    color:#fff;
 }
 
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 .main{
     flex:1;
     min-width:0;
-    padding:25px;
+    padding:24px;
 }
 
 .page{
     display:none;
     width:100%;
-    max-width:1400px;
+    max-width:1450px;
     margin:auto;
 }
 
@@ -144,41 +147,46 @@ button{
 }
 
 .header{
-    margin-bottom:22px;
+    margin-bottom:20px;
 }
 
 .header h1{
     margin:0;
-    font-size:28px;
+    font-size:27px;
     line-height:1.25;
 }
 
 .header p{
-    margin:8px 0 0;
     color:var(--muted);
-    font-size:14px;
+    margin:8px 0 0;
+    font-size:13px;
+    line-height:1.7;
 }
 
-/* =========================
-   GENERATOR
-========================= */
-
-.generator{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) 420px;
-    gap:18px;
-}
+/* =========================================================
+   PANELS
+========================================================= */
 
 .panel{
     background:var(--panel);
     border:1px solid var(--line);
     border-radius:var(--radius);
-    padding:20px;
+    padding:19px;
 }
 
-.panel h2{
+.panel-title{
+    margin:0 0 16px;
     font-size:16px;
-    margin:0 0 17px;
+}
+
+/* =========================================================
+   GENERATOR
+========================================================= */
+
+.generator-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:17px;
 }
 
 .field{
@@ -188,7 +196,7 @@ button{
 .field label{
     display:block;
     color:#b7bec8;
-    font-size:13px;
+    font-size:12px;
     margin-bottom:7px;
 }
 
@@ -196,138 +204,168 @@ input,
 textarea,
 select{
     width:100%;
-    border:1px solid #2a3039;
-    background:#0b0e12;
-    color:white;
+    color:#fff;
+    background:#0a0d11;
+    border:1px solid #2b3038;
     border-radius:12px;
     outline:none;
-    padding:12px 13px;
+    padding:12px;
 }
 
 input:focus,
 textarea:focus,
 select:focus{
-    border-color:#656e7c;
+    border-color:#6f6045;
 }
 
-textarea{
+.generator-textarea{
+    min-height:410px;
     resize:vertical;
-    min-height:150px;
+    direction:ltr;
+    text-align:left;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+    font-size:12px;
     line-height:1.7;
 }
 
-.mode{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
+.creative-box{
+    border:1px solid #3b3326;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(213,177,108,.08),
+            rgba(213,177,108,.015)
+        );
+    border-radius:15px;
+    padding:17px;
+    margin-bottom:17px;
 }
 
-.mode button{
-    padding:13px;
-    border-radius:12px;
-    border:1px solid #2b3038;
-    background:#0b0e12;
+.creative-box strong{
+    display:block;
+    color:var(--gold2);
+    font-size:16px;
+    margin-bottom:7px;
+}
+
+.creative-box p{
+    margin:0;
     color:#9da5b0;
-    cursor:pointer;
+    font-size:12px;
+    line-height:1.8;
 }
 
-.mode button.active{
-    background:#1d2026;
-    border-color:#82704e;
-    color:#fff;
-}
-
-.range-row{
+.duration-box{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:12px;
 }
 
-input[type="range"]{
+.duration-box input{
     padding:0;
-    accent-color:var(--accent);
+    accent-color:var(--gold);
 }
 
-.value{
-    min-width:45px;
-    color:var(--accent2);
-    font-weight:700;
+.duration-number{
+    min-width:50px;
+    color:var(--gold2);
+    font-weight:800;
 }
 
 .primary{
     width:100%;
     border:0;
-    background:linear-gradient(135deg,#e2c27e,#a98442);
-    color:#15110a;
-    padding:14px;
     border-radius:13px;
-    font-weight:800;
+    padding:14px;
     cursor:pointer;
-}
-
-.primary:active{
-    transform:translateY(1px);
+    color:#17120a;
+    font-weight:800;
+    background:
+        linear-gradient(
+            135deg,
+            #e3c27e,
+            #a77e3c
+        );
 }
 
 .secondary{
-    border:1px solid #303641;
+    border:1px solid var(--line2);
     background:#151920;
     color:#fff;
-    padding:12px 15px;
     border-radius:12px;
+    padding:12px 15px;
     cursor:pointer;
 }
 
-.prompt-output{
-    min-height:420px;
-    white-space:pre-wrap;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    direction:ltr;
-    text-align:left;
-    font-size:12px;
-    line-height:1.65;
-    overflow:auto;
+.secondary:disabled,
+.primary:disabled{
+    opacity:.45;
+    cursor:not-allowed;
 }
 
-.generator-note{
-    border:1px solid #2a3039;
-    border-radius:13px;
-    padding:13px;
-    color:#9da5b0;
-    font-size:12px;
-    line-height:1.7;
-    margin-bottom:15px;
+.copy-btn{
+    width:100%;
 }
 
-/* =========================
+/* =========================================================
    EXPORT
-========================= */
+========================================================= */
 
-.export-layout{
+.export-grid{
     display:grid;
-    grid-template-columns:360px minmax(0,1fr);
-    gap:18px;
+    grid-template-columns:370px minmax(0,1fr);
+    gap:17px;
 }
 
 .controls{
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:13px;
 }
 
-.control-group{
+.control-block{
     border-bottom:1px solid var(--line);
-    padding-bottom:14px;
+    padding-bottom:13px;
 }
 
-.control-group:last-child{
+.control-block:last-child{
     border-bottom:0;
 }
 
-.control-title{
+.control-label{
+    color:#9099a6;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.meta{
+    border:1px solid #2a3038;
+    background:#0b0e12;
+    border-radius:13px;
+    padding:12px;
+}
+
+.meta-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:6px 0;
     font-size:12px;
-    color:#929aa6;
-    margin-bottom:8px;
+}
+
+.meta-row span:first-child{
+    color:#7f8895;
+}
+
+.meta-row span:last-child{
+    color:#e4e7eb;
+    font-weight:700;
 }
 
 .segment{
@@ -341,18 +379,90 @@ input[type="range"]{
 }
 
 .segment button{
+    border:1px solid #2a3038;
+    background:#0b0e12;
+    color:#929aa5;
     padding:10px 7px;
     border-radius:10px;
-    border:1px solid #2b3038;
-    background:#0b0e12;
-    color:#9ea6b1;
     cursor:pointer;
 }
 
 .segment button.active{
-    background:#20242b;
     color:#fff;
-    border-color:#766442;
+    border-color:#756344;
+    background:#20242b;
+}
+
+.code{
+    min-height:270px;
+    resize:vertical;
+    direction:ltr;
+    text-align:left;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.status{
+    display:none;
+    border-radius:12px;
+    padding:12px;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.status.show{
+    display:block;
+}
+
+.status.info{
+    background:#11161c;
+    border:1px solid #29313b;
+    color:#b8c0ca;
+}
+
+.status.success{
+    background:#0e1c17;
+    border:1px solid #245c47;
+    color:#70e0ad;
+}
+
+.status.error{
+    background:#1e1010;
+    border:1px solid #713333;
+    color:#ff9c9c;
+}
+
+.progress{
+    width:100%;
+    height:7px;
+    overflow:hidden;
+    border-radius:100px;
+    background:#080a0d;
+    border:1px solid #252a32;
+    display:none;
+}
+
+.progress-bar{
+    width:0;
+    height:100%;
+    background:
+        linear-gradient(
+            90deg,
+            #a47d3b,
+            #f0d59b
+        );
 }
 
 .preview-panel{
@@ -363,130 +473,101 @@ input[type="range"]{
 
 .preview-wrap{
     width:100%;
-    min-height:300px;
+    min-height:340px;
+    padding:20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:
-        radial-gradient(circle at 50% 30%,#20252c 0%,#0d1014 48%,#080a0d 100%);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:20px;
     overflow:hidden;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    background:
+        radial-gradient(
+            circle at 50% 25%,
+            #20252d,
+            #0d1014 48%,
+            #080a0d
+        );
 }
 
-.preview-frame{
+.preview{
     width:min(100%,900px);
     aspect-ratio:16/9;
     background:#000;
-    border:1px solid #343a44;
-    box-shadow:0 25px 70px rgba(0,0,0,.45);
     overflow:hidden;
+    border:1px solid #363c45;
+    box-shadow:0 25px 80px rgba(0,0,0,.5);
 }
 
-.preview-frame.vertical{
+.preview.vertical{
     width:min(55%,430px);
     aspect-ratio:9/16;
 }
 
-iframe{
-    display:block;
+.preview iframe{
     width:100%;
     height:100%;
     border:0;
+    display:block;
     background:#000;
 }
 
-.actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
+.engine-panel{
+    padding:15px;
 }
 
-.actions button{
-    padding:12px;
+.engine-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
 }
 
-.html-editor{
-    min-height:250px;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12px;
-    direction:ltr;
-    text-align:left;
+.engine-title{
+    font-weight:800;
 }
 
-.status{
-    display:none;
-    padding:13px;
-    border-radius:12px;
-    border:1px solid #2d333d;
-    background:#11151a;
-    font-size:13px;
-    line-height:1.7;
+.engine-state{
+    color:#8d96a3;
+    font-size:11px;
 }
 
-.status.show{
-    display:block;
+.engine-desc{
+    color:#8d96a3;
+    font-size:11px;
+    line-height:1.8;
+    margin:8px 0 0;
 }
 
-.status.success{
-    border-color:#235f48;
-    color:#72e6b3;
-}
-
-.status.error{
-    border-color:#713333;
-    color:#ff9a9a;
-}
-
-.status.info{
-    color:#c0c7d1;
-}
-
-.progress{
-    height:7px;
-    background:#0a0c10;
-    border-radius:100px;
-    overflow:hidden;
-    border:1px solid #262b33;
-}
-
-.progress > div{
-    width:0%;
-    height:100%;
-    background:linear-gradient(90deg,#a98442,#f1d99d);
-    transition:width .08s linear;
-}
-
-/* =========================
+/* =========================================================
    MOBILE NAV
-========================= */
+========================================================= */
 
 .mobile-nav{
     display:none;
 }
 
-/* =========================
-   MODAL / LOCK
-========================= */
+/* =========================================================
+   LOCK
+========================================================= */
 
 .lock{
     position:fixed;
+    z-index:99999;
     inset:0;
-    z-index:10000;
-    background:#07090c;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:20px;
+    padding:18px;
+    background:#07090c;
 }
 
 .lock-box{
-    width:min(400px,100%);
+    width:min(390px,100%);
+    border:1px solid #2a3038;
     background:#11151a;
-    border:1px solid #292f38;
     border-radius:20px;
-    padding:25px;
+    padding:22px;
 }
 
 .lock-box h2{
@@ -494,78 +575,79 @@ iframe{
 }
 
 .lock-box p{
-    color:var(--muted);
-    font-size:13px;
+    margin:0 0 15px;
+    color:#89929e;
+    font-size:12px;
     line-height:1.7;
 }
 
 .lock-error{
     display:none;
-    color:#ff8f8f;
-    font-size:12px;
     margin-top:8px;
+    color:#ff8d8d;
+    font-size:11px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:900px){
+
     .sidebar{
         display:none;
     }
 
     .main{
-        padding:18px 15px calc(90px + env(safe-area-inset-bottom));
+        padding:
+            16px
+            12px
+            calc(88px + env(safe-area-inset-bottom));
     }
 
-    .generator,
-    .export-layout{
+    .generator-grid,
+    .export-grid{
         grid-template-columns:1fr;
     }
 
-    .generator .panel:last-child{
-        order:2;
-    }
-
     .mobile-nav{
-        position:fixed;
         display:grid;
         grid-template-columns:1fr 1fr;
         gap:7px;
-        bottom:0;
+        position:fixed;
+        z-index:9000;
         left:0;
         right:0;
-        z-index:9000;
-        padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-        background:rgba(12,15,19,.95);
+        bottom:0;
+        padding:
+            8px
+            10px
+            calc(8px + env(safe-area-inset-bottom));
+        background:rgba(11,14,18,.96);
         backdrop-filter:blur(18px);
-        border-top:1px solid #272c34;
+        border-top:1px solid #282e37;
     }
 
     .mobile-nav button{
-        border:1px solid #2b3038;
-        background:#11151a;
-        color:#969eaa;
-        padding:12px 8px;
+        border:1px solid #2c323b;
+        background:#12161b;
+        color:#929aa5;
         border-radius:12px;
+        padding:11px;
     }
 
     .mobile-nav button.active{
-        color:white;
-        border-color:#766442;
-        background:#1d2026;
+        border-color:#756344;
+        background:#20242b;
+        color:#fff;
     }
 
-    .preview-frame.vertical{
-        width:min(72%,350px);
+    .preview.vertical{
+        width:min(74%,330px);
     }
 }
 
 @media(max-width:520px){
-    .main{
-        padding:14px 11px calc(88px + env(safe-area-inset-bottom));
-    }
 
     .header h1{
         font-size:23px;
@@ -577,20 +659,20 @@ iframe{
     }
 
     .preview-wrap{
+        min-height:245px;
         padding:9px;
-        min-height:230px;
     }
 
-    .preview-frame.vertical{
-        width:min(75%,290px);
+    .preview.vertical{
+        width:min(76%,295px);
     }
 
     .actions{
         grid-template-columns:1fr;
     }
 
-    .prompt-output{
-        min-height:330px;
+    .generator-textarea{
+        min-height:350px;
     }
 }
 </style>
@@ -598,14 +680,19 @@ iframe{
 
 <body>
 
-<!-- =========================
-     PASSWORD
-========================= -->
+<!-- =========================================================
+     LOCK
+========================================================= -->
 
 <div class="lock" id="lock">
+
     <div class="lock-box">
+
         <h2>Motion Studio</h2>
-        <p>أدخل كلمة المرور للدخول إلى المنصة.</p>
+
+        <p>
+            أدخل كلمة المرور للدخول إلى المنصة.
+        </p>
 
         <input
             id="password"
@@ -616,179 +703,192 @@ iframe{
 
         <div style="height:10px"></div>
 
-        <button class="primary" id="unlock">
+        <button
+            class="primary"
+            id="unlock"
+        >
             دخول
         </button>
 
-        <div class="lock-error" id="lockError">
+        <div
+            class="lock-error"
+            id="lockError"
+        >
             كلمة المرور غير صحيحة.
         </div>
+
     </div>
+
 </div>
+
+<!-- =========================================================
+     APP
+========================================================= -->
 
 <div class="app">
 
-    <!-- =========================
-         DESKTOP SIDEBAR
-    ========================= -->
-
     <aside class="sidebar">
-        <div class="logo">
-            <strong>Motion Studio</strong>
-            <span>HTML Motion Graphics</span>
+
+        <div class="brand">
+
+            <div class="brand-title">
+                Motion Studio
+            </div>
+
+            <div class="brand-sub">
+                HTML Motion Graphics
+            </div>
+
         </div>
 
         <nav class="nav">
-            <button class="nav-btn active" data-page="export">
+
+            <button
+                class="nav-btn active"
+                data-page="export"
+            >
                 مساحة التصدير
             </button>
 
-            <button class="nav-btn" data-page="generator">
+            <button
+                class="nav-btn"
+                data-page="generator"
+            >
                 المولد الذكي
             </button>
-        </nav>
-    </aside>
 
-    <!-- =========================
-         MAIN
-    ========================= -->
+        </nav>
+
+    </aside>
 
     <main class="main">
 
-        <!-- =========================
+        <!-- =================================================
              GENERATOR
-        ========================= -->
+        ================================================= -->
 
-        <section class="page" id="generatorPage">
+        <section
+            class="page"
+            id="generatorPage"
+        >
 
             <div class="header">
-                <h1>المولد الذكي</h1>
+
+                <h1>
+                    المولد الذكي
+                </h1>
+
                 <p>
-                    أنشئ Prompt صارم يجعل الذكاء الاصطناعي يبني موشن قابلًا للتصدير إطارًا بإطار.
+                    أعطِ الذكاء الفكرة فقط، وهو يبني المحتوى والقصة والهوية والحركة كاملة.
                 </p>
+
             </div>
 
-            <div class="generator">
+            <div class="generator-grid">
 
                 <div class="panel">
 
-                    <h2>إعداد المشروع</h2>
+                    <h2 class="panel-title">
+                        فكرة المشروع
+                    </h2>
 
                     <div class="field">
-                        <label>موضوع المقطع</label>
+
+                        <label>
+                            الموضوع
+                        </label>
+
                         <input
                             id="subject"
                             placeholder="مثال: اليوم الوطني السعودي 96"
                         >
+
                     </div>
 
                     <div class="field">
-                        <label>العنوان</label>
+
+                        <label>
+                            العنوان
+                        </label>
+
                         <input
                             id="title"
                             placeholder="مثال: اليوم الوطني الـ96"
                         >
+
                     </div>
 
-                    <div class="field">
-                        <label>الوضع الإبداعي</label>
+                    <div class="creative-box">
 
-                        <div class="mode">
-                            <button
-                                id="creativeBtn"
-                                class="active"
-                            >
-                                دع الذكاء يبدع
-                            </button>
+                        <strong>
+                            دع الذكاء يبدع
+                        </strong>
 
-                            <button id="manualBtn">
-                                تحكم يدوي
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="manualFields" style="display:none">
-
-                        <div class="field">
-                            <label>الأسلوب</label>
-
-                            <input
-                                id="style"
-                                placeholder="سينمائي، فاخر، تاريخي..."
-                            >
-                        </div>
-
-                        <div class="field">
-                            <label>الألوان</label>
-
-                            <input
-                                id="colors"
-                                placeholder="أخضر داكن، ذهبي، أسود..."
-                            >
-                        </div>
-
-                        <div class="field">
-                            <label>نوع الحركة</label>
-
-                            <input
-                                id="motion"
-                                placeholder="ظهور تدريجي، تكبير، انتقالات..."
-                            >
-                        </div>
+                        <p>
+                            لا توجد أوضاع أخرى. الذكاء يختار الأسلوب والألوان
+                            والخطوط والمشاهد والإيقاع والعناصر البصرية،
+                            لكن ضمن القواعد التقنية الصارمة للمنصة.
+                        </p>
 
                     </div>
 
                     <div class="field">
-                        <label>مدة المقطع</label>
 
-                        <div class="range-row">
+                        <label>
+                            مدة المقطع التي سيبني عليها AI المشروع
+                        </label>
+
+                        <div class="duration-box">
+
                             <input
-                                id="duration"
+                                id="promptDuration"
                                 type="range"
                                 min="1"
-                                max="30"
+                                max="60"
                                 value="10"
                             >
 
-                            <span class="value">
-                                <span id="durationValue">10</span>s
+                            <span class="duration-number">
+                                <span id="promptDurationValue">
+                                    10
+                                </span>
+                                ثانية
                             </span>
+
                         </div>
+
                     </div>
 
                     <div class="field">
-                        <label>النسبة</label>
+
+                        <label>
+                            النسبة
+                        </label>
 
                         <div class="segment two">
-                            <button class="ratio active" data-ratio="16:9">
+
+                            <button
+                                class="prompt-ratio active"
+                                data-ratio="16:9"
+                            >
                                 16:9
                             </button>
 
-                            <button class="ratio" data-ratio="9:16">
+                            <button
+                                class="prompt-ratio"
+                                data-ratio="9:16"
+                            >
                                 9:16
                             </button>
+
                         </div>
+
                     </div>
 
-                    <div class="field">
-                        <label>مستوى الإبداع</label>
-
-                        <div class="range-row">
-                            <input
-                                id="creativity"
-                                type="range"
-                                min="1"
-                                max="10"
-                                value="8"
-                            >
-
-                            <span class="value">
-                                <span id="creativityValue">8</span>/10
-                            </span>
-                        </div>
-                    </div>
-
-                    <button class="primary" id="generatePrompt">
+                    <button
+                        class="primary"
+                        id="generatePrompt"
+                    >
                         إنشاء Prompt
                     </button>
 
@@ -796,27 +896,22 @@ iframe{
 
                 <div class="panel">
 
-                    <h2>Prompt الجاهز</h2>
-
-                    <div class="generator-note">
-                        هذا الـPrompt لا يطلب من AI مجرد كتابة CSS animation.
-                        بل يفرض عليه بناء دالة <b>renderAt(time)</b> تتحكم في جميع العناصر،
-                        حتى تتمكن المنصة من تصدير كل Frame بشكل مستقل.
-                    </div>
+                    <h2 class="panel-title">
+                        Prompt الجاهز
+                    </h2>
 
                     <textarea
                         id="promptOutput"
-                        class="prompt-output"
+                        class="generator-textarea"
                         readonly
                         placeholder="سيظهر الـPrompt هنا..."
                     ></textarea>
 
-                    <div style="height:10px"></div>
+                    <div style="height:9px"></div>
 
                     <button
-                        class="secondary"
+                        class="secondary copy-btn"
                         id="copyPrompt"
-                        style="width:100%"
                     >
                         نسخ الـPrompt
                     </button>
@@ -827,56 +922,79 @@ iframe{
 
         </section>
 
-        <!-- =========================
+        <!-- =================================================
              EXPORT
-        ========================= -->
+        ================================================= -->
 
-        <section class="page active" id="exportPage">
+        <section
+            class="page active"
+            id="exportPage"
+        >
 
             <div class="header">
-                <h1>مساحة التصدير</h1>
+
+                <h1>
+                    مساحة التصدير
+                </h1>
+
                 <p>
-                    الصق كود الموشن هنا، ثم افحص الحركة وجرب Frame قبل التصدير.
+                    ألصق الكود الناتج من AI. المنصة ستقرأ مدة المشروع ونسبته تلقائيًا.
                 </p>
+
             </div>
 
-            <div class="export-layout">
-
-                <!-- CONTROLS -->
+            <div class="export-grid">
 
                 <div class="panel controls">
 
-                    <div class="control-group">
+                    <div class="control-block">
 
-                        <div class="control-title">
-                            نسبة الفيديو
+                        <div class="control-label">
+                            معلومات المشروع
                         </div>
 
-                        <div class="segment two">
-                            <button
-                                class="export-ratio active"
-                                data-ratio="16:9"
-                            >
-                                16:9
-                            </button>
+                        <div class="meta">
 
-                            <button
-                                class="export-ratio"
-                                data-ratio="9:16"
-                            >
-                                9:16
-                            </button>
+                            <div class="meta-row">
+                                <span>الحالة</span>
+                                <span id="projectState">
+                                    لم يتم تحميل مشروع
+                                </span>
+                            </div>
+
+                            <div class="meta-row">
+                                <span>المدة</span>
+                                <span id="projectDuration">
+                                    —
+                                </span>
+                            </div>
+
+                            <div class="meta-row">
+                                <span>النسبة</span>
+                                <span id="projectRatio">
+                                    —
+                                </span>
+                            </div>
+
+                            <div class="meta-row">
+                                <span>المشاهد</span>
+                                <span id="projectScenes">
+                                    —
+                                </span>
+                            </div>
+
                         </div>
 
                     </div>
 
-                    <div class="control-group">
+                    <div class="control-block">
 
-                        <div class="control-title">
+                        <div class="control-label">
                             الدقة
                         </div>
 
                         <div class="segment two">
+
                             <button
                                 class="resolution active"
                                 data-resolution="720"
@@ -890,17 +1008,19 @@ iframe{
                             >
                                 1080p
                             </button>
+
                         </div>
 
                     </div>
 
-                    <div class="control-group">
+                    <div class="control-block">
 
-                        <div class="control-title">
-                            FPS
+                        <div class="control-label">
+                            معدل الإطارات
                         </div>
 
                         <div class="segment">
+
                             <button
                                 class="fps"
                                 data-fps="24"
@@ -921,65 +1041,48 @@ iframe{
                             >
                                 60
                             </button>
+
                         </div>
 
                     </div>
 
-                    <div class="control-group">
+                    <div class="control-block">
 
-                        <div class="control-title">
-                            مدة التصدير
-                        </div>
-
-                        <div class="range-row">
-                            <input
-                                id="exportDuration"
-                                type="range"
-                                min="1"
-                                max="60"
-                                value="10"
-                            >
-
-                            <span class="value">
-                                <span id="exportDurationValue">10</span>s
-                            </span>
-                        </div>
-
-                    </div>
-
-                    <div class="control-group">
-
-                        <div class="control-title">
-                            جودة الفيديو
+                        <div class="control-label">
+                            الجودة
                         </div>
 
                         <select id="quality">
+
                             <option value="5000000">
                                 قياسية
                             </option>
 
-                            <option value="8000000" selected>
+                            <option
+                                value="8000000"
+                                selected
+                            >
                                 عالية
                             </option>
 
                             <option value="12000000">
                                 عالية جدًا
                             </option>
+
                         </select>
 
                     </div>
 
-                    <div class="control-group">
+                    <div class="control-block">
 
-                        <div class="control-title">
-                            الكود
-
+                        <div class="control-label">
+                            كود المشروع
                         </div>
 
                         <textarea
                             id="htmlCode"
-                            class="html-editor"
-                            placeholder="الصق كود HTML هنا..."
+                            class="code"
+                            placeholder="الصق HTML الناتج من الـAI هنا..."
                         ></textarea>
 
                     </div>
@@ -988,16 +1091,16 @@ iframe{
 
                         <button
                             class="secondary"
-                            id="updatePreview"
+                            id="loadProject"
                         >
-                            تحديث المعاينة
+                            تحميل المشروع
                         </button>
 
                         <button
                             class="secondary"
                             id="validate"
                         >
-                            فحص الحركة
+                            فحص المشروع
                         </button>
 
                         <button
@@ -1024,9 +1127,11 @@ iframe{
                     <div
                         class="progress"
                         id="progressBox"
-                        style="display:none"
                     >
-                        <div id="progress"></div>
+                        <div
+                            class="progress-bar"
+                            id="progressBar"
+                        ></div>
                     </div>
 
                     <button
@@ -1046,15 +1151,13 @@ iframe{
 
                 </div>
 
-                <!-- PREVIEW -->
-
                 <div class="preview-panel">
 
                     <div class="preview-wrap">
 
                         <div
-                            class="preview-frame"
-                            id="previewFrame"
+                            class="preview"
+                            id="previewBox"
                         >
 
                             <iframe
@@ -1066,46 +1169,27 @@ iframe{
 
                     </div>
 
-                    <div
-                        class="panel"
-                        style="padding:15px"
-                    >
+                    <div class="panel engine-panel">
 
-                        <div
-                            style="
-                            display:flex;
-                            justify-content:space-between;
-                            align-items:center;
-                            gap:10px;
-                            "
-                        >
+                        <div class="engine-head">
 
-                            <strong>
-                                ملاحظات المحرك
-                            </strong>
+                            <div class="engine-title">
+                                محرك التصدير
+                            </div>
 
-                            <span
+                            <div
+                                class="engine-state"
                                 id="engineState"
-                                style="
-                                color:#8f98a4;
-                                font-size:12px;
-                                "
                             >
                                 جاهز
-                            </span>
+                            </div>
 
                         </div>
 
-                        <p
-                            style="
-                            color:#8e96a2;
-                            font-size:12px;
-                            line-height:1.8;
-                            margin:8px 0 0;
-                            "
-                        >
-                            التصدير الجديد لا يعتمد على تشغيل الأنيميشن في الزمن الحقيقي.
-                            يتم إرسال الزمن مباشرة إلى <b>renderAt()</b> ثم التقاط Frame مستقل.
+                        <p class="engine-desc">
+                            المنصة تقرأ MOTION_CONFIG من المشروع،
+                            ثم تستدعي renderAt() لكل Frame.
+                            لذلك المدة والتصميم والحركة تأتي من المشروع نفسه.
                         </p>
 
                     </div>
@@ -1117,14 +1201,17 @@ iframe{
         </section>
 
     </main>
+
 </div>
 
-<!-- MOBILE NAV -->
+<!-- =========================================================
+     MOBILE NAV
+========================================================= -->
 
 <div class="mobile-nav">
 
     <button
-        class="mobile-nav-btn"
+        class="mobile-nav-btn active"
         data-page="export"
     >
         التصدير
@@ -1139,1040 +1226,39 @@ iframe{
 
 </div>
 
+
 <script>
-/* ============================================================
-   SETTINGS
-============================================================ */
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
 
 const SECRET_PASSWORD = "ayman";
 
-let currentRatio = "16:9";
+let projectConfig = null;
+let projectSource = "";
+
 let currentResolution = 720;
 let currentFPS = 30;
-let exportDuration = 10;
-
-let isCreative = true;
 let exporting = false;
 let cancelRequested = false;
 
 
-/* ============================================================
-   DOM
-============================================================ */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-const $ = id => document.getElementById(id);
+const $ = id =>
+    document.getElementById(id);
 
-const lock = $("lock");
-const password = $("password");
-const unlock = $("unlock");
-const lockError = $("lockError");
+const sleep = ms =>
+    new Promise(resolve => setTimeout(resolve, ms));
 
-const generatorPage = $("generatorPage");
-const exportPage = $("exportPage");
-
-const htmlCode = $("htmlCode");
-const preview = $("preview");
-const previewFrame = $("previewFrame");
-
-const statusBox = $("status");
-const progressBox = $("progressBox");
-const progress = $("progress");
-
-const engineState = $("engineState");
-
-
-/* ============================================================
-   PASSWORD
-============================================================ */
-
-function unlockApp(){
-
-    if(password.value === SECRET_PASSWORD){
-
-        lock.style.display = "none";
-
-        try{
-            localStorage.setItem("motion_unlocked","1");
-        }catch(e){}
-
-    }else{
-
-        lockError.style.display = "block";
-
-    }
-}
-
-try{
-    if(localStorage.getItem("motion_unlocked") === "1"){
-        lock.style.display = "none";
-    }
-}catch(e){}
-
-unlock.addEventListener("click",unlockApp);
-
-password.addEventListener("keydown",e=>{
-    if(e.key === "Enter") unlockApp();
-});
-
-
-/* ============================================================
-   PAGE NAVIGATION
-============================================================ */
-
-function showPage(name){
-
-    generatorPage.classList.toggle("active",name === "generator");
-    exportPage.classList.toggle("active",name === "export");
-
-    document.querySelectorAll(".nav-btn,.mobile-nav-btn")
-        .forEach(btn=>{
-            btn.classList.toggle(
-                "active",
-                btn.dataset.page === name
-            );
-        });
-}
-
-document.querySelectorAll("[data-page]")
-    .forEach(btn=>{
-        btn.addEventListener("click",()=>{
-            showPage(btn.dataset.page);
-        });
-    });
-
-
-/* ============================================================
-   GENERATOR
-============================================================ */
-
-const duration = $("duration");
-const durationValue = $("durationValue");
-
-duration.addEventListener("input",()=>{
-    durationValue.textContent = duration.value;
-});
-
-const creativity = $("creativity");
-const creativityValue = $("creativityValue");
-
-creativity.addEventListener("input",()=>{
-    creativityValue.textContent = creativity.value;
-});
-
-
-$("creativeBtn").addEventListener("click",()=>{
-
-    isCreative = true;
-
-    $("creativeBtn").classList.add("active");
-    $("manualBtn").classList.remove("active");
-
-    $("manualFields").style.display = "none";
-});
-
-
-$("manualBtn").addEventListener("click",()=>{
-
-    isCreative = false;
-
-    $("manualBtn").classList.add("active");
-    $("creativeBtn").classList.remove("active");
-
-    $("manualFields").style.display = "block";
-});
-
-
-document.querySelectorAll(".ratio").forEach(btn=>{
-
-    btn.addEventListener("click",()=>{
-
-        document.querySelectorAll(".ratio")
-            .forEach(x=>x.classList.remove("active"));
-
-        btn.classList.add("active");
-
-    });
-
-});
-
-
-function generatePrompt(){
-
-    const subject =
-        $("subject").value.trim() || "موضوع إبداعي";
-
-    const title =
-        $("title").value.trim() || subject;
-
-    const dur =
-        duration.value;
-
-    const ratio =
-        document.querySelector(".ratio.active")?.dataset.ratio || "16:9";
-
-    const creativeLevel =
-        creativity.value;
-
-    let manualBlock = "";
-
-    if(!isCreative){
-
-        manualBlock = `
-الأسلوب المطلوب:
-${$("style").value.trim() || "يحدد المصمم الأسلوب المناسب"}
-
-الألوان:
-${$("colors").value.trim() || "اختر ألوانًا متناسقة"}
-
-طبيعة الحركة:
-${$("motion").value.trim() || "حركة سينمائية سلسة"}
-`;
-
-    }else{
-
-        manualBlock = `
-الوضع الإبداعي:
-دع الذكاء يبدع بالكامل.
-
-لا تطلب مني تحديد:
-- لوحة الألوان
-- الخطوط
-- توزيع العناصر
-- عدد المشاهد
-- الانتقالات
-- أسلوب الحركة
-- التفاصيل الزخرفية
-
-اخترها أنت بناءً على الموضوع والعنوان.
-`;
-
-    }
-
-    const prompt = `
-أنت Motion Graphics Developer محترف جدًا.
-
-مهمتك إنشاء ملف HTML واحد فقط يحتوي على تجربة Motion Graphics سينمائية كاملة تعمل داخل المتصفح.
-
-━━━━━━━━━━━━━━━━━━━━━━
-المشروع
-━━━━━━━━━━━━━━━━━━━━━━
-
-الموضوع:
-${subject}
-
-العنوان:
-${title}
-
-المدة:
-${dur} ثانية
-
-النسبة:
-${ratio}
-
-مستوى الإبداع:
-${creativeLevel}/10
-
-${manualBlock}
-
-━━━━━━━━━━━━━━━━━━━━━━
-الشرط الأهم
-━━━━━━━━━━━━━━━━━━━━━━
-
-المشروع سيتم تصديره Frame-by-Frame.
-
-لذلك ممنوع بناء الحركة اعتمادًا على الزمن الحقيقي للمتصفح.
-
-ممنوع أن تكون الحركة الأساسية مبنية على:
-
-requestAnimationFrame()
-setTimeout()
-setInterval()
-Date.now()
-performance.now()
-CSS animation
-CSS transition
-anime.js
-GSAP timelines
-WebGL animation loop
-Canvas animation loop
-
-هذه الأشياء يمكن استخدامها فقط لأمور غير مرتبطة بالحركة الأساسية، مثل التهيئة، لكن الحركة نفسها يجب ألا تعتمد عليها.
-
-━━━━━━━━━━━━━━━━━━━━━━
-RENDER ENGINE CONTRACT
-━━━━━━━━━━━━━━━━━━━━━━
-
-يجب أن يحتوي الملف على دالة عامة بهذا الشكل:
-
-window.renderAt = function(timeMs){
-
-    // تحديث جميع العناصر حسب الزمن
-
-};
-
-هذه الدالة هي مصدر الحقيقة الوحيد للحركة.
-
-timeMs يبدأ من:
-
-0
-
-وينتهي عند:
-
-${Number(dur) * 1000}
-
-يجب أن تكون الدالة deterministic.
-
-إذا استدعيتها مرتين بنفس timeMs يجب أن تعطي نفس النتيجة.
-
-━━━━━━━━━━━━━━━━━━━━━━
-مثال للحركة
-━━━━━━━━━━━━━━━━━━━━━━
-
-const p = Math.min(
-    1,
-    Math.max(
-        0,
-        (timeMs - 500) / 1000
-    )
-);
-
-const eased =
-    p * p * (3 - 2 * p);
-
-element.style.opacity = eased;
-
-element.style.transform =
-    "translateY(" +
-    ((1 - eased) * 80) +
-    "px)";
-
-يجب استخدام هذا الأسلوب أو أسلوب رياضي مشابه.
-
-━━━━━━━━━━━━━━━━━━━━━━
-ممنوع
-━━━━━━━━━━━━━━━━━━━━━━
-
-لا تستخدم:
-
-element.animate()
-
-أو:
-
-element.style.animation
-
-أو:
-
-element.style.transition
-
-للحركة الأساسية.
-
-لا تجعل الحركة تعتمد على مرور الوقت الحقيقي.
-
-لا تستخدم loop لتشغيل الحركة.
-
-━━━━━━━━━━━━━━━━━━━━━━
-جميع العناصر
-━━━━━━━━━━━━━━━━━━━━━━
-
-كل عنصر متحرك يجب أن يتم تحديثه داخل renderAt().
-
-ليس عنصرًا واحدًا فقط.
-
-إذا كان هناك:
-
-عنوان
-نص
-صورة
-شكل
-خط
-خلفية
-جزيئات
-زخارف
-
-فكل واحد منها يجب أن يتلقى حالته المناسبة داخل renderAt().
-
-━━━━━━━━━━━━━━━━━━━━━━
-المشهد
-━━━━━━━━━━━━━━━━━━━━━━
-
-أنشئ Timeline واضحًا.
-
-مثلاً:
-
-0% - 15%
-INTRO
-
-15% - 70%
-MAIN
-
-70% - 100%
-OUTRO
-
-لكن لا تجعل التصميم مقيدًا بهذا المثال.
-
-━━━━━━━━━━━━━━━━━━━━━━
-التصميم
-━━━━━━━━━━━━━━━━━━━━━━
-
-أنشئ تصميمًا احترافيًا.
-
-لا تستخدم بطاقات UI تقليدية إلا إذا كانت مناسبة للموضوع.
-
-لا تستخدم Emojis.
-
-استخدم CSS ورسومات وأشكالًا هندسية وعناصر بصرية مناسبة.
-
-إذا كان الموضوع تاريخيًا، اجعل التصميم تاريخيًا.
-
-إذا كان تقنيًا، اجعله تقنيًا.
-
-إذا كان احتفاليًا، اجعله سينمائيًا.
-
-━━━━━━━━━━━━━━━━━━━━━━
-الصور
-━━━━━━━━━━━━━━━━━━━━━━
-
-إذا احتجت صورًا استخدم صورًا خارجية قابلة للتحميل.
-
-أضف:
-
-crossorigin="anonymous"
-
-عندما يكون ذلك مناسبًا.
-
-لا تعتمد على فيديو خارجي أثناء التصدير.
-
-━━━━━━━━━━━━━━━━━━━━━━
-الأبعاد
-━━━━━━━━━━━━━━━━━━━━━━
-
-صمم المسرح على نسبة:
-
-${ratio}
-
-ويجب أن يحتفظ التصميم بنسبة العرض والارتفاع.
-
-لا تعتمد على أبعاد الهاتف.
-
-━━━━━━━━━━━━━━━━━━━━━━
-الأداء
-━━━━━━━━━━━━━━━━━━━━━━
-
-يجب أن يكون المشروع خفيفًا قدر الإمكان.
-
-لا تستخدم آلاف العناصر.
-
-لا تستخدم Particle System ضخم.
-
-لا تجعل renderAt() ينشئ عناصر جديدة.
-
-أنشئ العناصر مرة واحدة.
-
-renderAt() يقوم فقط بتغيير properties.
-
-━━━━━━━━━━━━━━━━━━━━━━
-الاستجابة
-━━━━━━━━━━━━━━━━━━━━━━
-
-يجب أن تعمل المعاينة والتصدير بنفس التصميم.
-
-لا تجعل التصميم يعتمد على viewport الخاص بالمتصفح.
-
-━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━
-
-أرسل HTML كاملًا فقط.
-
-بدون Markdown.
-
-بدون شرح.
-
-بدون:
-
-\`\`\`html
-
-ابدأ مباشرة بـ:
-
-<!doctype html>
-
-━━━━━━━━━━━━━━━━━━━━━━
-FINAL CHECK
-━━━━━━━━━━━━━━━━━━━━━━
-
-قبل إرسال الكود تأكد أن:
-
-1. window.renderAt موجودة.
-2. renderAt تستقبل timeMs.
-3. renderAt تحدث جميع العناصر المتحركة.
-4. الحركة لا تعتمد على requestAnimationFrame.
-5. الحركة لا تعتمد على setTimeout.
-6. الحركة لا تعتمد على setInterval.
-7. الحركة لا تعتمد على Date.now.
-8. الحركة لا تعتمد على performance.now.
-9. لا توجد CSS animations للحركة الأساسية.
-10. لا توجد CSS transitions للحركة الأساسية.
-11. نفس timeMs يعطي نفس النتيجة.
-12. HTML يعمل مباشرة عند فتحه.
-13. لا توجد أخطاء JavaScript.
-14. لا تستخدم alert().
-15. لا تستخدم prompt().
-16. لا تنتظر تفاعل المستخدم لبدء المشهد.
-17. جميع العناصر موجودة قبل أول renderAt.
-18. renderAt(0) يعرض بداية المقطع.
-19. renderAt(${Number(dur) * 1000}) يعرض نهاية المقطع.
-20. المقطع النهائي يبدو كموشن جرافيك حقيقي وليس مجرد صفحة ثابتة.
-
-نفذ التصميم بإبداع عالٍ.
-`;
-
-    $("promptOutput").value = prompt.trim();
-
-}
-
-
-$("generatePrompt").addEventListener(
-    "click",
-    generatePrompt
-);
-
-
-$("copyPrompt").addEventListener("click",async()=>{
-
-    const value = $("promptOutput").value;
-
-    if(!value){
-        showStatus(
-            "أنشئ الـPrompt أولًا.",
-            "error"
-        );
-        return;
-    }
-
-    try{
-
-        await navigator.clipboard.writeText(value);
-
-        showStatus(
-            "تم نسخ الـPrompt.",
-            "success"
-        );
-
-    }catch(e){
-
-        $("promptOutput").select();
-        document.execCommand("copy");
-
-        showStatus(
-            "تم نسخ الـPrompt.",
-            "success"
-        );
-
-    }
-
-});
-
-
-/* ============================================================
-   EXPORT SETTINGS
-============================================================ */
-
-function setupSegment(selector,callback){
-
-    document.querySelectorAll(selector)
-        .forEach(btn=>{
-
-            btn.addEventListener("click",()=>{
-
-                document.querySelectorAll(selector)
-                    .forEach(x=>x.classList.remove("active"));
-
-                btn.classList.add("active");
-
-                callback(btn.dataset);
-
-            });
-
-        });
-
-}
-
-
-setupSegment(".export-ratio",data=>{
-
-    currentRatio = data.ratio;
-
-    previewFrame.classList.toggle(
-        "vertical",
-        currentRatio === "9:16"
-    );
-
-});
-
-
-setupSegment(".resolution",data=>{
-
-    currentResolution =
-        Number(data.resolution);
-
-});
-
-
-setupSegment(".fps",data=>{
-
-    currentFPS =
-        Number(data.fps);
-
-});
-
-
-$("exportDuration").addEventListener("input",()=>{
-
-    exportDuration =
-        Number($("exportDuration").value);
-
-    $("exportDurationValue").textContent =
-        exportDuration;
-
-});
-
-
-$("clearCode").addEventListener("click",()=>{
-
-    if(exporting) return;
-
-    htmlCode.value = "";
-    preview.srcdoc = "";
-
-    showStatus(
-        "تم مسح الكود.",
-        "info"
-    );
-
-});
-
-
-/* ============================================================
-   STATUS
-============================================================ */
-
-function showStatus(message,type="info"){
-
-    statusBox.className =
-        "status show " + type;
-
-    statusBox.textContent =
-        message;
-
-}
-
-
-function setEngineState(text){
-
-    engineState.textContent =
-        text;
-
-}
-
-
-/* ============================================================
-   BUILD DOCUMENT
-============================================================ */
-
-function buildDocument(source){
-
-    /*
-      نضيف reset بسيط حتى لا تؤثر
-      هوامش المتصفح على المسرح.
-    */
-
-    const reset = `
-<style>
-html,body{
-    margin:0 !important;
-    padding:0 !important;
-    width:100% !important;
-    height:100% !important;
-    overflow:hidden !important;
-}
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    background:#000;
-}
-
-body{
-    background:#000;
-}
-</style>
-`;
-
-    return source + reset;
-}
-
-
-/* ============================================================
-   PREVIEW
-============================================================ */
-
-function updatePreview(){
-
-    const source =
-        htmlCode.value.trim();
-
-    if(!source){
-
-        showStatus(
-            "الصق كود HTML أولًا.",
-            "error"
-        );
-
-        return;
-
-    }
-
-    preview.srcdoc =
-        buildDocument(source);
-
-    setEngineState("تم تحديث المعاينة");
-
-    showStatus(
-        "تم تحديث المعاينة.",
-        "success"
-    );
-
-}
-
-
-$("updatePreview").addEventListener(
-    "click",
-    updatePreview
-);
-
-
-/* ============================================================
-   GET RENDER FUNCTION
-============================================================ */
-
-function getRenderFunction(win){
-
-    if(
-        typeof win.renderAt !== "function"
-    ){
-        return null;
-    }
-
-    return win.renderAt;
-}
-
-
-/* ============================================================
-   VALIDATOR
-============================================================ */
-
-async function validateMotion(){
-
-    const source =
-        htmlCode.value.trim();
-
-    if(!source){
-
-        showStatus(
-            "الصق كود HTML أولًا.",
-            "error"
-        );
-
-        return false;
-
-    }
-
-    try{
-
-        const iframe =
-            await loadRenderIframe(
-                source
-            );
-
-        const win =
-            iframe.contentWindow;
-
-        const render =
-            getRenderFunction(win);
-
-        if(!render){
-
-            showStatus(
-                "الكود لا يحتوي على window.renderAt(timeMs). استخدم الـPrompt الجديد لتوليد الكود.",
-                "error"
-            );
-
-            return false;
-
-        }
-
-        /*
-          نختبر ثلاثة أزمنة.
-        */
-
-        render(0);
-
-        await nextPaint();
-
-        const first =
-            await capturePreviewFrame(
-                iframe
-            );
-
-        render(
-            Math.max(
-                1,
-                exportDuration * 500
-            )
-        );
-
-        await nextPaint();
-
-        const middle =
-            await capturePreviewFrame(
-                iframe
-            );
-
-        render(
-            exportDuration * 1000
-        );
-
-        await nextPaint();
-
-        const last =
-            await capturePreviewFrame(
-                iframe
-            );
-
-        /*
-          نقارن الصور.
-        */
-
-        const a =
-            canvasSignature(first);
-
-        const b =
-            canvasSignature(middle);
-
-        const c =
-            canvasSignature(last);
-
-        if(a === b && b === c){
-
-            showStatus(
-                "الـrenderAt موجود، لكن الإطارات الثلاثة متطابقة. هذا يعني أن الحركة لا تتغير مع الزمن.",
-                "error"
-            );
-
-            return false;
-
-        }
-
-        showStatus(
-            "الحركة سليمة: renderAt() يستجيب للزمن.",
-            "success"
-        );
-
-        return true;
-
-    }catch(error){
-
-        console.error(error);
-
-        showStatus(
-            "فشل فحص الحركة: " +
-            error.message,
-            "error"
-        );
-
-        return false;
-
-    }
-
-}
-
-
-$("validate").addEventListener(
-    "click",
-    validateMotion
-);
-
-
-/* ============================================================
-   IFRAME LOADER
-============================================================ */
-
-function loadRenderIframe(source){
-
-    return new Promise((resolve,reject)=>{
-
-        const iframe =
-            document.createElement("iframe");
-
-        iframe.style.position =
-            "fixed";
-
-        iframe.style.left =
-            "-10000px";
-
-        iframe.style.top =
-            "0";
-
-        iframe.style.width =
-            currentRatio === "16:9"
-                ? "1280px"
-                : "720px";
-
-        iframe.style.height =
-            currentRatio === "16:9"
-                ? "720px"
-                : "1280px";
-
-        iframe.style.opacity =
-            "0";
-
-        iframe.style.pointerEvents =
-            "none";
-
-        iframe.setAttribute(
-            "sandbox",
-            "allow-scripts allow-same-origin"
-        );
-
-        let done = false;
-
-        const timer =
-            setTimeout(()=>{
-
-                if(done) return;
-
-                done = true;
-
-                iframe.remove();
-
-                reject(
-                    new Error(
-                        "انتهت مهلة تحميل المشروع."
-                    )
-                );
-
-            },15000);
-
-        iframe.onload = ()=>{
-
-            if(done) return;
-
-            clearTimeout(timer);
-
-            /*
-              ننتظر تحميل الصور والخطوط.
-            */
-
-            waitForResources(
-                iframe.contentWindow.document
-            ).then(()=>{
-
-                if(done) return;
-
-                done = true;
-
-                resolve(iframe);
-
-            }).catch(error=>{
-
-                if(done) return;
-
-                done = true;
-
-                iframe.remove();
-
-                reject(error);
-
-            });
-
-        };
-
-        iframe.srcdoc =
-            buildDocument(source);
-
-        document.body.appendChild(iframe);
-
-    });
-
-}
-
-
-/* ============================================================
-   RESOURCE WAIT
-============================================================ */
-
-async function waitForResources(doc){
-
-    const images =
-        Array.from(
-            doc.images || []
-        );
-
-    await Promise.all(
-        images.map(img=>{
-
-            if(img.complete){
-                return Promise.resolve();
-            }
-
-            return new Promise(resolve=>{
-
-                const finish = ()=>{
-                    resolve();
-                };
-
-                img.addEventListener(
-                    "load",
-                    finish,
-                    {once:true}
-                );
-
-                img.addEventListener(
-                    "error",
-                    finish,
-                    {once:true}
-                );
-
-            });
-
-        })
-    );
-
-    if(
-        doc.fonts &&
-        doc.fonts.ready
-    ){
-
-        try{
-            await doc.fonts.ready;
-        }catch(e){}
-
-    }
-
-}
-
-
-/* ============================================================
-   NEXT PAINT
-============================================================ */
 
 function nextPaint(){
 
-    return new Promise(resolve=>{
+    return new Promise(resolve => {
 
-        requestAnimationFrame(()=>{
+        requestAnimationFrame(() => {
 
             requestAnimationFrame(resolve);
 
@@ -2183,231 +1269,2195 @@ function nextPaint(){
 }
 
 
-/* ============================================================
-   CAPTURE PREVIEW
-============================================================ */
+/* =========================================================
+   PASSWORD
+========================================================= */
 
-async function capturePreviewFrame(iframe){
-
-    const doc =
-        iframe.contentDocument;
-
-    return html2canvas(
-        doc.documentElement,
-        {
-            backgroundColor:null,
-            scale:1,
-            useCORS:true,
-            allowTaint:false,
-            logging:false,
-            width:
-                currentRatio === "16:9"
-                    ? 1280
-                    : 720,
-            height:
-                currentRatio === "16:9"
-                    ? 720
-                    : 1280
-        }
-    );
-
-}
-
-
-/* ============================================================
-   CANVAS SIGNATURE
-============================================================ */
-
-function canvasSignature(canvas){
-
-    const ctx =
-        canvas.getContext("2d");
-
-    const sample =
-        32;
-
-    const small =
-        document.createElement("canvas");
-
-    small.width =
-        sample;
-
-    small.height =
-        sample;
-
-    const sctx =
-        small.getContext("2d");
-
-    sctx.drawImage(
-        canvas,
-        0,
-        0,
-        sample,
-        sample
-    );
-
-    const data =
-        sctx.getImageData(
-            0,
-            0,
-            sample,
-            sample
-        ).data;
-
-    let hash = 0;
-
-    for(
-        let i=0;
-        i<data.length;
-        i+=17
-    ){
-
-        hash =
-            ((hash << 5) - hash) +
-            data[i];
-
-        hash |= 0;
-
-    }
-
-    return String(hash);
-
-}
-
-
-/* ============================================================
-   TEST FRAME
-============================================================ */
-
-$("testFrame").addEventListener(
+$("unlock").addEventListener(
     "click",
-    async()=>{
+    unlockApp
+);
 
-        const source =
-            htmlCode.value.trim();
+$("password").addEventListener(
+    "keydown",
+    e => {
 
-        if(!source){
-
-            showStatus(
-                "الصق كود HTML أولًا.",
-                "error"
-            );
-
-            return;
-
-        }
-
-        try{
-
-            setEngineState(
-                "اختبار Frame..."
-            );
-
-            const iframe =
-                await loadRenderIframe(
-                    source
-                );
-
-            const render =
-                getRenderFunction(
-                    iframe.contentWindow
-                );
-
-            if(!render){
-
-                iframe.remove();
-
-                throw new Error(
-                    "window.renderAt غير موجودة."
-                );
-
-            }
-
-            /*
-              نأخذ Frame من منتصف المقطع.
-            */
-
-            render(
-                exportDuration * 500
-            );
-
-            await nextPaint();
-
-            const canvas =
-                await capturePreviewFrame(
-                    iframe
-                );
-
-            const blob =
-                await new Promise(resolve=>{
-                    canvas.toBlob(
-                        resolve,
-                        "image/png"
-                    );
-                });
-
-            iframe.remove();
-
-            const url =
-                URL.createObjectURL(blob);
-
-            /*
-              يفتح الصورة في تبويب.
-              مفيد جدًا على iPhone.
-            */
-
-            window.open(
-                url,
-                "_blank"
-            );
-
-            setEngineState(
-                "تم اختبار Frame"
-            );
-
-            showStatus(
-                "تم التقاط Frame من منتصف المقطع.",
-                "success"
-            );
-
-        }catch(error){
-
-            console.error(error);
-
-            setEngineState(
-                "خطأ"
-            );
-
-            showStatus(
-                error.message,
-                "error"
-            );
-
+        if(e.key === "Enter"){
+            unlockApp();
         }
 
     }
 );
 
 
-/* ============================================================
-   WEB CODECS SUPPORT
-============================================================ */
-
-async function checkEncoder(){
+function unlockApp(){
 
     if(
-        typeof VideoEncoder === "undefined"
+        $("password").value ===
+        SECRET_PASSWORD
+    ){
+
+        $("lock").style.display =
+            "none";
+
+        try{
+            localStorage.setItem(
+                "motion_unlocked",
+                "1"
+            );
+        }catch(e){}
+
+    }else{
+
+        $("lockError").style.display =
+            "block";
+
+    }
+
+}
+
+
+try{
+
+    if(
+        localStorage.getItem(
+            "motion_unlocked"
+        ) === "1"
+    ){
+
+        $("lock").style.display =
+            "none";
+
+    }
+
+}catch(e){}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page){
+
+    $("exportPage")
+        .classList.toggle(
+            "active",
+            page === "export"
+        );
+
+    $("generatorPage")
+        .classList.toggle(
+            "active",
+            page === "generator"
+        );
+
+    document
+        .querySelectorAll(
+            ".nav-btn,.mobile-nav-btn"
+        )
+        .forEach(btn => {
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.page === page
+            );
+
+        });
+
+}
+
+
+document
+    .querySelectorAll(
+        "[data-page]"
+    )
+    .forEach(btn => {
+
+        btn.addEventListener(
+            "click",
+            () => showPage(
+                btn.dataset.page
+            )
+        );
+
+    });
+
+
+/* =========================================================
+   GENERATOR
+========================================================= */
+
+$("promptDuration")
+    .addEventListener(
+        "input",
+        () => {
+
+            $("promptDurationValue")
+                .textContent =
+                $("promptDuration").value;
+
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        ".prompt-ratio"
+    )
+    .forEach(btn => {
+
+        btn.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".prompt-ratio"
+                    )
+                    .forEach(
+                        x =>
+                        x.classList.remove(
+                            "active"
+                        )
+                    );
+
+                btn.classList.add(
+                    "active"
+                );
+
+            }
+        );
+
+    });
+
+
+function generatePrompt(){
+
+    const subject =
+        $("subject")
+            .value
+            .trim() ||
+        "موضوع إبداعي";
+
+    const title =
+        $("title")
+            .value
+            .trim() ||
+        subject;
+
+    const duration =
+        Number(
+            $("promptDuration").value
+        );
+
+    const ratio =
+        document
+            .querySelector(
+                ".prompt-ratio.active"
+            )
+            ?.dataset.ratio ||
+        "16:9";
+
+
+    const prompt = `أنت Motion Graphics Developer + Art Director + Storyboard Designer محترف جدًا.
+
+مهمتك إنشاء تجربة Motion Graphics سينمائية كاملة داخل ملف HTML واحد.
+
+المشروع:
+
+الموضوع:
+${subject}
+
+العنوان:
+${title}
+
+المدة الدقيقة:
+${duration} ثانية
+
+النسبة:
+${ratio}
+
+الوضع الإبداعي:
+دع الذكاء يبدع.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+أولًا: الإبداع والمحتوى
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+أنت مسؤول عن بناء المحتوى كاملًا.
+
+لا تنشئ مجرد شاشة جميلة فيها عنوان.
+
+يجب أن يكون المقطع قصة بصرية قصيرة ومتماسكة لها معنى.
+
+فكر قبل كتابة الكود في:
+
+1. الفكرة المركزية.
+2. الرسالة التي يريد المقطع إيصالها.
+3. بداية تجذب الانتباه.
+4. تطور بصري ومعلوماتي.
+5. ذروة أو لحظة رئيسية.
+6. نهاية واضحة ومقصودة.
+
+يجب أن تكون جميع المشاهد مرتبطة ببعضها.
+
+لا تجعل كل Scene يبدو وكأنه تصميم منفصل.
+
+العناصر والنصوص والألوان والحركة يجب أن تخدم الفكرة نفسها.
+
+إذا كان الموضوع تاريخيًا:
+استخدم لغة بصرية تاريخية مناسبة.
+
+إذا كان الموضوع علميًا:
+اجعل العناصر البصرية مرتبطة بالمعلومة.
+
+إذا كان الموضوع وطنيًا:
+اجعل الإحساس العام احتفاليًا وفخمًا ومرتبطًا بالموضوع.
+
+إذا كان الموضوع تقنيًا:
+استخدم لغة بصرية تقنية مناسبة.
+
+لا تستخدم وصفًا عامًا لا علاقة له بالموضوع.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ثانيًا: لا تسأل المستخدم
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+لا تسأل المستخدم عن:
+
+الألوان.
+الخطوط.
+الأسلوب.
+عدد المشاهد.
+الانتقالات.
+المؤثرات.
+نوع الحركة.
+توزيع العناصر.
+الصور.
+الزخارف.
+
+اتخذ جميع القرارات الإبداعية بنفسك.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ثالثًا: المدة
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+المدة جزء من مواصفات المشروع.
+
+يجب أن تكون مدة المشروع:
+
+${duration} ثانية بالضبط.
+
+يجب وضعها داخل الكود بهذه الصيغة:
+
+window.MOTION_CONFIG = {
+    duration: ${duration},
+    ratio: "${ratio}",
+    version: 1
+};
+
+ممنوع وضع مدة مختلفة.
+
+ممنوع طلب المدة من المستخدم.
+
+ممنوع إنشاء عنصر HTML يطلب مدة.
+
+المنصة التي ستقرأ الكود ستستخرج مدة المشروع من MOTION_CONFIG.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+رابعًا: النسبة
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+النسبة:
+
+${ratio}
+
+يجب بناء المسرح على هذه النسبة.
+
+لا تعتمد على أبعاد شاشة المستخدم.
+
+لا تستخدم تصميمًا يتغير جذريًا بسبب viewport أثناء التصدير.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+خامسًا: نظام الحركة
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+يجب أن يحتوي الكود على:
+
+window.renderAt = function(timeMs){
+
+};
+
+هذه الدالة هي المصدر الوحيد للحركة.
+
+timeMs يمثل الوقت الحالي بالملي ثانية.
+
+0 يعني بداية الفيديو.
+
+${duration * 1000} يعني نهاية الفيديو.
+
+كل العناصر المتحركة يجب أن يتم تحديثها داخل renderAt(timeMs).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+سادسًا: ممنوعات الحركة
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ممنوع الاعتماد على:
+
+requestAnimationFrame()
+setTimeout()
+setInterval()
+Date.now()
+performance.now()
+
+للحركة.
+
+ممنوع:
+
+CSS animation
+
+CSS transition
+
+element.animate()
+
+GSAP timeline
+
+Anime.js timeline
+
+أي مكتبة خارجية لإدارة Timeline.
+
+المحرك الخارجي هو الذي سيستدعي:
+
+renderAt(timeMs)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+سابعًا: Deterministic Animation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+إذا استدعينا:
+
+renderAt(2000)
+
+يجب أن تكون النتيجة نفسها دائمًا.
+
+إذا استدعينا:
+
+renderAt(2000)
+
+مرة ثانية، يجب أن تكون النتيجة نفسها.
+
+لا تستخدم random غير ثابت.
+
+إذا احتجت random استخدم قيمًا ثابتة.
+
+لا تعتمد على حالة سابقة غير معروفة.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ثامنًا: كل العناصر
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+يجب أن تكون جميع العناصر موجودة قبل بداية التصدير.
+
+renderAt() ممنوع أن ينشئ عناصر جديدة.
+
+renderAt() يقوم فقط بتحديث:
+
+opacity
+transform
+filter
+clip-path
+width
+height
+scale
+rotation
+position
+color
+background
+وما يلزم.
+
+إذا كان هناك:
+
+عنوان
+
+عنوان فرعي
+
+نص
+
+صورة
+
+شكل
+
+خط
+
+زخرفة
+
+جزيئات
+
+خلفية
+
+كل عنصر يجب أن تكون له حالة زمنية واضحة.
+
+لا تحرك عنصرًا واحدًا وتترك بقية التصميم ثابتًا بلا سبب.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+تاسعًا: النص العربي
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+هذا مهم جدًا.
+
+لا تقسم الكلمات العربية إلى أحرف منفصلة.
+
+ممنوع إنشاء:
+
+<span>ا</span>
+<span>ل</span>
+<span>و</span>
+<span>ط</span>
+<span>ن</span>
+
+للكلمات العربية.
+
+يجب أن تبقى الجملة العربية نصًا متصلًا.
+
+مثال صحيح:
+
+<div class="title">الوطن</div>
+
+مثال ممنوع:
+
+<div>
+<span>ا</span>
+<span>ل</span>
+<span>و</span>
+<span>ط</span>
+<span>ن</span>
+</div>
+
+استخدم:
+
+direction: rtl;
+unicode-bidi: plaintext;
+
+عند الحاجة.
+
+ويجب أن يكون:
+
+text-align: center;
+
+أو الاتجاه المناسب للسياق.
+
+لا تستخدم letter-spacing على النص العربي.
+
+لا تستخدم CSS تجعل الحروف العربية تبدو منفصلة.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+عاشرًا: الخطوط
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+اختر خطًا عربيًا مناسبًا.
+
+يفضل استخدام خط ويب واضح وموثوق.
+
+إذا استخدمت Google Fonts، ضع رابط الخط داخل HTML.
+
+حدد font-family صراحة.
+
+لا تعتمد على خط عشوائي من الجهاز.
+
+لا تستخدم عشرات الخطوط.
+
+استخدم خطًا أساسيًا واحدًا أو خطين كحد أقصى.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الحادي عشر: الصور
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+إذا احتجت صورًا:
+
+استخدم صورًا مناسبة للموضوع.
+
+لا تضع صورًا عشوائية.
+
+إذا استخدمت صورة خارجية يجب أن تكون قابلة للتحميل.
+
+ضع:
+
+crossorigin="anonymous"
+
+عند الحاجة.
+
+لا تعتمد على فيديو خارجي للحركة الأساسية.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الثاني عشر: المشاهد
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+أنشئ Timeline منطقيًا.
+
+مثال فقط:
+
+0% → افتتاحية
+
+20% → تقديم الفكرة
+
+50% → المعلومة أو الحدث الرئيسي
+
+75% → الذروة
+
+90% → الخاتمة
+
+لكن اختر التوقيت الذي يخدم الموضوع.
+
+لا تجعل جميع العناصر تظهر في الثانية الأولى.
+
+لا تجعل جميع العناصر تختفي في النهاية بشكل عشوائي.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الثالث عشر: جودة التصميم
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+التصميم يجب أن يبدو كموشن جرافيك حقيقي.
+
+لا تستخدم واجهة Dashboard.
+
+لا تستخدم Cards بكثرة.
+
+لا تستخدم Emojis.
+
+لا تستخدم ألوانًا كثيرة بلا سبب.
+
+استخدم:
+
+composition
+
+depth
+
+lighting
+
+gradients
+
+shapes
+
+typography
+
+motion hierarchy
+
+visual rhythm
+
+cinematic transitions
+
+إذا كان الموضوع يحتاج صورًا، استخدمها.
+
+إذا كان يحتاج رسومات CSS، أنشئها.
+
+إذا كان يحتاج عناصر هندسية، استخدمها.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الرابع عشر: المسرح
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+أنشئ عنصرًا رئيسيًا:
+
+#stage
+
+واجعله يمثل الفيديو كاملًا.
+
+يجب أن يكون:
+
+width: 100%;
+height: 100%;
+
+مع aspect ratio المناسب.
+
+لا تجعل المحتوى يخرج عن المسرح.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الخامس عشر: الأداء
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+لا تستخدم آلاف العناصر.
+
+لا تستخدم آلاف الجزيئات.
+
+لا تنشئ DOM جديد داخل renderAt().
+
+أنشئ جميع العناصر مرة واحدة.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+السادس عشر: التوافق مع التصدير
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+يجب أن يعمل المشروع داخل iframe.
+
+لا تعتمد على:
+
+window.innerWidth
+
+window.innerHeight
+
+للحركة.
+
+لا تعتمد على scroll.
+
+لا تعتمد على mouse position.
+
+لا تعتمد على touch.
+
+لا تعتمد على تفاعل المستخدم.
+
+المشهد يجب أن يعمل مباشرة.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+السابع عشر: التحقق النهائي
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+قبل إرسال الكود، تحقق من:
+
+1. MOTION_CONFIG موجود.
+2. MOTION_CONFIG.duration = ${duration}.
+3. MOTION_CONFIG.ratio = "${ratio}".
+4. window.renderAt موجود.
+5. renderAt تستقبل timeMs.
+6. renderAt deterministic.
+7. جميع العناصر موجودة قبل التصدير.
+8. لا يتم إنشاء عناصر داخل renderAt.
+9. لا توجد CSS animations للحركة الأساسية.
+10. لا توجد CSS transitions للحركة الأساسية.
+11. لا توجد requestAnimationFrame للحركة الأساسية.
+12. لا توجد setTimeout للحركة الأساسية.
+13. لا توجد setInterval للحركة الأساسية.
+14. لا توجد Date.now للحركة الأساسية.
+15. لا توجد performance.now للحركة الأساسية.
+16. لا توجد أحرف عربية مقسمة إلى spans.
+17. direction: rtl موجود حيث يلزم.
+18. النصوص العربية تبقى متصلة.
+19. الخطوط معرفة صراحة.
+20. جميع الموارد قابلة للتحميل.
+21. المشروع يعمل بدون تفاعل.
+22. renderAt(0) يعرض بداية صحيحة.
+23. renderAt(${duration * 1000}) يعرض نهاية صحيحة.
+24. المحتوى متناسق وله معنى.
+25. كل مشهد يخدم الفكرة الرئيسية.
+26. النهاية مرتبطة ببداية المقطع.
+27. لا توجد شاشة فارغة بين المشاهد.
+28. لا يوجد عنصر يظهر بدون سبب.
+29. لا يوجد نص زائد لا يخدم الموضوع.
+30. لا يوجد placeholder.
+31. لا يوجد lorem ipsum.
+32. لا يوجد console error.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+الإخراج
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+أرسل HTML كاملًا فقط.
+
+لا تكتب شرحًا.
+
+لا تكتب Markdown.
+
+لا تكتب:
+
+\`\`\`html
+
+ابدأ مباشرة بـ:
+
+<!doctype html>
+
+يجب أن يكون الملف جاهزًا للنسخ والتشغيل مباشرة.
+
+المشروع النهائي يجب أن يكون تجربة Motion Graphics كاملة ومتماسكة، وليس مجرد صفحة HTML جميلة.
+`;
+
+    $("promptOutput").value =
+        prompt.trim();
+
+}
+
+
+$("generatePrompt")
+    .addEventListener(
+        "click",
+        generatePrompt
+    );
+
+
+$("copyPrompt")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const value =
+                $("promptOutput").value;
+
+            if(!value){
+
+                showStatus(
+                    "أنشئ الـPrompt أولًا.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            try{
+
+                await navigator
+                    .clipboard
+                    .writeText(value);
+
+            }catch(e){
+
+                $("promptOutput").select();
+
+                document.execCommand(
+                    "copy"
+                );
+
+            }
+
+            showStatus(
+                "تم نسخ الـPrompt.",
+                "success"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+    message,
+    type = "info"
+){
+
+    $("status").className =
+        "status show " + type;
+
+    $("status").textContent =
+        message;
+
+}
+
+
+function engineState(
+    message
+){
+
+    $("engineState")
+        .textContent =
+        message;
+
+}
+
+
+/* =========================================================
+   EXPORT SETTINGS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".resolution"
+    )
+    .forEach(btn => {
+
+        btn.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".resolution"
+                    )
+                    .forEach(
+                        x =>
+                        x.classList.remove(
+                            "active"
+                        )
+                    );
+
+                btn.classList.add(
+                    "active"
+                );
+
+                currentResolution =
+                    Number(
+                        btn.dataset.resolution
+                    );
+
+            }
+        );
+
+    });
+
+
+document
+    .querySelectorAll(
+        ".fps"
+    )
+    .forEach(btn => {
+
+        btn.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".fps"
+                    )
+                    .forEach(
+                        x =>
+                        x.classList.remove(
+                            "active"
+                        )
+                    );
+
+                btn.classList.add(
+                    "active"
+                );
+
+                currentFPS =
+                    Number(
+                        btn.dataset.fps
+                    );
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   PROJECT HTML
+========================================================= */
+
+function normalizeSource(source){
+
+    /*
+      لا نعيد كتابة DOM المشروع.
+      نضيف فقط قواعد حماية خارجية.
+    */
+
+    const safety = `
+
+<style id="motion-platform-safety">
+
+html,
+body{
+    margin:0 !important;
+    padding:0 !important;
+    width:100% !important;
+    height:100% !important;
+    overflow:hidden !important;
+}
+
+html{
+    background:#000;
+}
+
+body{
+    background:#000;
+}
+
+#stage{
+    overflow:hidden !important;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+img,
+svg,
+canvas{
+    max-width:none;
+}
+
+[dir="rtl"],
+.rtl,
+.arabic{
+    direction:rtl;
+    unicode-bidi:plaintext;
+}
+
+</style>
+`;
+
+    if(
+        source.includes(
+            "</head>"
+        )
+    ){
+
+        return source.replace(
+            "</head>",
+            safety +
+            "</head>"
+        );
+
+    }
+
+    return safety + source;
+
+}
+
+
+/* =========================================================
+   EXTRACT PROJECT CONFIG
+========================================================= */
+
+function extractConfigFromText(source){
+
+    const iframe =
+        document.createElement(
+            "iframe"
+        );
+
+    iframe.style.display =
+        "none";
+
+    iframe.setAttribute(
+        "sandbox",
+        "allow-scripts allow-same-origin"
+    );
+
+    document.body.appendChild(
+        iframe
+    );
+
+    /*
+      This is only a temporary parser.
+      The actual config is read after execution.
+    */
+
+    iframe.srcdoc =
+        normalizeSource(source);
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const timeout =
+                setTimeout(
+                    () => {
+
+                        iframe.remove();
+
+                        reject(
+                            new Error(
+                                "انتهت مهلة قراءة إعدادات المشروع."
+                            )
+                        );
+
+                    },
+                    10000
+                );
+
+            iframe.onload =
+                async () => {
+
+                    clearTimeout(
+                        timeout
+                    );
+
+                    try{
+
+                        await waitForResources(
+                            iframe
+                                .contentDocument
+                        );
+
+                        const config =
+                            iframe
+                                .contentWindow
+                                .MOTION_CONFIG;
+
+                        const render =
+                            iframe
+                                .contentWindow
+                                .renderAt;
+
+                        if(
+                            !config ||
+                            typeof config !==
+                            "object"
+                        ){
+
+                            throw new Error(
+                                "المشروع لا يحتوي على window.MOTION_CONFIG."
+                            );
+
+                        }
+
+                        if(
+                            !Number.isFinite(
+                                Number(
+                                    config.duration
+                                )
+                            ) ||
+                            Number(
+                                config.duration
+                            ) <= 0
+                        ){
+
+                            throw new Error(
+                                "مدة المشروع غير صحيحة داخل MOTION_CONFIG."
+                            );
+
+                        }
+
+                        if(
+                            config.ratio !==
+                                "16:9" &&
+                            config.ratio !==
+                                "9:16"
+                        ){
+
+                            throw new Error(
+                                "نسبة المشروع يجب أن تكون 16:9 أو 9:16."
+                            );
+
+                        }
+
+                        if(
+                            typeof render !==
+                            "function"
+                        ){
+
+                            throw new Error(
+                                "المشروع لا يحتوي على window.renderAt(timeMs)."
+                            );
+
+                        }
+
+                        resolve({
+                            iframe,
+                            config:{
+                                duration:
+                                    Number(
+                                        config.duration
+                                    ),
+                                ratio:
+                                    config.ratio,
+                                scenes:
+                                    Array.isArray(
+                                        config.scenes
+                                    )
+                                        ? config.scenes
+                                        : []
+                            },
+                            render
+                        });
+
+                    }catch(error){
+
+                        iframe.remove();
+
+                        reject(error);
+
+                    }
+
+                };
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RESOURCE LOADING
+========================================================= */
+
+async function waitForResources(doc){
+
+    if(!doc){
+        return;
+    }
+
+    /*
+      Fonts
+    */
+
+    if(
+        doc.fonts &&
+        doc.fonts.ready
+    ){
+
+        try{
+
+            await doc.fonts.ready;
+
+        }catch(e){}
+
+    }
+
+
+    /*
+      Explicitly ask the browser to
+      load all font faces it knows about.
+    */
+
+    if(
+        doc.fonts &&
+        doc.fonts.values
+    ){
+
+        const fonts =
+            Array.from(
+                doc.fonts
+            );
+
+        for(
+            const font of fonts
+        ){
+
+            try{
+
+                await font.load();
+
+            }catch(e){}
+
+        }
+
+    }
+
+
+    /*
+      Images
+    */
+
+    const images =
+        Array.from(
+            doc.images || []
+        );
+
+    await Promise.all(
+        images.map(
+            img => {
+
+                if(
+                    img.complete &&
+                    img.naturalWidth > 0
+                ){
+
+                    return Promise.resolve();
+
+                }
+
+                return new Promise(
+                    resolve => {
+
+                        let finished =
+                            false;
+
+                        const finish =
+                            () => {
+
+                                if(
+                                    finished
+                                ){
+                                    return;
+                                }
+
+                                finished =
+                                    true;
+
+                                resolve();
+
+                            };
+
+                        img.addEventListener(
+                            "load",
+                            finish,
+                            {
+                                once:true
+                            }
+                        );
+
+                        img.addEventListener(
+                            "error",
+                            finish,
+                            {
+                                once:true
+                            }
+                        );
+
+                        setTimeout(
+                            finish,
+                            8000
+                        );
+
+                    }
+                );
+
+            }
+        )
+    );
+
+
+    /*
+      SVG / video / canvas
+      are already in the document,
+      but we wait for layout.
+    */
+
+    await new Promise(
+        resolve =>
+            requestAnimationFrame(
+                () =>
+                    requestAnimationFrame(
+                        resolve
+                    )
+            )
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE PROJECT INFO
+========================================================= */
+
+async function loadProject(){
+
+    const source =
+        $("htmlCode")
+            .value
+            .trim();
+
+    if(!source){
+
+        showStatus(
+            "الصق كود المشروع أولًا.",
+            "error"
+        );
+
+        return null;
+
+    }
+
+    engineState(
+        "قراءة المشروع..."
+    );
+
+    try{
+
+        const result =
+            await extractConfigFromText(
+                source
+            );
+
+        projectConfig =
+            result.config;
+
+        projectSource =
+            source;
+
+        updateProjectUI();
+
+        /*
+          Update preview using
+          the exact loaded iframe.
+        */
+
+        const previewSource =
+            normalizeSource(
+                source
+            );
+
+        $("preview").srcdoc =
+            previewSource;
+
+        $("previewBox")
+            .classList.toggle(
+                "vertical",
+                projectConfig.ratio ===
+                "9:16"
+            );
+
+        showStatus(
+            "تم التعرف على مدة المشروع ونسبته تلقائيًا.",
+            "success"
+        );
+
+        engineState(
+            "المشروع جاهز"
+        );
+
+        return result;
+
+    }catch(error){
+
+        projectConfig = null;
+        projectSource = "";
+
+        updateProjectUI();
+
+        engineState(
+            "المشروع غير صالح"
+        );
+
+        showStatus(
+            error.message,
+            "error"
+        );
+
+        return null;
+
+    }
+
+}
+
+
+function updateProjectUI(){
+
+    if(!projectConfig){
+
+        $("projectState")
+            .textContent =
+            "لم يتم تحميل مشروع";
+
+        $("projectDuration")
+            .textContent =
+            "—";
+
+        $("projectRatio")
+            .textContent =
+            "—";
+
+        $("projectScenes")
+            .textContent =
+            "—";
+
+        return;
+
+    }
+
+    $("projectState")
+        .textContent =
+        "جاهز";
+
+    $("projectDuration")
+        .textContent =
+        projectConfig.duration +
+        " ثانية";
+
+    $("projectRatio")
+        .textContent =
+        projectConfig.ratio;
+
+    $("projectScenes")
+        .textContent =
+        projectConfig.scenes.length
+            ? projectConfig.scenes.length
+            : "تلقائي";
+
+}
+
+
+/* =========================================================
+   LOAD PROJECT BUTTON
+========================================================= */
+
+$("loadProject")
+    .addEventListener(
+        "click",
+        loadProject
+    );
+
+
+$("htmlCode")
+    .addEventListener(
+        "paste",
+        () => {
+
+            /*
+              Give the browser a moment
+              to place pasted text.
+            */
+
+            setTimeout(
+                () => {
+
+                    if(
+                        $("htmlCode")
+                            .value
+                            .trim()
+                    ){
+
+                        loadProject();
+
+                    }
+
+                },
+                100
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+$("clearCode")
+    .addEventListener(
+        "click",
+        () => {
+
+            if(exporting){
+                return;
+            }
+
+            $("htmlCode").value =
+                "";
+
+            $("preview").srcdoc =
+                "";
+
+            projectConfig =
+                null;
+
+            projectSource =
+                "";
+
+            updateProjectUI();
+
+            engineState(
+                "جاهز"
+            );
+
+            showStatus(
+                "تم مسح المشروع.",
+                "info"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+$("validate")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const result =
+                await loadProject();
+
+            if(!result){
+                return;
+            }
+
+            try{
+
+                const duration =
+                    result.config.duration;
+
+                const render =
+                    result.render;
+
+                /*
+                  Test multiple points.
+                */
+
+                const points = [
+                    0,
+                    duration * 250,
+                    duration * 500,
+                    duration * 750,
+                    duration * 1000
+                ];
+
+                for(
+                    const point of points
+                ){
+
+                    render(point);
+
+                    await nextPaint();
+
+                }
+
+                /*
+                  Check Arabic text.
+                */
+
+                const doc =
+                    result
+                        .iframe
+                        .contentDocument;
+
+                const arabicElements =
+                    Array.from(
+                        doc.querySelectorAll(
+                            "*"
+                        )
+                    )
+                    .filter(
+                        el =>
+                            /[\u0600-\u06FF]/.test(
+                                el.textContent || ""
+                            )
+                    );
+
+                let brokenArabic =
+                    false;
+
+                for(
+                    const el of
+                    arabicElements
+                ){
+
+                    const text =
+                        (el.textContent || "")
+                            .trim();
+
+                    if(
+                        text.length > 3 &&
+                        /^[\u0600-\u06FF\s]+$/.test(
+                            text
+                        ) &&
+                        text.includes(" ")
+                    ){
+
+                        /*
+                          This is only a warning
+                          because spaces can be legitimate.
+                        */
+
+                    }
+
+                }
+
+                /*
+                  Resource check.
+                */
+
+                const badImages =
+                    Array.from(
+                        doc.images || []
+                    )
+                    .filter(
+                        img =>
+                            !img.complete ||
+                            (
+                                img.src &&
+                                img.naturalWidth === 0
+                            )
+                    );
+
+                result.iframe.remove();
+
+                if(
+                    badImages.length
+                ){
+
+                    showStatus(
+                        "الحركة سليمة، لكن توجد صور لم تُحمّل. هذه الصور قد لا تظهر في التصدير.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+                showStatus(
+                    "المشروع سليم: المدة والحركة والموارد الأساسية جاهزة للتصدير.",
+                    "success"
+                );
+
+            }catch(error){
+
+                try{
+                    result.iframe.remove();
+                }catch(e){}
+
+                showStatus(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CAPTURE OPTIONS
+========================================================= */
+
+function getOutputSize(){
+
+    if(
+        projectConfig.ratio ===
+        "16:9"
+    ){
+
+        if(
+            currentResolution ===
+            1080
+        ){
+
+            return {
+                width:1920,
+                height:1080
+            };
+
+        }
+
+        return {
+            width:1280,
+            height:720
+        };
+
+    }
+
+    if(
+        currentResolution ===
+        1080
+    ){
+
+        return {
+            width:1080,
+            height:1920
+        };
+
+    }
+
+    return {
+        width:720,
+        height:1280
+    };
+
+}
+
+
+/* =========================================================
+   FIXED RENDER SIZE
+========================================================= */
+
+function getStageSize(){
+
+    if(
+        projectConfig.ratio ===
+        "16:9"
+    ){
+
+        return {
+            width:1280,
+            height:720
+        };
+
+    }
+
+    return {
+        width:720,
+        height:1280
+    };
+
+}
+
+
+/* =========================================================
+   PREPARE DOCUMENT FOR CAPTURE
+========================================================= */
+
+async function prepareDocument(
+    iframe
+){
+
+    const doc =
+        iframe.contentDocument;
+
+    const win =
+        iframe.contentWindow;
+
+    /*
+      Wait for fonts and images.
+    */
+
+    await waitForResources(
+        doc
+    );
+
+
+    /*
+      Freeze viewport-like dimensions
+      inside the document.
+    */
+
+    const size =
+        getStageSize();
+
+    const style =
+        doc.createElement(
+            "style"
+        );
+
+    style.id =
+        "motion-export-freeze";
+
+    style.textContent = `
+
+html,
+body{
+    width:${size.width}px !important;
+    height:${size.height}px !important;
+    min-width:${size.width}px !important;
+    min-height:${size.height}px !important;
+    max-width:${size.width}px !important;
+    max-height:${size.height}px !important;
+    overflow:hidden !important;
+    margin:0 !important;
+    padding:0 !important;
+}
+
+body{
+    position:relative !important;
+}
+
+#stage{
+    width:${size.width}px !important;
+    height:${size.height}px !important;
+    min-width:${size.width}px !important;
+    min-height:${size.height}px !important;
+    max-width:${size.width}px !important;
+    max-height:${size.height}px !important;
+    overflow:hidden !important;
+}
+
+`;
+
+    doc.head.appendChild(
+        style
+    );
+
+
+    /*
+      Force font loading for all
+      visible text families.
+    */
+
+    const textNodes =
+        Array.from(
+            doc.querySelectorAll(
+                "*"
+            )
+        )
+        .filter(
+            el =>
+                (
+                    el.textContent || ""
+                ).trim()
+        );
+
+    const fontRequests =
+        new Set();
+
+    textNodes.forEach(
+        el => {
+
+            const cs =
+                win.getComputedStyle(
+                    el
+                );
+
+            if(
+                cs.fontFamily
+            ){
+
+                const weight =
+                    cs.fontWeight ||
+                    "400";
+
+                const style =
+                    cs.fontStyle ||
+                    "normal";
+
+                const size =
+                    cs.fontSize ||
+                    "16px";
+
+                fontRequests.add(
+                    `${style} ${weight} ${size} ${cs.fontFamily}`
+                );
+
+            }
+
+        }
+    );
+
+    if(
+        doc.fonts &&
+        doc.fonts.load
+    ){
+
+        for(
+            const request
+            of fontRequests
+        ){
+
+            try{
+
+                await doc.fonts.load(
+                    request
+                );
+
+            }catch(e){}
+
+        }
+
+        try{
+
+            await doc.fonts.ready;
+
+        }catch(e){}
+
+    }
+
+
+    /*
+      Force layout.
+    */
+
+    void doc.body.offsetHeight;
+
+    void doc.documentElement.offsetHeight;
+
+    await nextPaint();
+
+}
+
+
+/* =========================================================
+   HTML2CANVAS CAPTURE
+========================================================= */
+
+async function captureCanvas(
+    iframe,
+    mode = "normal"
+){
+
+    const doc =
+        iframe.contentDocument;
+
+    const size =
+        getStageSize();
+
+    const target =
+        doc.getElementById(
+            "stage"
+        ) ||
+        doc.body;
+
+    /*
+      normal capture
+    */
+
+    let canvas =
+        await html2canvas(
+            target,
+            {
+
+                backgroundColor:
+                    "#000",
+
+                scale:1,
+
+                useCORS:true,
+
+                allowTaint:false,
+
+                logging:false,
+
+                width:
+                    size.width,
+
+                height:
+                    size.height,
+
+                windowWidth:
+                    size.width,
+
+                windowHeight:
+                    size.height,
+
+                scrollX:0,
+
+                scrollY:0,
+
+                foreignObjectRendering:
+                    mode ===
+                    "foreign"
+
+            }
+        );
+
+    /*
+      If the result is suspiciously
+      empty, retry using foreignObject.
+    */
+
+    if(
+        mode === "auto" &&
+        canvasLooksEmpty(
+            canvas
+        )
+    ){
+
+        canvas =
+            await html2canvas(
+                target,
+                {
+
+                    backgroundColor:
+                        "#000",
+
+                    scale:1,
+
+                    useCORS:true,
+
+                    allowTaint:false,
+
+                    logging:false,
+
+                    width:
+                        size.width,
+
+                    height:
+                        size.height,
+
+                    windowWidth:
+                        size.width,
+
+                    windowHeight:
+                        size.height,
+
+                    scrollX:0,
+
+                    scrollY:0,
+
+                    foreignObjectRendering:
+                        true
+
+                }
+            );
+
+    }
+
+    return canvas;
+
+}
+
+
+function canvasLooksEmpty(
+    canvas
+){
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    if(!ctx){
+        return true;
+    }
+
+    const sample =
+        document.createElement(
+            "canvas"
+        );
+
+    sample.width =
+        20;
+
+    sample.height =
+        20;
+
+    const sctx =
+        sample.getContext(
+            "2d"
+        );
+
+    sctx.drawImage(
+        canvas,
+        0,
+        0,
+        20,
+        20
+    );
+
+    const data =
+        sctx.getImageData(
+            0,
+            0,
+            20,
+            20
+        ).data;
+
+    let nonBlack =
+        0;
+
+    for(
+        let i=0;
+        i<data.length;
+        i+=4
+    ){
+
+        if(
+            data[i] > 8 ||
+            data[i+1] > 8 ||
+            data[i+2] > 8 ||
+            data[i+3] > 8
+        ){
+
+            nonBlack++;
+
+        }
+
+    }
+
+    return nonBlack < 3;
+
+}
+
+
+/* =========================================================
+   TEST FRAME
+========================================================= */
+
+$("testFrame")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if(!projectConfig){
+
+                const result =
+                    await loadProject();
+
+                if(!result){
+                    return;
+                }
+
+            }
+
+            try{
+
+                engineState(
+                    "تحضير Frame..."
+                );
+
+                const result =
+                    await extractConfigFromText(
+                        projectSource
+                    );
+
+                await prepareDocument(
+                    result.iframe
+                );
+
+                result.render(
+                    result.config.duration *
+                    500
+                );
+
+                await nextPaint();
+
+                const canvas =
+                    await captureCanvas(
+                        result.iframe,
+                        "auto"
+                    );
+
+                const blob =
+                    await new Promise(
+                        resolve =>
+                            canvas.toBlob(
+                                resolve,
+                                "image/png"
+                            )
+                    );
+
+                result.iframe.remove();
+
+                const url =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+                /*
+                  Opening instead of forced
+                  download is more reliable
+                  on iPhone.
+                */
+
+                window.open(
+                    url,
+                    "_blank"
+                );
+
+                engineState(
+                    "تم اختبار Frame"
+                );
+
+                showStatus(
+                    "تم فتح Frame من منتصف المشروع.",
+                    "success"
+                );
+
+            }catch(error){
+
+                console.error(
+                    error
+                );
+
+                engineState(
+                    "خطأ"
+                );
+
+                showStatus(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   WEBCODECS
+========================================================= */
+
+async function getEncoderConfig(){
+
+    if(
+        typeof VideoEncoder ===
+        "undefined"
     ){
 
         throw new Error(
-            "هذا المتصفح لا يدعم VideoEncoder. جرّب Safari حديثًا أو Chrome/Edge حديثًا."
+            "هذا المتصفح لا يوفر VideoEncoder."
         );
 
     }
 
     if(
         !window.isSecureContext &&
-        location.protocol !== "file:"
+        location.protocol !==
+        "file:"
     ){
 
         throw new Error(
@@ -2416,160 +3466,241 @@ async function checkEncoder(){
 
     }
 
-    const config = {
+    const size =
+        getOutputSize();
 
-        codec:"vp09.00.10.08",
-
-        width:
-            currentRatio === "16:9"
-                ? currentResolution === 1080
-                    ? 1920
-                    : 1280
-                : currentResolution === 1080
-                    ? 1080
-                    : 720,
-
-        height:
-            currentRatio === "16:9"
-                ? currentResolution === 1080
-                    ? 1080
-                    : 720
-                : currentResolution === 1080
-                    ? 1920
-                    : 1280,
-
-        bitrate:
-            Number($("quality").value),
-
-        framerate:
-            currentFPS,
-
-        latencyMode:"quality"
-
-    };
-
-    const supported =
-        await VideoEncoder.isConfigSupported(
-            config
+    const bitrate =
+        Number(
+            $("quality").value
         );
 
-    if(
-        !supported ||
-        !supported.supported
+    const candidates = [
+
+        "vp09.00.10.08",
+        "vp09.00.10.08",
+        "vp8"
+
+    ];
+
+    for(
+        const codec
+        of candidates
     ){
 
-        throw new Error(
-            "الجهاز لا يدعم ترميز VP9 المطلوب للتصدير."
-        );
+        const config = {
+
+            codec,
+
+            width:
+                size.width,
+
+            height:
+                size.height,
+
+            bitrate,
+
+            framerate:
+                currentFPS,
+
+            latencyMode:
+                "quality"
+
+        };
+
+        try{
+
+            const result =
+                await VideoEncoder
+                    .isConfigSupported(
+                        config
+                    );
+
+            if(
+                result &&
+                result.supported
+            ){
+
+                return config;
+
+            }
+
+        }catch(e){}
 
     }
 
-    return config;
+    throw new Error(
+        "لم يجد الجهاز إعداد فيديو مدعومًا."
+    );
 
 }
 
 
-/* ============================================================
+/* =========================================================
    EXPORT
-============================================================ */
+========================================================= */
 
-$("exportBtn").addEventListener(
-    "click",
-    startExport
-);
+$("exportBtn")
+    .addEventListener(
+        "click",
+        startExport
+    );
 
 
-$("cancelBtn").addEventListener(
-    "click",
-    ()=>{
+$("cancelBtn")
+    .addEventListener(
+        "click",
+        () => {
 
-        cancelRequested = true;
+            cancelRequested =
+                true;
 
-        setEngineState(
-            "جاري إيقاف التصدير..."
-        );
+            engineState(
+                "جاري الإيقاف..."
+            );
 
-    }
-);
+        }
+    );
 
 
 async function startExport(){
 
-    if(exporting) return;
-
-    const source =
-        htmlCode.value.trim();
-
-    if(!source){
-
-        showStatus(
-            "الصق كود HTML أولًا.",
-            "error"
-        );
-
+    if(exporting){
         return;
+    }
+
+    /*
+      Ensure project is loaded.
+    */
+
+    if(!projectConfig){
+
+        const loaded =
+            await loadProject();
+
+        if(!loaded){
+            return;
+        }
 
     }
 
-    exporting = true;
-    cancelRequested = false;
+    exporting =
+        true;
 
-    $("exportBtn").style.display =
+    cancelRequested =
+        false;
+
+    $("exportBtn")
+        .style.display =
         "none";
 
-    $("cancelBtn").style.display =
+    $("cancelBtn")
+        .style.display =
         "block";
 
-    progressBox.style.display =
+    $("progressBox")
+        .style.display =
         "block";
 
-    progress.style.width =
+    $("progressBar")
+        .style.width =
         "0%";
+
+
+    let renderIframe =
+        null;
+
+    let encoder =
+        null;
 
     try{
 
-        setEngineState(
-            "فحص الجهاز..."
+        /*
+          =====================================================
+          1. Read duration from project
+          =====================================================
+        */
+
+        const duration =
+            projectConfig.duration;
+
+        const ratio =
+            projectConfig.ratio;
+
+
+        /*
+          =====================================================
+          2. Encoder
+          =====================================================
+        */
+
+        engineState(
+            "فحص الترميز..."
         );
 
         const encoderConfig =
-            await checkEncoder();
+            await getEncoderConfig();
 
-        setEngineState(
-            "تحميل المشروع..."
+
+        /*
+          =====================================================
+          3. Load project in isolated iframe
+          =====================================================
+        */
+
+        engineState(
+            "تحميل الخطوط والعناصر..."
         );
 
-        const iframe =
-            await loadRenderIframe(
-                source
+        const result =
+            await extractConfigFromText(
+                projectSource
             );
 
-        const render =
-            getRenderFunction(
-                iframe.contentWindow
-            );
+        renderIframe =
+            result.iframe;
 
-        if(!render){
+
+        /*
+          =====================================================
+          4. Prepare exact render environment
+          =====================================================
+        */
+
+        await prepareDocument(
+            renderIframe
+        );
+
+
+        /*
+          =====================================================
+          5. Validate render
+          =====================================================
+        */
+
+        if(
+            typeof result.render !==
+            "function"
+        ){
 
             throw new Error(
-                "لا توجد window.renderAt(timeMs). استخدم المولد الذكي الجديد."
+                "renderAt() غير موجود."
             );
 
         }
 
+
         /*
-          أبعاد الإخراج.
+          =====================================================
+          6. Output
+          =====================================================
         */
 
-        const width =
-            encoderConfig.width;
-
-        const height =
-            encoderConfig.height;
+        const outputSize =
+            getOutputSize();
 
         const totalFrames =
             Math.ceil(
-                exportDuration *
+                duration *
                 currentFPS
             );
 
@@ -2577,25 +3708,29 @@ async function startExport(){
             1000000 /
             currentFPS;
 
+
         /*
-          Canvas ثابت.
+          =====================================================
+          7. Canvas
+          =====================================================
         */
 
         const canvas =
-            document.createElement("canvas");
+            document.createElement(
+                "canvas"
+            );
 
         canvas.width =
-            width;
+            outputSize.width;
 
         canvas.height =
-            height;
+            outputSize.height;
 
         const ctx =
             canvas.getContext(
                 "2d",
                 {
-                    alpha:false,
-                    desynchronized:false
+                    alpha:false
                 }
             );
 
@@ -2607,8 +3742,11 @@ async function startExport(){
 
         }
 
+
         /*
-          Muxer
+          =====================================================
+          8. Muxer
+          =====================================================
         */
 
         const muxer =
@@ -2618,47 +3756,71 @@ async function startExport(){
                     new WebMMuxer.ArrayBufferTarget(),
 
                 video:{
-                    codec:"V_VP9",
-                    width,
-                    height,
-                    frameRate:currentFPS
+                    codec:
+                        encoderConfig.codec
+                            .startsWith("vp8")
+                            ? "V_VP8"
+                            : "V_VP9",
+
+                    width:
+                        outputSize.width,
+
+                    height:
+                        outputSize.height,
+
+                    frameRate:
+                        currentFPS
+
                 }
 
             });
 
-        let encodedFrames = 0;
 
-        const encoder =
+        /*
+          =====================================================
+          9. Encoder
+          =====================================================
+        */
+
+        let encoderError =
+            null;
+
+        encoder =
             new VideoEncoder({
 
-                output(chunk,metadata){
+                output(
+                    chunk,
+                    metadata
+                ){
 
                     muxer.addVideoChunk(
                         chunk,
                         metadata
                     );
 
-                    encodedFrames++;
-
                 },
 
-                error(error){
+                error(
+                    error
+                ){
 
-                    console.error(
-                        "VideoEncoder:",
-                        error
-                    );
+                    encoderError =
+                        error;
 
                 }
 
             });
 
+
         encoder.configure(
             encoderConfig
         );
 
+
         /*
-          Frame loop.
+          =====================================================
+          10. FRAME LOOP
+          =====================================================
         */
 
         for(
@@ -2667,13 +3829,9 @@ async function startExport(){
             frameIndex++
         ){
 
-            if(cancelRequested){
-
-                try{
-                    encoder.close();
-                }catch(e){}
-
-                iframe.remove();
+            if(
+                cancelRequested
+            ){
 
                 throw new Error(
                     "تم إيقاف التصدير."
@@ -2681,117 +3839,135 @@ async function startExport(){
 
             }
 
+            if(
+                encoderError
+            ){
+
+                throw encoderError;
+
+            }
+
+
             /*
-              الزمن الدقيق لهذا الـFrame.
+              Exact project time.
             */
 
             const timeMs =
                 (
                     frameIndex /
                     currentFPS
-                ) * 1000;
+                ) *
+                1000;
+
 
             /*
-              أهم خطوة:
-              renderAt() يحدد حالة
-              جميع العناصر.
+              Let the AI project
+              determine ALL visual state.
             */
 
-            render(
+            result.render(
                 timeMs
             );
 
+
             /*
-              نعطي المتصفح فرصة
-              لتطبيق styles.
+              Critical:
+              wait for browser layout
+              after renderAt().
             */
 
             await nextPaint();
 
+
+            /*
+              Re-check fonts.
+            */
+
+            if(
+                renderIframe
+                    .contentDocument
+                    .fonts
+            ){
+
+                try{
+
+                    await renderIframe
+                        .contentDocument
+                        .fonts
+                        .ready;
+
+                }catch(e){}
+
+            }
+
+
             /*
               Capture.
+
+              Use auto mode so a blank
+              capture can be retried
+              with foreignObject.
             */
 
             const rendered =
-                await html2canvas(
-                    iframe.contentDocument.documentElement,
-                    {
-
-                        backgroundColor:"#000",
-
-                        scale:
-                            width /
-                            (
-                                currentRatio === "16:9"
-                                    ? 1280
-                                    : 720
-                            ),
-
-                        useCORS:true,
-
-                        allowTaint:false,
-
-                        logging:false,
-
-                        width:
-                            currentRatio === "16:9"
-                                ? 1280
-                                : 720,
-
-                        height:
-                            currentRatio === "16:9"
-                                ? 720
-                                : 1280
-
-                    }
+                await captureCanvas(
+                    renderIframe,
+                    "auto"
                 );
 
+
             /*
-              نرسم الصورة بالحجم النهائي.
+              Resize to final output.
             */
 
             ctx.clearRect(
                 0,
                 0,
-                width,
-                height
+                outputSize.width,
+                outputSize.height
             );
 
             ctx.drawImage(
                 rendered,
                 0,
                 0,
-                width,
-                height
+                outputSize.width,
+                outputSize.height
             );
 
+
             /*
-              WebCodecs VideoFrame.
+              Create VideoFrame.
             */
 
-            const videoFrame =
+            const frame =
                 new VideoFrame(
                     canvas,
                     {
+
                         timestamp:
                             Math.round(
                                 frameIndex *
                                 frameDuration
                             ),
+
                         duration:
                             Math.round(
                                 frameDuration
                             )
+
                     }
                 );
 
+
             /*
-              أول Frame Keyframe.
+              Keyframes.
             */
 
             encoder.encode(
-                videoFrame,
+                frame,
                 {
+
                     keyFrame:
                         frameIndex === 0 ||
                         frameIndex %
@@ -2799,62 +3975,93 @@ async function startExport(){
                                 1,
                                 currentFPS * 2
                             ) === 0
+
                 }
             );
 
-            videoFrame.close();
+
+            frame.close();
+
 
             /*
-              لا نترك Queue تكبر
-              بلا حدود.
+              Control queue.
             */
 
             while(
-                encoder.encodeQueueSize > 4
+                encoder.encodeQueueSize >
+                5
             ){
 
-                await wait(2);
+                await sleep(3);
 
-                if(cancelRequested){
+                if(
+                    cancelRequested
+                ){
+
                     break;
+
                 }
 
             }
+
 
             /*
               Progress.
             */
 
-            const pct =
+            const percent =
                 (
                     (frameIndex + 1) /
                     totalFrames
-                ) * 100;
+                ) *
+                100;
 
-            progress.style.width =
-                pct.toFixed(2) + "%";
+            $("progressBar")
+                .style.width =
+                percent +
+                "%";
 
-            setEngineState(
-                `تصدير ${frameIndex + 1} / ${totalFrames}`
+            engineState(
+                `${frameIndex + 1} / ${totalFrames}`
             );
 
         }
 
+
         /*
-          Flush.
+          =====================================================
+          11. Flush
+          =====================================================
         */
 
-        setEngineState(
+        engineState(
             "إنهاء الفيديو..."
         );
 
         await encoder.flush();
 
-        encoder.close();
 
-        iframe.remove();
+        if(
+            encoderError
+        ){
+
+            throw encoderError;
+
+        }
+
+
+        encoder.close();
+        encoder = null;
+
+
+        /*
+          =====================================================
+          12. Finalize
+          =====================================================
+        */
 
         muxer.finalize();
+
 
         const buffer =
             muxer.target.buffer;
@@ -2863,83 +4070,200 @@ async function startExport(){
             new Blob(
                 [buffer],
                 {
-                    type:"video/webm"
+                    type:
+                        "video/webm"
                 }
             );
 
+
         /*
-          حفظ / فتح الفيديو.
+          =====================================================
+          13. Result
+          =====================================================
         */
 
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
 
-        const filename =
-            "motion-" +
-            Date.now() +
-            ".webm";
-
-        const link =
-            document.createElement("a");
-
-        link.href =
-            url;
-
-        link.download =
-            filename;
-
-        link.textContent =
-            "فتح الفيديو";
-
-        link.style.position =
-            "fixed";
-
-        link.style.left =
-            "-9999px";
-
-        document.body.appendChild(link);
 
         /*
-          click يعمل على أغلب
-          المتصفحات.
+          On mobile, open a result
+          page rather than depending
+          entirely on download.
         */
 
-        link.click();
+        const resultWindow =
+            window.open(
+                "",
+                "_blank"
+            );
 
-        link.remove();
+        if(
+            resultWindow
+        ){
+
+            resultWindow.document
+                .write(`
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Motion Export</title>
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:#080a0d;
+    color:white;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+video{
+    max-width:100%;
+    max-height:80vh;
+    background:#000;
+    border-radius:14px;
+}
+a{
+    margin-top:15px;
+    color:#111;
+    background:#e1c27e;
+    padding:12px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+</style>
+</head>
+<body>
+<video
+    controls
+    autoplay
+    playsinline
+    src="${url}"
+></video>
+<a href="${url}" download="motion.webm">
+حفظ الفيديو
+</a>
+</body>
+</html>
+            `);
+
+            resultWindow.document.close();
+
+        }else{
+
+            /*
+              Popup blocked:
+              create a visible download link.
+            */
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href =
+                url;
+
+            link.download =
+                "motion.webm";
+
+            link.textContent =
+                "فتح الفيديو";
+
+            link.style.position =
+                "fixed";
+
+            link.style.zIndex =
+                "99999";
+
+            link.style.bottom =
+                "20px";
+
+            link.style.left =
+                "20px";
+
+            link.style.padding =
+                "14px 18px";
+
+            link.style.background =
+                "#e1c27e";
+
+            link.style.color =
+                "#111";
+
+            link.style.borderRadius =
+                "12px";
+
+            document.body.appendChild(
+                link
+            );
+
+        }
+
 
         /*
-          على iPhone قد يكون فتح
-          الرابط أفضل من download.
+          Keep URL alive for
+          mobile sharing/saving.
         */
 
-        setTimeout(()=>{
-            try{
-                URL.revokeObjectURL(url);
-            }catch(e){}
-        },60000);
+        setTimeout(
+            () => {
 
-        progress.style.width =
+                try{
+                    URL.revokeObjectURL(
+                        url
+                    );
+                }catch(e){}
+
+            },
+            10 * 60 * 1000
+        );
+
+
+        $("progressBar")
+            .style.width =
             "100%";
 
-        setEngineState(
+        engineState(
             "اكتمل التصدير"
         );
 
         showStatus(
-            "تم تصدير الفيديو بنجاح بصيغة WebM.",
+            `تم تصدير ${duration} ثانية كاملة.`,
             "success"
         );
 
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
-        setEngineState(
+        if(
+            encoder
+        ){
+
+            try{
+                encoder.close();
+            }catch(e){}
+
+        }
+
+        engineState(
             "فشل التصدير"
         );
 
-        progress.style.width =
+        $("progressBar")
+            .style.width =
             "0%";
 
         showStatus(
@@ -2948,15 +4272,33 @@ async function startExport(){
             "error"
         );
 
+
     }finally{
 
-        exporting = false;
-        cancelRequested = false;
+        try{
 
-        $("exportBtn").style.display =
+            if(
+                renderIframe
+            ){
+
+                renderIframe.remove();
+
+            }
+
+        }catch(e){}
+
+        exporting =
+            false;
+
+        cancelRequested =
+            false;
+
+        $("exportBtn")
+            .style.display =
             "block";
 
-        $("cancelBtn").style.display =
+        $("cancelBtn")
+            .style.display =
             "none";
 
     }
@@ -2964,31 +4306,12 @@ async function startExport(){
 }
 
 
-/* ============================================================
-   WAIT
-============================================================ */
+/* =========================================================
+   START
+========================================================= */
 
-function wait(ms){
-
-    return new Promise(resolve=>{
-        setTimeout(
-            resolve,
-            ms
-        );
-    });
-
-}
-
-
-/* ============================================================
-   STARTUP
-============================================================ */
-
-showPage("export");
-
-previewFrame.classList.toggle(
-    "vertical",
-    currentRatio === "9:16"
+showPage(
+    "export"
 );
 
 </script>
