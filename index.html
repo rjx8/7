@@ -1,22 +1,29 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
 <title>منصة المشاريع المرئية المتحركة</title>
 
 <style>
+
 :root{
     --bg:#071013;
     --panel:#0d191d;
-    --panel2:#111f24;
-    --line:rgba(255,255,255,.09);
-    --text:#edf4f3;
-    --muted:#8ea3a8;
+    --panel2:#101e23;
+    --line:rgba(255,255,255,.085);
+    --text:#eef5f4;
+    --muted:#8ea4a8;
     --gold:#c9a85a;
-    --green:#45c69a;
+    --gold2:#e3ca7c;
+    --green:#49c89b;
     --red:#df7474;
-    --blue:#5da9df;
+    --blue:#65aee0;
     --radius:18px;
 }
 
@@ -34,6 +41,7 @@ body{
     font-family:
         "Tajawal",
         "Noto Sans Arabic",
+        "Cairo",
         Arial,
         sans-serif;
 }
@@ -53,13 +61,18 @@ button{
     cursor:pointer;
 }
 
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
 .app{
     min-height:100vh;
 }
 
-/* =========================
+/* =========================================
    TOP BAR
-========================= */
+========================================= */
 
 .topbar{
     position:sticky;
@@ -70,7 +83,7 @@ button{
     align-items:center;
     justify-content:space-between;
     padding:0 22px;
-    background:rgba(7,16,19,.92);
+    background:rgba(7,16,19,.94);
     border-bottom:1px solid var(--line);
     backdrop-filter:blur(18px);
 }
@@ -87,9 +100,14 @@ button{
     border-radius:12px;
     display:grid;
     place-items:center;
-    background:linear-gradient(135deg,#e1c678,#9e7b31);
+    background:linear-gradient(
+        135deg,
+        var(--gold2),
+        #94712d
+    );
     color:#111;
     font-weight:900;
+    font-size:16px;
 }
 
 .brand-name{
@@ -98,17 +116,17 @@ button{
 }
 
 .brand-sub{
-    font-size:10px;
+    font-size:9px;
     color:var(--muted);
-    margin-top:2px;
+    margin-top:3px;
 }
 
 .top-status{
     display:flex;
     align-items:center;
     gap:7px;
-    font-size:10px;
     color:var(--muted);
+    font-size:10px;
 }
 
 .status-dot{
@@ -116,12 +134,12 @@ button{
     height:7px;
     border-radius:50%;
     background:var(--green);
-    box-shadow:0 0 12px rgba(69,198,154,.7);
+    box-shadow:0 0 12px rgba(73,200,155,.7);
 }
 
-/* =========================
+/* =========================================
    NAV
-========================= */
+========================================= */
 
 .nav{
     max-width:1180px;
@@ -141,14 +159,14 @@ button{
 }
 
 .nav button.active{
-    background:rgba(201,168,90,.11);
-    border-color:rgba(201,168,90,.32);
     color:#fff;
+    background:rgba(201,168,90,.1);
+    border-color:rgba(201,168,90,.35);
 }
 
-/* =========================
+/* =========================================
    PAGES
-========================= */
+========================================= */
 
 .page{
     display:none;
@@ -161,27 +179,28 @@ button{
     display:block;
 }
 
-/* =========================
+/* =========================================
    HERO
-========================= */
+========================================= */
 
 .hero{
-    padding:28px;
+    padding:30px;
+    margin-bottom:17px;
     border:1px solid var(--line);
     border-radius:24px;
+
     background:
         radial-gradient(
-            circle at 85% 10%,
+            circle at 85% 5%,
             rgba(201,168,90,.12),
             transparent 28%
         ),
         radial-gradient(
-            circle at 10% 90%,
-            rgba(69,198,154,.08),
-            transparent 28%
+            circle at 5% 90%,
+            rgba(73,200,155,.07),
+            transparent 30%
         ),
         var(--panel);
-    margin-bottom:18px;
 }
 
 .kicker{
@@ -193,21 +212,21 @@ button{
 
 .hero h1{
     margin:0;
-    font-size:clamp(27px,5vw,46px);
+    font-size:clamp(28px,5vw,46px);
     line-height:1.18;
 }
 
 .hero p{
-    margin:13px 0 0;
-    max-width:780px;
+    max-width:800px;
+    margin:14px 0 0;
     color:var(--muted);
     font-size:12px;
     line-height:1.9;
 }
 
-/* =========================
+/* =========================================
    GENERATOR
-========================= */
+========================================= */
 
 .generator-grid{
     display:grid;
@@ -223,9 +242,9 @@ button{
 }
 
 .panel-title{
+    margin-bottom:15px;
     font-size:13px;
     font-weight:900;
-    margin-bottom:15px;
 }
 
 .fields{
@@ -245,13 +264,14 @@ button{
 }
 
 .field label{
-    color:#b7c7ca;
+    color:#b8c7ca;
     font-size:10px;
     font-weight:700;
 }
 
 .field input,
-.field textarea{
+.field textarea,
+.field select{
     width:100%;
     border:1px solid var(--line);
     background:#071114;
@@ -263,7 +283,8 @@ button{
 }
 
 .field input:focus,
-.field textarea:focus{
+.field textarea:focus,
+.field select:focus{
     border-color:rgba(201,168,90,.5);
 }
 
@@ -307,13 +328,13 @@ button{
 }
 
 .creative{
-    height:100%;
+    min-height:100%;
     border:1px solid rgba(201,168,90,.25);
     background:
         linear-gradient(
             145deg,
-            rgba(201,168,90,.10),
-            rgba(69,198,154,.035)
+            rgba(201,168,90,.1),
+            rgba(73,200,155,.035)
         );
     border-radius:18px;
     padding:20px;
@@ -335,14 +356,14 @@ button{
 }
 
 .creative p{
+    margin:0;
     color:var(--muted);
     font-size:11px;
     line-height:1.9;
-    margin:0;
 }
 
 .creative-items{
-    margin-top:17px;
+    margin-top:18px;
     display:grid;
     gap:9px;
 }
@@ -351,8 +372,8 @@ button{
     display:flex;
     align-items:flex-start;
     gap:8px;
-    font-size:10px;
     color:#cad5d7;
+    font-size:10px;
     line-height:1.7;
 }
 
@@ -361,25 +382,29 @@ button{
     height:16px;
     flex:none;
     border-radius:5px;
-    border:1px solid rgba(69,198,154,.25);
-    background:rgba(69,198,154,.08);
+    border:1px solid rgba(73,200,155,.25);
+    background:rgba(73,200,155,.08);
 }
 
 .generate{
     width:100%;
-    margin-top:16px;
     height:54px;
+    margin-top:16px;
     border:0;
     border-radius:15px;
-    background:linear-gradient(135deg,#e2c675,#a9873c);
+    background:linear-gradient(
+        135deg,
+        var(--gold2),
+        #a17d34
+    );
     color:#101010;
     font-weight:900;
     font-size:12px;
 }
 
-/* =========================
+/* =========================================
    PROMPT
-========================= */
+========================================= */
 
 .prompt-box{
     display:none;
@@ -394,7 +419,6 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
     margin-bottom:8px;
 }
 
@@ -413,7 +437,7 @@ button{
 
 #prompt{
     width:100%;
-    min-height:440px;
+    min-height:450px;
     resize:vertical;
     background:#040b0e;
     color:#dce8e8;
@@ -421,13 +445,15 @@ button{
     border-radius:14px;
     padding:14px;
     outline:0;
+    direction:rtl;
+    text-align:right;
     line-height:1.8;
     font-size:10px;
 }
 
-/* =========================
+/* =========================================
    WORKSPACE
-========================= */
+========================================= */
 
 .workspace{
     display:grid;
@@ -474,12 +500,14 @@ button{
     place-items:center;
     border-radius:14px;
     overflow:hidden;
+
     background:
         radial-gradient(
             circle,
             #18282c 1px,
             transparent 1px
         );
+
     background-size:15px 15px;
 }
 
@@ -497,9 +525,9 @@ button{
     background:#000;
 }
 
-/* =========================
+/* =========================================
    SIDE
-========================= */
+========================================= */
 
 .side{
     display:flex;
@@ -521,7 +549,7 @@ button{
 
 #code{
     width:100%;
-    height:270px;
+    height:280px;
     resize:vertical;
     background:#040b0e;
     color:#dce8e8;
@@ -529,14 +557,17 @@ button{
     border-radius:12px;
     outline:0;
     padding:11px;
+
     direction:ltr;
     text-align:left;
+
     font-family:
         ui-monospace,
         SFMono-Regular,
         Menlo,
         Consolas,
         monospace;
+
     font-size:9px;
     line-height:1.65;
 }
@@ -560,8 +591,8 @@ button{
 
 .btn.green{
     color:#8ee0c1;
-    border-color:rgba(69,198,154,.25);
-    background:rgba(69,198,154,.08);
+    border-color:rgba(73,200,155,.25);
+    background:rgba(73,200,155,.08);
 }
 
 .btn.red{
@@ -599,9 +630,37 @@ button{
     text-align:left;
 }
 
-/* =========================
+/* =========================================
+   EXPORT SETTINGS
+========================================= */
+
+.export-settings{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.export-settings label{
+    color:var(--muted);
+    font-size:9px;
+    margin-bottom:4px;
+    display:block;
+}
+
+.export-settings select{
+    width:100%;
+    border:1px solid var(--line);
+    background:#071114;
+    color:#fff;
+    border-radius:10px;
+    padding:9px;
+    outline:0;
+    font-size:10px;
+}
+
+/* =========================================
    VALIDATION
-========================= */
+========================================= */
 
 .validation{
     display:grid;
@@ -619,7 +678,7 @@ button{
 }
 
 .validation-item.ok{
-    border-color:rgba(69,198,154,.2);
+    border-color:rgba(73,200,155,.2);
 }
 
 .validation-item.warn{
@@ -640,9 +699,9 @@ button{
     background:rgba(255,255,255,.04);
 }
 
-/* =========================
+/* =========================================
    TIMELINE
-========================= */
+========================================= */
 
 .timeline-panel{
     margin-top:12px;
@@ -694,9 +753,9 @@ button{
     box-shadow:0 0 12px #fff;
 }
 
-/* =========================
+/* =========================================
    PROGRESS
-========================= */
+========================================= */
 
 .progress-wrap{
     display:none;
@@ -717,7 +776,12 @@ button{
 .progress-bar{
     height:100%;
     width:0;
-    background:linear-gradient(90deg,var(--gold),#ecd68f);
+    background:
+        linear-gradient(
+            90deg,
+            var(--gold),
+            #ecd68f
+        );
 }
 
 .progress-text{
@@ -727,13 +791,13 @@ button{
     font-size:9px;
 }
 
-/* =========================
+/* =========================================
    DOWNLOAD
-========================= */
+========================================= */
 
 .download{
     display:none;
-    margin-top:10px;
+    margin-top:9px;
 }
 
 .download.show{
@@ -746,9 +810,9 @@ button{
     text-align:center;
 }
 
-/* =========================
+/* =========================================
    MOBILE
-========================= */
+========================================= */
 
 .mobile-nav{
     display:none;
@@ -851,16 +915,21 @@ button{
     .mobile-nav{
         display:grid;
         grid-template-columns:1fr 1fr;
+
         position:fixed;
         left:0;
         right:0;
         bottom:0;
+
         z-index:100;
+
         height:68px;
+
         padding:
             7px
             8px
             calc(7px + env(safe-area-inset-bottom));
+
         background:rgba(7,16,19,.97);
         border-top:1px solid var(--line);
         backdrop-filter:blur(18px);
@@ -882,9 +951,15 @@ button{
     .btns{
         grid-template-columns:1fr;
     }
+
+    .export-settings{
+        grid-template-columns:1fr;
+    }
 }
+
 </style>
 </head>
+
 
 <body>
 
@@ -892,9 +967,12 @@ button{
 
     <div class="brand">
 
-        <div class="logo">م</div>
+        <div class="logo">
+            م
+        </div>
 
         <div>
+
             <div class="brand-name">
                 منصة المشاريع المرئية
             </div>
@@ -902,13 +980,19 @@ button{
             <div class="brand-sub">
                 مشاريع دراسية بأسلوب الموشن
             </div>
+
         </div>
 
     </div>
 
     <div class="top-status">
+
         <span class="status-dot"></span>
-        جاهز
+
+        <span id="globalStatus">
+            جاهز
+        </span>
+
     </div>
 
 </header>
@@ -932,9 +1016,9 @@ button{
 </nav>
 
 
-<!-- =========================================================
+<!-- =====================================================
      GENERATOR
-========================================================= -->
+===================================================== -->
 
 <section
     class="page active"
@@ -954,9 +1038,10 @@ button{
         </h1>
 
         <p>
-            الذكاء الاصطناعي يبني المحتوى والمشاهد والهوية
-            البصرية والحركة، ثم تحصل على مشروع مرئي متكامل
-            يمكن تشغيله وتصديره كفيديو.
+            أدخل بيانات مشروعك، وسيتم إنشاء Prompt صارم
+            يطلب من الذكاء الاصطناعي بناء مشروع تعليمي
+            متكامل بمشاهد وحركة وانتقالات، وليس مجرد
+            صفحة ثابتة.
         </p>
 
     </div>
@@ -973,63 +1058,109 @@ button{
             <div class="fields">
 
                 <div class="field full">
-                    <label>عنوان المشروع</label>
+
+                    <label>
+                        عنوان المشروع
+                    </label>
+
                     <input
                         id="title"
                         placeholder="مثال: أنظمة التشغيل"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>اسم الطالب</label>
+
+                    <label>
+                        اسم الطالب
+                    </label>
+
                     <input
                         id="student"
                         placeholder="أيمن"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>اسم المعلم / المعلمة</label>
+
+                    <label>
+                        اسم المعلم / المعلمة
+                    </label>
+
                     <input
                         id="teacher"
                         placeholder="أ. تهاني"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>المادة</label>
+
+                    <label>
+                        المادة
+                    </label>
+
                     <input
                         id="subject"
                         placeholder="التقنية الرقمية"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>الصف</label>
+
+                    <label>
+                        الصف
+                    </label>
+
                     <input
                         id="grade"
                         placeholder="أول ثانوي"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>الفصل الدراسي</label>
+
+                    <label>
+                        الفصل الدراسي
+                    </label>
+
                     <input
                         id="semester"
                         placeholder="الفصل الأول"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>الدرس / الوحدة</label>
+
+                    <label>
+                        الدرس / الوحدة
+                    </label>
+
                     <input
                         id="lesson"
                         placeholder="أنظمة التشغيل"
                     >
+
                 </div>
 
+
                 <div class="field">
-                    <label>المدة بالثواني</label>
+
+                    <label>
+                        مدة المشروع بالثواني
+                    </label>
+
                     <input
                         id="duration"
                         type="number"
@@ -1037,18 +1168,23 @@ button{
                         max="600"
                         value="60"
                     >
+
                 </div>
 
+
                 <div class="field full">
+
                     <label>
                         متطلبات أو معلومات إضافية
                     </label>
 
                     <textarea
                         id="extra"
-                        placeholder="مثال: ركز على أنواع أنظمة التشغيل واستخداماتها..."
+                        placeholder="مثال: أريد التركيز على أنواع أنظمة التشغيل واستخداماتها..."
                     ></textarea>
+
                 </div>
+
 
                 <div class="field full">
 
@@ -1063,16 +1199,31 @@ button{
                             class="active"
                             data-orientation="landscape"
                         >
-                            <strong>أفقي</strong>
-                            <span>16:9 — شاشات وعروض</span>
+
+                            <strong>
+                                أفقي
+                            </strong>
+
+                            <span>
+                                16:9 — عروض وشاشات
+                            </span>
+
                         </button>
+
 
                         <button
                             type="button"
                             data-orientation="portrait"
                         >
-                            <strong>عمودي</strong>
-                            <span>9:16 — جوال</span>
+
+                            <strong>
+                                عمودي
+                            </strong>
+
+                            <span>
+                                9:16 — الجوال
+                            </span>
+
                         </button>
 
                     </div>
@@ -1087,7 +1238,7 @@ button{
         <div class="creative">
 
             <span class="creative-badge">
-                الوضع الوحيد
+                الوضع الإبداعي
             </span>
 
             <h2>
@@ -1095,40 +1246,42 @@ button{
             </h2>
 
             <p>
-                لا نعطي الذكاء قالبًا جاهزًا. نعطيه الموضوع
-                والقواعد، وهو يختار الشكل المناسب للمشروع.
+                لا نعطي الذكاء قالبًا بصريًا جامدًا.
+                نعطيه الموضوع والقواعد التقنية،
+                وهو يختار طريقة بناء المشروع.
             </p>
+
 
             <div class="creative-items">
 
                 <div class="creative-item">
                     <i></i>
-                    يبني محتوى تعليميًا مترابطًا
+                    بناء محتوى تعليمي مترابط
                 </div>
 
                 <div class="creative-item">
                     <i></i>
-                    يقسم المحتوى إلى مشاهد
+                    تقسيم الموضوع إلى مشاهد
                 </div>
 
                 <div class="creative-item">
                     <i></i>
-                    يصمم الهوية البصرية
+                    تصميم هوية بصرية مناسبة
                 </div>
 
                 <div class="creative-item">
                     <i></i>
-                    يحرك العناصر بطريقة موشن
+                    حركة مرتبطة بالمعلومة
                 </div>
 
                 <div class="creative-item">
                     <i></i>
-                    يحافظ على وضوح العربية
+                    معالجة صحيحة للعربية
                 </div>
 
                 <div class="creative-item">
                     <i></i>
-                    يمنع ازدحام العناصر
+                    Safe Area ومنع التداخل
                 </div>
 
             </div>
@@ -1176,9 +1329,9 @@ button{
 </section>
 
 
-<!-- =========================================================
+<!-- =====================================================
      WORKSPACE
-========================================================= -->
+===================================================== -->
 
 <section
     class="page"
@@ -1213,10 +1366,11 @@ button{
                             class="chip"
                             id="formatInfo"
                         >
-                            تلقائي
+                            —
                         </span>
 
                     </div>
+
 
                     <span
                         class="chip"
@@ -1274,6 +1428,9 @@ button{
 
         <aside class="side">
 
+
+            <!-- PROJECT INFO -->
+
             <div class="side-panel">
 
                 <h3>
@@ -1312,6 +1469,8 @@ button{
             </div>
 
 
+            <!-- HTML -->
+
             <div class="side-panel">
 
                 <h3>
@@ -1332,7 +1491,7 @@ button{
                         class="btn primary"
                         id="load"
                     >
-                        تشغيل
+                        تشغيل المشروع
                     </button>
 
                     <button
@@ -1347,20 +1506,29 @@ button{
             </div>
 
 
+            <!-- VALIDATION -->
+
             <div class="side-panel">
 
                 <h3>
-                    الفحص
+                    فحص المشروع
                 </h3>
 
                 <div
                     class="validation"
                     id="validation"
                 >
+
                     <div class="validation-item warn">
-                        <div class="validation-icon">—</div>
+
+                        <div class="validation-icon">
+                            —
+                        </div>
+
                         لم يتم فحص المشروع
+
                     </div>
+
                 </div>
 
                 <div style="height:8px"></div>
@@ -1375,11 +1543,63 @@ button{
             </div>
 
 
+            <!-- EXPORT -->
+
             <div class="side-panel">
 
                 <h3>
-                    التصدير
+                    إعدادات التصدير
                 </h3>
+
+
+                <div class="export-settings">
+
+                    <div>
+
+                        <label>
+                            الجودة
+                        </label>
+
+                        <select id="quality">
+
+                            <option value="720">
+                                720p — أخف وأسرع
+                            </option>
+
+                            <option value="1080">
+                                1080p — أعلى جودة
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            الإطارات
+                        </label>
+
+                        <select id="fps">
+
+                            <option value="30">
+                                30 FPS
+                            </option>
+
+                            <option value="60">
+                                60 FPS
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div style="height:9px"></div>
+
 
                 <button
                     class="btn"
@@ -1388,7 +1608,9 @@ button{
                     اختبار Frame
                 </button>
 
+
                 <div style="height:7px"></div>
+
 
                 <button
                     class="btn primary"
@@ -1397,13 +1619,15 @@ button{
                     تصدير الفيديو
                 </button>
 
+
                 <button
                     class="btn red"
                     id="stop"
                     style="display:none;margin-top:7px;"
                 >
-                    إيقاف
+                    إيقاف التصدير
                 </button>
+
 
                 <div
                     class="progress-wrap"
@@ -1411,10 +1635,12 @@ button{
                 >
 
                     <div class="progress">
+
                         <div
                             class="progress-bar"
                             id="progressBar"
                         ></div>
+
                     </div>
 
                     <div
@@ -1425,6 +1651,7 @@ button{
                     </div>
 
                 </div>
+
 
                 <div
                     class="download"
@@ -1439,6 +1666,8 @@ button{
 
 </section>
 
+
+<!-- MOBILE NAV -->
 
 <nav class="mobile-nav">
 
@@ -1458,310 +1687,396 @@ button{
 </nav>
 
 
+<!-- =====================================================
+     LIBRARIES
+===================================================== -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/build/mp4-muxer.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/webm-muxer@5.1.4/build/webm-muxer.js"></script>
+<!--
+    Mediabunny هو محرك التصدير الجديد.
+    يدعم CanvasSource + Output + MP4/WebM.
+-->
+<script src="https://cdn.jsdelivr.net/npm/mediabunny@latest/dist/bundles/mediabunny.cjs"></script>
 
 
 <script>
+
 "use strict";
 
-/* =========================================================
-   STATE
-========================================================= */
+
+/* =====================================================
+   GLOBAL STATE
+===================================================== */
 
 const APP = {
+
     orientation:"landscape",
+
     html:"",
+
     loaded:false,
+
     durationMs:0,
+
     title:"",
+
     subject:"",
+
     grade:"",
+
     student:"",
+
     teacher:"",
+
+    exporting:false,
+
     stop:false,
-    exporting:false
+
+    exportObjectURL:null,
+
+    projectWidth:1920,
+
+    projectHeight:1080,
+
+    currentTime:0,
+
+    previewPlaying:false,
+
+    previewRAF:null
+
 };
 
 
-/* =========================================================
-   SHORTCUTS
-========================================================= */
+/* =====================================================
+   SHORTCUT
+===================================================== */
 
-const $ = id => document.getElementById(id);
+function $(id){
 
+    return document.getElementById(id);
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function openPage(name){
-
-    document
-        .querySelectorAll(".page")
-        .forEach(page => {
-
-            page.classList.toggle(
-                "active",
-                page.id === "page-" + name
-            );
-
-        });
-
-    document
-        .querySelectorAll("[data-page]")
-        .forEach(button => {
-
-            button.classList.toggle(
-                "active",
-                button.dataset.page === name
-            );
-
-        });
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
 }
 
-document
-    .querySelectorAll("[data-page]")
-    .forEach(button => {
 
-        button.addEventListener(
-            "click",
-            () => openPage(
-                button.dataset.page
-            )
-        );
-
-    });
-
-
-/* =========================================================
-   ORIENTATION
-========================================================= */
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
 document
-    .querySelectorAll("[data-orientation]")
-    .forEach(button => {
+.querySelectorAll("[data-page]")
+.forEach(button => {
 
-        button.addEventListener(
-            "click",
-            () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-                APP.orientation =
-                    button.dataset.orientation;
+            const page =
+                button.dataset.page;
 
-                document
-                    .querySelectorAll(
-                        "[data-orientation]"
-                    )
-                    .forEach(item => {
+            document
+            .querySelectorAll(".page")
+            .forEach(item => {
 
-                        item.classList.toggle(
-                            "active",
-                            item === button
-                        );
+                item.classList.toggle(
+                    "active",
+                    item.id ===
+                    "page-" + page
+                );
 
-                    });
+            });
+
+
+            document
+            .querySelectorAll("[data-page]")
+            .forEach(item => {
+
+                item.classList.toggle(
+                    "active",
+                    item.dataset.page === page
+                );
+
+            });
+
+
+            if(page === "workspace"){
+
+                setTimeout(
+                    resizePreview,
+                    30
+                );
 
             }
-        );
 
-    });
+        }
+    );
+
+});
 
 
-/* =========================================================
-   PROJECT DATA
-========================================================= */
+/* =====================================================
+   ORIENTATION
+===================================================== */
+
+document
+.querySelectorAll("[data-orientation]")
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            APP.orientation =
+                button.dataset.orientation;
+
+
+            document
+            .querySelectorAll(
+                "[data-orientation]"
+            )
+            .forEach(item => {
+
+                item.classList.toggle(
+                    "active",
+                    item === button
+                );
+
+            });
+
+        }
+    );
+
+});
+
+
+/* =====================================================
+   FORM
+===================================================== */
 
 function getForm(){
 
-    return {
-        title:$("title").value.trim(),
-        student:$("student").value.trim(),
-        teacher:$("teacher").value.trim(),
-        subject:$("subject").value.trim(),
-        grade:$("grade").value.trim(),
-        semester:$("semester").value.trim(),
-        lesson:$("lesson").value.trim(),
-        extra:$("extra").value.trim(),
-        duration:Math.max(
+    let duration =
+        Number(
+            $("duration").value
+        );
+
+    if(!Number.isFinite(duration)){
+        duration = 60;
+    }
+
+    duration =
+        Math.max(
             5,
             Math.min(
                 600,
-                Number($("duration").value) || 60
+                duration
             )
-        )
+        );
+
+
+    return {
+
+        title:
+            $("title").value.trim(),
+
+        student:
+            $("student").value.trim(),
+
+        teacher:
+            $("teacher").value.trim(),
+
+        subject:
+            $("subject").value.trim(),
+
+        grade:
+            $("grade").value.trim(),
+
+        semester:
+            $("semester").value.trim(),
+
+        lesson:
+            $("lesson").value.trim(),
+
+        extra:
+            $("extra").value.trim(),
+
+        duration
+
     };
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PROMPT
-========================================================= */
+===================================================== */
 
-function makePrompt(){
+function createPrompt(){
 
-    const p = getForm();
+    const data =
+        getForm();
+
 
     const portrait =
-        APP.orientation === "portrait";
+        APP.orientation ===
+        "portrait";
+
 
     const width =
-        portrait ? 1080 : 1920;
+        portrait
+            ? 1080
+            : 1920;
+
 
     const height =
-        portrait ? 1920 : 1080;
+        portrait
+            ? 1920
+            : 1080;
 
-    const seconds =
-        p.duration;
 
-    const ms =
-        seconds * 1000;
+    const durationMs =
+        data.duration *
+        1000;
+
 
     return `
 أنت مخرج مشاريع تعليمية ومصمم Motion Graphics ومطور HTML/CSS/JavaScript محترف.
 
-أنشئ مشروعًا دراسيًا مرئيًا متكاملًا، لكن طريقة تقديمه تكون بأسلوب Motion Graphics.
+المطلوب إنشاء مشروع دراسي مرئي متكامل.
 
 المشروع ليس صفحة ويب عادية.
 وليس مجموعة بطاقات ثابتة.
-وليس مشهدًا قصيرًا فقط.
+وليس Animation قصيرًا بلا محتوى.
 
-المطلوب:
-مشروع دراسي مترابط يشبه مشروع PowerPoint أو Canva Video من ناحية بناء المحتوى، لكن جميع عناصره ومشاهده وحركاته تعمل كموشن داخل فيديو.
+المطلوب مشروع يشبه مشروع PowerPoint / Canva Video من ناحية بناء المحتوى، لكن يتم تقديمه بالكامل بطريقة Motion Graphics داخل HTML.
 
 ==================================================
 بيانات المشروع
 ==================================================
 
 العنوان:
-${p.title || "غير محدد"}
+${data.title || "غير محدد"}
 
 الطالب:
-${p.student || "غير محدد"}
+${data.student || "غير محدد"}
 
-المعلم:
-${p.teacher || "غير محدد"}
+المعلم / المعلمة:
+${data.teacher || "غير محدد"}
 
 المادة:
-${p.subject || "غير محددة"}
+${data.subject || "غير محددة"}
 
 الصف:
-${p.grade || "غير محدد"}
+${data.grade || "غير محدد"}
 
 الفصل:
-${p.semester || "غير محدد"}
+${data.semester || "غير محدد"}
 
 الدرس / الوحدة:
-${p.lesson || "غير محدد"}
+${data.lesson || "غير محدد"}
 
 الاتجاه:
 ${portrait ? "عمودي 9:16" : "أفقي 16:9"}
 
-أبعاد المشروع:
+الأبعاد:
 ${width} × ${height}
 
 المدة:
-${seconds} ثانية
+${data.duration} ثانية
 
 المدة بالميلي ثانية:
-${ms}
+${durationMs}
 
-متطلبات إضافية:
-${p.extra || "لا توجد"}
+المتطلبات الإضافية:
+${data.extra || "لا توجد"}
 
 ==================================================
 الوضع الإبداعي
 ==================================================
 
-"دع الذكاء يبدع"
+دع الذكاء يبدع.
 
-أنت حر في:
+اختر بنفسك:
 - الهوية البصرية
 - الألوان
-- الخلفيات
-- الصور
-- الرسومات
-- توزيع المشاهد
-- الانتقالات
+- أسلوب الرسومات
+- توزيع العناصر
+- نوع الانتقالات
 - الحركة
 - الإيقاع
-- الأسلوب البصري
+- طريقة سرد المعلومات
 
-لكن يجب الالتزام بجميع القواعد التقنية التالية.
+لكن يجب الالتزام بالقواعد التقنية التالية.
 
 ==================================================
-بناء المشروع
+المحتوى
 ==================================================
 
-افهم موضوع المشروع أولًا.
+أنشئ محتوى تعليميًا حقيقيًا.
 
-ثم أنشئ محتوى تعليميًا حقيقيًا ومترابطًا.
+لا تكتفِ بالعناوين.
 
-قسّم المحتوى إلى مشاهد مناسبة للمدة.
+قسّم الموضوع منطقيًا إلى مشاهد.
 
-المشروع يجب أن يحتوي على بداية وشرح وتطور وخلاصة وخاتمة.
+استخدم حسب طبيعة الموضوع:
+- تعريفات
+- شرح
+- أمثلة
+- مقارنات
+- تطبيقات
+- حقائق
+- مخططات
+- خطوات
+- خلاصة
+
+يجب أن يكون للمشروع بداية وشرح وتطور وخاتمة.
+
+كل مشهد يجب أن يقدم فكرة واضحة.
 
 لا تجعل جميع المشاهد متشابهة.
 
-لا تجعل المشروع عبارة عن عناوين فقط.
-
-استخدم المعلومات والتعريفات والأمثلة والمقارنات أو التطبيقات عندما تكون مناسبة للموضوع.
-
-كل مشهد يجب أن يركز على فكرة واضحة.
-
 ==================================================
-أسلوب الموشن
+MOTION
 ==================================================
 
-اجعل المشروع يبدو كفيديو.
+المشروع يجب أن يبدو كفيديو حقيقي.
 
-استخدم:
-- دخول تدريجي
-- خروج تدريجي
+استخدم عند الحاجة:
+- دخول العناصر
+- خروج العناصر
 - تحريك العناوين
 - تحريك الصور
 - تحريك الأشكال
-- انتقالات بين المشاهد
-- تكبير وتصغير خفيف
-- Parallax بسيط
+- Parallax
+- Zoom
+- Reveal
+- انتقالات
+- تحريك خطوط ومؤشرات
 - ظهور المعلومات على مراحل
-- تحريك الخلفيات عند الحاجة
 
-الحركة يجب أن تخدم المعلومة.
+الحركة تخدم المعلومة.
 
-لا تجعل كل شيء يتحرك في الوقت نفسه.
+لا تجعل كل العناصر تتحرك في الوقت نفسه.
 
 لا تستخدم حركة سريعة أو مزعجة.
 
 ==================================================
-التخطيط
+LAYOUT
 ==================================================
 
-هذه قاعدة صارمة جدًا.
-
-ممنوع تداخل:
-- العنوان مع النص
-- النص مع الصورة
-- الصور مع بعضها
-- العناصر المهمة مع بعضها
-
-استخدم Grid وContainers واضحة.
+استخدم Grid وFlexbox وContainers.
 
 استخدم Safe Area.
 
-اترك مساحات تنفس.
+لا تسمح بتداخل العناصر.
 
-لا تضع كل العناصر باستخدام absolute بشكل عشوائي.
+لا تجعل:
+- النص فوق صورة بطريقة غير مقصودة
+- عنوان يغطي نصًا
+- عناصر تخرج من الشاشة
+- عناصر مهمة تلتصق بالحواف
 
-absolute مسموح للخلفيات والزخارف والعناصر التي تحتاج تموضعًا خاصًا فقط.
+absolute مسموح للزخارف والخلفيات والعناصر الخاصة فقط.
 
 ==================================================
 العربية
@@ -1771,7 +2086,7 @@ absolute مسموح للخلفيات والزخارف والعناصر التي 
 
 <html lang="ar" dir="rtl">
 
-ممنوع تمامًا:
+ممنوع:
 
 letter-spacing
 
@@ -1779,17 +2094,21 @@ letter-spacing
 
 text-transform
 
-ممنوع تفكيك العربية إلى حروف.
+ممنوع تقسيم الحروف العربية.
 
-ممنوع كتابة كلمة عربية على شكل حروف منفصلة.
+ممنوع كتابة:
 
-ممنوع إضافة مسافات بين الحروف.
+ا ل و ط ن
 
-النص العربي يجب أن يبقى نصًا طبيعيًا داخل عناصر HTML.
+بل يجب أن تكون:
+
+الوطن
+
+لا تضف مسافات بين الحروف.
 
 استخدم خطًا عربيًا حقيقيًا.
 
-الخطوط المسموحة مثل:
+يفضل:
 Tajawal
 Noto Sans Arabic
 Cairo
@@ -1799,11 +2118,11 @@ Amiri
 
 استخدم خطًا أو خطين فقط.
 
-يجب انتظار:
+ضع:
 
 document.fonts.ready
 
-قبل بدء المشروع.
+ضمن مرحلة تجهيز المشروع.
 
 ==================================================
 الصور
@@ -1811,93 +2130,85 @@ document.fonts.ready
 
 يمكن استخدام:
 - img
-- SVG inline
+- SVG
 - CSS shapes
-- رسومات HTML/CSS
+- HTML graphics
 
 لا تستخدم video.
 
-لا تستخدم WebGL.
+لا تستخدم WebGL للمعلومات الأساسية.
 
-لا تجعل المعلومات الأساسية داخل Canvas.
-
-استخدم الصور بشكل صحيح دون تشويه.
+لا تضع النصوص المهمة داخل Canvas.
 
 ==================================================
 التحكم الزمني
 ==================================================
 
-المشروع سيتم تصديره Frame-by-Frame.
+المشروع سيتم تصديره Frame by Frame.
 
 لذلك لا تعتمد على:
-
 setTimeout
 setInterval
 Date.now
 performance.now
 requestAnimationFrame
-Math.random
 
 كمصدر أساسي للحركة.
 
-لا تعتمد على CSS animation للحركة الأساسية.
+لا تعتمد على CSS animation كطريقة أساسية للتحكم بالزمن.
 
-لا تعتمد على CSS transition للحركة الأساسية.
-
-يجب أن يكون المشروع قابلًا للتحكم بالزمن.
+لا تعتمد على CSS transition كطريقة أساسية للتحكم بالزمن.
 
 يجب إنشاء:
 
 window.__PROJECT__ = {
 
-    duration:${ms},
+    duration:${durationMs},
 
     orientation:"${APP.orientation}",
 
     setTime:function(timeMs){
-        ...
+
+        // تحديث جميع عناصر المشروع حسب الوقت
+
     }
 
 };
 
-عند استدعاء:
+يجب أن يعمل:
 
 window.__PROJECT__.setTime(0)
 
-يجب أن يظهر المشروع عند بداية الفيديو.
+ويظهر المشروع في البداية.
 
-وعند:
+ويجب أن يعمل:
 
 window.__PROJECT__.setTime(5000)
 
-يجب أن يظهر المشروع عند الثانية الخامسة.
+ويظهر المشروع عند الثانية الخامسة.
 
 وهكذا.
 
-يمكن استخدام Web Animations API، لكن يجب أن تكون الحركة قابلة للتحكم من المنصة.
+يمكن استخدام Web Animations API بشرط أن يكون التحكم بالزمن ممكنًا.
 
 ==================================================
-مدة المشروع
+META
 ==================================================
 
 أضف:
 
-<meta name="project-duration" content="${seconds}">
+<meta name="project-duration" content="${data.duration}">
 
-<meta name="project-duration-ms" content="${ms}">
+<meta name="project-duration-ms" content="${durationMs}">
 
 <meta name="project-orientation" content="${APP.orientation}">
 
 <meta name="project-type" content="educational-motion-project">
 
-<meta name="project-title" content="${p.title || ""}">
-
-ويجب أن تكون المدة أيضًا في:
-
-window.__PROJECT__.duration
+<meta name="project-title" content="${escapePromptAttribute(data.title)}">
 
 ==================================================
-المشاهد
+SCENES
 ==================================================
 
 كل مشهد يجب أن يحتوي:
@@ -1907,11 +2218,7 @@ data-scene
 ويفضل:
 
 data-scene-name
-
-ويمكن تحديد:
-
 data-scene-start
-
 data-scene-end
 
 مثال:
@@ -1922,25 +2229,23 @@ data-scene-end
     data-scene-start="0"
     data-scene-end="8000"
 >
-
 ...
-
 </section>
 
 ==================================================
-الخطوط والتخطيط
+التحميل
 ==================================================
 
-لا تستخدم خطًا يتغير بعد تحميل المشروع.
+انتظر:
 
-لا تبدأ الحركة قبل تحميل الخطوط.
+document.fonts.ready
 
-لا تبدأ التصوير قبل تحميل الصور.
+وانتظر الصور قبل بدء المشروع.
 
-لا تجعل تحميل الخطوط يؤدي إلى تغير مكان العناصر.
+لا تجعل تحميل الخطوط يؤدي إلى تغيير مفاجئ في تخطيط الصفحة.
 
 ==================================================
-إخراج HTML
+HTML
 ==================================================
 
 أخرج ملف HTML واحدًا كاملًا.
@@ -1953,92 +2258,118 @@ data-scene-end
 
 <html lang="ar" dir="rtl">
 
-ويحتوي على:
-HTML
-CSS
-JavaScript
-
-كلها داخل الملف نفسه.
+ويحتوي على HTML وCSS وJavaScript داخل الملف نفسه.
 
 لا تستخدم Markdown.
 
-لا تكتب شرحًا قبل HTML.
+لا تضع شرحًا قبل HTML.
 
-لا تكتب شرحًا بعد HTML.
+لا تضع شرحًا بعد HTML.
 
 لا تستخدم Lorem ipsum.
 
-لا تضع placeholders.
+لا تستخدم placeholders.
 
-إذا كانت هناك معلومات ناقصة، استخدم فهمك للموضوع بدل ترك فراغات.
+إذا كانت معلومة ناقصة، استخدم معرفتك بالموضوع بدل ترك فراغ.
 
 ==================================================
-الفحص قبل الإخراج
+الفحص
 ==================================================
 
-راجع الكود داخليًا قبل إرساله:
+قبل إخراج HTML راجع:
 
-- هل المحتوى مترابط؟
-- هل المشروع فعليًا تعليمي؟
-- هل الحركة موجودة؟
-- هل الحركة قابلة للتحكم بالزمن؟
-- هل setTime موجود؟
-- هل duration موجود؟
-- هل orientation موجود؟
-- هل الخطوط عربية؟
-- هل document.fonts.ready موجود؟
-- هل يوجد letter-spacing؟
-- هل هناك تفكيك للحروف؟
-- هل يوجد تداخل؟
-- هل النص يخرج عن الإطار؟
-- هل الصور مناسبة؟
-- هل يوجد CSS animation للحركة الأساسية؟
-- هل يوجد requestAnimationFrame للحركة الأساسية؟
-- هل يعتمد المشروع على الوقت الحقيقي؟
-- هل يمكن للمنصة التقاط أي لحظة زمنية منه؟
-
-إذا وجدت مشكلة، أصلحها قبل إخراج HTML.
+- RTL
+- اللغة العربية
+- الخطوط
+- عدم وجود letter-spacing
+- عدم تفكيك الحروف
+- عدم وجود تداخل
+- عدم خروج العناصر
+- وجود setTime
+- وجود duration
+- وجود orientation
+- وجود scenes
+- عدم الاعتماد على الوقت الحقيقي
+- عدم استخدام CSS animation كآلية زمنية أساسية
+- إمكانية التقاط أي Frame
 
 أخرج HTML فقط.
 `.trim();
+
 }
 
 
-/* =========================================================
-   GENERATE
-========================================================= */
+/* =====================================================
+   PROMPT ATTRIBUTE
+===================================================== */
 
-$("generate").addEventListener(
+function escapePromptAttribute(value){
+
+    return String(value || "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
+
+}
+
+
+/* =====================================================
+   GENERATE PROMPT
+===================================================== */
+
+$("generate")
+.addEventListener(
     "click",
     () => {
 
-        const data = getForm();
+        const data =
+            getForm();
+
 
         if(!data.title){
 
-            alert("اكتب عنوان المشروع أولًا");
+            alert(
+                "اكتب عنوان المشروع أولًا"
+            );
 
             $("title").focus();
 
             return;
+
         }
 
+
         $("prompt").value =
-            makePrompt();
+            createPrompt();
+
 
         $("promptBox")
-            .classList
-            .add("show");
+        .classList
+        .add("show");
 
     }
 );
 
 
-/* =========================================================
+/* =====================================================
    COPY
-========================================================= */
+===================================================== */
 
-$("copyPrompt").addEventListener(
+$("copyPrompt")
+.addEventListener(
     "click",
     async() => {
 
@@ -2052,79 +2383,125 @@ $("copyPrompt").addEventListener(
 
             $("prompt").select();
 
-            document.execCommand("copy");
+            document.execCommand(
+                "copy"
+            );
 
         }
 
-        alert("تم نسخ الـPrompt");
+        $("copyPrompt").textContent =
+            "تم النسخ";
+
+        setTimeout(
+            () => {
+
+                $("copyPrompt").textContent =
+                    "نسخ";
+
+            },
+            1200
+        );
 
     }
 );
 
 
-/* =========================================================
+/* =====================================================
    NORMALIZE HTML
-========================================================= */
+===================================================== */
 
 function normalizeHTML(value){
 
-    return String(value || "")
-        .trim()
-        .replace(/^```html/i,"")
-        .replace(/^```/i,"")
-        .replace(/```$/i,"")
+    let html =
+        String(value || "")
         .trim();
+
+
+    html =
+        html.replace(
+            /^```html\s*/i,
+            ""
+        );
+
+
+    html =
+        html.replace(
+            /^```\s*/i,
+            ""
+        );
+
+
+    html =
+        html.replace(
+            /\s*```\s*$/i,
+            ""
+        );
+
+
+    return html.trim();
 
 }
 
 
-/* =========================================================
-   READ META
-========================================================= */
+/* =====================================================
+   META
+===================================================== */
 
 function readMeta(doc){
 
     function meta(name){
 
-        const el =
+        const element =
             doc.querySelector(
-                'meta[name="' + name + '"]'
+                'meta[name="' +
+                name +
+                '"]'
             );
 
-        return el
-            ? el.content.trim()
+        return element
+            ? element.content.trim()
             : "";
 
     }
+
 
     return {
 
         duration:
             Number(
-                meta("project-duration")
+                meta(
+                    "project-duration"
+                )
             ),
 
         durationMs:
             Number(
-                meta("project-duration-ms")
+                meta(
+                    "project-duration-ms"
+                )
             ),
 
         orientation:
-            meta("project-orientation"),
+            meta(
+                "project-orientation"
+            ),
 
         title:
-            meta("project-title")
+            meta(
+                "project-title"
+            )
 
     };
 
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD PROJECT
-========================================================= */
+===================================================== */
 
-$("load").addEventListener(
+$("load")
+.addEventListener(
     "click",
     loadProject
 );
@@ -2137,48 +2514,90 @@ async function loadProject(){
             $("code").value
         );
 
+
     if(!html){
 
-        alert("الصق HTML المشروع أولًا");
-
-        return;
-    }
-
-    if(
-        !/<html[\s>]/i.test(html)
-    ){
-
         alert(
-            "يجب أن يكون HTML كاملًا يبدأ بعنصر html"
+            "الصق HTML المشروع أولًا"
         );
 
         return;
+
     }
 
-    APP.html = html;
 
-    $("stateInfo").textContent =
-        "جارٍ التحميل...";
+    if(
+        !/<html[\s>]/i.test(
+            html
+        )
+    ){
+
+        alert(
+            "الصق ملف HTML كاملًا."
+        );
+
+        return;
+
+    }
+
+
+    stopPreview();
+
+
+    APP.html =
+        html;
+
+
+    APP.loaded =
+        false;
+
+
+    setStatus(
+        "جارٍ تحميل المشروع..."
+    );
+
 
     try{
 
-        await setIframe(html);
+        await setIframe(
+            html
+        );
+
 
         const iframe =
             $("preview");
 
+
         const doc =
             iframe.contentDocument;
+
 
         const win =
             iframe.contentWindow;
 
-        await waitResources(doc);
+
+        if(!doc || !win){
+
+            throw new Error(
+                "تعذر الوصول إلى المشروع."
+            );
+
+        }
+
+
+        await waitForResources(
+            doc
+        );
+
 
         const meta =
-            readMeta(doc);
+            readMeta(
+                doc
+            );
+
 
         let durationMs = 0;
+
 
         if(
             Number.isFinite(
@@ -2198,7 +2617,8 @@ async function loadProject(){
         ){
 
             durationMs =
-                meta.duration * 1000;
+                meta.duration *
+                1000;
 
         }else if(
             win.__PROJECT__ &&
@@ -2214,51 +2634,82 @@ async function loadProject(){
 
         }
 
+
         if(!durationMs){
 
             throw new Error(
-                "لم يتم العثور على مدة المشروع"
+                "لم يتم العثور على مدة المشروع. يجب أن يحتوي HTML على project-duration أو __PROJECT__.duration."
             );
 
         }
 
+
         APP.durationMs =
             durationMs;
 
-        APP.loaded = true;
 
         APP.title =
             meta.title ||
             $("title").value.trim();
 
+
+        APP.subject =
+            $("subject").value.trim();
+
+
+        APP.grade =
+            $("grade").value.trim();
+
+
         APP.orientation =
-            meta.orientation === "portrait"
+            meta.orientation ===
+            "portrait"
                 ? "portrait"
                 : "landscape";
 
-        updateWorkspace(meta);
+
+        APP.loaded =
+            true;
+
+
+        updateProjectInfo();
+
 
         await buildTimeline();
 
+
+        await setProjectTime(
+            0
+        );
+
+
         await validateProject();
 
-        await setProjectTime(0);
 
-        $("stateInfo").textContent =
-            "جاهز";
+        setStatus(
+            "جاهز"
+        );
+
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
-        APP.loaded = false;
 
-        $("stateInfo").textContent =
-            "خطأ";
+        APP.loaded =
+            false;
+
+
+        setStatus(
+            "خطأ"
+        );
+
 
         alert(
             error.message ||
-            "حدث خطأ أثناء تحميل المشروع"
+            "حدث خطأ أثناء تحميل المشروع."
         );
 
     }
@@ -2266,9 +2717,9 @@ async function loadProject(){
 }
 
 
-/* =========================================================
+/* =====================================================
    IFRAME
-========================================================= */
+===================================================== */
 
 function setIframe(html){
 
@@ -2278,63 +2729,78 @@ function setIframe(html){
             const iframe =
                 $("preview");
 
-            let finished = false;
 
-            const done = () => {
+            let done =
+                false;
 
-                if(finished) return;
 
-                finished = true;
+            function finish(){
+
+                if(done){
+                    return;
+                }
+
+                done =
+                    true;
 
                 resolve();
 
-            };
+            }
+
 
             iframe.onload =
                 () => {
 
                     setTimeout(
-                        done,
-                        80
+                        finish,
+                        100
                     );
 
                 };
 
+
             iframe.srcdoc =
                 html;
 
+
+            const fallback =
+                setTimeout(
+                    () => {
+
+                        if(
+                            !done &&
+                            iframe.contentDocument
+                        ){
+
+                            finish();
+
+                        }
+
+                    },
+                    1500
+                );
+
+
             setTimeout(
                 () => {
 
-                    if(
-                        !finished &&
-                        iframe.contentDocument &&
-                        iframe.contentDocument.readyState !== "loading"
-                    ){
+                    clearTimeout(
+                        fallback
+                    );
 
-                        done();
 
-                    }
-
-                },
-                1000
-            );
-
-            setTimeout(
-                () => {
-
-                    if(!finished){
+                    if(!done){
 
                         reject(
                             new Error(
-                                "انتهى وقت تحميل المشروع"
+                                "انتهى وقت تحميل HTML."
                             )
                         );
 
                     }
 
                 },
-                12000
+                15000
             );
 
         }
@@ -2343,144 +2809,206 @@ function setIframe(html){
 }
 
 
-/* =========================================================
+/* =====================================================
    RESOURCES
-========================================================= */
+===================================================== */
 
-async function waitResources(doc){
+async function waitForResources(doc){
 
     if(
         doc.fonts &&
         doc.fonts.ready
     ){
 
-        await doc.fonts.ready;
+        try{
+
+            await doc.fonts.ready;
+
+        }catch{}
 
     }
+
 
     const images =
         Array.from(
             doc.images || []
         );
 
+
     await Promise.all(
         images.map(
-            img =>
-                new Promise(
-                    resolve => {
-
-                        if(
-                            img.complete &&
-                            img.naturalWidth > 0
-                        ){
-
-                            if(img.decode){
-
-                                img.decode()
-                                    .catch(
-                                        () => {}
-                                    )
-                                    .finally(
-                                        resolve
-                                    );
-
-                            }else{
-
-                                resolve();
-
-                            }
-
-                            return;
-                        }
-
-                        let finished = false;
-
-                        const done = () => {
-
-                            if(finished) return;
-
-                            finished = true;
-
-                            resolve();
-
-                        };
-
-                        img.addEventListener(
-                            "load",
-                            done,
-                            {once:true}
-                        );
-
-                        img.addEventListener(
-                            "error",
-                            done,
-                            {once:true}
-                        );
-
-                        setTimeout(
-                            done,
-                            10000
-                        );
-
-                    }
+            image =>
+                waitForImage(
+                    image
                 )
         )
     );
 
-    await nextFrame();
 
-    await nextFrame();
+    await sleep(
+        80
+    );
 
-}
 
-
-function nextFrame(){
-
-    return new Promise(
-        resolve =>
-            requestAnimationFrame(
-                resolve
-            )
+    await sleep(
+        80
     );
 
 }
 
 
-/* =========================================================
-   PROJECT TIME
-========================================================= */
+function waitForImage(image){
 
-async function setProjectTime(ms){
+    return new Promise(
+        resolve => {
+
+            if(
+                image.complete &&
+                image.naturalWidth > 0
+            ){
+
+                resolve();
+
+                return;
+
+            }
+
+
+            let finished =
+                false;
+
+
+            function finish(){
+
+                if(finished){
+                    return;
+                }
+
+                finished =
+                    true;
+
+                resolve();
+
+            }
+
+
+            image.addEventListener(
+                "load",
+                finish,
+                {
+                    once:true
+                }
+            );
+
+
+            image.addEventListener(
+                "error",
+                finish,
+                {
+                    once:true
+                }
+            );
+
+
+            setTimeout(
+                finish,
+                10000
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SET PROJECT TIME
+===================================================== */
+
+async function setProjectTime(
+    timeMs
+){
+
+    if(!APP.loaded){
+        return;
+    }
+
 
     const iframe =
         $("preview");
 
+
     const win =
         iframe.contentWindow;
+
 
     const doc =
         iframe.contentDocument;
 
+
     if(!win || !doc){
-
         return;
-
     }
+
+
+    let t =
+        Number(timeMs);
+
+
+    if(!Number.isFinite(t)){
+        t = 0;
+    }
+
+
+    t =
+        Math.max(
+            0,
+            Math.min(
+                APP.durationMs,
+                t
+            )
+        );
+
+
+    APP.currentTime =
+        t;
+
+
+    /*
+     * المشروع نفسه.
+     */
 
     if(
         win.__PROJECT__ &&
-        typeof win.__PROJECT__.setTime === "function"
+        typeof
+        win.__PROJECT__.setTime ===
+        "function"
     ){
 
-        win.__PROJECT__.setTime(ms);
+        try{
+
+            win.__PROJECT__.setTime(
+                t
+            );
+
+        }catch(error){
+
+            console.warn(
+                "Project setTime error:",
+                error
+            );
+
+        }
 
     }
 
+
     /*
-     * Also control all WAAPI animations.
+     * Web Animations API.
      */
 
     let animations = [];
+
 
     try{
 
@@ -2500,8 +3028,10 @@ async function setProjectTime(ms){
 
     }
 
+
     for(
-        const animation of animations
+        const animation
+        of animations
     ){
 
         try{
@@ -2509,80 +3039,123 @@ async function setProjectTime(ms){
             animation.pause();
 
             animation.currentTime =
-                ms;
+                t;
 
         }catch{}
 
     }
 
-    void doc.documentElement.offsetHeight;
+
+    setPlayhead(
+        t
+    );
+
+
+    /*
+     * Force layout.
+     */
+
+    void doc.documentElement
+        .offsetHeight;
+
+
+    await sleep(
+        0
+    );
 
 }
 
 
-/* =========================================================
-   UPDATE WORKSPACE
-========================================================= */
+/* =====================================================
+   PROJECT INFO
+===================================================== */
 
-function updateWorkspace(meta){
+function updateProjectInfo(){
 
     const portrait =
-        APP.orientation === "portrait";
+        APP.orientation ===
+        "portrait";
 
-    $("orientationInfo").textContent =
+
+    $("orientationInfo")
+        .textContent =
         portrait
             ? "عمودي 9:16"
             : "أفقي 16:9";
 
-    $("durationInfo").textContent =
+
+    $("durationInfo")
+        .textContent =
         formatDuration(
             APP.durationMs
         );
 
-    $("infoTitle").textContent =
+
+    $("infoTitle")
+        .textContent =
         APP.title ||
         "—";
 
-    $("infoSubject").textContent =
-        $("subject").value ||
+
+    $("infoSubject")
+        .textContent =
+        APP.subject ||
         "—";
 
-    $("infoGrade").textContent =
-        $("grade").value ||
+
+    $("infoGrade")
+        .textContent =
+        APP.grade ||
         "—";
 
-    $("infoOrientation").textContent =
+
+    $("infoOrientation")
+        .textContent =
         portrait
             ? "عمودي"
             : "أفقي";
 
-    $("infoDuration").textContent =
+
+    $("infoDuration")
+        .textContent =
         formatDuration(
             APP.durationMs
         );
+
 
     resizePreview();
 
 }
 
 
-/* =========================================================
-   PREVIEW SIZE
-========================================================= */
+/* =====================================================
+   RESIZE PREVIEW
+===================================================== */
 
 function resizePreview(){
 
     const wrap =
         $("frameWrap");
 
+
     const iframe =
         $("preview");
 
+
+    if(!wrap || !iframe){
+        return;
+    }
+
+
     const portrait =
-        APP.orientation === "portrait";
+        APP.orientation ===
+        "portrait";
+
 
     const mobile =
-        window.innerWidth <= 650;
+        window.innerWidth <=
+        650;
+
 
     const maxWidth =
         mobile
@@ -2592,13 +3165,16 @@ function resizePreview(){
                 900
             );
 
+
     const maxHeight =
         mobile
             ? window.innerHeight * .55
             : window.innerHeight * .68;
 
+
     let width;
     let height;
+
 
     if(portrait){
 
@@ -2608,9 +3184,12 @@ function resizePreview(){
                 800
             );
 
+
         width =
             height *
-            9 / 16;
+            9 /
+            16;
+
 
         if(width > maxWidth){
 
@@ -2619,7 +3198,8 @@ function resizePreview(){
 
             height =
                 width *
-                16 / 9;
+                16 /
+                9;
 
         }
 
@@ -2628,9 +3208,12 @@ function resizePreview(){
         width =
             maxWidth;
 
+
         height =
             width *
-            9 / 16;
+            9 /
+            16;
+
 
         if(height > maxHeight){
 
@@ -2639,23 +3222,32 @@ function resizePreview(){
 
             width =
                 height *
-                16 / 9;
+                16 /
+                9;
 
         }
 
     }
 
+
     wrap.style.width =
-        Math.round(width) + "px";
+        Math.round(width) +
+        "px";
+
 
     wrap.style.height =
-        Math.round(height) + "px";
+        Math.round(height) +
+        "px";
+
 
     iframe.style.width =
-        Math.round(width) + "px";
+        Math.round(width) +
+        "px";
+
 
     iframe.style.height =
-        Math.round(height) + "px";
+        Math.round(height) +
+        "px";
 
 }
 
@@ -2666,25 +3258,28 @@ window.addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    TIMELINE
-========================================================= */
+===================================================== */
 
 async function buildTimeline(){
 
     const track =
         $("timelineTrack");
 
-    track.innerHTML = "";
+
+    track.innerHTML =
+        "";
+
 
     const doc =
         $("preview").contentDocument;
 
+
     if(!doc){
-
         return;
-
     }
+
 
     const scenes =
         Array.from(
@@ -2693,197 +3288,238 @@ async function buildTimeline(){
             )
         );
 
+
     if(!scenes.length){
 
         const scene =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         scene.className =
             "scene";
 
+
         scene.style.width =
             "100%";
 
-        track.appendChild(scene);
+
+        track.appendChild(
+            scene
+        );
+
 
         return;
 
     }
 
-    for(
-        let i = 0;
-        i < scenes.length;
-        i++
-    ){
 
-        const source =
-            scenes[i];
+    scenes.forEach(
+        (source,index) => {
 
-        let start =
-            Number(
-                source.dataset.sceneStart
+            let start =
+                Number(
+                    source.dataset.sceneStart
+                );
+
+
+            let end =
+                Number(
+                    source.dataset.sceneEnd
+                );
+
+
+            if(
+                !Number.isFinite(
+                    start
+                )
+            ){
+
+                start =
+                    APP.durationMs *
+                    index /
+                    scenes.length;
+
+            }
+
+
+            if(
+                !Number.isFinite(
+                    end
+                )
+            ){
+
+                end =
+                    APP.durationMs *
+                    (index + 1) /
+                    scenes.length;
+
+            }
+
+
+            const percentage =
+                Math.max(
+                    .5,
+                    (
+                        (
+                            end -
+                            start
+                        ) /
+                        APP.durationMs
+                    ) *
+                    100
+                );
+
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "scene";
+
+
+            element.style.width =
+                percentage +
+                "%";
+
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+
+            label.textContent =
+                source.dataset.sceneName ||
+                "مشهد " +
+                (index + 1);
+
+
+            element.appendChild(
+                label
             );
 
-        let end =
-            Number(
-                source.dataset.sceneEnd
+
+            track.appendChild(
+                element
             );
-
-        if(!Number.isFinite(start)){
-
-            start =
-                APP.durationMs *
-                i /
-                scenes.length;
 
         }
-
-        if(!Number.isFinite(end)){
-
-            end =
-                APP.durationMs *
-                (i + 1) /
-                scenes.length;
-
-        }
-
-        const width =
-            Math.max(
-                0.5,
-                (
-                    (end - start) /
-                    APP.durationMs
-                ) * 100
-            );
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "scene";
-
-        item.style.width =
-            width + "%";
-
-        const label =
-            document.createElement("span");
-
-        label.textContent =
-            source.dataset.sceneName ||
-            "مشهد " + (i + 1);
-
-        item.appendChild(label);
-
-        track.appendChild(item);
-
-    }
+    );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    PLAYHEAD
-========================================================= */
+===================================================== */
 
 function setPlayhead(ms){
 
     if(!APP.durationMs){
-
         return;
-
     }
+
 
     const percentage =
         Math.max(
             0,
             Math.min(
                 100,
-                ms /
-                APP.durationMs *
+                (
+                    ms /
+                    APP.durationMs
+                ) *
                 100
             )
         );
 
-    $("playhead").style.left =
-        percentage + "%";
+
+    $("playhead")
+        .style.left =
+        percentage +
+        "%";
 
 }
 
 
-/* =========================================================
+/* =====================================================
    VALIDATION
-========================================================= */
+===================================================== */
 
 async function validateProject(){
 
     const box =
         $("validation");
 
-    box.innerHTML = "";
+
+    box.innerHTML =
+        "";
+
 
     if(!APP.loaded){
 
         addValidation(
             "warn",
-            "المشروع غير محمل"
+            "المشروع غير محمل."
         );
 
         return;
 
     }
 
+
     const iframe =
         $("preview");
 
+
     const doc =
         iframe.contentDocument;
+
 
     const win =
         iframe.contentWindow;
 
 
-    addValidation(
-        "ok",
-        "تم اكتشاف مدة: " +
-        formatDuration(
-            APP.durationMs
-        )
-    );
-
-
     if(
-        doc.documentElement.dir === "rtl"
+        doc.documentElement.dir ===
+        "rtl"
     ){
 
         addValidation(
             "ok",
-            "اتجاه العربية RTL مضبوط"
+            "RTL مضبوط."
         );
 
     }else{
 
         addValidation(
             "bad",
-            "HTML لا يحتوي dir=\"rtl\""
+            'لم يتم العثور على dir="rtl".'
         );
 
     }
 
 
     if(
-        doc.documentElement.lang === "ar"
+        doc.documentElement.lang ===
+        "ar"
     ){
 
         addValidation(
             "ok",
-            "لغة المشروع عربية"
+            "لغة المشروع عربية."
         );
 
     }else{
 
         addValidation(
             "warn",
-            "لغة HTML ليست ar"
+            'لغة HTML ليست "ar".'
         );
 
     }
@@ -2891,44 +3527,58 @@ async function validateProject(){
 
     if(
         doc.fonts &&
-        doc.fonts.status === "loaded"
+        doc.fonts.status ===
+        "loaded"
     ){
 
         addValidation(
             "ok",
-            "الخطوط محملة"
+            "الخطوط محملة."
         );
 
     }else{
 
         addValidation(
             "warn",
-            "تعذر التأكد من حالة الخطوط"
+            "تعذر التأكد من حالة الخطوط."
         );
 
     }
 
 
-    let letterSpacing = false;
+    /*
+     * letter-spacing
+     */
 
-    Array.from(
+    let letterSpacing =
+        false;
+
+
+    Array
+    .from(
         doc.querySelectorAll("*")
-    ).some(
-        el => {
+    )
+    .some(
+        element => {
 
             const style =
-                win.getComputedStyle(el);
+                win.getComputedStyle(
+                    element
+                );
+
 
             if(
                 style.letterSpacing !==
                 "normal"
             ){
 
-                letterSpacing = true;
+                letterSpacing =
+                    true;
 
                 return true;
 
             }
+
 
             return false;
 
@@ -2940,43 +3590,109 @@ async function validateProject(){
 
         addValidation(
             "bad",
-            "يوجد letter-spacing؛ هذا ممنوع للمشروع العربي"
+            "يوجد letter-spacing."
         );
 
     }else{
 
         addValidation(
             "ok",
-            "لا يوجد letter-spacing مؤثر"
+            "لا يوجد letter-spacing مؤثر."
         );
 
     }
 
 
+    /*
+     * setTime
+     */
+
     if(
         win.__PROJECT__ &&
-        typeof win.__PROJECT__.setTime === "function"
+        typeof
+        win.__PROJECT__.setTime ===
+        "function"
     ){
 
         addValidation(
             "ok",
-            "__PROJECT__.setTime موجود"
+            "__PROJECT__.setTime موجود."
         );
 
     }else{
 
         addValidation(
             "warn",
-            "لا يوجد setTime؛ سيتم الاعتماد على WAAPI إن وجد"
+            "لا يوجد setTime مخصص؛ سيتم التحكم في WAAPI إن وجد."
         );
 
     }
 
 
+    /*
+     * duration
+     */
+
+    if(
+        win.__PROJECT__ &&
+        Number(
+            win.__PROJECT__.duration
+        ) > 0
+    ){
+
+        addValidation(
+            "ok",
+            "__PROJECT__.duration موجود."
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "__PROJECT__.duration غير موجود."
+        );
+
+    }
+
+
+    /*
+     * scenes
+     */
+
+    const scenes =
+        doc.querySelectorAll(
+            "[data-scene]"
+        );
+
+
+    if(scenes.length){
+
+        addValidation(
+            "ok",
+            "تم اكتشاف " +
+            scenes.length +
+            " مشاهد."
+        );
+
+    }else{
+
+        addValidation(
+            "warn",
+            "لم يتم تعريف data-scene."
+        );
+
+    }
+
+
+    /*
+     * images
+     */
+
     const images =
         Array.from(
             doc.images || []
         );
+
 
     const broken =
         images.filter(
@@ -2985,71 +3701,61 @@ async function validateProject(){
                 image.naturalWidth === 0
         );
 
+
     if(broken.length){
 
         addValidation(
             "warn",
             "هناك " +
             broken.length +
-            " صورة لم يكتمل تحميلها"
+            " صورة لم يكتمل تحميلها."
         );
 
     }else{
 
         addValidation(
             "ok",
-            "الصور محملة"
+            "الصور محملة."
         );
 
     }
 
 
-    const scenes =
-        doc.querySelectorAll(
-            "[data-scene]"
-        );
+    /*
+     * overflow
+     */
 
-    if(scenes.length){
-
-        addValidation(
-            "ok",
-            "تم اكتشاف " +
-            scenes.length +
-            " مشاهد"
-        );
-
-    }else{
+    if(
+        checkOverflow(
+            doc
+        )
+    ){
 
         addValidation(
             "warn",
-            "لم يتم تعريف data-scene"
-        );
-
-    }
-
-
-    const overflow =
-        checkOverflow(doc);
-
-    if(overflow){
-
-        addValidation(
-            "warn",
-            "تم العثور على عناصر قد تتجاوز حدود المشروع"
+            "قد توجد عناصر تتجاوز حدود المشروع."
         );
 
     }else{
 
         addValidation(
             "ok",
-            "لا توجد عناصر واضحة خارج الإطار"
+            "لا يوجد Overflow واضح."
         );
 
     }
 
+
+    /*
+     * overlaps
+     */
 
     const overlaps =
-        checkOverlaps(doc,win);
+        checkOverlaps(
+            doc,
+            win
+        );
+
 
     if(overlaps > 0){
 
@@ -3057,14 +3763,14 @@ async function validateProject(){
             "warn",
             "تم اكتشاف " +
             overlaps +
-            " احتمالات تداخل"
+            " احتمالات تداخل."
         );
 
     }else{
 
         addValidation(
             "ok",
-            "لا يوجد تداخل واضح بين العناصر الأساسية"
+            "لا يوجد تداخل واضح بين العناصر الأساسية."
         );
 
     }
@@ -3072,14 +3778,25 @@ async function validateProject(){
 }
 
 
-function addValidation(type,text){
+/* =====================================================
+   ADD VALIDATION
+===================================================== */
+
+function addValidation(
+    type,
+    text
+){
 
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     item.className =
         "validation-item " +
         type;
+
 
     const icon =
         type === "ok"
@@ -3087,6 +3804,7 @@ function addValidation(type,text){
             : type === "bad"
                 ? "!"
                 : "·";
+
 
     item.innerHTML =
         '<div class="validation-icon">' +
@@ -3096,48 +3814,49 @@ function addValidation(type,text){
         escapeHTML(text) +
         '</div>';
 
+
     $("validation")
-        .appendChild(item);
+        .appendChild(
+            item
+        );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    OVERFLOW
-========================================================= */
+===================================================== */
 
 function checkOverflow(doc){
 
     const root =
         doc.documentElement;
 
-    const width =
-        root.scrollWidth;
 
-    const height =
-        root.scrollHeight;
+    if(!root){
+        return false;
+    }
 
-    const viewportWidth =
-        root.clientWidth;
-
-    const viewportHeight =
-        root.clientHeight;
 
     return (
-        width >
-        viewportWidth + 5 ||
-        height >
-        viewportHeight + 5
+        root.scrollWidth >
+        root.clientWidth + 5
+        ||
+        root.scrollHeight >
+        root.clientHeight + 5
     );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    OVERLAP
-========================================================= */
+===================================================== */
 
-function checkOverlaps(doc,win){
+function checkOverlaps(
+    doc,
+    win
+){
 
     const elements =
         Array.from(
@@ -3146,19 +3865,24 @@ function checkOverlaps(doc,win){
             )
         );
 
-    let count = 0;
+
+    let count =
+        0;
+
 
     for(
-        let i=0;
-        i<elements.length;
+        let i = 0;
+        i < elements.length;
         i++
     ){
 
         const a =
             elements[i];
 
+
         const ra =
             a.getBoundingClientRect();
+
 
         if(
             ra.width < 3 ||
@@ -3169,14 +3893,16 @@ function checkOverlaps(doc,win){
 
         }
 
+
         for(
-            let j=i+1;
-            j<elements.length;
+            let j = i + 1;
+            j < elements.length;
             j++
         ){
 
             const b =
                 elements[j];
+
 
             if(
                 a.contains(b) ||
@@ -3187,32 +3913,45 @@ function checkOverlaps(doc,win){
 
             }
 
+
             const rb =
                 b.getBoundingClientRect();
 
-            if(
+
+            const overlap =
                 ra.left < rb.right &&
                 ra.right > rb.left &&
                 ra.top < rb.bottom &&
-                ra.bottom > rb.top
+                ra.bottom > rb.top;
+
+
+            if(!overlap){
+                continue;
+            }
+
+
+            const sa =
+                win.getComputedStyle(
+                    a
+                );
+
+
+            const sb =
+                win.getComputedStyle(
+                    b
+                );
+
+
+            if(
+                sa.visibility !==
+                "hidden" &&
+                sb.visibility !==
+                "hidden" &&
+                Number(sa.opacity) > .05 &&
+                Number(sb.opacity) > .05
             ){
 
-                const sa =
-                    win.getComputedStyle(a);
-
-                const sb =
-                    win.getComputedStyle(b);
-
-                if(
-                    sa.visibility !== "hidden" &&
-                    sb.visibility !== "hidden" &&
-                    Number(sa.opacity) > .05 &&
-                    Number(sb.opacity) > .05
-                ){
-
-                    count++;
-
-                }
+                count++;
 
             }
 
@@ -3220,30 +3959,37 @@ function checkOverlaps(doc,win){
 
     }
 
+
     return count;
 
 }
 
 
-/* =========================================================
+/* =====================================================
    VALIDATE BUTTON
-========================================================= */
+===================================================== */
 
-$("validate").addEventListener(
+$("validate")
+.addEventListener(
     "click",
     async() => {
 
         if(!APP.loaded){
 
-            alert("شغّل المشروع أولًا");
+            alert(
+                "شغّل المشروع أولًا."
+            );
 
             return;
 
         }
 
-        await waitResources(
-            $("preview").contentDocument
+
+        await waitForResources(
+            $("preview")
+            .contentDocument
         );
+
 
         await validateProject();
 
@@ -3251,28 +3997,43 @@ $("validate").addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    CLEAR
-========================================================= */
+===================================================== */
 
-$("clear").addEventListener(
+$("clear")
+.addEventListener(
     "click",
     () => {
 
-        APP.html = "";
+        stopPreview();
 
-        APP.loaded = false;
 
-        APP.durationMs = 0;
+        APP.html =
+            "";
 
-        $("code").value = "";
+        APP.loaded =
+            false;
 
-        $("preview").srcdoc = "";
+        APP.durationMs =
+            0;
+
+        APP.title =
+            "";
+
+        $("code").value =
+            "";
+
+        $("preview").srcdoc =
+            "";
 
         $("stateInfo").textContent =
             "لا يوجد مشروع";
 
         $("durationInfo").textContent =
+            "—";
+
+        $("formatInfo").textContent =
             "—";
 
         $("infoTitle").textContent =
@@ -3290,71 +4051,104 @@ $("clear").addEventListener(
         $("download").innerHTML =
             "";
 
-        $("download").classList.remove(
+        $("download")
+        .classList
+        .remove(
             "show"
+        );
+
+
+        setStatus(
+            "جاهز"
         );
 
     }
 );
 
 
-/* =========================================================
+/* =====================================================
    TEST FRAME
-========================================================= */
+===================================================== */
 
-$("test").addEventListener(
+$("test")
+.addEventListener(
     "click",
     async() => {
 
         if(!APP.loaded){
 
-            alert("شغّل المشروع أولًا");
+            alert(
+                "شغّل المشروع أولًا."
+            );
 
             return;
 
         }
 
+
         try{
 
-            await setProjectTime(0);
+            await setProjectTime(
+                0
+            );
+
 
             const canvas =
-                await renderFrame(0);
+                await renderFrame(
+                    0,
+                    true
+                );
+
 
             const url =
                 canvas.toDataURL(
                     "image/png"
                 );
 
-            const win =
-                window.open();
 
-            if(!win){
+            const popup =
+                window.open(
+                    "",
+                    "_blank"
+                );
+
+
+            if(!popup){
 
                 alert(
-                    "المتصفح منع نافذة المعاينة"
+                    "المتصفح منع نافذة المعاينة."
                 );
 
                 return;
 
             }
 
-            win.document.write(
+
+            popup.document.write(
+                "<!doctype html>" +
                 "<title>Frame</title>" +
-                "<style>body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}img{max-width:100%;height:auto}</style>" +
+                "<style>" +
+                "body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}" +
+                "img{max-width:100%;height:auto;display:block}" +
+                "</style>" +
                 "<img src='" +
                 url +
                 "'>"
             );
 
-            win.document.close();
+
+            popup.document.close();
+
 
         }catch(error){
 
-            console.error(error);
+            console.error(
+                error
+            );
+
 
             alert(
-                "فشل اختبار Frame: " +
+                "فشل اختبار Frame:\n\n" +
                 error.message
             );
 
@@ -3364,195 +4158,225 @@ $("test").addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    RENDER FRAME
-========================================================= */
+===================================================== */
 
-async function renderFrame(ms){
+async function renderFrame(
+    timeMs,
+    forExport = false
+){
 
-    await setProjectTime(ms);
+    await setProjectTime(
+        timeMs
+    );
 
-    await nextFrame();
+
+    await sleep(
+        0
+    );
+
 
     const iframe =
         $("preview");
 
+
     const doc =
         iframe.contentDocument;
+
 
     if(!doc){
 
         throw new Error(
-            "تعذر الوصول إلى المشروع"
+            "تعذر الوصول إلى المشروع."
         );
 
     }
 
-    const sourceWidth =
-        APP.orientation === "portrait"
-            ? 1080
-            : 1920;
 
-    const sourceHeight =
-        APP.orientation === "portrait"
-            ? 1920
-            : 1080;
+    const size =
+        getProjectSize();
 
-    /*
-     * Force project root dimensions.
-     * This makes preview/export use the same
-     * logical canvas.
-     */
 
-    const root =
+    const body =
         doc.body;
 
-    const oldWidth =
-        root.style.width;
 
-    const oldHeight =
-        root.style.height;
+    if(!body){
 
-    root.style.width =
-        sourceWidth + "px";
-
-    root.style.height =
-        sourceHeight + "px";
-
-    const canvas =
-        await html2canvas(
-            root,
-            {
-                width:sourceWidth,
-                height:sourceHeight,
-                windowWidth:sourceWidth,
-                windowHeight:sourceHeight,
-                scale:1,
-                backgroundColor:"#000",
-                useCORS:true,
-                allowTaint:false,
-                logging:false,
-                imageTimeout:15000,
-                foreignObjectRendering:false
-            }
+        throw new Error(
+            "مشروع HTML لا يحتوي body."
         );
 
-    root.style.width =
-        oldWidth;
+    }
 
-    root.style.height =
-        oldHeight;
+
+    const oldWidth =
+        body.style.width;
+
+
+    const oldHeight =
+        body.style.height;
+
+
+    const oldOverflow =
+        body.style.overflow;
+
+
+    body.style.width =
+        size.width +
+        "px";
+
+
+    body.style.height =
+        size.height +
+        "px";
+
+
+    body.style.overflow =
+        "hidden";
+
+
+    let canvas;
+
+
+    try{
+
+        canvas =
+            await html2canvas(
+                body,
+                {
+
+                    width:
+                        size.width,
+
+                    height:
+                        size.height,
+
+                    windowWidth:
+                        size.width,
+
+                    windowHeight:
+                        size.height,
+
+                    scale:1,
+
+                    backgroundColor:
+                        "#000",
+
+                    useCORS:true,
+
+                    allowTaint:false,
+
+                    logging:false,
+
+                    imageTimeout:15000,
+
+                    foreignObjectRendering:false
+
+                }
+            );
+
+    }finally{
+
+        body.style.width =
+            oldWidth;
+
+        body.style.height =
+            oldHeight;
+
+        body.style.overflow =
+            oldOverflow;
+
+    }
+
 
     return canvas;
 
 }
 
 
-/* =========================================================
-   EXPORT SIZE
-========================================================= */
+/* =====================================================
+   PROJECT SIZE
+===================================================== */
 
-function getExportSize(){
+function getProjectSize(){
+
+    const quality =
+        Number(
+            $("quality").value
+        );
+
+
+    let baseWidth;
+    let baseHeight;
+
+
+    if(
+        APP.orientation ===
+        "portrait"
+    ){
+
+        baseWidth =
+            1080;
+
+        baseHeight =
+            1920;
+
+    }else{
+
+        baseWidth =
+            1920;
+
+        baseHeight =
+            1080;
+
+    }
+
+
+    /*
+     * 720p is 1280x720 or 720x1280.
+     */
+
+    if(
+        quality === 720
+    ){
+
+        if(
+            APP.orientation ===
+            "portrait"
+        ){
+
+            return {
+                width:720,
+                height:1280
+            };
+
+        }
+
+
+        return {
+            width:1280,
+            height:720
+        };
+
+    }
+
 
     return {
-        width:
-            APP.orientation === "portrait"
-                ? 1080
-                : 1920,
-
-        height:
-            APP.orientation === "portrait"
-                ? 1920
-                : 1080
+        width:baseWidth,
+        height:baseHeight
     };
 
 }
 
 
-/* =========================================================
-   ENCODER CONFIG
-========================================================= */
-
-async function findEncoder(width,height,fps){
-
-    if(
-        typeof VideoEncoder ===
-        "undefined"
-    ){
-
-        throw new Error(
-            "WebCodecs غير متوفر في هذا المتصفح"
-        );
-
-    }
-
-    const configs = [
-
-        {
-            type:"mp4",
-            codec:"avc1.42001f",
-            containerCodec:"avc",
-            mime:"video/mp4"
-        },
-
-        {
-            type:"mp4",
-            codec:"avc1.4d401f",
-            containerCodec:"avc",
-            mime:"video/mp4"
-        },
-
-        {
-            type:"webm",
-            codec:"vp09.00.10.08",
-            containerCodec:"V_VP9",
-            mime:"video/webm"
-        }
-
-    ];
-
-    for(
-        const config of configs
-    ){
-
-        try{
-
-            const result =
-                await VideoEncoder.isConfigSupported(
-                    {
-                        codec:config.codec,
-                        width,
-                        height,
-                        bitrate:
-                            config.type === "mp4"
-                                ? 8_000_000
-                                : 8_000_000,
-                        framerate:fps
-                    }
-                );
-
-            if(result.supported){
-
-                return config;
-
-            }
-
-        }catch{}
-
-    }
-
-    throw new Error(
-        "لم يجد المتصفح Codec مناسبًا"
-    );
-
-}
-
-
-/* =========================================================
+/* =====================================================
    EXPORT
-========================================================= */
+===================================================== */
 
-$("export").addEventListener(
+$("export")
+.addEventListener(
     "click",
     exportVideo
 );
@@ -3561,231 +4385,360 @@ $("export").addEventListener(
 async function exportVideo(){
 
     if(APP.exporting){
-
         return;
-
     }
+
 
     if(!APP.loaded){
 
-        alert("شغّل المشروع أولًا");
+        alert(
+            "شغّل المشروع أولًا."
+        );
 
         return;
 
     }
 
-    APP.exporting = true;
 
-    APP.stop = false;
+    if(
+        !window.Mediabunny
+    ){
 
-    $("export").style.display =
+        alert(
+            "لم يتم تحميل محرك التصدير Mediabunny.\n\nتأكد من وجود اتصال بالإنترنت ثم أعد تحميل الصفحة."
+        );
+
+        return;
+
+    }
+
+
+    APP.exporting =
+        true;
+
+    APP.stop =
+        false;
+
+
+    $("export")
+        .style.display =
         "none";
 
-    $("stop").style.display =
+
+    $("stop")
+        .style.display =
         "block";
+
 
     $("progressWrap")
         .classList
         .add("show");
 
+
     $("download")
         .classList
         .remove("show");
 
-    try{
 
-        const fps = 30;
+    if(APP.exportObjectURL){
 
-        const totalFrames =
-            Math.ceil(
-                APP.durationMs /
-                1000 *
-                fps
-            );
-
-        const size =
-            getExportSize();
-
-        updateProgress(
-            0,
-            "فحص الترميز..."
+        URL.revokeObjectURL(
+            APP.exportObjectURL
         );
 
-        const codec =
-            await findEncoder(
-                size.width,
-                size.height,
-                fps
+        APP.exportObjectURL =
+            null;
+
+    }
+
+
+    try{
+
+        const {
+
+            Output,
+            BufferTarget,
+            CanvasSource,
+            Mp4OutputFormat,
+            WebMOutputFormat,
+            Quality,
+            canEncodeVideo
+
+        } = window.Mediabunny;
+
+
+        if(
+            !Output ||
+            !BufferTarget ||
+            !CanvasSource
+        ){
+
+            throw new Error(
+                "إصدار Mediabunny المحمل لا يحتوي على مكونات التصدير المطلوبة."
             );
-
-        $("formatInfo").textContent =
-            codec.type === "mp4"
-                ? "MP4 / H.264"
-                : "WebM / VP9";
-
-
-        let muxer;
-        let target;
-
-
-        if(codec.type === "mp4"){
-
-            if(
-                !window.Mp4Muxer
-            ){
-
-                throw new Error(
-                    "MP4 Muxer غير محمل"
-                );
-
-            }
-
-            target =
-                new Mp4Muxer.ArrayBufferTarget();
-
-            muxer =
-                new Mp4Muxer.Muxer({
-
-                    target,
-
-                    video:{
-                        codec:"avc",
-                        width:size.width,
-                        height:size.height,
-                        frameRate:fps
-                    },
-
-                    fastStart:"in-memory"
-
-                });
-
-        }else{
-
-            if(
-                !window.WebMMuxer
-            ){
-
-                throw new Error(
-                    "WebM Muxer غير محمل"
-                );
-
-            }
-
-            target =
-                new WebMMuxer.ArrayBufferTarget();
-
-            muxer =
-                new WebMMuxer.Muxer({
-
-                    target,
-
-                    video:{
-                        codec:"V_VP9",
-                        width:size.width,
-                        height:size.height,
-                        frameRate:fps
-                    }
-
-                });
 
         }
 
 
-        let encoderError = null;
-
-        const encoder =
-            new VideoEncoder({
-
-                output:
-                    (chunk,metadata) => {
-
-                        muxer.addVideoChunk(
-                            chunk,
-                            metadata
-                        );
-
-                    },
-
-                error:
-                    error => {
-
-                        encoderError =
-                            error;
-
-                    }
-
-            });
+        const fps =
+            Math.max(
+                1,
+                Number(
+                    $("fps").value
+                ) || 30
+            );
 
 
-        encoder.configure({
-
-            codec:codec.codec,
-
-            width:size.width,
-
-            height:size.height,
-
-            bitrate:8_000_000,
-
-            framerate:fps
-
-        });
+        const size =
+            getProjectSize();
 
 
         /*
-         * Dedicated canvas.
+         * نختبر AVC أولًا.
          */
 
-        const outputCanvas =
+        updateProgress(
+            0,
+            "فحص H.264..."
+        );
+
+
+        let codec =
+            null;
+
+
+        try{
+
+            if(
+                await canEncodeVideo(
+                    "avc",
+                    {
+                        width:size.width,
+                        height:size.height,
+                        frameRate:fps
+                    }
+                )
+            ){
+
+                codec =
+                    "avc";
+
+            }
+
+        }catch(error){
+
+            console.warn(
+                "AVC unavailable:",
+                error
+            );
+
+        }
+
+
+        /*
+         * إذا لم يتوفر H.264
+         * نجرب VP9.
+         */
+
+        if(!codec){
+
+            updateProgress(
+                0,
+                "H.264 غير متاح — فحص VP9..."
+            );
+
+
+            try{
+
+                if(
+                    await canEncodeVideo(
+                        "vp9",
+                        {
+                            width:size.width,
+                            height:size.height,
+                            frameRate:fps
+                        }
+                    )
+                ){
+
+                    codec =
+                        "vp9";
+
+                }
+
+            }catch(error){
+
+                console.warn(
+                    "VP9 unavailable:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+         * ثم VP8.
+         */
+
+        if(!codec){
+
+            updateProgress(
+                0,
+                "فحص VP8..."
+            );
+
+
+            try{
+
+                if(
+                    await canEncodeVideo(
+                        "vp8",
+                        {
+                            width:size.width,
+                            height:size.height,
+                            frameRate:fps
+                        }
+                    )
+                ){
+
+                    codec =
+                        "vp8";
+
+                }
+
+            }catch(error){
+
+                console.warn(
+                    "VP8 unavailable:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        if(!codec){
+
+            throw new Error(
+                "الجهاز لا يوفر Video Codec مناسبًا للتصدير داخل المتصفح."
+            );
+
+        }
+
+
+        /*
+         * Container
+         */
+
+        const isMP4 =
+            codec ===
+            "avc";
+
+
+        const format =
+            isMP4
+                ? new Mp4OutputFormat({
+                    fastStart:"in-memory"
+                })
+                : new WebMOutputFormat();
+
+
+        const target =
+            new BufferTarget();
+
+
+        const output =
+            new Output({
+                format,
+                target
+            });
+
+
+        const canvas =
             document.createElement(
                 "canvas"
             );
 
-        outputCanvas.width =
+
+        canvas.width =
             size.width;
 
-        outputCanvas.height =
+
+        canvas.height =
             size.height;
 
-        const outputContext =
-            outputCanvas.getContext(
-                "2d",
+
+        const source =
+            new CanvasSource(
+                canvas,
                 {
-                    alpha:false
+                    codec,
+                    quality:
+                        new Quality(
+                            "high"
+                        )
                 }
             );
 
 
+        output.addVideoTrack(
+            source,
+            {
+                frameRate:fps
+            }
+        );
+
+
+        $("formatInfo")
+            .textContent =
+            isMP4
+                ? "MP4 / H.264"
+                : "WebM / VP9";
+
+
+        /*
+         * Start output.
+         */
+
+        updateProgress(
+            0,
+            "تهيئة الفيديو..."
+        );
+
+
+        await output.start();
+
+
+        const durationSeconds =
+            APP.durationMs /
+            1000;
+
+
+        const totalFrames =
+            Math.ceil(
+                durationSeconds *
+                fps
+            );
+
+
+        /*
+         * Render each frame deterministically.
+         */
+
         for(
-            let frame = 0;
-            frame < totalFrames;
-            frame++
+            let frameIndex = 0;
+            frameIndex < totalFrames;
+            frameIndex++
         ){
 
             if(APP.stop){
 
                 throw new Error(
-                    "تم إيقاف التصدير"
+                    "تم إيقاف التصدير."
                 );
-
-            }
-
-            if(encoderError){
-
-                throw encoderError;
-
-            }
-
-
-            /*
-             * Backpressure.
-             */
-
-            while(
-                encoder.encodeQueueSize > 3
-            ){
-
-                await sleep(2);
 
             }
 
@@ -3793,79 +4746,90 @@ async function exportVideo(){
             const timeMs =
                 Math.min(
                     APP.durationMs - 1,
-                    frame *
-                    1000 /
-                    fps
+
+                    (
+                        frameIndex /
+                        fps
+                    ) * 1000
                 );
+
 
             setPlayhead(
                 timeMs
             );
 
 
-            const source =
+            const rendered =
                 await renderFrame(
-                    timeMs
+                    timeMs,
+                    true
                 );
 
 
-            outputContext.clearRect(
-                0,
-                0,
-                size.width,
-                size.height
-            );
-
-            outputContext.drawImage(
-                source,
-                0,
-                0,
-                size.width,
-                size.height
-            );
-
-
-            const videoFrame =
-                new VideoFrame(
-                    outputCanvas,
+            const context =
+                canvas.getContext(
+                    "2d",
                     {
-                        timestamp:
-                            Math.round(
-                                frame *
-                                1_000_000 /
-                                fps
-                            ),
-
-                        duration:
-                            Math.round(
-                                1_000_000 /
-                                fps
-                            )
+                        alpha:false
                     }
                 );
 
 
-            encoder.encode(
-                videoFrame,
+            context.clearRect(
+                0,
+                0,
+                size.width,
+                size.height
+            );
+
+
+            context.drawImage(
+                rendered,
+                0,
+                0,
+                size.width,
+                size.height
+            );
+
+
+            /*
+             * CanvasSource.add:
+             *
+             * timestamp in seconds
+             * duration in seconds
+             *
+             * Mediabunny handles the
+             * encoder/muxer pipeline.
+             */
+
+            await source.add(
+                frameIndex /
+                fps,
+
+                1 /
+                fps,
+
                 {
                     keyFrame:
-                        frame === 0 ||
-                        frame % (fps * 2) === 0
+                        frameIndex === 0 ||
+                        frameIndex %
+                        (fps * 2) === 0
                 }
             );
 
 
-            videoFrame.close();
+            const progress =
+                (
+                    (frameIndex + 1) /
+                    totalFrames
+                ) * 100;
 
 
             updateProgress(
-                (
-                    (frame + 1) /
-                    totalFrames
-                ) * 100,
+                progress,
 
                 "تصدير " +
-                (frame + 1) +
+                (frameIndex + 1) +
                 " / " +
                 totalFrames
             );
@@ -3873,45 +4837,40 @@ async function exportVideo(){
         }
 
 
+        /*
+         * Finalize.
+         */
+
         updateProgress(
             100,
-            "إنهاء الملف..."
+            "إنهاء ملف الفيديو..."
         );
 
 
-        await encoder.flush();
-
-        encoder.close();
-
-        if(encoderError){
-
-            throw encoderError;
-
-        }
-
-
-        muxer.finalize();
+        await output.finalize();
 
 
         const buffer =
             target.buffer;
 
+
         if(!buffer){
 
             throw new Error(
-                "لم يتم إنشاء ملف الفيديو"
+                "لم يتم إنشاء ملف الفيديو."
             );
 
         }
 
 
         const mime =
-            codec.type === "mp4"
+            isMP4
                 ? "video/mp4"
                 : "video/webm";
 
+
         const extension =
-            codec.type === "mp4"
+            isMP4
                 ? "mp4"
                 : "webm";
 
@@ -3925,14 +4884,28 @@ async function exportVideo(){
             );
 
 
-        const url =
+        APP.exportObjectURL =
             URL.createObjectURL(
                 blob
             );
 
 
-        const filename =
-            safeName(
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.className =
+            "btn primary";
+
+
+        link.href =
+            APP.exportObjectURL;
+
+
+        link.download =
+            safeFileName(
                 APP.title ||
                 "مشروع-موشن"
             ) +
@@ -3940,15 +4913,21 @@ async function exportVideo(){
             extension;
 
 
-        $("download").innerHTML = `
-            <a
-                class="btn primary"
-                href="${url}"
-                download="${escapeHTML(filename)}"
-            >
-                حفظ ${extension.toUpperCase()}
-            </a>
-        `;
+        link.textContent =
+            "حفظ " +
+            extension.toUpperCase();
+
+
+        $("download")
+            .innerHTML =
+            "";
+
+
+        $("download")
+            .appendChild(
+                link
+            );
+
 
         $("download")
             .classList
@@ -3963,71 +4942,279 @@ async function exportVideo(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "EXPORT ERROR:",
+            error
+        );
+
 
         alert(
-            error.message ||
-            "حدث خطأ أثناء التصدير"
+            "فشل التصدير:\n\n" +
+            (
+                error &&
+                error.message
+                    ? error.message
+                    : String(error)
+            )
         );
+
 
     }finally{
 
-        APP.exporting = false;
+        APP.exporting =
+            false;
 
-        $("export").style.display =
+
+        $("export")
+            .style.display =
             "block";
 
-        $("stop").style.display =
-            "none";
 
-        setPlayhead(0);
+        $("stop")
+            .style.display =
+            "none";
 
     }
 
 }
 
 
-/* =========================================================
-   STOP
-========================================================= */
+/* =====================================================
+   STOP EXPORT
+===================================================== */
 
-$("stop").addEventListener(
+$("stop")
+.addEventListener(
     "click",
     () => {
 
-        APP.stop = true;
+        if(
+            !APP.exporting
+        ){
 
-        $("progressText").textContent =
-            "جارٍ إيقاف التصدير...";
+            return;
+
+        }
+
+
+        APP.stop =
+            true;
+
+
+        updateProgress(
+            0,
+            "جارٍ إيقاف التصدير..."
+        );
 
     }
 );
 
 
-/* =========================================================
+/* =====================================================
    PROGRESS
-========================================================= */
+===================================================== */
 
-function updateProgress(percent,text){
+function updateProgress(
+    percent,
+    text
+){
 
-    $("progressBar").style.width =
+    const value =
         Math.max(
             0,
             Math.min(
                 100,
-                percent
+                Number(percent) || 0
             )
-        ) + "%";
+        );
 
-    $("progressText").textContent =
+
+    $("progressBar")
+        .style.width =
+        value +
+        "%";
+
+
+    $("progressText")
+        .textContent =
         text;
 
 }
 
 
-/* =========================================================
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(
+    text
+){
+
+    $("stateInfo")
+        .textContent =
+        text;
+
+
+    $("globalStatus")
+        .textContent =
+        text;
+
+}
+
+
+/* =====================================================
+   PREVIEW PLAYBACK
+===================================================== */
+
+function stopPreview(){
+
+    APP.previewPlaying =
+        false;
+
+
+    if(APP.previewRAF){
+
+        cancelAnimationFrame(
+            APP.previewRAF
+        );
+
+        APP.previewRAF =
+            null;
+
+    }
+
+}
+
+
+async function playPreview(){
+
+    if(
+        !APP.loaded ||
+        APP.previewPlaying
+    ){
+
+        return;
+
+    }
+
+
+    APP.previewPlaying =
+        true;
+
+
+    const startedAt =
+        performance.now();
+
+
+    const initialTime =
+        APP.currentTime;
+
+
+    async function tick(now){
+
+        if(
+            !APP.previewPlaying
+        ){
+
+            return;
+
+        }
+
+
+        const elapsed =
+            now -
+            startedAt;
+
+
+        const time =
+            initialTime +
+            elapsed;
+
+
+        if(
+            time >=
+            APP.durationMs
+        ){
+
+            await setProjectTime(
+                0
+            );
+
+
+            stopPreview();
+
+
+            return;
+
+        }
+
+
+        await setProjectTime(
+            time
+        );
+
+
+        APP.previewRAF =
+            requestAnimationFrame(
+                tick
+            );
+
+    }
+
+
+    APP.previewRAF =
+        requestAnimationFrame(
+            tick
+        );
+
+}
+
+
+/* =====================================================
+   TIMELINE CLICK
+===================================================== */
+
+$("timelineTrack")
+.addEventListener(
+    "click",
+    async event => {
+
+        if(!APP.loaded){
+            return;
+        }
+
+
+        const rect =
+            event.currentTarget
+            .getBoundingClientRect();
+
+
+        const ratio =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    (
+                        event.clientX -
+                        rect.left
+                    ) /
+                    rect.width
+                )
+            );
+
+
+        await setProjectTime(
+            ratio *
+            APP.durationMs
+        );
+
+    }
+);
+
+
+/* =====================================================
    UTILITIES
-========================================================= */
+===================================================== */
 
 function sleep(ms){
 
@@ -4049,26 +5236,37 @@ function formatDuration(ms){
             ms / 1000
         );
 
+
     if(seconds < 60){
 
-        return seconds + " ثانية";
+        return (
+            seconds +
+            " ثانية"
+        );
 
     }
 
+
     const minutes =
         Math.floor(
-            seconds / 60
+            seconds /
+            60
         );
 
+
     const rest =
-        seconds % 60;
+        seconds %
+        60;
+
 
     return (
         minutes +
         " د" +
         (
             rest
-                ? " " + rest + " ث"
+                ? " " +
+                  rest +
+                  " ث"
                 : ""
         )
     );
@@ -4076,53 +5274,65 @@ function formatDuration(ms){
 }
 
 
-function safeName(name){
+function safeFileName(
+    value
+){
 
-    return String(name)
-        .replace(
-            /[\\/:*?"<>|]/g,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            "-"
-        )
-        .slice(0,70)
-        || "مشروع-موشن";
-
-}
-
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return String(
+        value || ""
+    )
+    .replace(
+        /[\\/:*?"<>|]/g,
+        ""
+    )
+    .replace(
+        /\s+/g,
+        "-"
+    )
+    .slice(
+        0,
+        80
+    )
+    ||
+    "مشروع-موشن";
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+function escapeHTML(
+    value
+){
+
+    return String(
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
 resizePreview();
 
