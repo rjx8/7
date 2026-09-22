@@ -715,6 +715,7 @@ button:disabled{
     position:relative;
     overflow:hidden;
     direction:ltr;
+    cursor:pointer;
 }
 
 .timeline-track{
@@ -722,6 +723,7 @@ button:disabled{
     inset:16px 8px;
     display:flex;
     gap:2px;
+    pointer-events:none;
 }
 
 .scene{
@@ -741,6 +743,7 @@ button:disabled{
     color:#d7c38c;
     direction:rtl;
     white-space:nowrap;
+    pointer-events:none;
 }
 
 .playhead{
@@ -751,6 +754,7 @@ button:disabled{
     width:2px;
     background:#fff;
     box-shadow:0 0 12px #fff;
+    pointer-events:none;
 }
 
 /* =========================================
@@ -1403,11 +1407,13 @@ button:disabled{
 
             <div class="panel timeline-panel">
 
-                <div class="panel-title">
+                <!-- إصلاح إضافة زر التشغيل بجانب عنوان الخط الزمني -->
+                <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
                     الخط الزمني
+                    <button class="btn green" id="playBtn" style="width:auto; padding:6px 14px; font-size:10px; border-radius:8px;">تشغيل العرض</button>
                 </div>
 
-                <div class="timeline">
+                <div class="timeline" id="timelineContainer">
 
                     <div
                         class="timeline-track"
@@ -1694,10 +1700,9 @@ button:disabled{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!--
-    Mediabunny هو محرك التصدير الجديد.
-    يدعم CanvasSource + Output + MP4/WebM.
+    تعديل مكتبة Mediabunny لتعمل على المتصفح بنجاح بدلا من NodeJS
 -->
-<script src="https://cdn.jsdelivr.net/npm/mediabunny@latest/dist/bundles/mediabunny.cjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/mediabunny/dist/bundles/mediabunny.umd.js"></script>
 
 
 <script>
@@ -1741,9 +1746,7 @@ const APP = {
 
     currentTime:0,
 
-    previewPlaying:false,
-
-    previewRAF:null
+    previewPlaying:false
 
 };
 
@@ -5066,107 +5069,45 @@ function setStatus(
    PREVIEW PLAYBACK
 ===================================================== */
 
-function stopPreview(){
-
-    APP.previewPlaying =
-        false;
-
-
-    if(APP.previewRAF){
-
-        cancelAnimationFrame(
-            APP.previewRAF
-        );
-
-        APP.previewRAF =
-            null;
-
+$("playBtn").addEventListener("click", () => {
+    if(!APP.loaded){
+        alert("تحقق من تحميل المشروع أولاً.");
+        return;
     }
+    if(APP.previewPlaying) {
+        stopPreview();
+    } else {
+        playPreview();
+    }
+});
 
+function stopPreview(){
+    APP.previewPlaying = false;
+    const playBtn = $("playBtn");
+    if(playBtn) playBtn.textContent = "تشغيل العرض";
 }
 
-
 async function playPreview(){
+    if(!APP.loaded || APP.previewPlaying) return;
+    APP.previewPlaying = true;
+    $("playBtn").textContent = "إيقاف العرض";
+    
+    let startedAt = performance.now();
+    let initialTime = APP.currentTime;
 
-    if(
-        !APP.loaded ||
-        APP.previewPlaying
-    ){
+    while(APP.previewPlaying){
+        const now = performance.now();
+        const elapsed = now - startedAt;
+        const time = initialTime + elapsed;
 
-        return;
-
-    }
-
-
-    APP.previewPlaying =
-        true;
-
-
-    const startedAt =
-        performance.now();
-
-
-    const initialTime =
-        APP.currentTime;
-
-
-    async function tick(now){
-
-        if(
-            !APP.previewPlaying
-        ){
-
-            return;
-
-        }
-
-
-        const elapsed =
-            now -
-            startedAt;
-
-
-        const time =
-            initialTime +
-            elapsed;
-
-
-        if(
-            time >=
-            APP.durationMs
-        ){
-
-            await setProjectTime(
-                0
-            );
-
-
+        if(time >= APP.durationMs){
+            await setProjectTime(0);
             stopPreview();
-
-
-            return;
-
+            break;
         }
-
-
-        await setProjectTime(
-            time
-        );
-
-
-        APP.previewRAF =
-            requestAnimationFrame(
-                tick
-            );
-
+        await setProjectTime(time);
+        await sleep(15); // انتظار ~15ms (تقريبا 60 إطار في الثانية)
     }
-
-
-    APP.previewRAF =
-        requestAnimationFrame(
-            tick
-        );
-
 }
 
 
@@ -5174,7 +5115,7 @@ async function playPreview(){
    TIMELINE CLICK
 ===================================================== */
 
-$("timelineTrack")
+$("timelineContainer")
 .addEventListener(
     "click",
     async event => {
@@ -5183,30 +5124,17 @@ $("timelineTrack")
             return;
         }
 
+        const rect = event.currentTarget.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+        const newTime = ratio * APP.durationMs;
 
-        const rect =
-            event.currentTarget
-            .getBoundingClientRect();
-
-
-        const ratio =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    (
-                        event.clientX -
-                        rect.left
-                    ) /
-                    rect.width
-                )
-            );
-
-
-        await setProjectTime(
-            ratio *
-            APP.durationMs
-        );
+        await setProjectTime(newTime);
+        
+        // إذا كان العرض يشتغل أثناء النقر نقوم بتبديل نقطة البداية ليكمل من المكان الجديد
+        if(APP.previewPlaying){
+            stopPreview();
+            setTimeout(playPreview, 50);
+        }
 
     }
 );
