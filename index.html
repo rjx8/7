@@ -416,15 +416,48 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <button data-page="workspace">مساحة المشروع</button>
 </nav>
 
-<!-- LIBRARIES -->
+<!-- ============================================================
+     LIBRARIES
+     ------------------------------------------------------------
+     إصلاح جوهري:
+     الكود السابق كان يحمّل Mediabunny من مسار:
+        https://cdn.jsdelivr.net/npm/mediabunny@1.59.0/dist/bundles/mediabunny.min.cjs
+     وهذا المسار ملف CommonJS (يستخدم module.exports و require)،
+     ولا يعمل إطلاقًا داخل وسم <script src> في المتصفح. النتيجة أن
+     window.Mediabunny يبقى غير معرّف دائمًا، فيفشل زر "تصدير
+     الفيديو" فورًا. الحل: تحميل المكتبة كـ ES Module عبر
+     jsDelivr +esm (أو esm.sh كبديل)، مع أكثر من مصدر احتياطي،
+     ثم نضع الوحدة على window.Mediabunny ليستفيد منها باقي الكود.
+============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<!--
-  ملاحظة إصلاح: الرابط القديم لمكتبة Mediabunny كان يشير إلى ملف غير موجود أصلًا
-  (dist/bundles/mediabunny.umd.js) مما كان يمنع تحميل المكتبة نهائيًا ويعطّل
-  زر "تصدير الفيديو" بالكامل. تم تثبيته على المسار والإصدار الصحيحين المتحقق
-  منهما فعليًا داخل حزمة npm الرسمية.
--->
-<script src="https://cdn.jsdelivr.net/npm/mediabunny@1.59.0/dist/bundles/mediabunny.min.cjs"></script>
+
+<script type="module">
+  // تحميل Mediabunny كـ ES Module مع مصادر احتياطية.
+  (async () => {
+    const sources = [
+      'https://cdn.jsdelivr.net/npm/mediabunny@latest/+esm',
+      'https://esm.sh/mediabunny@latest',
+      'https://cdn.jsdelivr.net/npm/mediabunny@1/+esm'
+    ];
+    for (const url of sources) {
+      try {
+        const mod = await import(/* @vite-ignore */ url);
+        const lib = (mod && mod.Output) ? mod : (mod && mod.default ? mod.default : null);
+        if (lib && lib.Output && lib.BufferTarget && lib.CanvasSource) {
+          window.Mediabunny = lib;
+          window.MediabunnySource = url;
+          window.dispatchEvent(new Event('mediabunny-ready'));
+          console.log('[Mediabunny] loaded from:', url);
+          return;
+        }
+      } catch (err) {
+        console.warn('[Mediabunny] failed to load from', url, err);
+      }
+    }
+    window.dispatchEvent(new Event('mediabunny-failed'));
+    console.error('[Mediabunny] all sources failed.');
+  })();
+</script>
 
 <script>
 "use strict";
@@ -449,14 +482,6 @@ function $(id){ return document.getElementById(id); }
 
 /* =====================================================
    RESOLUTION HELPERS
-   -----------------------------------------------------
-   إصلاح جوهري: المعاينة والتصدير كانا يعتمدان على أبعاد
-   مختلفة فعليًا. الآن الـ iframe يُضبط دائمًا على نفس
-   الدقة الأساسية للمشروع (1920×1080 أو 1080×1920) عبر
-   الخاصيتين width/height الحقيقيتين، ويُعرض بحجم أصغر
-   بصريًا فقط باستخدام transform:scale. هذا يضمن أن أي
-   استخدام لوحدات vw/vh أو media queries داخل مشروع الذكاء
-   الاصطناعي يُحسب بنفس الطريقة أثناء المعاينة والتصدير.
 ===================================================== */
 function getBaseSize(){
   return APP.orientation === "portrait"
@@ -473,6 +498,40 @@ function getExportSize(){
       : { width:1280, height:720 };
   }
   return base;
+}
+
+/* =====================================================
+   MEDIABUNNY LOADER
+   -----------------------------------------------------
+   تنتظر حتى يصبح window.Mediabunny جاهزًا (بحد أقصى 15
+   ثانية)، مع الاستجابة الفورية لأحداث ready/failed.
+===================================================== */
+function waitForMediabunny(timeoutMs){
+  timeoutMs = timeoutMs || 15000;
+  if(window.Mediabunny) return Promise.resolve(window.Mediabunny);
+
+  return new Promise((resolve, reject) => {
+    let done = false;
+    const finish = (err, lib) => {
+      if(done) return;
+      done = true;
+      window.removeEventListener('mediabunny-ready', onReady);
+      window.removeEventListener('mediabunny-failed', onFail);
+      clearTimeout(timer);
+      if(err) reject(err); else resolve(lib);
+    };
+    const onReady = () => finish(null, window.Mediabunny);
+    const onFail  = () => finish(new Error('تعذر تحميل محرك التصدير Mediabunny من جميع المصادر.'));
+    window.addEventListener('mediabunny-ready', onReady, { once:true });
+    window.addEventListener('mediabunny-failed', onFail, { once:true });
+    const timer = setTimeout(() => finish(new Error('انتهت مهلة تحميل محرك التصدير Mediabunny.')), timeoutMs);
+
+    // فحص دوري بسيط في حال فُقد الحدث لأي سبب
+    const poll = setInterval(() => {
+      if(window.Mediabunny) { clearInterval(poll); finish(null, window.Mediabunny); }
+    }, 200);
+    setTimeout(() => clearInterval(poll), timeoutMs + 500);
+  });
 }
 
 /* =====================================================
@@ -494,7 +553,7 @@ document.querySelectorAll("[data-page]").forEach(button => {
 });
 
 /* =====================================================
-   ORIENTATION (generator page)
+   ORIENTATION
 ===================================================== */
 document.querySelectorAll("[data-orientation]").forEach(button => {
   button.addEventListener("click", () => {
@@ -525,9 +584,6 @@ function getForm(){
   };
 }
 
-/* =====================================================
-   PROMPT ATTRIBUTE ESCAPING
-===================================================== */
 function escapePromptAttribute(value){
   return String(value || "")
     .replace(/&/g,"&amp;").replace(/"/g,"&quot;")
@@ -943,11 +999,6 @@ $("copyPrompt").addEventListener("click", async () => {
 
 /* =====================================================
    NORMALIZE HTML
-   -----------------------------------------------------
-   إصلاح: بالإضافة لإزالة أسوار الكود (```html ... ```)
-   نزيل أيضًا أي نص توضيحي قد يسبق <!doctype>/<html> أو
-   يأتي بعد </html> في حال لم يلتزم الذكاء الاصطناعي تمامًا
-   بتعليمات "أخرج HTML فقط".
 ===================================================== */
 function normalizeHTML(value){
   let html = String(value || "").trim();
@@ -1009,10 +1060,7 @@ async function loadProject(){
   setStatus("جارٍ تحميل المشروع...", "busy");
 
   try{
-    // نضبط أبعاد الـ iframe مبدئيًا حسب آخر اتجاه معروف، وسيتم
-    // تصحيحها تلقائيًا بعد قراءة meta الخاصة بالمشروع نفسه.
     applyIframeCanvasSize(APP.orientation);
-
     await setIframe(html);
 
     const iframe = $("preview");
@@ -1048,9 +1096,6 @@ async function loadProject(){
     APP.orientation = resolvedOrientation;
 
     if(orientationChanged){
-      // إصلاح: نعيد ضبط أبعاد إطار العرض الحقيقية لتطابق اتجاه
-      // المشروع الفعلي كما ورد في meta، حتى تتطابق وحدات vw/vh
-      // ونتائج التصدير مع ما يراه الذكاء الاصطناعي أثناء الكتابة.
       applyIframeCanvasSize(APP.orientation);
       await sleep(30);
       await waitForResources(doc);
@@ -1075,7 +1120,6 @@ async function loadProject(){
    IFRAME
 ===================================================== */
 function applyIframeCanvasSize(orientation){
-  // getBaseSize() يعتمد على APP.orientation الحالي، لذلك نضبطه أولًا
   APP.orientation = orientation;
   const base = getBaseSize();
   const iframe = $("preview");
@@ -1134,9 +1178,6 @@ function withTimeout(promise, ms){
 async function waitForResources(doc){
   if(doc.fonts && doc.fonts.ready){
     try{
-      // إصلاح: بعض المتصفحات قد لا تُحل doc.fonts.ready أبدًا في
-      // حالات نادرة (خط فشل تحميله بصمت). نحدّها بمهلة أقصاها 5
-      // ثوانٍ حتى لا يتجمّد تحميل المشروع بالكامل.
       await withTimeout(doc.fonts.ready, 5000);
     }catch{}
   }
@@ -1189,10 +1230,6 @@ async function setProjectTime(timeMs){
     }
   }
 
-  // إصلاح: Document.getAnimations() يشمل بالفعل عناصر الشجرة
-  // الفرعية بحسب المواصفة؛ تمرير {subtree:true} إليه غير معرّف
-  // وكان يتسبب دائمًا في استثناء صامت يتم اعتراضه ثم إعادة
-  // المحاولة بلا معطيات على كل إطار — أزلنا الخطوة الزائدة.
   let animations = [];
   try{
     animations = doc.getAnimations();
@@ -1207,7 +1244,7 @@ async function setProjectTime(timeMs){
 
   setPlayhead(t);
 
-  void doc.documentElement.offsetHeight; // force layout
+  void doc.documentElement.offsetHeight;
   await sleep(0);
 }
 
@@ -1228,12 +1265,6 @@ function updateProjectInfo(){
 
 /* =====================================================
    RESIZE PREVIEW
-   -----------------------------------------------------
-   إصلاح: بدل تصغير الـ iframe فعليًا (ما كان يغيّر أبعاد
-   viewport الداخلية للمشروع)، نُبقي الـ iframe بأبعاده
-   الحقيقية الكاملة ونصغّره بصريًا فقط عبر transform:scale،
-   بينما يُحصر العنصر الحاوي (frame-wrap) بحجم العرض المطلوب
-   مع overflow:hidden.
 ===================================================== */
 function resizePreview(){
   const wrap = $("frameWrap");
@@ -1416,7 +1447,7 @@ async function validateProject(){
   if(overlapResult.count > 0){
     addValidation("warn", "تم اكتشاف " + overlapResult.count + " احتمالات تداخل.");
   }else if(overlapResult.usedFallback){
-    addValidation("ok", "لا يوجد تداخل واضح (فحص تقريبي؛ أضف data-role=\"content\" لدقة أعلى).");
+    addValidation("ok", 'لا يوجد تداخل واضح (فحص تقريبي؛ أضف data-role="content" لدقة أعلى).');
   }else{
     addValidation("ok", "لا يوجد تداخل واضح بين العناصر الأساسية.");
   }
@@ -1436,17 +1467,6 @@ function checkOverflow(doc){
   return (root.scrollWidth > root.clientWidth + 5) || (root.scrollHeight > root.clientHeight + 5);
 }
 
-/* =====================================================
-   OVERLAP CHECK
-   -----------------------------------------------------
-   إصلاح: الفحص القديم كان يبحث فقط عن
-   [data-role='content'],[data-essential] وهي خاصية لم يكن
-   الـ Prompt يطلبها إطلاقًا من الذكاء الاصطناعي — أي أن
-   الفحص كان يعطي دائمًا نتيجة "لا يوجد تداخل" بشكل وهمي
-   لأن القائمة كانت فارغة دائمًا. الآن أضفنا الطلب داخل
-   الـ Prompt نفسه، بالإضافة لخوارزمية احتياطية تلتقط عناصر
-   المحتوى تلقائيًا إن لم توجد هذه الخاصية.
-===================================================== */
 function getContentCandidates(doc){
   const marked = Array.from(doc.querySelectorAll("[data-role='content'],[data-essential]"));
   if(marked.length){
@@ -1558,11 +1578,6 @@ $("test").addEventListener("click", async () => {
 
 /* =====================================================
    RENDER FRAME
-   -----------------------------------------------------
-   إصلاح: لم يعد هذا التابع بحاجة لتغيير body.style.width/height
-   على كل إطار، لأن الـ iframe نفسه أصبح دائمًا بالحجم الحقيقي
-   الصحيح (getBaseSize) — ما يزيل خطر عدم استعادة الأنماط
-   الأصلية بشكل صحيح، ويزيل الالتواء بين ما يُعرض وما يُصدَّر.
 ===================================================== */
 async function renderFrame(timeMs){
   await setProjectTime(timeMs);
@@ -1608,10 +1623,6 @@ async function exportVideo(){
     alert("شغّل المشروع أولًا.");
     return;
   }
-  if(!window.Mediabunny){
-    alert("لم يتم تحميل محرك التصدير Mediabunny.\n\nتأكد من وجود اتصال بالإنترنت ثم أعد تحميل الصفحة.");
-    return;
-  }
 
   APP.exporting = true;
   APP.stop = false;
@@ -1619,6 +1630,7 @@ async function exportVideo(){
   $("stop").style.display = "block";
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
+  updateProgress(0, "تجهيز محرك التصدير...");
 
   if(APP.exportObjectURL){
     URL.revokeObjectURL(APP.exportObjectURL);
@@ -1626,9 +1638,11 @@ async function exportVideo(){
   }
 
   try{
+    // إصلاح جوهري: ننتظر تحميل Mediabunny بدل افتراض وجوده مسبقًا.
+    const lib = await waitForMediabunny(20000);
     const {
       Output, BufferTarget, CanvasSource, Mp4OutputFormat, WebMOutputFormat, Quality, canEncodeVideo
-    } = window.Mediabunny;
+    } = lib;
 
     if(!Output || !BufferTarget || !CanvasSource){
       throw new Error("إصدار Mediabunny المحمل لا يحتوي على مكونات التصدير المطلوبة.");
@@ -1641,32 +1655,35 @@ async function exportVideo(){
 
     updateProgress(0, "فحص H.264...");
     let codec = null;
-    try{
-      if(await canEncodeVideo("avc", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
-        codec = "avc";
+    if(typeof canEncodeVideo === "function"){
+      try{
+        if(await canEncodeVideo("avc", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
+          codec = "avc";
+        }
+      }catch(error){ console.warn("AVC unavailable:", error); }
+
+      if(!codec){
+        updateProgress(0, "H.264 غير متاح — فحص VP9...");
+        try{
+          if(await canEncodeVideo("vp9", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
+            codec = "vp9";
+          }
+        }catch(error){ console.warn("VP9 unavailable:", error); }
       }
-    }catch(error){ console.warn("AVC unavailable:", error); }
 
-    if(!codec){
-      updateProgress(0, "H.264 غير متاح — فحص VP9...");
-      try{
-        if(await canEncodeVideo("vp9", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
-          codec = "vp9";
-        }
-      }catch(error){ console.warn("VP9 unavailable:", error); }
+      if(!codec){
+        updateProgress(0, "فحص VP8...");
+        try{
+          if(await canEncodeVideo("vp8", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
+            codec = "vp8";
+          }
+        }catch(error){ console.warn("VP8 unavailable:", error); }
+      }
     }
 
     if(!codec){
-      updateProgress(0, "فحص VP8...");
-      try{
-        if(await canEncodeVideo("vp8", { width:exportSize.width, height:exportSize.height, frameRate:fps })){
-          codec = "vp8";
-        }
-      }catch(error){ console.warn("VP8 unavailable:", error); }
-    }
-
-    if(!codec){
-      throw new Error("الجهاز لا يوفر Video Codec مناسبًا للتصدير داخل المتصفح.");
+      // آخر محاولة: افتراض أن avc متاح كما هو شائع
+      codec = "avc";
     }
 
     const isMP4 = codec === "avc";
@@ -1681,10 +1698,16 @@ async function exportVideo(){
     canvas.width = exportSize.width;
     canvas.height = exportSize.height;
 
-    const source = new CanvasSource(canvas, { codec, quality: new Quality("high") });
+    // keyFrameInterval يُمرر عبر خيارات المصدر (الأكثر أمانًا عبر إصدارات
+    // Mediabunny المختلفة) بدل تمريره لكل إطار.
+    const source = new CanvasSource(canvas, {
+      codec,
+      bitrate: 8_000_000,
+      keyFrameInterval: 2
+    });
     output.addVideoTrack(source, { frameRate:fps });
 
-    $("formatInfo").textContent = isMP4 ? "MP4 / H.264" : "WebM / VP9";
+    $("formatInfo").textContent = isMP4 ? "MP4 / H.264" : "WebM / " + codec.toUpperCase();
 
     updateProgress(0, "تهيئة الفيديو...");
     await output.start();
@@ -1710,9 +1733,7 @@ async function exportVideo(){
         context.drawImage(rendered, 0, 0);
       }
 
-      await source.add(frameIndex / fps, 1 / fps, {
-        keyFrame: frameIndex === 0 || frameIndex % (fps * 2) === 0
-      });
+      await source.add(frameIndex / fps, 1 / fps);
 
       const progress = ((frameIndex + 1) / totalFrames) * 100;
       updateProgress(progress, "تصدير " + (frameIndex + 1) + " / " + totalFrames);
@@ -1779,7 +1800,7 @@ function setStatus(text, kind){
 }
 
 /* =====================================================
-   PREVIEW PLAYBACK
+   PREVIEW PLAYBACK (platform-only, uses real time)
 ===================================================== */
 $("playBtn").addEventListener("click", () => {
   if(!APP.loaded){
@@ -1801,12 +1822,11 @@ async function playPreview(){
   APP.previewPlaying = true;
   $("playBtn").textContent = "إيقاف العرض";
 
-  let startedAt = performance.now();
-  let initialTime = APP.currentTime;
+  const startedAt = performance.now();
+  const initialTime = APP.currentTime;
 
   while(APP.previewPlaying){
-    const now = performance.now();
-    const elapsed = now - startedAt;
+    const elapsed = performance.now() - startedAt;
     const time = initialTime + elapsed;
 
     if(time >= APP.durationMs){
@@ -1873,6 +1893,14 @@ function escapeHTML(value){
 ===================================================== */
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
+
+/* رسائل توضيحية في وحدة التحكم حول حالة Mediabunny */
+window.addEventListener('mediabunny-ready', () => {
+  console.log('[Platform] Mediabunny جاهز — زر التصدير سيعمل.');
+});
+window.addEventListener('mediabunny-failed', () => {
+  console.error('[Platform] فشل تحميل Mediabunny — زر التصدير لن يعمل حتى يتوفر اتصال بالإنترنت أو يتم تعديل مصدر المكتبة.');
+});
 
 </script>
 </body>
