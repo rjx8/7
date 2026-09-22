@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>منصة المشاريع المرئية المتحركة</title>
+
+<!-- ============================================================
+     إصلاح الخطوط #1: تحميل كل الخطوط العربية الشائعة مسبقًا
+     ------------------------------------------------------------
+     المشكلة: المنصة كانت تعتمد على خطوط النظام فقط، والمشاريع
+     المولّدة تحمّل خطوطها من Google Fonts داخل iframe. النتيجة
+     أن الخطوط تُحمّل مرتين، وفي بعض الأحيان لا تُحمّل إطلاقًا
+     بسبب ترتيب الأحداث داخل iframe.
+
+     الحل: نحمّل الخطوط هنا في المنصة الأم. وبما أن iframe
+     يستخدم allow-same-origin، فإن كاش المتصفح مشترك — أي أن
+     أي طلب لاحق من داخل iframe سيُخدَم فورًا من الكاش.
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;900&family=Noto+Sans+Arabic:wght@400;500;700;900&family=Almarai:wght@400;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --bg:#071013; --panel:#0d191d; --panel2:#101e23; --line:rgba(255,255,255,.085);
@@ -12,7 +29,7 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);
-  font-family:"Tajawal","Noto Sans Arabic","Cairo",Arial,sans-serif}
+  font-family:"Tajawal","Noto Sans Arabic","Cairo","Almarai",Arial,sans-serif}
 body{overflow-x:hidden}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
@@ -356,6 +373,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
           <div class="info-row"><span>الصف</span><span id="infoGrade">—</span></div>
           <div class="info-row"><span>الاتجاه</span><span id="infoOrientation">—</span></div>
           <div class="info-row"><span>المدة</span><span id="infoDuration">—</span></div>
+          <div class="info-row"><span>الخطوط</span><span id="infoFonts">—</span></div>
         </div>
       </div>
 
@@ -418,16 +436,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <!-- ============================================================
      LIBRARIES
-     ------------------------------------------------------------
-     إصلاح جوهري:
-     الكود السابق كان يحمّل Mediabunny من مسار:
-        https://cdn.jsdelivr.net/npm/mediabunny@1.59.0/dist/bundles/mediabunny.min.cjs
-     وهذا المسار ملف CommonJS (يستخدم module.exports و require)،
-     ولا يعمل إطلاقًا داخل وسم <script src> في المتصفح. النتيجة أن
-     window.Mediabunny يبقى غير معرّف دائمًا، فيفشل زر "تصدير
-     الفيديو" فورًا. الحل: تحميل المكتبة كـ ES Module عبر
-     jsDelivr +esm (أو esm.sh كبديل)، مع أكثر من مصدر احتياطي،
-     ثم نضع الوحدة على window.Mediabunny ليستفيد منها باقي الكود.
 ============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -475,7 +483,9 @@ const APP = {
   stop:false,
   exportObjectURL:null,
   currentTime:0,
-  previewPlaying:false
+  previewPlaying:false,
+  detectedFonts:[],
+  missingFonts:[]
 };
 
 function $(id){ return document.getElementById(id); }
@@ -502,9 +512,6 @@ function getExportSize(){
 
 /* =====================================================
    MEDIABUNNY LOADER
-   -----------------------------------------------------
-   تنتظر حتى يصبح window.Mediabunny جاهزًا (بحد أقصى 15
-   ثانية)، مع الاستجابة الفورية لأحداث ready/failed.
 ===================================================== */
 function waitForMediabunny(timeoutMs){
   timeoutMs = timeoutMs || 15000;
@@ -526,7 +533,6 @@ function waitForMediabunny(timeoutMs){
     window.addEventListener('mediabunny-failed', onFail, { once:true });
     const timer = setTimeout(() => finish(new Error('انتهت مهلة تحميل محرك التصدير Mediabunny.')), timeoutMs);
 
-    // فحص دوري بسيط في حال فُقد الحدث لأي سبب
     const poll = setInterval(() => {
       if(window.Mediabunny) { clearInterval(poll); finish(null, window.Mediabunny); }
     }, 200);
@@ -592,6 +598,14 @@ function escapePromptAttribute(value){
 
 /* =====================================================
    PROMPT TEMPLATE
+   -----------------------------------------------------
+   إصلاح: أضفنا قسم "الخطوط (إلزامي)" وأعدنا صياغة قسم
+   العربية ليفرض على الذكاء الاصطناعي:
+     - تحميل الخطوط عبر <link> من Google Fonts بشكل صريح
+     - استخدام font-family مع fallback واضح
+     - انتظار document.fonts.load() لكل وزن مستخدم
+     - إضافة كلاس fonts-ready بعد التحميل
+   هذا يضمن ظهور الخط في المعاينة والتصدير معًا.
 ===================================================== */
 function createPrompt(){
   const data = getForm();
@@ -747,6 +761,55 @@ data-role="content"
 حتى تتمكن أداة الفحص التلقائي من كشف أي تداخل حقيقي بين هذه العناصر.
 
 ==================================================
+الخطوط (إلزامي — مهم جدًا)
+==================================================
+
+يجب أن يبدأ ملف HTML بتحميل الخط من Google Fonts
+داخل <head> بهذا الترتيب بالضبط:
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+قواعد إلزامية للخطوط:
+
+1. استخدم خطًّا واحدًا أو خطين كحد أقصى في كامل المشروع.
+
+2. اكتب font-family في body بهذا الشكل مع fallback واضح:
+   font-family: 'Tajawal', 'Cairo', 'Noto Sans Arabic', system-ui, sans-serif;
+
+3. كل عنصر نصي يجب أن يرث أو يُصرّح بـ font-family.
+
+4. لا تستخدم أوزانًا غير محمّلة (مثل 300 إذا لم تطلبها في الرابط).
+   الأوزان المسموحة فقط: 400, 500, 700, 900.
+
+5. في كود JavaScript قبل تشغيل أي حركة أو عرض، انتظر تحميل الخط
+   بشكل صريح:
+
+   async function ensureFonts(){
+     if(!document.fonts) return;
+     try{
+       await document.fonts.load('400 24px Tajawal');
+       await document.fonts.load('700 24px Tajawal');
+       await document.fonts.load('900 24px Tajawal');
+       await document.fonts.ready;
+     }catch(e){}
+     document.documentElement.classList.add('fonts-ready');
+   }
+
+6. اجعل النصوص مخفية افتراضيًا ثم اكشفها بعد fonts-ready:
+
+   html:not(.fonts-ready) [data-role="content"]{visibility:hidden;}
+
+   ثم في نهاية ensureFonts():
+   document.documentElement.classList.add('fonts-ready');
+
+7. لا تعتمد على خط النظام فقط — يجب تحميل خط Google Fonts فعليًا.
+   في حال فشل التحميل، يجب أن يبقى المشروع قابلًا للقراءة بـ fallback واضح.
+
+8. ممنوع استخدام font-weight: bold وحده دون التأكد من تحميل الوزن 700.
+
+==================================================
 العربية
 ==================================================
 
@@ -783,14 +846,6 @@ Cairo
 Almarai
 IBM Plex Sans Arabic
 Amiri
-
-استخدم خطًا أو خطين فقط.
-
-ضع:
-
-document.fonts.ready
-
-ضمن مرحلة تجهيز المشروع.
 
 ==================================================
 الصور
@@ -954,7 +1009,8 @@ HTML
 
 - RTL
 - اللغة العربية
-- الخطوط
+- الخطوط محمّلة عبر <link> صريح
+- وجود كلاس fonts-ready بعد التحميل
 - عدم وجود letter-spacing
 - عدم تفكيك الحروف
 - عدم وجود تداخل
@@ -1167,6 +1223,20 @@ function setIframe(html){
 
 /* =====================================================
    RESOURCES
+   -----------------------------------------------------
+   إصلاح الخطوط #2: انتظار تحميل الخطوط بشكل صريح
+   ------------------------------------------------------------
+   المشكلة السابقة: doc.fonts.ready يحل مبكرًا في حالة أن
+   الصفحة لم تطلب أي خط بعد (لأن CSS لم يُطبَّق على عنصر
+   ظاهر بعد)، أو يحل قبل أن يُحمَّل خط معيّن مستخدم.
+
+   الحل: 
+     1) فرض layout (offsetHeight) لتشغيل طلبات الخط
+     2) جمع كل عائلات الخطوط المستخدمة فعليًا عبر
+        getComputedStyle لكل عنصر
+     3) طلب تحميل كل عائلة بكل الأوزان الشائعة صراحة
+        عبر document.fonts.load()
+     4) ثم انتظر document.fonts.ready نهائيًا
 ===================================================== */
 function withTimeout(promise, ms){
   return Promise.race([
@@ -1175,17 +1245,97 @@ function withTimeout(promise, ms){
   ]);
 }
 
-async function waitForResources(doc){
-  if(doc.fonts && doc.fonts.ready){
-    try{
-      await withTimeout(doc.fonts.ready, 5000);
-    }catch{}
+const GENERIC_FAMILIES = new Set([
+  'inherit','initial','unset','revert',
+  'sans-serif','serif','monospace','cursive','fantasy','system-ui',
+  'ui-sans-serif','ui-serif','ui-monospace','ui-rounded',
+  'arial','helvetica','tahoma','verdana','times new roman',
+  'segoe ui','courier new','georgia','trebuchet ms'
+]);
+
+async function waitForFonts(doc, win){
+  if(!doc.fonts || !win) return;
+
+  // 1) فرض layout لتشغيل طلبات الخط في CSS
+  try { void doc.documentElement.offsetHeight; } catch{}
+  try { void (doc.body && doc.body.offsetHeight); } catch{}
+
+  // 2) انتظار أولي قصير
+  try { await withTimeout(doc.fonts.ready, 4000); } catch{}
+
+  // 3) جمع عائلات الخطوط الفعلية
+  const families = new Set();
+  let elements = [];
+  try {
+    elements = Array.from(doc.querySelectorAll('*')).slice(0, 1200);
+  } catch{}
+
+  for(const el of elements){
+    let ff = '';
+    try { ff = win.getComputedStyle(el).fontFamily || ''; } catch{}
+    if(!ff) continue;
+    ff.split(',').forEach(name => {
+      const clean = name.trim().replace(/^["']|["']$/g, '');
+      if(clean && !GENERIC_FAMILIES.has(clean.toLowerCase())){
+        families.add(clean);
+      }
+    });
   }
+
+  // 4) طلب صريح لكل عائلة بكل الأوزان الشائعة
+  const loads = [];
+  const weights = ['400', '500', '700', '900'];
+  families.forEach(fam => {
+    weights.forEach(w => {
+      try {
+        loads.push(doc.fonts.load(w + ' 24px "' + fam + '"'));
+      } catch{}
+    });
+  });
+
+  if(loads.length){
+    try { await withTimeout(Promise.all(loads), 10000); } catch{}
+  }
+
+  // 5) انتظار نهائي
+  try { await withTimeout(doc.fonts.ready, 5000); } catch{}
+
+  // 6) حفظ قائمة العائلات المكتشفة للعرض
+  APP.detectedFonts = Array.from(families);
+
+  // 7) فحص العائلات الناقصة
+  const missing = [];
+  families.forEach(fam => {
+    try {
+      if(!doc.fonts.check('400 16px "' + fam + '"')){
+        missing.push(fam);
+      }
+    } catch{
+      missing.push(fam);
+    }
+  });
+  APP.missingFonts = missing;
+
+  // 8) إضافة كلاس fonts-ready على <html> إن لم يكن موجودًا
+  //    (المشاريع التي تعتمد على كشف الظهور عبر هذا الكلاس)
+  try {
+    doc.documentElement.classList.add('fonts-ready');
+    doc.documentElement.setAttribute('data-fonts-ready', '1');
+  } catch{}
+}
+
+async function waitForResources(doc){
+  const win = doc.defaultView || window;
+
+  await waitForFonts(doc, win);
 
   const images = Array.from(doc.images || []);
   await Promise.all(images.map(image => waitForImage(image)));
 
-  await sleep(80);
+  // إعادة انتظار سريعة للتأكد من استقرار الحالة
+  try { await withTimeout(doc.fonts.ready, 2000); } catch{}
+
+  await sleep(120);
 }
 
 function waitForImage(image){
@@ -1260,6 +1410,20 @@ function updateProjectInfo(){
   $("infoGrade").textContent = APP.grade || "—";
   $("infoOrientation").textContent = portrait ? "عمودي" : "أفقي";
   $("infoDuration").textContent = formatDuration(APP.durationMs);
+
+  // عرض الخطوط المكتشفة
+  const detected = APP.detectedFonts || [];
+  const missing  = APP.missingFonts || [];
+  if($("infoFonts")){
+    if(detected.length === 0){
+      $("infoFonts").textContent = "—";
+    }else if(missing.length === 0){
+      $("infoFonts").textContent = detected.slice(0,2).join("، ") + (detected.length > 2 ? " +"+(detected.length-2) : "");
+    }else{
+      $("infoFonts").textContent = detected.slice(0,2).join("، ") + " (" + missing.length + " ناقص)";
+    }
+  }
+
   resizePreview();
 }
 
@@ -1389,10 +1553,30 @@ async function validateProject(){
     addValidation("warn", 'لغة HTML ليست "ar".');
   }
 
-  if(doc.fonts && doc.fonts.status === "loaded"){
-    addValidation("ok", "الخطوط محملة.");
+  /* فحص الخطوط */
+  const detected = APP.detectedFonts || [];
+  const missing  = APP.missingFonts || [];
+
+  if(detected.length === 0){
+    addValidation("warn", "لم يتم العثور على خطوط مخصصة (يستخدم خط النظام فقط).");
+  }else if(missing.length === 0){
+    addValidation("ok", "كل الخطوط محمّلة: " + detected.join("، "));
   }else{
-    addValidation("warn", "تعذر التأكد من حالة الخطوط.");
+    addValidation("bad", "خطوط لم تُحمَّل: " + missing.join("، "));
+  }
+
+  // كشف <link> لجوجل فونتس
+  const hasGoogleFontsLink = Array.from(doc.querySelectorAll('link[href*="fonts.googleapis.com"]')).length > 0;
+  if(hasGoogleFontsLink){
+    addValidation("ok", "رابط Google Fonts موجود.");
+  }else if(detected.length > 0){
+    addValidation("warn", "لا يوجد رابط Google Fonts صريح.");
+  }
+
+  if(doc.fonts && doc.fonts.status === "loaded"){
+    addValidation("ok", "حالة الخطوط: loaded.");
+  }else{
+    addValidation("warn", "حالة الخطوط غير مكتملة.");
   }
 
   let letterSpacing = false;
@@ -1533,6 +1717,8 @@ $("clear").addEventListener("click", () => {
   APP.loaded = false;
   APP.durationMs = 0;
   APP.title = "";
+  APP.detectedFonts = [];
+  APP.missingFonts = [];
   $("code").value = "";
   $("preview").srcdoc = "";
   $("stateInfo").textContent = "لا يوجد مشروع";
@@ -1540,6 +1726,7 @@ $("clear").addEventListener("click", () => {
   $("formatInfo").textContent = "—";
   $("infoTitle").textContent = "—";
   $("infoDuration").textContent = "—";
+  if($("infoFonts")) $("infoFonts").textContent = "—";
   $("timelineTrack").innerHTML = "";
   $("validation").innerHTML = "";
   $("download").innerHTML = "";
@@ -1638,7 +1825,9 @@ async function exportVideo(){
   }
 
   try{
-    // إصلاح جوهري: ننتظر تحميل Mediabunny بدل افتراض وجوده مسبقًا.
+    // التأكد من تحميل الخطوط قبل بدء التصدير
+    await waitForResources($("preview").contentDocument);
+
     const lib = await waitForMediabunny(20000);
     const {
       Output, BufferTarget, CanvasSource, Mp4OutputFormat, WebMOutputFormat, Quality, canEncodeVideo
@@ -1682,7 +1871,6 @@ async function exportVideo(){
     }
 
     if(!codec){
-      // آخر محاولة: افتراض أن avc متاح كما هو شائع
       codec = "avc";
     }
 
@@ -1698,8 +1886,6 @@ async function exportVideo(){
     canvas.width = exportSize.width;
     canvas.height = exportSize.height;
 
-    // keyFrameInterval يُمرر عبر خيارات المصدر (الأكثر أمانًا عبر إصدارات
-    // Mediabunny المختلفة) بدل تمريره لكل إطار.
     const source = new CanvasSource(canvas, {
       codec,
       bitrate: 8_000_000,
@@ -1800,7 +1986,7 @@ function setStatus(text, kind){
 }
 
 /* =====================================================
-   PREVIEW PLAYBACK (platform-only, uses real time)
+   PREVIEW PLAYBACK
 ===================================================== */
 $("playBtn").addEventListener("click", () => {
   if(!APP.loaded){
@@ -1894,12 +2080,18 @@ function escapeHTML(value){
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
 
-/* رسائل توضيحية في وحدة التحكم حول حالة Mediabunny */
+// انتظار جاهزية خطوط المنصة نفسها قبل الاعتماد عليها
+if(document.fonts && document.fonts.ready){
+  document.fonts.ready.then(() => {
+    console.log('[Platform] خطوط المنصة جاهزة.');
+  }).catch(()=>{});
+}
+
 window.addEventListener('mediabunny-ready', () => {
   console.log('[Platform] Mediabunny جاهز — زر التصدير سيعمل.');
 });
 window.addEventListener('mediabunny-failed', () => {
-  console.error('[Platform] فشل تحميل Mediabunny — زر التصدير لن يعمل حتى يتوفر اتصال بالإنترنت أو يتم تعديل مصدر المكتبة.');
+  console.error('[Platform] فشل تحميل Mediabunny.');
 });
 
 </script>
