@@ -3,26 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>منصة المشاريع المرئية المتحركة</title>
+<title>منصة المشاريع المرئية</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;900&family=Noto+Sans+Arabic:wght@400;500;700;900&family=Almarai:wght@400;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Cairo:wght@400;700;900&family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#071013; --panel:#0d191d; --panel2:#101e23; --line:rgba(255,255,255,.085);
+  --bg:#071013; --panel:#0d191d; --line:rgba(255,255,255,.085);
   --text:#eef5f4; --muted:#8ea4a8; --gold:#c9a85a; --gold2:#e3ca7c;
-  --green:#49c89b; --red:#df7474; --blue:#65aee0;
+  --green:#49c89b; --red:#df7474;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);
-  font-family:"Tajawal","Noto Sans Arabic","Cairo","Almarai",Arial,sans-serif}
+  font-family:"Tajawal","Noto Sans Arabic","Cairo",Arial,sans-serif}
 body{overflow-x:hidden}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
-.app{min-height:100vh}
 
 .topbar{position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;
   justify-content:space-between;padding:0 22px;background:rgba(7,16,19,.94);
@@ -64,12 +63,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
   background:#071114;color:#fff;border-radius:11px;outline:0;padding:11px 12px;font-size:11px}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(201,168,90,.5)}
 .field textarea{min-height:90px;resize:vertical;line-height:1.8}
+
 .orientation{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .orientation button{border:1px solid var(--line);background:#071114;color:var(--muted);
-  border-radius:12px;padding:13px;text-align:right}
+  border-radius:12px;padding:14px;text-align:right}
 .orientation button.active{color:#fff;border-color:rgba(201,168,90,.55);background:rgba(201,168,90,.08)}
 .orientation strong{display:block;font-size:12px}
 .orientation span{display:block;margin-top:4px;font-size:9px;color:var(--muted)}
+
 .creative{min-height:100%;border:1px solid rgba(201,168,90,.25);
   background:linear-gradient(145deg,rgba(201,168,90,.1),rgba(73,200,155,.035));
   border-radius:18px;padding:20px}
@@ -81,6 +82,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .creative-item{display:flex;align-items:flex-start;gap:8px;color:#cad5d7;font-size:10px;line-height:1.7}
 .creative-item i{width:16px;height:16px;flex:none;border-radius:5px;
   border:1px solid rgba(73,200,155,.25);background:rgba(73,200,155,.08)}
+
 .generate{width:100%;height:54px;margin-top:16px;border:0;border-radius:15px;
   background:linear-gradient(135deg,var(--gold2),#a17d34);color:#101010;font-weight:900;font-size:12px}
 
@@ -92,7 +94,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   padding:8px 12px;font-size:10px}
 #prompt{width:100%;min-height:450px;resize:vertical;background:#040b0e;color:#dce8e8;
   border:1px solid var(--line);border-radius:14px;padding:14px;outline:0;direction:rtl;
-  text-align:right;line-height:1.8;font-size:10px}
+  text-align:right;line-height:1.8;font-size:10px;font-family:ui-monospace,monospace}
 
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
 .preview-panel{min-width:0}
@@ -110,7 +112,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .side-panel h3{margin:0 0 11px;font-size:12px}
 #code{width:100%;height:280px;resize:vertical;background:#040b0e;color:#dce8e8;
   border:1px solid var(--line);border-radius:12px;outline:0;padding:11px;direction:ltr;text-align:left;
-  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9px;line-height:1.65}
+  font-family:ui-monospace,monospace;font-size:9px;line-height:1.65}
 .btn{width:100%;border:1px solid var(--line);background:#091419;color:#e8eeee;border-radius:11px;
   padding:11px;font-size:10px;font-weight:800}
 .btn.primary{background:var(--gold);border-color:var(--gold);color:#101010}
@@ -216,31 +218,61 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <button data-page="workspace">مساحة المشروع</button>
 </nav>
 
+<!-- ================= GENERATOR ================= -->
 <section class="page active" id="page-generator">
   <div class="hero">
     <div class="kicker">EDUCATIONAL MOTION PROJECT</div>
     <h1>مشروع دراسي كامل<br>بطريقة الموشن.</h1>
-    <p>أدخل بيانات مشروعك، وسيتم إنشاء Prompt صارم يطلب من الذكاء الاصطناعي بناء مشروع تعليمي متكامل بمشاهد وحركة وانتقالات، وليس مجرد صفحة ثابتة.</p>
+    <p>أدخل بيانات مشروعك، وسيتم إنشاء Prompt صارم للذكاء الاصطناعي لبناء مشروع تعليمي مرئي متكامل بمشاهد وحركة وانتقالات.</p>
   </div>
 
   <div class="generator-grid">
     <div class="panel">
       <div class="panel-title">بيانات المشروع</div>
       <div class="fields">
-        <div class="field full"><label>عنوان المشروع</label><input id="title" placeholder="مثال: أنظمة التشغيل"></div>
-        <div class="field"><label>اسم الطالب</label><input id="student" placeholder="أيمن"></div>
-        <div class="field"><label>اسم المعلم / المعلمة</label><input id="teacher" placeholder="أ. تهاني"></div>
-        <div class="field"><label>المادة</label><input id="subject" placeholder="التقنية الرقمية"></div>
-        <div class="field"><label>الصف</label><input id="grade" placeholder="أول ثانوي"></div>
-        <div class="field"><label>الفصل الدراسي</label><input id="semester" placeholder="الفصل الأول"></div>
-        <div class="field"><label>الدرس / الوحدة</label><input id="lesson" placeholder="أنظمة التشغيل"></div>
-        <div class="field"><label>مدة المشروع بالثواني</label><input id="duration" type="number" min="5" max="600" value="60"></div>
-        <div class="field full"><label>متطلبات أو معلومات إضافية</label><textarea id="extra" placeholder="مثال: أريد التركيز على أنواع أنظمة التشغيل..."></textarea></div>
+        <div class="field full">
+          <label>عنوان البحث أو العرض</label>
+          <input id="title" placeholder="مثال: الطاقة وعلاقتها بالإنسان">
+        </div>
+        <div class="field">
+          <label>المادة</label>
+          <input id="subject" placeholder="الفيزياء">
+        </div>
+        <div class="field">
+          <label>الصف</label>
+          <input id="grade" placeholder="أول ثانوي">
+        </div>
+        <div class="field">
+          <label>اسم الطالب / المقدم</label>
+          <input id="student" placeholder="أيمن">
+        </div>
+        <div class="field">
+          <label>اسم المعلم / المعلمة</label>
+          <input id="teacher" placeholder="أ. رهان">
+        </div>
+        <div class="field">
+          <label>العام الدراسي</label>
+          <input id="year" placeholder="1446 هـ">
+        </div>
+        <div class="field">
+          <label>مدة المشروع بالثواني</label>
+          <input id="duration" type="number" min="5" max="600" value="60">
+        </div>
+        <div class="field full">
+          <label>متطلبات إضافية (اختياري)</label>
+          <textarea id="extra" placeholder="مثال: أريد التركيز على الطاقة المتجددة..."></textarea>
+        </div>
         <div class="field full">
           <label>اتجاه المشروع</label>
           <div class="orientation">
-            <button type="button" class="active" data-orientation="landscape"><strong>أفقي</strong><span>16:9 — عروض وشاشات</span></button>
-            <button type="button" data-orientation="portrait"><strong>عمودي</strong><span>9:16 — الجوال</span></button>
+            <button type="button" class="active" data-orientation="landscape">
+              <strong>أفقي 16:9</strong>
+              <span>مناسب للعروض والشاشات</span>
+            </button>
+            <button type="button" data-orientation="portrait">
+              <strong>عمودي 9:16</strong>
+              <span>مناسب للجوال</span>
+            </button>
           </div>
         </div>
       </div>
@@ -249,14 +281,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="creative">
       <span class="creative-badge">الوضع الإبداعي</span>
       <h2>دع الذكاء يبدع</h2>
-      <p>لا نعطي الذكاء قالبًا بصريًا جامدًا. نعطيه الموضوع والقواعد التقنية، وهو يختار طريقة بناء المشروع.</p>
+      <p>لا نعطي الذكاء قالبًا جامدًا، بل نعطيه الموضوع والقواعد التقنية ليختار الأسلوب البصري المناسب.</p>
       <div class="creative-items">
         <div class="creative-item"><i></i>بناء محتوى تعليمي مترابط</div>
         <div class="creative-item"><i></i>تقسيم الموضوع إلى مشاهد</div>
         <div class="creative-item"><i></i>تصميم هوية بصرية مناسبة</div>
         <div class="creative-item"><i></i>حركة مرتبطة بالمعلومة</div>
         <div class="creative-item"><i></i>معالجة صحيحة للعربية</div>
-        <div class="creative-item"><i></i>Safe Area ومنع التداخل</div>
+        <div class="creative-item"><i></i>قواعد أداء صارمة للتصدير</div>
       </div>
     </div>
   </div>
@@ -272,6 +304,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </div>
 </section>
 
+<!-- ================= WORKSPACE ================= -->
 <section class="page" id="page-workspace">
   <div class="workspace">
     <div class="preview-panel">
@@ -342,15 +375,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
           <div>
             <label>الجودة</label>
             <select id="quality">
-              <option value="720">720p — أخف وأسرع</option>
-              <option value="native" selected>الدقة الأصلية — أعلى جودة</option>
+              <option value="720">720p</option>
+              <option value="native" selected>الدقة الأصلية</option>
             </select>
           </div>
           <div>
             <label>الإطارات</label>
             <select id="fps">
-              <option value="24">24 FPS</option>
-              <option value="30" selected>30 FPS</option>
+              <option value="24" selected>24 FPS</option>
+              <option value="30">30 FPS</option>
               <option value="60">60 FPS</option>
             </select>
           </div>
@@ -371,15 +404,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </section>
 
 <nav class="mobile-nav">
-  <button class="active" data-page="generator">إنشاء المشروع</button>
-  <button data-page="workspace">مساحة المشروع</button>
+  <button class="active" data-page="generator">إنشاء</button>
+  <button data-page="workspace">المشروع</button>
 </nav>
 
-<!-- ============================================================
-     LIBRARIES — إصدارات مثبّتة
-============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script type="module">
   (async () => {
     const sources = [
@@ -396,9 +425,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
           console.log('[Mediabunny] loaded from:', url);
           return;
         }
-      } catch (err) {
-        console.warn('[Mediabunny] failed:', url, err);
-      }
+      } catch (err) { console.warn('[Mediabunny] failed:', url); }
     }
     window.dispatchEvent(new Event('mediabunny-failed'));
   })();
@@ -420,7 +447,7 @@ const APP = {
   previewPlaying:false,
   detectedFonts:[],
   missingFonts:[],
-  preprocessStats:{clipText:0, filters:0, blendMode:0, masks:0, backdrop:0}
+  preprocessStats:{clipText:0, heavy:0, total:0}
 };
 
 function $(id){ return document.getElementById(id); }
@@ -438,9 +465,6 @@ function getExportSize(){
   return base;
 }
 
-/* =====================================================
-   MEDIABUNNY LOADER
-===================================================== */
 function waitForMediabunny(timeoutMs){
   timeoutMs = timeoutMs || 15000;
   if(window.Mediabunny) return Promise.resolve(window.Mediabunny);
@@ -464,9 +488,7 @@ function waitForMediabunny(timeoutMs){
   });
 }
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
+/* ================= NAVIGATION ================= */
 document.querySelectorAll("[data-page]").forEach(button => {
   button.addEventListener("click", () => {
     const page = button.dataset.page;
@@ -489,21 +511,18 @@ document.querySelectorAll("[data-orientation]").forEach(button => {
   });
 });
 
-/* =====================================================
-   FORM
-===================================================== */
+/* ================= FORM ================= */
 function getForm(){
   let duration = Number($("duration").value);
   if(!Number.isFinite(duration)) duration = 60;
   duration = Math.max(5, Math.min(600, duration));
   return {
     title: $("title").value.trim(),
-    student: $("student").value.trim(),
-    teacher: $("teacher").value.trim(),
     subject: $("subject").value.trim(),
     grade: $("grade").value.trim(),
-    semester: $("semester").value.trim(),
-    lesson: $("lesson").value.trim(),
+    student: $("student").value.trim(),
+    teacher: $("teacher").value.trim(),
+    year: $("year").value.trim(),
     extra: $("extra").value.trim(),
     duration
   };
@@ -513,65 +532,100 @@ function escapePromptAttribute(value){
   return String(value || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-/* =====================================================
-   PROMPT TEMPLATE
-===================================================== */
+/* ================= PROMPT ================= */
 function createPrompt(){
   const data = getForm();
   const portrait = APP.orientation === "portrait";
   const width = portrait ? 1080 : 1920;
   const height = portrait ? 1920 : 1080;
   const durationMs = data.duration * 1000;
+  const fps = Number($("fps").value) || 24;
 
   return `
 أنت مخرج مشاريع تعليمية ومصمم Motion Graphics ومطور HTML/CSS/JavaScript محترف.
 
 المطلوب إنشاء مشروع دراسي مرئي متكامل.
 
-المشروع ليس صفحة ويب عادية. وليس مجموعة بطاقات ثابتة. وليس Animation قصيرًا بلا محتوى.
-
-المطلوب مشروع يشبه مشروع PowerPoint / Canva Video من ناحية بناء المحتوى، لكن يتم تقديمه بالكامل بطريقة Motion Graphics داخل HTML.
+المشروع ليس صفحة ويب عادية، وليس مجموعة بطاقات ثابتة، وليس Animation قصيرًا بلا محتوى.
+المطلوب مشروع يشبه مشروع PowerPoint / Canva Video من ناحية بناء المحتوى،
+لكن يتم تقديمه بالكامل بطريقة Motion Graphics داخل HTML.
 
 ==================================================
 بيانات المشروع
 ==================================================
 
-العنوان: ${data.title || "غير محدد"}
-الطالب: ${data.student || "غير محدد"}
-المعلم / المعلمة: ${data.teacher || "غير محدد"}
-المادة: ${data.subject || "غير محددة"}
-الصف: ${data.grade || "غير محدد"}
-الفصل: ${data.semester || "غير محدد"}
-الدرس / الوحدة: ${data.lesson || "غير محدد"}
+عنوان البحث أو العرض:
+${data.title || "غير محدد"}
 
-الاتجاه: ${portrait ? "عمودي 9:16" : "أفقي 16:9"}
-الأبعاد: ${width} × ${height}
-المدة: ${data.duration} ثانية
-المدة بالميلي ثانية: ${durationMs}
+المادة:
+${data.subject || "غير محددة"}
 
-المتطلبات الإضافية: ${data.extra || "لا توجد"}
+الصف:
+${data.grade || "غير محدد"}
+
+اسم الطالب / المقدم:
+${data.student || "غير محدد"}
+
+اسم المعلم / المعلمة:
+${data.teacher || "غير محدد"}
+
+العام الدراسي:
+${data.year || "غير محدد"}
+
+الاتجاه:
+${portrait ? "عمودي 9:16" : "أفقي 16:9"}
+
+الأبعاد:
+${width} × ${height}
+
+المدة:
+${data.duration} ثانية
+
+المدة بالميلي ثانية:
+${durationMs}
+
+معدل الإطارات المقترح للتصدير:
+${fps} FPS
+
+المتطلبات الإضافية:
+${data.extra || "لا توجد"}
 
 ==================================================
 الوضع الإبداعي
 ==================================================
 
-دع الذكاء يبدع. اختر بنفسك:
-- الهوية البصرية، الألوان، أسلوب الرسومات، توزيع العناصر
-- نوع الانتقالات، الحركة، الإيقاع، طريقة سرد المعلومات
+دع الذكاء يبدع.
+
+اختر بنفسك:
+- الهوية البصرية
+- الألوان
+- أسلوب الرسومات
+- توزيع العناصر
+- نوع الانتقالات
+- الحركة والإيقاع
+- طريقة سرد المعلومات
 
 لكن يجب الالتزام بالقواعد التقنية التالية.
 
 ==================================================
-المحتوى
+المحتوى التعليمي
 ==================================================
 
 أنشئ محتوى تعليميًا حقيقيًا. لا تكتفِ بالعناوين.
 
-قسّم الموضوع منطقيًا إلى مشاهد. استخدم حسب طبيعة الموضوع:
-تعريفات، شرح، أمثلة، مقارنات، تطبيقات، حقائق، مخططات، خطوات، خلاصة.
+قسّم الموضوع منطقيًا إلى 5-6 مشاهد. استخدم حسب طبيعة الموضوع:
+- تعريفات
+- شرح
+- أمثلة
+- مقارنات
+- تطبيقات
+- حقائق
+- مخططات
+- خطوات
+- خلاصة
 
 يجب أن يكون للمشروع بداية وشرح وتطور وخاتمة.
-كل مشهد يجب أن يقدم فكرة واضحة. لا تجعل جميع المشاهد متشابهة.
+كل مشهد يقدم فكرة واضحة. لا تجعل جميع المشاهد متشابهة.
 
 ==================================================
 MOTION
@@ -579,8 +633,15 @@ MOTION
 
 المشروع يجب أن يبدو كفيديو حقيقي.
 
-استخدم عند الحاجة: دخول/خروج العناصر، تحريك العناوين، تحريك الصور، تحريك الأشكال،
-Parallax، Zoom، Reveal، انتقالات، تحريك خطوط ومؤشرات، ظهور المعلومات على مراحل.
+استخدم عند الحاجة:
+- دخول وخروج العناصر
+- تحريك العناوين
+- Parallax
+- Zoom
+- Reveal
+- انتقالات
+- تحريك خطوط ومؤشرات
+- ظهور المعلومات على مراحل
 
 الحركة تخدم المعلومة. لا تجعل كل العناصر تتحرك في الوقت نفسه. لا تستخدم حركة سريعة أو مزعجة.
 
@@ -589,56 +650,88 @@ LAYOUT
 ==================================================
 
 استخدم Grid وFlexbox وContainers. استخدم Safe Area.
+لا تسمح بتداخل العناصر. لا تجعل:
+- النص فوق صورة بطريقة غير مقصودة
+- عنوان يغطي نصًا
+- عناصر تخرج من الشاشة
+- عناصر مهمة تلتصق بالحواف
 
-لا تسمح بتداخل العناصر. لا تجعل: النص فوق صورة بطريقة غير مقصودة، عنوان يغطي نصًا،
-عناصر تخرج من الشاشة، عناصر مهمة تلتصق بالحواف.
+absolute مسموح للزخارف والخلفيات فقط.
 
-absolute مسموح للزخارف والخلفيات والعناصر الخاصة فقط.
+ضع data-role="content" على كل عنصر أساسي يحمل معلومة مهمة في كل مشهد.
 
-ضع الخاصية: data-role="content" على كل عنصر أساسي.
+==================================================
+قواعد الأداء (إلزامية — مهمة جدًا)
+==================================================
+
+التصدير يستخدم html2canvas، وهذه الخاصيات تجعله بطيئًا جدًا:
+
+ممنوع تمامًا:
+
+1. backdrop-filter: blur(...)
+   → يُبطئ 20x لكل عنصر
+   → البديل: خلفية معتمة rgba(18,28,52,0.96)
+
+2. filter: drop-shadow(...)
+   → يُبطئ 10x لكل عنصر
+   → البديل: طبقة إضافية مع gradient شفاف
+
+3. filter: blur(Npx) حيث N >= 15
+   → يُبطئ 20x
+   → البديل: radial-gradient(circle, COLOR 0%, transparent 70%) مع border-radius: 50%
+
+4. mask-image
+   → غير مدعوم أصلًا، يُزال
+   → البديل: تدرج شفاف (linear-gradient مع alpha)
+
+5. box-shadow مع blur-radius > 25px على عناصر كبيرة
+   → البديل: box-shadow مع blur-radius 10-15px فقط
+
+المشاهد المخفية يجب أن تكون بـ display:none وليس visibility:hidden،
+لأن html2canvas يحسب المشاهد المخفية كأنها موجودة، وهذا يُبطئ التصدير 6x.
+
+مثال صحيح:
+  .scene-wrapper { display: none; }
+  .scene-wrapper.active { display: flex; }
 
 ==================================================
 CSS المدعوم والممنوع
 ==================================================
 
-التصدير يستخدم html2canvas + معالج CSS. الخاصيات التالية مدعومة بالكامل:
-- الألوان الصلبة، التدرجات الخطية والدائرية
-- border-radius، box-shadow، transform
+مدعوم بالكامل:
+- الألوان الصلبة والتدرجات (linear-gradient، radial-gradient)
+- border-radius، box-shadow (بحجم معقول)
+- transform، opacity
 - flexbox، grid، position
-- opacity، overflow: hidden
-- SVG inline (يُعامل كصورة — مدعوم بالكامل)
+- SVG inline كامل (يُعامل كصورة)
+- overflow: hidden
 
-الخاصيات التالية تُعالج تلقائيًا وتحوّل:
-- background-clip:text → يُحوّل تلقائيًا إلى SVG مع gradient
-- filter: drop-shadow → يُحوّل إلى box-shadow
-- mix-blend-mode → يُزال ويُستعاض عنه بـ opacity
+يُعالج تلقائيًا:
+- background-clip: text → يُحوّل إلى SVG مع gradient
 
-الخاصيات التالية ممنوعة (لن تظهر بشكل صحيح):
-- filter: blur() على العناصر (يعمل فقط على الصور)
-- mask-image (يُزال)
-- backdrop-filter (يُزال)
+ممنوع (لن يظهر بشكل صحيح):
+- filter: blur على العناصر
+- mask-image
+- backdrop-filter
+- mix-blend-mode
 - clip-path معقد
-
-بدل هذه، استخدم:
-- SVG كامل للتأثيرات المعقدة
-- صور data: URI مسبقة المعالجة
 
 ==================================================
 الخطوط (إلزامي)
 ==================================================
 
-يجب أن يبدأ ملف HTML بتحميل الخط من Google Fonts
-داخل <head> بهذا الترتيب بالضبط:
+يجب أن يبدأ ملف HTML بتحميل الخط من Google Fonts داخل <head>
+بهذا الترتيب بالضبط:
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 
-قواعد إلزامية:
-1. استخدم خطًّا واحدًا أو خطين كحد أقصى.
+قواعد الخطوط:
+1. استخدم خطًّا واحدًا أو خطين كحد أقصى في كامل المشروع.
 2. font-family في body مع fallback واضح.
-3. كل عنصر نصي يجب أن يرث أو يُصرّح بـ font-family.
-4. الأوزان المسموحة فقط: 400, 500, 700, 900.
+3. كل عنصر نصي يرث أو يُصرّح بـ font-family.
+4. الأوزان المسموحة فقط: 400، 500، 700، 900.
 5. في JavaScript قبل أي حركة، انتظر تحميل الخط:
 
    async function ensureFonts(){
@@ -656,14 +749,14 @@ CSS المدعوم والممنوع
    html:not(.fonts-ready) [data-role="content"]{visibility:hidden;}
 
 ==================================================
-العربية
+اللغة العربية
 ==================================================
 
 يجب أن يكون: <html lang="ar" dir="rtl">
 
 ممنوع: letter-spacing، text-transform، تفكيك الحروف، كتابة "ا ل و ط ن".
 
-استخدم خطًا عربيًا حقيقيًا: Tajawal, Noto Sans Arabic, Cairo, Almarai, IBM Plex Sans Arabic, Amiri.
+استخدم خطًا عربيًا حقيقيًا: Tajawal, Cairo, Noto Sans Arabic, Almarai, IBM Plex Sans Arabic, Amiri.
 
 ==================================================
 الصور
@@ -671,7 +764,9 @@ CSS المدعوم والممنوع
 
 يمكن استخدام: img، SVG، CSS shapes، HTML graphics.
 
-لا تستخدم video. لا تستخدم WebGL للمعلومات الأساسية. لا تضع النصوص المهمة داخل Canvas.
+لا تستخدم video.
+لا تستخدم WebGL للمعلومات الأساسية.
+لا تضع النصوص المهمة داخل Canvas.
 
 إذا استخدمت صورًا خارجية، تأكد أنها تدعم CORS أو استخدم data: URI.
 
@@ -681,7 +776,9 @@ CSS المدعوم والممنوع
 
 المشروع سيتم تصديره Frame by Frame داخل إطار بأبعاد ${width}×${height}.
 
-لذلك لا تعتمد على: setTimeout، setInterval، Date.now، performance.now، requestAnimationFrame.
+لا تعتمد على: setTimeout، setInterval، Date.now، performance.now، requestAnimationFrame
+كمصدر أساسي للحركة.
+
 لا تعتمد على CSS animation أو CSS transition كطريقة أساسية للتحكم بالزمن.
 
 يجب إنشاء:
@@ -695,7 +792,7 @@ window.__PROJECT__ = {
 };
 
 يجب أن يعمل window.__PROJECT__.setTime(0) ويظهر البداية.
-ويجب أن يعمل window.__PROJECT__.setTime(5000) ويظهر عند الثانية 5.
+ويجب أن يعمل window.__PROJECT__.setTime(5000) ويظهر عند الثانية الخامسة.
 
 يمكن استخدام Web Animations API بشرط أن يكون التحكم بالزمن ممكنًا.
 
@@ -704,6 +801,7 @@ META
 ==================================================
 
 أضف:
+
 <meta name="project-duration" content="${data.duration}">
 <meta name="project-duration-ms" content="${durationMs}">
 <meta name="project-orientation" content="${APP.orientation}">
@@ -715,10 +813,13 @@ SCENES
 ==================================================
 
 كل مشهد يجب أن يحتوي: data-scene
-ويفضل: data-scene-name, data-scene-start, data-scene-end
+ويفضل: data-scene-name، data-scene-start، data-scene-end
 
 مثال:
-<section data-scene="1" data-scene-name="المقدمة" data-scene-start="0" data-scene-end="8000">
+
+<section data-scene="1" data-scene-name="المقدمة" data-scene-start="0" data-scene-end="9000">
+...
+</section>
 
 ==================================================
 التحميل
@@ -739,25 +840,26 @@ HTML
 إذا كانت معلومة ناقصة، استخدم معرفتك.
 
 ==================================================
-الفحص
+الفحص النهائي
 ==================================================
 
 قبل إخراج HTML راجع:
-- RTL، اللغة العربية، الخطوط محمّلة عبر <link>، كلاس fonts-ready
-- عدم وجود letter-spacing، عدم تفكيك الحروف
-- عدم وجود تداخل، عدم خروج العناصر
-- وجود setTime، duration، orientation، scenes
+- RTL واللغة العربية
+- الخطوط محمّلة عبر <link> صريح + كلاس fonts-ready
+- عدم وجود letter-spacing أو تفكيك الحروف
+- عدم وجود تداخل أو خروج عناصر
+- وجود setTime و duration و orientation و scenes
 - data-role="content" على العناصر المهمة
 - عدم الاعتماد على الوقت الحقيقي
 - عدم استخدام CSS animation كآلية زمنية
+- عدم استخدام backdrop-filter أو filter: blur أو drop-shadow
+- المشاهد المخفية بـ display:none
 
 أخرج HTML فقط.
 `.trim();
 }
 
-/* =====================================================
-   GENERATE / COPY
-===================================================== */
+/* ================= GENERATE / COPY ================= */
 $("generate").addEventListener("click", () => {
   const data = getForm();
   if(!data.title){ alert("اكتب عنوان المشروع أولًا"); $("title").focus(); return; }
@@ -772,9 +874,7 @@ $("copyPrompt").addEventListener("click", async () => {
   setTimeout(() => { $("copyPrompt").textContent = "نسخ"; }, 1200);
 });
 
-/* =====================================================
-   NORMALIZE HTML
-===================================================== */
+/* ================= NORMALIZE HTML ================= */
 function normalizeHTML(value){
   let html = String(value || "").trim();
   html = html.replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```\s*$/i, "");
@@ -801,9 +901,7 @@ function readMeta(doc){
   };
 }
 
-/* =====================================================
-   LOAD PROJECT
-===================================================== */
+/* ================= LOAD PROJECT ================= */
 $("load").addEventListener("click", loadProject);
 
 async function loadProject(){
@@ -864,9 +962,7 @@ async function loadProject(){
   }
 }
 
-/* =====================================================
-   IFRAME
-===================================================== */
+/* ================= IFRAME ================= */
 function applyIframeCanvasSize(orientation){
   APP.orientation = orientation;
   const base = getBaseSize();
@@ -893,9 +989,7 @@ function setIframe(html){
   });
 }
 
-/* =====================================================
-   RESOURCES
-===================================================== */
+/* ================= RESOURCES ================= */
 function withTimeout(promise, ms){
   return Promise.race([promise, new Promise(resolve => setTimeout(resolve, ms))]);
 }
@@ -945,22 +1039,7 @@ async function waitForFonts(doc, win){
   } catch{}
 }
 
-/* =====================================================
-   PREPROCESS MODERN CSS
-   ------------------------------------------------------------
-   html2canvas سريع لكنه لا يدعم:
-   - background-clip: text
-   - mix-blend-mode
-   - filter (blur/grayscale)
-   - mask-image
-   - backdrop-filter
-
-   الحل: قبل الرسم، نمر على كل عنصر ونحوّل هذه الخاصيات
-   إلى ما يعادلها بشكل مدعوم.
-
-   أهم تحويل: background-clip:text → SVG مع linearGradient.
-   هذا يحافظ على التأثير المتدرج بدقة عالية.
-===================================================== */
+/* ================= PREPROCESS: gradient text ================= */
 const NS_SVG = 'http://www.w3.org/2000/svg';
 
 function convertGradientTextToSVG(el, win, doc){
@@ -976,7 +1055,6 @@ function convertGradientTextToSVG(el, win, doc){
 
   const c1 = colors[0];
   const c2 = colors[colors.length - 1] || c1;
-
   const fontSize = parseFloat(styles.fontSize) || 40;
   const fontWeight = styles.fontWeight || "700";
   const fontFamily = (styles.fontFamily || "Tajawal, sans-serif").replace(/"/g, "'");
@@ -1006,7 +1084,6 @@ function convertGradientTextToSVG(el, win, doc){
   s1.setAttribute("offset", "0%");
   s1.setAttribute("stop-color", c1);
   grad.appendChild(s1);
-
   if(c2 !== c1){
     const s2 = doc.createElementNS(NS_SVG, "stop");
     s2.setAttribute("offset", "100%");
@@ -1028,7 +1105,6 @@ function convertGradientTextToSVG(el, win, doc){
   tEl.setAttribute("fill", `url(#${gid})`);
   tEl.setAttribute("direction", "rtl");
   tEl.textContent = text;
-
   svg.appendChild(tEl);
 
   el.textContent = "";
@@ -1043,7 +1119,7 @@ function convertGradientTextToSVG(el, win, doc){
 
 function preprocessModernCSS(doc, win){
   if(!doc || !win) return { total: 0 };
-  const stats = { clipText: 0, filters: 0, blendMode: 0, masks: 0, backdrop: 0, total: 0 };
+  const stats = { clipText: 0, heavy: 0, total: 0 };
 
   let elements = [];
   try { elements = Array.from(doc.querySelectorAll("*")).slice(0, 3000); } catch { return stats; }
@@ -1052,7 +1128,7 @@ function preprocessModernCSS(doc, win){
     let styles;
     try { styles = win.getComputedStyle(el); } catch { continue; }
 
-    // 1) background-clip: text → SVG with gradient
+    // gradient text
     const clip = (styles.webkitBackgroundClip || styles.backgroundClip || "").toLowerCase();
     if(clip === "text"){
       if(convertGradientTextToSVG(el, win, doc)){
@@ -1060,7 +1136,6 @@ function preprocessModernCSS(doc, win){
         stats.total++;
         continue;
       }
-      // إذا فشل التحويل، ارجع للون صلب
       const bg = styles.backgroundImage || "";
       const cols = bg.match(/(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g) || [];
       const solid = cols[0] || styles.color || "#22d3ee";
@@ -1075,7 +1150,7 @@ function preprocessModernCSS(doc, win){
       continue;
     }
 
-    // 2) -webkit-text-fill-color: transparent بدون clip
+    // text-fill-color transparent بدون clip
     const fill = (styles.webkitTextFillColor || "").toLowerCase();
     if(fill === "transparent"){
       const color = styles.color && styles.color !== "rgba(0, 0, 0, 0)" ? styles.color : "#eef2ff";
@@ -1084,57 +1159,71 @@ function preprocessModernCSS(doc, win){
       stats.total++;
     }
 
-    // 3) filter
-    const filter = (styles.filter || "none").toLowerCase();
-    if(filter !== "none" && filter !== ""){
-      const dm = filter.match(/drop-shadow\(([^)]+)\)/);
-      if(dm){
-        const shadow = dm[1].replace(/(\d+\.?\d*)px/g, "$1px");
-        el.style.setProperty("filter", "none", "important");
-        el.style.setProperty("-webkit-filter", "none", "important");
-        el.style.setProperty("box-shadow", shadow, "important");
-        stats.filters++;
-        stats.total++;
-      } else {
-        el.style.setProperty("filter", "none", "important");
-        el.style.setProperty("-webkit-filter", "none", "important");
-        stats.filters++;
-        stats.total++;
-      }
+    // filter: blur كبير → radial-gradient
+    const filter = (styles.filter || "").toLowerCase();
+    const blurMatch = filter.match(/blur\((\d+(?:\.\d+)?)px\)/);
+    if(blurMatch && parseFloat(blurMatch[1]) >= 15){
+      el.style.setProperty("filter", "none", "important");
+      const bg = styles.backgroundColor || "#5b6cff";
+      el.style.setProperty("background",
+        `radial-gradient(circle, ${bg} 0%, transparent 70%)`, "important");
+      el.style.setProperty("border-radius", "50%", "important");
+      stats.heavy++;
+      stats.total++;
+      continue;
     }
 
-    // 4) mix-blend-mode
+    // filter: drop-shadow → box-shadow
+    const dm = filter.match(/drop-shadow\(([^)]+)\)/);
+    if(dm){
+      el.style.setProperty("filter", "none", "important");
+      el.style.setProperty("box-shadow", dm[1], "important");
+      stats.heavy++;
+      stats.total++;
+      continue;
+    }
+
+    // أي filter آخر → إزالة
+    if(filter && filter !== "none"){
+      el.style.setProperty("filter", "none", "important");
+      el.style.setProperty("-webkit-filter", "none", "important");
+      stats.heavy++;
+      stats.total++;
+    }
+
+    // backdrop-filter → خلفية معتمة
+    const bf = (styles.backdropFilter || styles.webkitBackdropFilter || "").toLowerCase();
+    if(bf && bf !== "none"){
+      const bgColor = styles.backgroundColor || "";
+      el.style.setProperty("backdrop-filter", "none", "important");
+      el.style.setProperty("-webkit-backdrop-filter", "none", "important");
+      if(!bgColor || bgColor === "rgba(0, 0, 0, 0)" || bgColor === "transparent"){
+        el.style.setProperty("background-color", "rgba(15, 25, 55, 0.85)", "important");
+      }
+      stats.heavy++;
+      stats.total++;
+    }
+
+    // mask-image → إزالة
+    const mask = (styles.maskImage || styles.webkitMaskImage || "").toLowerCase();
+    if(mask && mask !== "none"){
+      el.style.setProperty("mask-image", "none", "important");
+      el.style.setProperty("-webkit-mask-image", "none", "important");
+      stats.heavy++;
+      stats.total++;
+    }
+
+    // mix-blend-mode → normal
     const bm = (styles.mixBlendMode || "normal").toLowerCase();
     if(bm !== "normal"){
       el.style.setProperty("mix-blend-mode", "normal", "important");
-      el.style.setProperty("isolation", "auto", "important");
-      stats.blendMode++;
-      stats.total++;
-    }
-
-    // 5) mask-image
-    const mask = (styles.maskImage || styles.webkitMaskImage || "none").toLowerCase();
-    if(mask !== "none" && mask !== ""){
-      el.style.setProperty("mask-image", "none", "important");
-      el.style.setProperty("-webkit-mask-image", "none", "important");
-      stats.masks++;
-      stats.total++;
-    }
-
-    // 6) backdrop-filter
-    const bf = (styles.backdropFilter || styles.webkitBackdropFilter || "none").toLowerCase();
-    if(bf !== "none" && bf !== ""){
-      el.style.setProperty("backdrop-filter", "none", "important");
-      el.style.setProperty("-webkit-backdrop-filter", "none", "important");
-      stats.backdrop++;
+      stats.heavy++;
       stats.total++;
     }
   }
 
   APP.preprocessStats = stats;
-  if(stats.total > 0){
-    console.log("[preprocessModernCSS]", stats);
-  }
+  if(stats.total > 0) console.log("[preprocessModernCSS]", stats);
   return stats;
 }
 
@@ -1147,10 +1236,9 @@ async function waitForResources(doc){
 
   try { await withTimeout(doc.fonts.ready, 2000); } catch{}
 
-  // معالجة CSS الحديثة قبل الرسم
   preprocessModernCSS(doc, win);
 
-  await sleep(120);
+  await sleep(80);
 }
 
 function waitForImage(image){
@@ -1164,9 +1252,7 @@ function waitForImage(image){
   });
 }
 
-/* =====================================================
-   SET PROJECT TIME
-===================================================== */
+/* ================= SET TIME ================= */
 async function setProjectTime(timeMs){
   if(!APP.loaded) return;
   const iframe = $("preview");
@@ -1196,9 +1282,7 @@ async function setProjectTime(timeMs){
   await sleep(0);
 }
 
-/* =====================================================
-   PROJECT INFO
-===================================================== */
+/* ================= INFO ================= */
 function updateProjectInfo(){
   const portrait = APP.orientation === "portrait";
   $("orientationInfo").textContent = portrait ? "عمودي 9:16" : "أفقي 16:9";
@@ -1227,9 +1311,7 @@ function updateProjectInfo(){
   resizePreview();
 }
 
-/* =====================================================
-   RESIZE
-===================================================== */
+/* ================= RESIZE ================= */
 function resizePreview(){
   const wrap = $("frameWrap");
   const iframe = $("preview");
@@ -1254,9 +1336,7 @@ function resizePreview(){
 
 window.addEventListener("resize", resizePreview);
 
-/* =====================================================
-   TIMELINE
-===================================================== */
+/* ================= TIMELINE ================= */
 async function buildTimeline(){
   const track = $("timelineTrack");
   track.innerHTML = "";
@@ -1292,9 +1372,7 @@ function setPlayhead(ms){
   $("playhead").style.left = percentage + "%";
 }
 
-/* =====================================================
-   VALIDATION
-===================================================== */
+/* ================= VALIDATION ================= */
 async function validateProject(){
   const box = $("validation");
   box.innerHTML = "";
@@ -1302,8 +1380,10 @@ async function validateProject(){
   const doc = $("preview").contentDocument;
   const win = $("preview").contentWindow;
 
-  addValidation(doc.documentElement.dir === "rtl" ? "ok" : "bad", doc.documentElement.dir === "rtl" ? "RTL مضبوط." : 'لم يتم العثور على dir="rtl".');
-  addValidation(doc.documentElement.lang === "ar" ? "ok" : "warn", doc.documentElement.lang === "ar" ? "لغة المشروع عربية." : 'لغة HTML ليست "ar".');
+  addValidation(doc.documentElement.dir === "rtl" ? "ok" : "bad",
+    doc.documentElement.dir === "rtl" ? "RTL مضبوط." : 'لم يتم العثور على dir="rtl".');
+  addValidation(doc.documentElement.lang === "ar" ? "ok" : "warn",
+    doc.documentElement.lang === "ar" ? "لغة المشروع عربية." : 'لغة HTML ليست "ar".');
 
   const detected = APP.detectedFonts || [];
   const missing  = APP.missingFonts || [];
@@ -1325,15 +1405,11 @@ async function validateProject(){
   const scenes = doc.querySelectorAll("[data-scene]");
   addValidation(scenes.length ? "ok" : "warn", scenes.length ? "تم اكتشاف " + scenes.length + " مشاهد." : "لم يتم تعريف data-scene.");
 
-  // تقرير preprocessing
   const stats = APP.preprocessStats || {};
   if(stats.total > 0){
     const parts = [];
     if(stats.clipText) parts.push(stats.clipText + " نص متدرج");
-    if(stats.filters) parts.push(stats.filters + " فلتر");
-    if(stats.blendMode) parts.push(stats.blendMode + " blend-mode");
-    if(stats.masks) parts.push(stats.masks + " mask");
-    if(stats.backdrop) parts.push(stats.backdrop + " backdrop");
+    if(stats.heavy) parts.push(stats.heavy + " عنصر ثقيل");
     addValidation("ok", "تم معالجة " + stats.total + " عنصر: " + parts.join("، ") + ".");
   } else {
     addValidation("ok", "لا يحتاج المشروع معالجة CSS حديثة.");
@@ -1357,9 +1433,7 @@ function checkOverflow(doc){
   return (root.scrollWidth > root.clientWidth + 5) || (root.scrollHeight > root.clientHeight + 5);
 }
 
-/* =====================================================
-   BUTTONS
-===================================================== */
+/* ================= BUTTONS ================= */
 $("validate").addEventListener("click", async () => {
   if(!APP.loaded){ alert("شغّل المشروع أولًا."); return; }
   await waitForResources($("preview").contentDocument);
@@ -1370,7 +1444,7 @@ $("clear").addEventListener("click", () => {
   stopPreview();
   APP.html = ""; APP.loaded = false; APP.durationMs = 0; APP.title = "";
   APP.detectedFonts = []; APP.missingFonts = [];
-  APP.preprocessStats = {clipText:0, filters:0, blendMode:0, masks:0, backdrop:0, total:0};
+  APP.preprocessStats = {clipText:0, heavy:0, total:0};
   $("code").value = ""; $("preview").srcdoc = "";
   $("stateInfo").textContent = "لا يوجد مشروع";
   $("durationInfo").textContent = "—";
@@ -1385,9 +1459,7 @@ $("clear").addEventListener("click", () => {
   setStatus("جاهز", "ok");
 });
 
-/* =====================================================
-   TEST FRAME
-===================================================== */
+/* ================= TEST FRAME ================= */
 $("test").addEventListener("click", async () => {
   if(!APP.loaded){ alert("شغّل المشروع أولًا."); return; }
   try{
@@ -1401,9 +1473,7 @@ $("test").addEventListener("click", async () => {
   }catch(error){ console.error(error); alert("فشل اختبار Frame:\n\n" + error.message); }
 });
 
-/* =====================================================
-   RENDER FRAME
-===================================================== */
+/* ================= RENDER ================= */
 async function renderFrame(timeMs){
   await setProjectTime(timeMs);
   await sleep(0);
@@ -1422,9 +1492,7 @@ async function renderFrame(timeMs){
   return canvas;
 }
 
-/* =====================================================
-   EXPORT
-===================================================== */
+/* ================= EXPORT ================= */
 $("export").addEventListener("click", exportVideo);
 
 async function exportVideo(){
@@ -1447,7 +1515,7 @@ async function exportVideo(){
     const { Output, BufferTarget, CanvasSource, Mp4OutputFormat, WebMOutputFormat, canEncodeVideo } = lib;
     if(!Output || !BufferTarget || !CanvasSource) throw new Error("مكونات Mediabunny ناقصة.");
 
-    const fps = Math.max(1, Number($("fps").value) || 30);
+    const fps = Math.max(1, Number($("fps").value) || 24);
     const exportSize = getExportSize();
     const baseSize = getBaseSize();
     const needsDownscale = exportSize.width !== baseSize.width || exportSize.height !== baseSize.height;
@@ -1522,9 +1590,7 @@ $("stop").addEventListener("click", () => {
   updateProgress(0, "جارٍ إيقاف التصدير...");
 });
 
-/* =====================================================
-   PROGRESS / STATUS
-===================================================== */
+/* ================= PROGRESS / STATUS ================= */
 function updateProgress(percent, text){
   const value = Math.max(0, Math.min(100, Number(percent) || 0));
   $("progressBar").style.width = value + "%";
@@ -1540,9 +1606,7 @@ function setStatus(text, kind){
   if(kind === "error") dot.classList.add("error");
 }
 
-/* =====================================================
-   PREVIEW PLAYBACK
-===================================================== */
+/* ================= PREVIEW PLAYBACK ================= */
 $("playBtn").addEventListener("click", () => {
   if(!APP.loaded){ alert("تحقق من تحميل المشروع أولاً."); return; }
   if(APP.previewPlaying) stopPreview(); else playPreview();
@@ -1568,9 +1632,7 @@ async function playPreview(){
   }
 }
 
-/* =====================================================
-   TIMELINE CLICK
-===================================================== */
+/* ================= TIMELINE CLICK ================= */
 $("timelineContainer").addEventListener("click", async event => {
   if(!APP.loaded) return;
   const rect = event.currentTarget.getBoundingClientRect();
@@ -1579,9 +1641,7 @@ $("timelineContainer").addEventListener("click", async event => {
   if(APP.previewPlaying){ stopPreview(); setTimeout(playPreview, 50); }
 });
 
-/* =====================================================
-   UTILITIES
-===================================================== */
+/* ================= UTILITIES ================= */
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
 function formatDuration(ms){
@@ -1598,19 +1658,12 @@ function escapeHTML(v){
   return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-/* =====================================================
-   INITIALIZE
-===================================================== */
+/* ================= INIT ================= */
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
 
-if(document.fonts && document.fonts.ready){
-  document.fonts.ready.then(() => console.log('[Platform] خطوط المنصة جاهزة.')).catch(()=>{});
-}
-
 window.addEventListener('mediabunny-ready', () => console.log('[Platform] Mediabunny جاهز.'));
 window.addEventListener('mediabunny-failed', () => console.error('[Platform] فشل تحميل Mediabunny.'));
-
 </script>
 </body>
 </html>
