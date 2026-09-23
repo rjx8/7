@@ -576,6 +576,18 @@ button:disabled{opacity:.5;cursor:not-allowed}
   margin-top:9px;
 }
 
+.quick-note{
+  display:none;
+  padding:9px;
+  background:rgba(73,200,155,.06);
+  border:1px solid rgba(73,200,155,.2);
+  border-radius:9px;
+  color:#8ee0c1;
+  font-size:9px;
+  line-height:1.7;
+  margin-top:9px;
+}
+
 .capture-badge{
   display:none;
   align-items:center;
@@ -904,6 +916,20 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </div>
 
         <div class="field full">
+          <label>الأسلوب البصري</label>
+          <select id="visualStyle">
+            <option value="cinematic-dark">سينمائي داكن — أزرق/بنفسجي</option>
+            <option value="modern-geometric">هندسي حديث — ألوان صريحة</option>
+            <option value="educational-board">لوحي تعليمي — ألوان دافئة</option>
+            <option value="journalistic">صحفي كلاسيكي — رمادي/ذهبي</option>
+            <option value="pastel-artistic">فني باستيل — ناعم وهادئ</option>
+            <option value="neon-futuristic">نيون مستقبلي — تباين عالٍ</option>
+            <option value="minimal-bw">أبيض وأسود بسيط</option>
+            <option value="saudi-modern">سعودي حديث — أخضر/ذهبي</option>
+          </select>
+        </div>
+
+        <div class="field full">
           <label>متطلبات إضافية (اختياري)</label>
           <textarea id="extra" placeholder="مثال: أريد التركيز على الطاقة المتجددة..."></textarea>
         </div>
@@ -1216,10 +1242,18 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </div>
 
         <div class="safari-note" id="safariNote">
-          تنبيه Safari: سيطلب المتصفح إذن مشاركة الشاشة.
+          <strong>تنبيه Safari:</strong>
+          سيطلب المتصفح إذن مشاركة الشاشة.
           اختر «مشاركة هذا التبويب» وليس الشاشة كاملة.
-          لا تُغيّر التبويب أثناء التسجيل.
-          مدة التصدير ستساوي مدة الفيديو الفعلية.
+          إذا لم يظهر خيار مشاركة الصوت، سيُصدَّر الفيديو بدون صوت.
+          <br><br>
+          <strong>مهم:</strong> لا تُغيّر التبويب ولا تُصغّر النافذة أثناء التسجيل.
+          مدة التصدير = مدة الفيديو الفعلية.
+        </div>
+
+        <div class="quick-note" id="quickNote">
+          ملاحظة: في وضع التسجيل الحي، «المعاينة السريعة» تقلل الدقة فقط —
+          المدة تبقى مساوية لمدة الفيديو الفعلية (لا يوجد تسريع).
         </div>
 
         <div style="height:9px"></div>
@@ -1488,15 +1522,8 @@ function waitForMediabunny(timeoutMs){
 
       done = true;
 
-      window.removeEventListener(
-        "mediabunny-ready",
-        onReady
-      );
-
-      window.removeEventListener(
-        "mediabunny-failed",
-        onFail
-      );
+      window.removeEventListener("mediabunny-ready",onReady);
+      window.removeEventListener("mediabunny-failed",onFail);
 
       if(poll) clearInterval(poll);
       if(timer) clearTimeout(timer);
@@ -1506,49 +1533,20 @@ function waitForMediabunny(timeoutMs){
 
     };
 
-    const onReady = ()=>{
-      finish(null,window.Mediabunny);
-    };
+    const onReady = ()=>{ finish(null,window.Mediabunny); };
+    const onFail = ()=>{ finish(new Error("تعذر تحميل Mediabunny.")); };
 
-    const onFail = ()=>{
-      finish(
-        new Error("تعذر تحميل Mediabunny.")
-      );
-    };
-
-    window.addEventListener(
-      "mediabunny-ready",
-      onReady,
-      {once:true}
-    );
-
-    window.addEventListener(
-      "mediabunny-failed",
-      onFail,
-      {once:true}
-    );
+    window.addEventListener("mediabunny-ready",onReady,{once:true});
+    window.addEventListener("mediabunny-failed",onFail,{once:true});
 
     timer = setTimeout(()=>{
-
-      finish(
-        new Error(
-          "انتهت مهلة تحميل محرك الفيديو."
-        )
-      );
-
+      finish(new Error("انتهت مهلة تحميل محرك الفيديو."));
     },timeoutMs);
 
     poll = setInterval(()=>{
-
       if(window.Mediabunny){
-
-        finish(
-          null,
-          window.Mediabunny
-        );
-
+        finish(null,window.Mediabunny);
       }
-
     },150);
 
   });
@@ -1561,42 +1559,18 @@ function waitForMediabunny(timeoutMs){
 ========================================================= */
 
 document.querySelectorAll("[data-page]").forEach(button=>{
-
   button.addEventListener("click",()=>{
-
     const page = button.dataset.page;
-
-    document.querySelectorAll(".page")
-      .forEach(item=>{
-
-        item.classList.toggle(
-          "active",
-          item.id === "page-" + page
-        );
-
-      });
-
-    document.querySelectorAll("[data-page]")
-      .forEach(item=>{
-
-        item.classList.toggle(
-          "active",
-          item.dataset.page === page
-        );
-
-      });
-
+    document.querySelectorAll(".page").forEach(item=>{
+      item.classList.toggle("active",item.id === "page-" + page);
+    });
+    document.querySelectorAll("[data-page]").forEach(item=>{
+      item.classList.toggle("active",item.dataset.page === page);
+    });
     if(page === "workspace"){
-
-      setTimeout(
-        resizePreview,
-        30
-      );
-
+      setTimeout(resizePreview,30);
     }
-
   });
-
 });
 
 
@@ -1604,28 +1578,14 @@ document.querySelectorAll("[data-page]").forEach(button=>{
    ORIENTATION
 ========================================================= */
 
-document.querySelectorAll("[data-orientation]")
-.forEach(button=>{
-
+document.querySelectorAll("[data-orientation]").forEach(button=>{
   button.addEventListener("click",()=>{
-
     if(APP.exporting) return;
-
-    APP.orientation =
-      button.dataset.orientation;
-
-    document.querySelectorAll("[data-orientation]")
-      .forEach(item=>{
-
-        item.classList.toggle(
-          "active",
-          item === button
-        );
-
-      });
-
+    APP.orientation = button.dataset.orientation;
+    document.querySelectorAll("[data-orientation]").forEach(item=>{
+      item.classList.toggle("active",item === button);
+    });
   });
-
 });
 
 
@@ -1635,630 +1595,231 @@ document.querySelectorAll("[data-orientation]")
 
 function getForm(){
 
-  let duration =
-    Number($("duration").value);
+  let duration = Number($("duration").value);
 
-  if(!Number.isFinite(duration)){
-    duration = 60;
-  }
+  if(!Number.isFinite(duration)) duration = 60;
 
-  duration =
-    Math.max(
-      5,
-      Math.min(600,duration)
-    );
+  duration = Math.max(5,Math.min(600,duration));
 
   return {
-
     title:$("title").value.trim(),
-
     subject:$("subject").value.trim(),
-
     grade:$("grade").value.trim(),
-
     student:$("student").value.trim(),
-
     teacher:$("teacher").value.trim(),
-
     year:$("year").value.trim(),
-
     extra:$("extra").value.trim(),
-
+    visualStyle: $("visualStyle") ? $("visualStyle").value : "cinematic-dark",
     duration
-
   };
 
 }
 
 
 function escapePromptAttribute(value){
-
   return String(value || "")
     .replace(/&/g,"&amp;")
     .replace(/"/g,"&quot;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;");
-
 }
 
 
 /* =========================================================
-   PROMPT
+   PROMPT — النسخة الإبداعية المحسّنة
 ========================================================= */
 
 function createPrompt(){
 
   const data = getForm();
+  const portrait = APP.orientation === "portrait";
+  const width = portrait ? 1080 : 1920;
+  const height = portrait ? 1920 : 1080;
+  const durationMs = data.duration * 1000;
+  const fps = Number($("fps").value) || 24;
 
-  const portrait =
-    APP.orientation === "portrait";
+  const idealScenes = Math.max(6,Math.min(12,Math.round(data.duration / 7)));
 
-  const width =
-    portrait ? 1080 : 1920;
+  const styleMap = {
+    "cinematic-dark": "خلفية داكنة (كحلي/أسود)، ألوان بنفسجية وسماوية متوهجة، تدرجات ناعمة، عناصر عائمة، إحساس سينمائي.",
+    "modern-geometric": "ألوان صريحة (أزرق، أحمر، أصفر)، أشكال هندسية واضحة، زوايا حادة، تباين عالٍ، إحساس Swiss Design.",
+    "educational-board": "خلفية كريمية دافئة، ألوان برتقالية وتركوازية، عناصر تشبه السبورة التعليمية، خطوط عربية كبيرة.",
+    "journalistic": "رمادي داكن + ذهبي فاخر، خطوط رقيقة، مساحات بيضاء كبيرة، إحساس صحفي راقٍ.",
+    "pastel-artistic": "ألوان باستيل ناعمة (وردي، أزرق فاتح، أخضر فاتح)، ظلال خفيفة، إحساس فني.",
+    "neon-futuristic": "أسود عميق + نيون (أخضر ليموني، ماجنتا، سماوي)، توهج قوي، تباين عالٍ، إحساس Cyberpunk.",
+    "minimal-bw": "أبيض وأسود فقط، تباين عالٍ، مساحات فارغة مدروسة، إحساس مجلة راقية.",
+    "saudi-modern": "أخضر داكن + ذهبي + أبيض، عناصر هندسية عربية حديثة، إحساس هوية سعودية."
+  };
 
-  const height =
-    portrait ? 1920 : 1080;
-
-  const durationMs =
-    data.duration * 1000;
-
-  const fps =
-    Number($("fps").value) || 24;
-
+  const style = styleMap[data.visualStyle] || styleMap["cinematic-dark"];
 
   return `
+أنت مخرج Motion Graphics عالمي، تصميمك يفوز بجوائز، ومتخصص في العربية والتصدير عبر HTML.
 
-أنت مخرج مشاريع تعليمية ومصمم Motion Graphics ومطور HTML/CSS/JavaScript محترف.
-
-المطلوب إنشاء مشروع دراسي مرئي متكامل.
-
-المشروع ليس صفحة ويب عادية، وليس مجموعة بطاقات ثابتة، وليس Animation قصيرًا بلا محتوى.
-
-المطلوب مشروع يشبه مشروع PowerPoint / Canva Video من ناحية بناء المحتوى،
-لكن يتم تقديمه بالكامل بطريقة Motion Graphics داخل HTML.
+المطلوب: مشروع دراسي مرئي واحد بصيغة HTML، يشبه فيديو Motion Graphics احترافيًا.
 
 ==================================================
-بيانات المشروع
+📋 بيانات المشروع
 ==================================================
 
-عنوان البحث أو العرض:
-${data.title || "غير محدد"}
+العنوان: ${data.title || "غير محدد"}
+المادة: ${data.subject || "غير محددة"}
+الصف: ${data.grade || "غير محدد"}
+الطالب: ${data.student || "غير محدد"}
+المعلم: ${data.teacher || "غير محدد"}
+العام: ${data.year || "غير محدد"}
+المتطلبات: ${data.extra || "لا توجد"}
 
-المادة:
-${data.subject || "غير محددة"}
-
-الصف:
-${data.grade || "غير محدد"}
-
-اسم الطالب / المقدم:
-${data.student || "غير محدد"}
-
-اسم المعلم / المعلمة:
-${data.teacher || "غير محدد"}
-
-العام الدراسي:
-${data.year || "غير محدد"}
-
-الاتجاه:
-${portrait ? "عمودي 9:16" : "أفقي 16:9"}
-
-الأبعاد:
-${width} × ${height}
-
-المدة:
-${data.duration} ثانية
-
-المدة بالميلي ثانية:
-${durationMs}
-
-معدل الإطارات المقترح للتصدير:
-${fps} FPS
-
-المتطلبات الإضافية:
-${data.extra || "لا توجد"}
+الأبعاد: ${width} × ${height}
+الاتجاه: ${portrait ? "عمودي 9:16" : "أفقي 16:9"}
+المدة الإجمالية: ${data.duration} ثانية (${durationMs} ms)
+معدل الإطارات: ${fps} FPS
 
 ==================================================
-الوضع الإبداعي
+🎨 الأسلوب البصري المطلوب (إلزامي)
 ==================================================
 
-دع الذكاء يبدع.
+${style}
 
-اختر بنفسك:
-- الهوية البصرية
-- الألوان
-- أسلوب الرسومات
-- توزيع العناصر
-- نوع الانتقالات
-- الحركة والإيقاع
-- طريقة سرد المعلومات
-
-لكن يجب الالتزام بالقواعد التقنية التالية.
+التزم بهذا الأسلوب في:
+- لوحة الألوان (حدد 4-5 ألوان فقط واستخدمها بثبات)
+- أشكال العناصر (زوايا، انحناءات، حدود)
+- نوع الخلفيات (مسطحة أم متدرجة أم مبطنة)
+- إيقاع الحركة (هادئ أم حيوي)
 
 ==================================================
-المحتوى التعليمي
+📚 بنية المشاهد الإلزامية
 ==================================================
 
-أنشئ محتوى تعليميًا حقيقيًا. لا تكتفِ بالعناوين.
+عدد المشاهد المطلوب: ${idealScenes} مشهد بالضبط.
 
-قسّم الموضوع منطقيًا إلى 5-6 مشاهد. استخدم حسب طبيعة الموضوع:
-- تعريفات
-- شرح
-- أمثلة
-- مقارنات
-- تطبيقات
-- حقائق
-- مخططات
-- خطوات
-- خلاصة
+كل مشهد له مدة 6-8 ثوانٍ فقط. لا تمدد مشهدًا لملء الوقت.
 
-يجب أن يكون للمشروع بداية وشرح وتطور وخاتمة.
-
-كل مشهد يقدم فكرة واضحة.
-لا تجعل جميع المشاهد متشابهة.
+البنية القصصية المقترحة:
+1. مشهد افتتاحي (عنوان + هوية بصرية)
+2. مشهد تمهيدي (سياق + سؤال مثير)
+3-${idealScenes - 2}. مشاهد المحتوى (شرح، أمثلة، مقارنات، تطبيقات)
+${idealScenes - 1}. مشهد خلاصة
+${idealScenes}. مشهد ختامي (شكر/رؤية)
 
 ==================================================
-الحد الأدنى الإلزامي للمحتوى
+⚡ قاعدة الكثافة الإلزامية (STRICT)
 ==================================================
 
-- عدد المشاهد: 6-8 مشاهد.
-- كل مشهد: 40-70 كلمة عربية فعلية كحد أدنى (نص حقيقي لا عناوين فقط).
-- كل مشهد: 3 عناصر معلومة على الأقل (نقاط/أرقام/أمثلة).
-- كل مشهد: عنصر بصري واحد على الأقل (رسم/أيقونة/رقم كبير/مخطط).
+هذه القاعدة غير قابلة للتفاوض:
 
-هذا الحد إلزامي. أي مشهد أقل من ذلك يُعد ناقصًا ويجب إعادة بنائه.
+- كل مشهد يحتوي على 60-90 كلمة عربية فعلية مرئية على الشاشة
+- كل مشهد يحتوي على 3 عناصر معلومة على الأقل (بطاقة، رقم، رسم، جدول)
+- كل مشهد يحتوي على عنصر بصري واحد على الأقل (SVG، مخطط، شكل هندسي)
+- ممنوع مشهد يحوي عنوانًا وفقط
 
-==================================================
-ROOT CONTAINER — مهم جدًا للأداء
-==================================================
-
-يجب أن يكون كل المحتوى المرئي للمشروع داخل عنصر واحد فقط بهذا الشكل:
-
-<div id="project-root" data-project-root>
-    ...
-</div>
-
-هذا العنصر يمثل مساحة الفيديو كاملة.
-
-يجب أن يكون:
-
-width: ${width}px;
-height: ${height}px;
-position: relative;
-overflow: hidden;
-
-ويجب ألا توجد أي عناصر مرئية مهمة خارج هذا العنصر.
-
-يمكن وضع:
-- المشاهد
-- النصوص
-- الصور
-- SVG
-- الرسومات
-- الخلفيات
-- الزخارف
-- عناصر الحركة
-
-داخل project-root.
-
-لا تضع عناصر خارج project-root إلا عناصر تقنية غير مرئية.
-
-هذه القاعدة مهمة لأن منصة التصدير ستستخدم project-root مباشرة بدل إعادة رسم body بالكامل.
+لمنع الفراغ:
+- ضع شريطًا سفليًا يعرض رقم المشهد + اسم المرحلة
+- أضف زخارف خفيفة (شبكة، دوائر، خطوط) تملأ الحواف
+- استخدم أرقامًا كبيرة شفافة (opacity 0.05-0.1) كخلفيات
 
 ==================================================
-MOTION
+🎬 الحركة — Web Animations API فقط
 ==================================================
 
-المشروع يجب أن يبدو كفيديو حقيقي.
+استخدم element.animate() لكل عنصر. المسموح:
 
-استخدم عند الحاجة:
-- دخول وخروج العناصر
-- تحريك العناوين
-- Parallax
-- Zoom
-- Reveal
-- انتقالات
-- تحريك خطوط ومؤشرات
-- ظهور المعلومات على مراحل
+el.animate([
+  {opacity:0, transform:"translateY(30px)"},
+  {opacity:1, transform:"translateY(0)"}
+], {duration:600, delay:START, fill:"both", easing:"cubic-bezier(0.16,1,0.3,1)"});
 
-الحركة تخدم المعلومة.
-
-لا تجعل كل العناصر تتحرك في الوقت نفسه.
-
-لا تستخدم حركة سريعة أو مزعجة.
-
-كل مشهد يجب أن يحتوي على 4-6 حركات دخول متتابعة (staggered).
-
-استخدم مزيجًا من:
-- fade + translateY(20-40px)
-- scale من 0.9 إلى 1
-- رسم خطوط عبر stroke-dashoffset
-- عدادات أرقام متصاعدة
-
-استخدم Web Animations API (element.animate) كآلية أساسية
-للحركة حتى يبقى التحكم بالزمن دقيقًا ومتوافقًا مع setTime.
-
-==================================================
-LAYOUT
-==================================================
-
-استخدم Grid وFlexbox وContainers.
-
-استخدم Safe Area.
-
-لا تسمح بتداخل العناصر.
-
-لا تجعل:
-- النص فوق صورة بطريقة غير مقصودة
-- عنوان يغطي نصًا
-- عناصر تخرج من الشاشة
-- عناصر مهمة تلتصق بالحواف
-
-absolute مسموح للزخارف والخلفيات فقط.
-
-ضع data-role="content" على كل عنصر أساسي يحمل معلومة مهمة في كل مشهد.
-
-==================================================
-نظام المسافات والطباعة — إلزامي
-==================================================
-
-- مقياس مسافات ثابت: 8 / 16 / 24 / 32 / 48 / 64 px.
-- padding خارجي للمشهد لا يقل عن 5% من أبعاد project-root.
-- line-height بين 1.6 و1.9 للنصوص العادية.
-- مسافة لا تقل عن 16px بين أي عنصرين نصيين متجاورين.
-- max-width للفقرات لا يتجاوز 70% من عرض المشهد.
-- منع ترك أكثر من 20% من مساحة أي مشهد فارغة، مع بدائل محددة لملء الفراغ:
-  زخرفة، رقم كبير شفاف، عنصر معلومة إضافي، مخطط صغير.
-
-==================================================
-قواعد الأداء — إلزامية جدًا
-==================================================
-
-منصة التصدير تقوم برسم المشروع Frame by Frame باستخدام html2canvas.
-
-لذلك يجب تقليل العمليات الثقيلة.
-
-ممنوع تمامًا:
-
-1. backdrop-filter: blur(...)
-
-البديل:
-خلفية rgba معتمة.
-
-2. filter: drop-shadow(...)
-
-البديل:
-box-shadow خفيف أو طبقة زخرفية.
-
-3. filter: blur(Npx) حيث N >= 15
-
-البديل:
-radial-gradient.
-
-4. mask-image
-
-البديل:
-linear-gradient.
-
-5. box-shadow مع blur-radius أكبر من 25px على عناصر كبيرة.
-
-استخدم blur بين 6px و15px قدر الإمكان.
-
-6. mix-blend-mode.
-
-7. WebGL للمعلومات الأساسية.
-
-8. فيديوهات خارجية.
-
-9. Canvas للنصوص المهمة.
-
-==================================================
-المشاهد
-==================================================
-
-المشاهد غير النشطة يجب أن تكون:
-
-display:none;
-
-ولا تستخدم visibility:hidden للمشاهد الكاملة.
-
-مثال:
-
-.scene{
-    display:none;
-}
-
-.scene.active{
-    display:block;
-}
-
-لكن يجب أن تكون كل المشاهد قابلة للتحكم من خلال setTime.
-
-==================================================
-CSS
-==================================================
-
-مدعوم:
-
-- solid colors
-- linear-gradient
-- radial-gradient
-- border-radius
-- box-shadow خفيف
-- transform
-- opacity
-- flex
-- grid
-- position
-- SVG inline
-- overflow:hidden
-
-يُعالج تلقائيًا:
-
-background-clip:text
+قواعد الحركة:
+- كل مشهد يحتوي على 5-8 حركات دخول متتابعة (staggered بـ 100-200ms)
+- أول 30% من المشهد: دخول العناصر
+- 30-80%: عناصر تتلألأ/تتنفس قليلًا (نبض، إزاحة)
+- آخر 20%: خروج ناعم (fade-out + translateY-20 أو scale-0.95)
+- الانتقالات بين المشاهد: crossfade 300ms
 
 ممنوع:
-
-- filter: blur
-- mask-image
-- backdrop-filter
-- mix-blend-mode
-- clip-path المعقد
+- CSS animation/transition كآلية زمنية أساسية
+- requestAnimationFrame داخل مشروع setTime
+- setTimeout/setInterval للحركة
 
 ==================================================
-الخطوط
+🖼️ المشهد — التفاصيل التقنية
 ==================================================
 
-يجب أن يبدأ ملف HTML بتحميل الخط من Google Fonts داخل <head> بهذا الترتيب:
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-
-قواعد الخطوط:
-
-1. استخدم خطًا واحدًا أو خطين كحد أقصى.
-
-2. font-family في body مع fallback واضح.
-
-3. كل عنصر نصي يرث أو يصرح بـ font-family.
-
-4. الأوزان:
-400
-500
-700
-900
-
-5. قبل أي حركة أو عرض يجب انتظار:
-
-async function ensureFonts(){
-
-    if(!document.fonts) return;
-
-    try{
-
-        await document.fonts.load('400 24px Tajawal');
-        await document.fonts.load('700 24px Tajawal');
-        await document.fonts.load('900 24px Tajawal');
-
-        await document.fonts.ready;
-
-    }catch(e){}
-
-    document.documentElement.classList.add('fonts-ready');
-
-}
-
-6. يمكن استخدام:
-
-html:not(.fonts-ready) [data-role="content"]{
-    visibility:hidden;
-}
-
-==================================================
-العربية
-==================================================
-
-يجب أن يكون:
-
-<html lang="ar" dir="rtl">
-
-ممنوع:
-
-letter-spacing
-
-text-transform
-
-تفكيك الحروف
-
-كتابة:
-ا ل و ط ن
-
-استخدم خطًا عربيًا حقيقيًا.
-
-==================================================
-الصور
-==================================================
-
-يمكن استخدام:
-
-img
-SVG
-CSS shapes
-HTML graphics
-
-لا تستخدم video.
-
-لا تستخدم WebGL للمعلومات الأساسية.
-
-لا تضع النصوص المهمة داخل Canvas.
-
-إذا استخدمت صورًا خارجية فتأكد من CORS أو استخدم data URI.
-
-==================================================
-التحكم الزمني
-==================================================
-
-المشروع سيتم تصديره Frame by Frame.
-
-لا تعتمد على:
-
-setTimeout
-setInterval
-Date.now
-performance.now
-requestAnimationFrame
-
-كمصدر أساسي للحركة.
-
-لا تعتمد على CSS animation أو CSS transition كطريقة أساسية للتحكم بالزمن.
-
-يجب إنشاء:
-
-window.__PROJECT__ = {
-
-    duration: ${durationMs},
-
-    orientation: "${APP.orientation}",
-
-    setTime:function(timeMs){
-
-        // تحديث المشروع حسب الوقت
-
-    }
-
-};
-
-يجب أن يعمل:
-
-window.__PROJECT__.setTime(0)
-
-ويظهر بداية المشروع.
-
-ويجب أن يعمل:
-
-window.__PROJECT__.setTime(5000)
-
-ويظهر المشروع عند الثانية الخامسة.
-
-يمكن استخدام Web Animations API بشرط إمكانية التحكم بالزمن.
-
-==================================================
-META
-==================================================
-
-أضف:
-
-<meta name="project-duration" content="${data.duration}">
-<meta name="project-duration-ms" content="${durationMs}">
-<meta name="project-orientation" content="${APP.orientation}">
-<meta name="project-type" content="educational-motion-project">
-<meta name="project-title" content="${escapePromptAttribute(data.title)}">
-
-==================================================
-SCENES
-==================================================
-
-كل مشهد يجب أن يحتوي:
-
-data-scene
-
-ويفضل:
-
-data-scene-name
-data-scene-start
-data-scene-end
-
-مثال:
-
+كل مشهد:
 <section
-    data-scene="1"
-    data-scene-name="المقدمة"
-    data-scene-start="0"
-    data-scene-end="9000">
-
+  data-scene="N"
+  data-scene-name="..."
+  data-scene-start="MS"
+  data-scene-end="MS"
+  class="scene">
+  ...
 </section>
 
-==================================================
-PERFORMANCE
-==================================================
-
-اجعل المشروع خفيفًا عند إعادة الرسم.
-
-يفضل:
-- عدد عناصر DOM معقول
-- SVG بسيط
-- تجنب آلاف العناصر
-- تجنب shadows الثقيلة
-- تجنب blur
-- تجنب الفلاتر
-- تجنب الصور الضخمة جدًا
-
-كل عنصر مهم يجب أن يكون داخل project-root.
+المشاهد غير النشطة: display:none.
+كل عنصر مهم يحمل data-role="content".
 
 ==================================================
-التحميل
+🎯 نظام setTime — إلزامي
 ==================================================
 
-انتظر document.fonts.ready والصور قبل بدء المشروع.
-
-لا تجعل تحميل الخطوط يؤدي إلى تغيير مفاجئ في تخطيط الصفحة.
+window.__PROJECT__ = {
+  duration: ${durationMs},
+  orientation: "${APP.orientation}",
+  setTime: function(timeMs){
+    // 1. إظهار/إخفاء المشاهد (display)
+    // 2. التحكم بالحركات (animations)
+    // 3. لا تعتمد على الوقت الحقيقي
+  }
+};
 
 ==================================================
-HTML
+🎨 قواعد التصميم
 ==================================================
 
-أخرج ملف HTML واحدًا كاملًا يبدأ بـ:
+- spacing: 8/16/24/32/48/64px فقط
+- padding المشهد: 5% على الأقل من الأبعاد
+- line-height: 1.7 للنصوص
+- max-width الفقرات: 70% من عرض المشهد
+- خط عربي واحد أو اثنان فقط: Tajawal, Cairo
+- font-weight: 400, 500, 700, 900 فقط
 
-<!doctype html>
+ممنوع:
+- letter-spacing على العربية
+- text-transform
+- clip-path معقد
+- filter: blur / drop-shadow / backdrop-filter
+- mix-blend-mode
+- mask-image
 
-ويحتوي:
+==================================================
+🎯 قاعدة النص المتدرج
+==================================================
 
+لا تستخدم background-clip:text على النصوص العربية
+(لأنه يكسر تشكيل الحروف ويستبدل الخط).
+
+للنصوص العربية استخدم لونًا صلبًا فقط.
+
+==================================================
+📤 الإخراج
+==================================================
+
+HTML واحد كامل يبدأ بـ <!doctype html>.
 <html lang="ar" dir="rtl">
+كل CSS وJS داخل الملف.
+لا Markdown، لا شرح خارج HTML.
 
-مع HTML وCSS وJavaScript داخل الملف نفسه.
-
-لا تستخدم Markdown.
-
-لا تضع شرحًا قبل HTML أو بعده.
-
-لا تستخدم Lorem ipsum.
-
-لا تستخدم placeholders.
-
-إذا كانت معلومة ناقصة، استخدم معرفتك.
-
-==================================================
-الفحص النهائي
-==================================================
-
-قبل إخراج HTML راجع:
-
-- RTL
-- lang="ar"
-- fonts
-- عدم وجود letter-spacing
-- عدم وجود تداخل
-- عدم خروج عناصر
-- وجود project-root
-- وجود setTime
-- وجود duration
-- وجود orientation
-- وجود scenes
-- data-role="content"
-- عدم الاعتماد على الوقت الحقيقي
-- عدم استخدام CSS animation كآلية زمنية أساسية
-- عدم استخدام backdrop-filter
-- عدم استخدام filter: blur
-- عدم استخدام drop-shadow
-- عدم استخدام mix-blend-mode
-- المشاهد غير النشطة display:none
-- المشروع كامل داخل project-root
-- عدم وجود فراغ يتجاوز 20% من مساحة أي مشهد
-- كل مشهد فيه 40 كلمة على الأقل
-- كل مشهد فيه 4 حركات دخول منفصلة على الأقل
+راجع قبل الإخراج:
+✓ project-root موجود
+✓ ${idealScenes} مشاهد بـ data-scene
+✓ كل مشهد ≥ 60 كلمة
+✓ كل مشهد ≥ 5 حركات animate()
+✓ setTime يعمل
+✓ لا يعتمد على وقت حقيقي
+✓ RTL + lang="ar"
+✓ لا يوجد background-clip:text على العربية
 
 أخرج HTML فقط.
-
 `.trim();
 
 }
@@ -2273,21 +1834,13 @@ $("generate").addEventListener("click",()=>{
   const data = getForm();
 
   if(!data.title){
-
     alert("اكتب عنوان المشروع أولًا");
-
     $("title").focus();
-
     return;
-
   }
 
-  $("prompt").value =
-    createPrompt();
-
-  $("promptBox")
-    .classList
-    .add("show");
+  $("prompt").value = createPrompt();
+  $("promptBox").classList.add("show");
 
 });
 
@@ -2296,38 +1849,16 @@ $("generate").addEventListener("click",()=>{
    COPY
 ========================================================= */
 
-$("copyPrompt").addEventListener(
-  "click",
-  async()=>{
-
-    try{
-
-      await navigator.clipboard.writeText(
-        $("prompt").value
-      );
-
-    }catch{
-
-      $("prompt").select();
-
-      try{
-        document.execCommand("copy");
-      }catch{}
-
-    }
-
-    $("copyPrompt").textContent =
-      "تم النسخ";
-
-    setTimeout(()=>{
-
-      $("copyPrompt").textContent =
-        "نسخ";
-
-    },1200);
-
+$("copyPrompt").addEventListener("click",async()=>{
+  try{
+    await navigator.clipboard.writeText($("prompt").value);
+  }catch{
+    $("prompt").select();
+    try{ document.execCommand("copy"); }catch{}
   }
-);
+  $("copyPrompt").textContent = "تم النسخ";
+  setTimeout(()=>{ $("copyPrompt").textContent = "نسخ"; },1200);
+});
 
 
 /* =========================================================
@@ -2336,44 +1867,24 @@ $("copyPrompt").addEventListener(
 
 function normalizeHTML(value){
 
-  let html =
-    String(value || "").trim();
+  let html = String(value || "").trim();
 
-  html =
-    html
-      .replace(/^```html\s*/i,"")
-      .replace(/^```\s*/i,"")
-      .replace(/\s*```\s*$/i,"");
+  html = html
+    .replace(/^```html\s*/i,"")
+    .replace(/^```\s*/i,"")
+    .replace(/\s*```\s*$/i,"");
 
-  const start =
-    html.search(/<!doctype[\s>]/i);
+  const start = html.search(/<!doctype[\s>]/i);
+  const alt = html.search(/<html[\s>]/i);
+  const realStart = start >= 0 ? start : alt;
 
-  const alt =
-    html.search(/<html[\s>]/i);
+  if(realStart > 0){ html = html.slice(realStart); }
 
-  const realStart =
-    start >= 0 ? start : alt;
-
-  if(realStart > 0){
-    html =
-      html.slice(realStart);
-  }
-
-  const endTag =
-    "</html>";
-
-  const endIndex =
-    html.toLowerCase()
-      .lastIndexOf(endTag);
+  const endTag = "</html>";
+  const endIndex = html.toLowerCase().lastIndexOf(endTag);
 
   if(endIndex >= 0){
-
-    html =
-      html.slice(
-        0,
-        endIndex + endTag.length
-      );
-
+    html = html.slice(0,endIndex + endTag.length);
   }
 
   return html.trim();
@@ -2384,32 +1895,15 @@ function normalizeHTML(value){
 function readMeta(doc){
 
   function meta(name){
-
-    const el =
-      doc.querySelector(
-        'meta[name="' + name + '"]'
-      );
-
-    return el
-      ? (el.getAttribute("content") || "").trim()
-      : "";
-
+    const el = doc.querySelector('meta[name="' + name + '"]');
+    return el ? (el.getAttribute("content") || "").trim() : "";
   }
 
   return {
-
-    duration:
-      Number(meta("project-duration")),
-
-    durationMs:
-      Number(meta("project-duration-ms")),
-
-    orientation:
-      meta("project-orientation"),
-
-    title:
-      meta("project-title")
-
+    duration: Number(meta("project-duration")),
+    durationMs: Number(meta("project-duration-ms")),
+    orientation: meta("project-orientation"),
+    title: meta("project-title")
   };
 
 }
@@ -2419,37 +1913,21 @@ function readMeta(doc){
    LOAD PROJECT
 ========================================================= */
 
-$("load").addEventListener(
-  "click",
-  loadProject
-);
+$("load").addEventListener("click",loadProject);
 
 
 async function loadProject(){
 
-  const html =
-    normalizeHTML(
-      $("code").value
-    );
+  const html = normalizeHTML($("code").value);
 
   if(!html){
-
-    alert(
-      "الصق HTML المشروع أولًا"
-    );
-
+    alert("الصق HTML المشروع أولًا");
     return;
-
   }
 
   if(!/<html[\s>]/i.test(html)){
-
-    alert(
-      "الصق ملف HTML كاملًا."
-    );
-
+    alert("الصق ملف HTML كاملًا.");
     return;
-
   }
 
   stopPreview();
@@ -2462,154 +1940,80 @@ async function loadProject(){
   APP.exportWin = null;
   APP.exportRoot = null;
 
-  setStatus(
-    "جارٍ تحميل المشروع...",
-    "busy"
-  );
+  setStatus("جارٍ تحميل المشروع...","busy");
 
   try{
 
-    applyIframeCanvasSize(
-      APP.orientation
-    );
+    applyIframeCanvasSize(APP.orientation);
 
     await setIframe(html);
 
-    const iframe =
-      $("preview");
-
-    const doc =
-      iframe.contentDocument;
-
-    const win =
-      iframe.contentWindow;
+    const iframe = $("preview");
+    const doc = iframe.contentDocument;
+    const win = iframe.contentWindow;
 
     if(!doc || !win){
-
-      throw new Error(
-        "تعذر الوصول إلى المشروع."
-      );
-
+      throw new Error("تعذر الوصول إلى المشروع.");
     }
 
     await waitForResources(doc);
 
-    const meta =
-      readMeta(doc);
+    const meta = readMeta(doc);
 
     let durationMs = 0;
 
-    if(
-      Number.isFinite(meta.durationMs) &&
-      meta.durationMs > 0
-    ){
-
-      durationMs =
-        meta.durationMs;
-
-    }else if(
-      Number.isFinite(meta.duration) &&
-      meta.duration > 0
-    ){
-
-      durationMs =
-        meta.duration * 1000;
-
-    }else if(
-      win.__PROJECT__ &&
-      Number(win.__PROJECT__.duration) > 0
-    ){
-
-      durationMs =
-        Number(
-          win.__PROJECT__.duration
-        );
-
+    if(Number.isFinite(meta.durationMs) && meta.durationMs > 0){
+      durationMs = meta.durationMs;
+    }else if(Number.isFinite(meta.duration) && meta.duration > 0){
+      durationMs = meta.duration * 1000;
+    }else if(win.__PROJECT__ && Number(win.__PROJECT__.duration) > 0){
+      durationMs = Number(win.__PROJECT__.duration);
     }
 
     if(!durationMs){
-
-      throw new Error(
-        "لم يتم العثور على مدة المشروع."
-      );
-
+      throw new Error("لم يتم العثور على مدة المشروع.");
     }
 
-    APP.durationMs =
-      durationMs;
-
-    APP.title =
-      meta.title ||
-      $("title").value.trim();
-
-    APP.subject =
-      $("subject").value.trim();
-
-    APP.grade =
-      $("grade").value.trim();
+    APP.durationMs = durationMs;
+    APP.title = meta.title || $("title").value.trim();
+    APP.subject = $("subject").value.trim();
+    APP.grade = $("grade").value.trim();
 
     const resolvedOrientation =
-      meta.orientation === "portrait"
-        ? "portrait"
-        : "landscape";
+      meta.orientation === "portrait" ? "portrait" : "landscape";
 
-    const orientationChanged =
-      resolvedOrientation !==
-      APP.orientation;
+    const orientationChanged = resolvedOrientation !== APP.orientation;
 
-    APP.orientation =
-      resolvedOrientation;
+    APP.orientation = resolvedOrientation;
 
     if(orientationChanged){
-
-      applyIframeCanvasSize(
-        APP.orientation
-      );
-
+      applyIframeCanvasSize(APP.orientation);
       await sleep(30);
-
       await waitForResources(doc);
-
     }
 
     APP.loaded = true;
 
     APP.exportDoc = doc;
     APP.exportWin = win;
-    APP.exportRoot =
-      getProjectRoot(doc);
-
-    APP.exportAnimations =
-      collectProjectAnimations(doc);
+    APP.exportRoot = getProjectRoot(doc);
+    APP.exportAnimations = collectProjectAnimations(doc);
 
     updateProjectInfo();
-
     await buildTimeline();
-
     await setProjectTime(0);
-
     await validateProject();
 
-    setStatus(
-      "جاهز",
-      "ok"
-    );
+    setStatus("جاهز","ok");
 
   }catch(error){
 
     console.error(error);
 
     APP.loaded = false;
+    setStatus("خطأ","error");
 
-    setStatus(
-      "خطأ",
-      "error"
-    );
-
-    alert(
-      error.message ||
-      "حدث خطأ أثناء تحميل المشروع."
-    );
+    alert(error.message || "حدث خطأ أثناء تحميل المشروع.");
 
   }
 
@@ -2620,30 +2024,17 @@ async function loadProject(){
    IFRAME
 ========================================================= */
 
-function applyIframeCanvasSize(
-  orientation
-){
+function applyIframeCanvasSize(orientation){
 
-  APP.orientation =
-    orientation;
+  APP.orientation = orientation;
 
-  const base =
-    getBaseSize();
+  const base = getBaseSize();
+  const iframe = $("preview");
 
-  const iframe =
-    $("preview");
-
-  iframe.width =
-    base.width;
-
-  iframe.height =
-    base.height;
-
-  iframe.style.width =
-    base.width + "px";
-
-  iframe.style.height =
-    base.height + "px";
+  iframe.width = base.width;
+  iframe.height = base.height;
+  iframe.style.width = base.width + "px";
+  iframe.style.height = base.height + "px";
 
   resizePreview();
 
@@ -2652,89 +2043,42 @@ function applyIframeCanvasSize(
 
 function setIframe(html){
 
-  return new Promise(
-    (resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
-      const iframe =
-        $("preview");
+    const iframe = $("preview");
 
-      let done = false;
+    let done = false;
+    let fallbackTimer = null;
+    let hardTimer = null;
 
-      let fallbackTimer = null;
-
-      let hardTimer = null;
-
-      function cleanup(){
-
-        if(fallbackTimer)
-          clearTimeout(
-            fallbackTimer
-          );
-
-        if(hardTimer)
-          clearTimeout(
-            hardTimer
-          );
-
-      }
-
-      function finish(){
-
-        if(done) return;
-
-        done = true;
-
-        cleanup();
-
-        resolve();
-
-      }
-
-      iframe.onload = ()=>{
-
-        setTimeout(
-          finish,
-          100
-        );
-
-      };
-
-      iframe.srcdoc =
-        html;
-
-      fallbackTimer =
-        setTimeout(()=>{
-
-          if(
-            !done &&
-            iframe.contentDocument
-          ){
-
-            finish();
-
-          }
-
-        },1500);
-
-      hardTimer =
-        setTimeout(()=>{
-
-          if(!done){
-
-            cleanup();
-
-            reject(
-              new Error(
-                "انتهى وقت تحميل HTML."
-              )
-            );
-
-          }
-
-        },15000);
-
+    function cleanup(){
+      if(fallbackTimer) clearTimeout(fallbackTimer);
+      if(hardTimer) clearTimeout(hardTimer);
     }
-  );
+
+    function finish(){
+      if(done) return;
+      done = true;
+      cleanup();
+      resolve();
+    }
+
+    iframe.onload = ()=>{ setTimeout(finish,100); };
+
+    iframe.srcdoc = html;
+
+    fallbackTimer = setTimeout(()=>{
+      if(!done && iframe.contentDocument){ finish(); }
+    },1500);
+
+    hardTimer = setTimeout(()=>{
+      if(!done){
+        cleanup();
+        reject(new Error("انتهى وقت تحميل HTML."));
+      }
+    },15000);
+
+  });
 
 }
 
@@ -2743,92 +2087,38 @@ function setIframe(html){
    RESOURCE HELPERS
 ========================================================= */
 
-function withTimeout(
-  promise,
-  ms
-){
-
+function withTimeout(promise,ms){
   return Promise.race([
-
     promise,
-
-    new Promise(resolve =>
-      setTimeout(
-        resolve,
-        ms
-      )
-    )
-
+    new Promise(resolve => setTimeout(resolve,ms))
   ]);
-
 }
 
 
-const GENERIC_FAMILIES =
-  new Set([
-
-    "inherit",
-    "initial",
-    "unset",
-    "revert",
-    "sans-serif",
-    "serif",
-    "monospace",
-    "cursive",
-    "fantasy",
-    "system-ui",
-    "ui-sans-serif",
-    "ui-serif",
-    "ui-monospace",
-    "ui-rounded",
-    "arial",
-    "helvetica",
-    "tahoma",
-    "verdana",
-    "times new roman",
-    "segoe ui",
-    "courier new",
-    "georgia",
-    "trebuchet ms"
-
-  ]);
+const GENERIC_FAMILIES = new Set([
+  "inherit","initial","unset","revert","sans-serif","serif",
+  "monospace","cursive","fantasy","system-ui","ui-sans-serif",
+  "ui-serif","ui-monospace","ui-rounded","arial","helvetica",
+  "tahoma","verdana","times new roman","segoe ui","courier new",
+  "georgia","trebuchet ms"
+]);
 
 
-async function waitForFonts(
-  doc,
-  win
-){
+async function waitForFonts(doc,win){
 
-  if(!doc.fonts || !win)
-    return;
+  if(!doc.fonts || !win) return;
+
+  try{ void doc.documentElement.offsetHeight; }catch{}
 
   try{
-
-    void doc.documentElement.offsetHeight;
-
+    await withTimeout(doc.fonts.ready,4000);
   }catch{}
 
-  try{
-
-    await withTimeout(
-      doc.fonts.ready,
-      4000
-    );
-
-  }catch{}
-
-  const families =
-    new Set();
-
+  const families = new Set();
   let elements = [];
 
   try{
-
-    elements =
-      Array.from(
-        doc.querySelectorAll("*")
-      ).slice(0,1200);
-
+    elements = Array.from(doc.querySelectorAll("*")).slice(0,1200);
   }catch{}
 
   for(const el of elements){
@@ -2836,136 +2126,60 @@ async function waitForFonts(
     let ff = "";
 
     try{
-
-      ff =
-        win
-          .getComputedStyle(el)
-          .fontFamily || "";
-
+      ff = win.getComputedStyle(el).fontFamily || "";
     }catch{}
 
     if(!ff) continue;
 
-    ff.split(",")
-      .forEach(name=>{
-
-        const clean =
-          name
-            .trim()
-            .replace(
-              /^["']|["']$/g,
-              ""
-            );
-
-        if(
-          clean &&
-          !GENERIC_FAMILIES.has(
-            clean.toLowerCase()
-          )
-        ){
-
-          families.add(
-            clean
-          );
-
-        }
-
-      });
+    ff.split(",").forEach(name=>{
+      const clean = name.trim().replace(/^["']|["']$/g,"");
+      if(clean && !GENERIC_FAMILIES.has(clean.toLowerCase())){
+        families.add(clean);
+      }
+    });
 
   }
 
   const loads = [];
-
-  const weights =
-    ["400","500","700","900"];
+  const weights = ["400","500","700","900"];
 
   families.forEach(fam=>{
-
     weights.forEach(w=>{
-
       try{
-
-        loads.push(
-          doc.fonts.load(
-            w +
-            ' 24px "' +
-            fam +
-            '"'
-          )
-        );
-
+        loads.push(doc.fonts.load(w + ' 24px "' + fam + '"'));
       }catch{}
-
     });
-
   });
 
   if(loads.length){
-
     try{
-
-      await withTimeout(
-        Promise.all(loads),
-        10000
-      );
-
+      await withTimeout(Promise.all(loads),10000);
     }catch{}
-
   }
 
   try{
-
-    await withTimeout(
-      doc.fonts.ready,
-      5000
-    );
-
+    await withTimeout(doc.fonts.ready,5000);
   }catch{}
 
-  APP.detectedFonts =
-    Array.from(families);
+  APP.detectedFonts = Array.from(families);
 
   const missing = [];
 
   families.forEach(fam=>{
-
     try{
-
-      if(
-        !doc.fonts.check(
-          '400 16px "' +
-          fam +
-          '"'
-        )
-      ){
-
+      if(!doc.fonts.check('400 16px "' + fam + '"')){
         missing.push(fam);
-
       }
-
     }catch{
-
       missing.push(fam);
-
     }
-
   });
 
-  APP.missingFonts =
-    missing;
+  APP.missingFonts = missing;
 
   try{
-
-    doc.documentElement
-      .classList
-      .add("fonts-ready");
-
-    doc.documentElement
-      .setAttribute(
-        "data-fonts-ready",
-        "1"
-      );
-
+    doc.documentElement.classList.add("fonts-ready");
+    doc.documentElement.setAttribute("data-fonts-ready","1");
   }catch{}
 
 }
@@ -2979,45 +2193,23 @@ function waitForImage(image){
 
   return new Promise(resolve=>{
 
-    if(
-      image.complete &&
-      image.naturalWidth > 0
-    ){
-
+    if(image.complete && image.naturalWidth > 0){
       resolve();
-
       return;
-
     }
 
     let finished = false;
 
     function finish(){
-
       if(finished) return;
-
       finished = true;
-
       resolve();
-
     }
 
-    image.addEventListener(
-      "load",
-      finish,
-      {once:true}
-    );
+    image.addEventListener("load",finish,{once:true});
+    image.addEventListener("error",finish,{once:true});
 
-    image.addEventListener(
-      "error",
-      finish,
-      {once:true}
-    );
-
-    setTimeout(
-      finish,
-      10000
-    );
+    setTimeout(finish,10000);
 
   });
 
@@ -3025,290 +2217,106 @@ function waitForImage(image){
 
 
 /* =========================================================
-   GRADIENT TEXT
+   ARABIC TEXT DETECTION
 ========================================================= */
 
-const NS_SVG =
-  "http://www.w3.org/2000/svg";
+function containsArabic(text){
+  return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(String(text || ""));
+}
 
 
-function convertGradientTextToSVG(
-  el,
-  win,
-  doc
-){
+/* =========================================================
+   GRADIENT TEXT (للنص اللاتيني فقط)
+========================================================= */
 
-  const styles =
-    win.getComputedStyle(el);
+const NS_SVG = "http://www.w3.org/2000/svg";
 
-  const rect =
-    el.getBoundingClientRect();
 
-  const text =
-    (el.textContent || "")
-      .trim();
+function convertGradientTextToSVG(el,win,doc){
 
-  if(
-    !text ||
-    rect.width < 1 ||
-    rect.height < 1
-  ){
+  const styles = win.getComputedStyle(el);
+  const rect = el.getBoundingClientRect();
+  const text = (el.textContent || "").trim();
 
-    return false;
+  if(!text || rect.width < 1 || rect.height < 1) return false;
+  if(el.children.length > 0) return false;
 
-  }
+  const bgImage = styles.backgroundImage || "";
 
-  if(el.children.length > 0)
-    return false;
+  const colors = bgImage.match(
+    /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
+  ) || [];
 
-  const bgImage =
-    styles.backgroundImage || "";
+  if(colors.length === 0) return false;
 
-  const colors =
-    bgImage.match(
-      /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
-    ) || [];
+  const c1 = colors[0];
+  const c2 = colors[colors.length - 1] || c1;
 
-  if(colors.length === 0)
-    return false;
+  const fontSize = parseFloat(styles.fontSize) || 40;
+  const fontWeight = styles.fontWeight || "700";
 
-  const c1 =
-    colors[0];
+  const fontFamily = (styles.fontFamily || "Tajawal, sans-serif")
+    .replace(/"/g,"'");
 
-  const c2 =
-    colors[colors.length - 1] ||
-    c1;
+  const w = Math.ceil(rect.width);
+  const h = Math.ceil(rect.height);
 
-  const fontSize =
-    parseFloat(styles.fontSize) ||
-    40;
+  const svg = doc.createElementNS(NS_SVG,"svg");
+  svg.setAttribute("xmlns",NS_SVG);
+  svg.setAttribute("width",w);
+  svg.setAttribute("height",h);
+  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
+  svg.setAttribute("preserveAspectRatio","xMidYMid meet");
+  svg.style.display = "block";
+  svg.style.width = "100%";
+  svg.style.height = "100%";
 
-  const fontWeight =
-    styles.fontWeight ||
-    "700";
+  const defs = doc.createElementNS(NS_SVG,"defs");
+  const gid = "g" + Math.random().toString(36).substring(2,9);
 
-  const fontFamily =
-    (
-      styles.fontFamily ||
-      "Tajawal, sans-serif"
-    )
-      .replace(/"/g,"'");
+  const grad = doc.createElementNS(NS_SVG,"linearGradient");
+  grad.setAttribute("id",gid);
+  grad.setAttribute("x1","0%");
+  grad.setAttribute("y1","0%");
+  grad.setAttribute("x2","100%");
+  grad.setAttribute("y2","100%");
 
-  const w =
-    Math.ceil(rect.width);
-
-  const h =
-    Math.ceil(rect.height);
-
-  const svg =
-    doc.createElementNS(
-      NS_SVG,
-      "svg"
-    );
-
-  svg.setAttribute(
-    "xmlns",
-    NS_SVG
-  );
-
-  svg.setAttribute(
-    "width",
-    w
-  );
-
-  svg.setAttribute(
-    "height",
-    h
-  );
-
-  svg.setAttribute(
-    "viewBox",
-    `0 0 ${w} ${h}`
-  );
-
-  svg.setAttribute(
-    "preserveAspectRatio",
-    "xMidYMid meet"
-  );
-
-  svg.style.display =
-    "block";
-
-  svg.style.width =
-    "100%";
-
-  svg.style.height =
-    "100%";
-
-  const defs =
-    doc.createElementNS(
-      NS_SVG,
-      "defs"
-    );
-
-  const gid =
-    "g" +
-    Math.random()
-      .toString(36)
-      .substring(2,9);
-
-  const grad =
-    doc.createElementNS(
-      NS_SVG,
-      "linearGradient"
-    );
-
-  grad.setAttribute(
-    "id",
-    gid
-  );
-
-  grad.setAttribute(
-    "x1",
-    "0%"
-  );
-
-  grad.setAttribute(
-    "y1",
-    "0%"
-  );
-
-  grad.setAttribute(
-    "x2",
-    "100%"
-  );
-
-  grad.setAttribute(
-    "y2",
-    "100%"
-  );
-
-  const s1 =
-    doc.createElementNS(
-      NS_SVG,
-      "stop"
-    );
-
-  s1.setAttribute(
-    "offset",
-    "0%"
-  );
-
-  s1.setAttribute(
-    "stop-color",
-    c1
-  );
-
+  const s1 = doc.createElementNS(NS_SVG,"stop");
+  s1.setAttribute("offset","0%");
+  s1.setAttribute("stop-color",c1);
   grad.appendChild(s1);
 
   if(c2 !== c1){
-
-    const s2 =
-      doc.createElementNS(
-        NS_SVG,
-        "stop"
-      );
-
-    s2.setAttribute(
-      "offset",
-      "100%"
-    );
-
-    s2.setAttribute(
-      "stop-color",
-      c2
-    );
-
+    const s2 = doc.createElementNS(NS_SVG,"stop");
+    s2.setAttribute("offset","100%");
+    s2.setAttribute("stop-color",c2);
     grad.appendChild(s2);
-
   }
 
-  defs.appendChild(
-    grad
-  );
+  defs.appendChild(grad);
+  svg.appendChild(defs);
 
-  svg.appendChild(
-    defs
-  );
+  const tEl = doc.createElementNS(NS_SVG,"text");
+  tEl.setAttribute("x","50%");
+  tEl.setAttribute("y","50%");
+  tEl.setAttribute("text-anchor","middle");
+  tEl.setAttribute("dominant-baseline","central");
+  tEl.setAttribute("font-family",fontFamily);
+  tEl.setAttribute("font-weight",fontWeight);
+  tEl.setAttribute("font-size",String(fontSize));
+  tEl.setAttribute("fill",`url(#${gid})`);
+  tEl.textContent = text;
 
-  const tEl =
-    doc.createElementNS(
-      NS_SVG,
-      "text"
-    );
-
-  tEl.setAttribute(
-    "x",
-    "50%"
-  );
-
-  tEl.setAttribute(
-    "y",
-    "50%"
-  );
-
-  tEl.setAttribute(
-    "text-anchor",
-    "middle"
-  );
-
-  tEl.setAttribute(
-    "dominant-baseline",
-    "central"
-  );
-
-  tEl.setAttribute(
-    "font-family",
-    fontFamily
-  );
-
-  tEl.setAttribute(
-    "font-weight",
-    fontWeight
-  );
-
-  tEl.setAttribute(
-    "font-size",
-    String(fontSize)
-  );
-
-  tEl.setAttribute(
-    "fill",
-    `url(#${gid})`
-  );
-
-  tEl.setAttribute(
-    "direction",
-    "rtl"
-  );
-
-  tEl.textContent =
-    text;
-
-  svg.appendChild(
-    tEl
-  );
+  svg.appendChild(tEl);
 
   el.textContent = "";
+  el.appendChild(svg);
 
-  el.appendChild(
-    svg
-  );
-
-  el.style.background =
-    "none";
-
-  el.style.webkitBackgroundClip =
-    "initial";
-
-  el.style.backgroundClip =
-    "initial";
-
-  el.style.webkitTextFillColor =
-    "initial";
-
-  el.style.color =
-    "transparent";
+  el.style.background = "none";
+  el.style.webkitBackgroundClip = "initial";
+  el.style.backgroundClip = "initial";
+  el.style.webkitTextFillColor = "initial";
+  el.style.color = "transparent";
 
   return true;
 
@@ -3316,75 +2324,64 @@ function convertGradientTextToSVG(
 
 
 /* =========================================================
-   CSS PREPROCESSING
+   CSS PREPROCESSING — نسخة محسّنة للعربية
 ========================================================= */
 
-function preprocessModernCSS(
-  doc,
-  win
-){
+function preprocessModernCSS(doc,win){
 
-  if(!doc || !win)
-    return {total:0};
+  if(!doc || !win) return {total:0};
 
-  const stats = {
-    clipText:0,
-    heavy:0,
-    total:0
-  };
+  const stats = { clipText:0, heavy:0, total:0 };
 
   let elements = [];
 
   try{
-
-    elements =
-      Array.from(
-        doc.querySelectorAll("*")
-      ).slice(0,3000);
-
+    elements = Array.from(doc.querySelectorAll("*")).slice(0,3000);
   }catch{
-
     return stats;
-
   }
-
 
   for(const el of elements){
 
     let styles;
 
     try{
-
-      styles =
-        win.getComputedStyle(el);
-
+      styles = win.getComputedStyle(el);
     }catch{
-
       continue;
-
     }
 
+    /* ===============================
+       Gradient text — دعم خاص للعربية
+    ============================== */
 
-    /*
-      Gradient text
-    */
-
-    const clip =
-      (
-        styles.webkitBackgroundClip ||
-        styles.backgroundClip ||
-        ""
-      ).toLowerCase();
+    const clip = (
+      styles.webkitBackgroundClip ||
+      styles.backgroundClip ||
+      ""
+    ).toLowerCase();
 
     if(clip === "text"){
 
-      if(
-        convertGradientTextToSVG(
-          el,
-          win,
-          doc
-        )
-      ){
+      const textContent = (el.textContent || "").trim();
+
+      // للعربية: لون صلب (SVG يكسر التشكيل والخط)
+      if(containsArabic(textContent)){
+
+        const bg = styles.backgroundImage || "";
+
+        const cols = bg.match(
+          /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
+        ) || [];
+
+        const solid = cols[0] || styles.color || "#38bdf8";
+
+        el.style.setProperty("-webkit-background-clip","border-box","important");
+        el.style.setProperty("background-clip","border-box","important");
+        el.style.setProperty("background-image","none","important");
+        el.style.setProperty("background","none","important");
+        el.style.setProperty("color",solid,"important");
+        el.style.setProperty("-webkit-text-fill-color",solid,"important");
 
         stats.clipText++;
         stats.total++;
@@ -3393,54 +2390,26 @@ function preprocessModernCSS(
 
       }
 
-      const bg =
-        styles.backgroundImage || "";
+      // للنص اللاتيني فقط: SVG
+      if(convertGradientTextToSVG(el,win,doc)){
+        stats.clipText++;
+        stats.total++;
+        continue;
+      }
 
-      const cols =
-        bg.match(
-          /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
-        ) || [];
+      // fallback
+      const bg = styles.backgroundImage || "";
+      const cols = bg.match(
+        /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
+      ) || [];
+      const solid = cols[0] || styles.color || "#22d3ee";
 
-      const solid =
-        cols[0] ||
-        styles.color ||
-        "#22d3ee";
-
-      el.style.setProperty(
-        "-webkit-background-clip",
-        "border-box",
-        "important"
-      );
-
-      el.style.setProperty(
-        "background-clip",
-        "border-box",
-        "important"
-      );
-
-      el.style.setProperty(
-        "background-image",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "background",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "color",
-        solid,
-        "important"
-      );
-
-      el.style.setProperty(
-        "-webkit-text-fill-color",
-        solid,
-        "important"
-      );
+      el.style.setProperty("-webkit-background-clip","border-box","important");
+      el.style.setProperty("background-clip","border-box","important");
+      el.style.setProperty("background-image","none","important");
+      el.style.setProperty("background","none","important");
+      el.style.setProperty("color",solid,"important");
+      el.style.setProperty("-webkit-text-fill-color",solid,"important");
 
       stats.clipText++;
       stats.total++;
@@ -3449,70 +2418,39 @@ function preprocessModernCSS(
 
     }
 
+    /* ===============================
+       transparent text fill
+    ============================== */
 
-    /*
-      transparent text fill
-    */
-
-    const fill =
-      (
-        styles.webkitTextFillColor ||
-        ""
-      ).toLowerCase();
+    const fill = (styles.webkitTextFillColor || "").toLowerCase();
 
     if(fill === "transparent"){
 
       const color =
-        styles.color &&
-        styles.color !==
-          "rgba(0, 0, 0, 0)"
+        styles.color && styles.color !== "rgba(0, 0, 0, 0)"
           ? styles.color
           : "#eef2ff";
 
-      el.style.setProperty(
-        "-webkit-text-fill-color",
-        color,
-        "important"
-      );
-
-      el.style.setProperty(
-        "color",
-        color,
-        "important"
-      );
+      el.style.setProperty("-webkit-text-fill-color",color,"important");
+      el.style.setProperty("color",color,"important");
 
       stats.total++;
 
     }
 
+    /* ===============================
+       Large blur
+    ============================== */
 
-    /*
-      Large blur
-    */
+    const filter = (styles.filter || "").toLowerCase();
 
-    const filter =
-      (styles.filter || "")
-        .toLowerCase();
+    const blurMatch = filter.match(/blur\((\d+(?:\.\d+)?)px\)/i);
 
-    const blurMatch =
-      filter.match(
-        /blur\((\d+(?:\.\d+)?)px\)/i
-      );
+    if(blurMatch && parseFloat(blurMatch[1]) >= 15){
 
-    if(
-      blurMatch &&
-      parseFloat(blurMatch[1]) >= 15
-    ){
+      el.style.setProperty("filter","none","important");
 
-      el.style.setProperty(
-        "filter",
-        "none",
-        "important"
-      );
-
-      const bg =
-        styles.backgroundColor ||
-        "#5b6cff";
+      const bg = styles.backgroundColor || "#5b6cff";
 
       el.style.setProperty(
         "background",
@@ -3520,11 +2458,7 @@ function preprocessModernCSS(
         "important"
       );
 
-      el.style.setProperty(
-        "border-radius",
-        "50%",
-        "important"
-      );
+      el.style.setProperty("border-radius","50%","important");
 
       stats.heavy++;
       stats.total++;
@@ -3533,111 +2467,50 @@ function preprocessModernCSS(
 
     }
 
+    /* ===============================
+       Drop shadow
+    ============================== */
 
-    /*
-      Drop shadow
-    */
-
-    const dm =
-      filter.match(
-        /drop-shadow\(([^)]+)\)/i
-      );
+    const dm = filter.match(/drop-shadow\(([^)]+)\)/i);
 
     if(dm){
-
-      el.style.setProperty(
-        "filter",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "box-shadow",
-        dm[1],
-        "important"
-      );
-
+      el.style.setProperty("filter","none","important");
+      el.style.setProperty("box-shadow",dm[1],"important");
       stats.heavy++;
       stats.total++;
-
       continue;
-
     }
 
+    /* ===============================
+       Any other filter
+    ============================== */
 
-    /*
-      Any other filter
-    */
-
-    if(
-      filter &&
-      filter !== "none"
-    ){
-
-      el.style.setProperty(
-        "filter",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "-webkit-filter",
-        "none",
-        "important"
-      );
-
+    if(filter && filter !== "none"){
+      el.style.setProperty("filter","none","important");
+      el.style.setProperty("-webkit-filter","none","important");
       stats.heavy++;
       stats.total++;
-
     }
 
+    /* ===============================
+       Backdrop filter
+    ============================== */
 
-    /*
-      Backdrop filter
-    */
+    const bf = (
+      styles.backdropFilter ||
+      styles.webkitBackdropFilter ||
+      ""
+    ).toLowerCase();
 
-    const bf =
-      (
-        styles.backdropFilter ||
-        styles.webkitBackdropFilter ||
-        ""
-      ).toLowerCase();
+    if(bf && bf !== "none"){
 
-    if(
-      bf &&
-      bf !== "none"
-    ){
+      const bgColor = styles.backgroundColor || "";
 
-      const bgColor =
-        styles.backgroundColor ||
-        "";
+      el.style.setProperty("backdrop-filter","none","important");
+      el.style.setProperty("-webkit-backdrop-filter","none","important");
 
-      el.style.setProperty(
-        "backdrop-filter",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "-webkit-backdrop-filter",
-        "none",
-        "important"
-      );
-
-      if(
-        !bgColor ||
-        bgColor ===
-          "rgba(0, 0, 0, 0)" ||
-        bgColor ===
-          "transparent"
-      ){
-
-        el.style.setProperty(
-          "background-color",
-          "rgba(15, 25, 55, 0.85)",
-          "important"
-        );
-
+      if(!bgColor || bgColor === "rgba(0, 0, 0, 0)" || bgColor === "transparent"){
+        el.style.setProperty("background-color","rgba(15, 25, 55, 0.85)","important");
       }
 
       stats.heavy++;
@@ -3645,77 +2518,41 @@ function preprocessModernCSS(
 
     }
 
+    /* ===============================
+       Mask
+    ============================== */
 
-    /*
-      Mask
-    */
+    const mask = (
+      styles.maskImage ||
+      styles.webkitMaskImage ||
+      ""
+    ).toLowerCase();
 
-    const mask =
-      (
-        styles.maskImage ||
-        styles.webkitMaskImage ||
-        ""
-      ).toLowerCase();
-
-    if(
-      mask &&
-      mask !== "none"
-    ){
-
-      el.style.setProperty(
-        "mask-image",
-        "none",
-        "important"
-      );
-
-      el.style.setProperty(
-        "-webkit-mask-image",
-        "none",
-        "important"
-      );
-
+    if(mask && mask !== "none"){
+      el.style.setProperty("mask-image","none","important");
+      el.style.setProperty("-webkit-mask-image","none","important");
       stats.heavy++;
       stats.total++;
-
     }
 
+    /* ===============================
+       Blend mode
+    ============================== */
 
-    /*
-      Blend mode
-    */
-
-    const bm =
-      (
-        styles.mixBlendMode ||
-        "normal"
-      ).toLowerCase();
+    const bm = (styles.mixBlendMode || "normal").toLowerCase();
 
     if(bm !== "normal"){
-
-      el.style.setProperty(
-        "mix-blend-mode",
-        "normal",
-        "important"
-      );
-
+      el.style.setProperty("mix-blend-mode","normal","important");
       stats.heavy++;
       stats.total++;
-
     }
 
   }
 
-
-  APP.preprocessStats =
-    stats;
+  APP.preprocessStats = stats;
 
   if(stats.total > 0){
-
-    console.log(
-      "[preprocessModernCSS]",
-      stats
-    );
-
+    console.log("[preprocessModernCSS]",stats);
   }
 
   try{
@@ -3735,54 +2572,24 @@ async function waitForResources(doc){
 
   if(!doc) return;
 
-  const win =
-    doc.defaultView ||
-    window;
+  const win = doc.defaultView || window;
 
-  await waitForFonts(
-    doc,
-    win
-  );
+  await waitForFonts(doc,win);
 
-  const images =
-    Array.from(
-      doc.images || []
-    );
+  const images = Array.from(doc.images || []);
 
-  await Promise.all(
-    images.map(
-      image =>
-        waitForImage(image)
-    )
-  );
+  await Promise.all(images.map(image => waitForImage(image)));
 
   try{
-
-    await withTimeout(
-      doc.fonts.ready,
-      2000
-    );
-
+    await withTimeout(doc.fonts.ready,2000);
   }catch{}
 
   if(!doc.__preprocessed){
-
-    preprocessModernCSS(
-      doc,
-      win
-    );
-
-    try{
-      doc.__preprocessed = true;
-    }catch{}
-
+    preprocessModernCSS(doc,win);
+    try{ doc.__preprocessed = true; }catch{}
   }
 
-  try{
-
-    void doc.documentElement.offsetHeight;
-
-  }catch{}
+  try{ void doc.documentElement.offsetHeight; }catch{}
 
   await sleep(40);
 
@@ -3794,20 +2601,12 @@ async function waitForResources(doc){
 ========================================================= */
 
 function getProjectRoot(doc){
-
-  if(!doc)
-    return null;
-
+  if(!doc) return null;
   return (
-    doc.getElementById(
-      "project-root"
-    ) ||
-    doc.querySelector(
-      "[data-project-root]"
-    ) ||
+    doc.getElementById("project-root") ||
+    doc.querySelector("[data-project-root]") ||
     doc.body
   );
-
 }
 
 
@@ -3815,139 +2614,62 @@ function getProjectRoot(doc){
    ANIMATION CACHE
 ========================================================= */
 
-function collectProjectAnimations(
-  doc
-){
+function collectProjectAnimations(doc){
 
-  if(!doc)
-    return [];
+  if(!doc) return [];
 
   try{
-
-    if(
-      typeof doc.getAnimations ===
-      "function"
-    ){
-
-      const animations =
-        doc.getAnimations({
-          subtree:true
-        });
-
-      return Array.from(
-        animations || []
-      );
-
+    if(typeof doc.getAnimations === "function"){
+      const animations = doc.getAnimations({subtree:true});
+      return Array.from(animations || []);
     }
-
   }catch(error){
-
-    console.warn(
-      "[Animations]",
-      error
-    );
-
+    console.warn("[Animations]",error);
   }
 
   try{
-
-    return Array.from(
-      doc.getAnimations() || []
-    );
-
+    return Array.from(doc.getAnimations() || []);
   }catch{
-
     return [];
-
   }
 
 }
 
 
-function setProjectTimeFast(
-  timeMs,
-  animations
-){
+function setProjectTimeFast(timeMs,animations){
 
-  if(!APP.loaded)
-    return;
+  if(!APP.loaded) return;
 
-  const iframe =
-    $("preview");
+  const iframe = $("preview");
+  const win = APP.exportWin || iframe.contentWindow;
+  const doc = APP.exportDoc || iframe.contentDocument;
 
-  const win =
-    APP.exportWin ||
-    iframe.contentWindow;
+  if(!win || !doc) return;
 
-  const doc =
-    APP.exportDoc ||
-    iframe.contentDocument;
+  let t = Number(timeMs);
+  if(!Number.isFinite(t)) t = 0;
 
-  if(!win || !doc)
-    return;
+  t = Math.max(0,Math.min(APP.durationMs,t));
 
-  let t =
-    Number(timeMs);
+  APP.currentTime = t;
 
-  if(!Number.isFinite(t))
-    t = 0;
-
-  t =
-    Math.max(
-      0,
-      Math.min(
-        APP.durationMs,
-        t
-      )
-    );
-
-  APP.currentTime =
-    t;
-
-
-  if(
-    win.__PROJECT__ &&
-    typeof win.__PROJECT__.setTime ===
-      "function"
-  ){
-
+  if(win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function"){
     try{
-
       win.__PROJECT__.setTime(t);
-
     }catch(error){
-
-      console.warn(
-        "setTime error:",
-        error
-      );
-
+      console.warn("setTime error:",error);
     }
-
   }
 
+  if(animations && animations.length){
 
-  if(
-    animations &&
-    animations.length
-  ){
+    for(let i = 0; i < animations.length; i++){
 
-    for(
-      let i = 0;
-      i < animations.length;
-      i++
-    ){
-
-      const animation =
-        animations[i];
+      const animation = animations[i];
 
       try{
-
         animation.pause();
-
-        animation.currentTime =
-          t;
-
+        animation.currentTime = t;
       }catch{}
 
     }
@@ -3961,107 +2683,46 @@ function setProjectTimeFast(
    NORMAL PROJECT TIME
 ========================================================= */
 
-async function setProjectTime(
-  timeMs
-){
+async function setProjectTime(timeMs){
 
-  if(!APP.loaded)
+  if(!APP.loaded) return;
+
+  if(APP.exporting && APP.exportAnimations.length){
+    setProjectTimeFast(timeMs,APP.exportAnimations);
     return;
-
-  if(
-    APP.exporting &&
-    APP.exportAnimations.length
-  ){
-
-    setProjectTimeFast(
-      timeMs,
-      APP.exportAnimations
-    );
-
-    return;
-
   }
 
+  const iframe = $("preview");
+  const win = iframe.contentWindow;
+  const doc = iframe.contentDocument;
 
-  const iframe =
-    $("preview");
+  if(!win || !doc) return;
 
-  const win =
-    iframe.contentWindow;
+  let t = Number(timeMs);
+  if(!Number.isFinite(t)) t = 0;
 
-  const doc =
-    iframe.contentDocument;
+  t = Math.max(0,Math.min(APP.durationMs,t));
 
-  if(!win || !doc)
-    return;
+  APP.currentTime = t;
 
-  let t =
-    Number(timeMs);
-
-  if(!Number.isFinite(t))
-    t = 0;
-
-  t =
-    Math.max(
-      0,
-      Math.min(
-        APP.durationMs,
-        t
-      )
-    );
-
-  APP.currentTime =
-    t;
-
-
-  if(
-    win.__PROJECT__ &&
-    typeof win.__PROJECT__.setTime ===
-      "function"
-  ){
-
+  if(win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function"){
     try{
-
       win.__PROJECT__.setTime(t);
-
     }catch(error){
-
-      console.warn(
-        "setTime error:",
-        error
-      );
-
+      console.warn("setTime error:",error);
     }
-
   }
-
 
   if(!APP.exportAnimations.length){
-
-    APP.exportAnimations =
-      collectProjectAnimations(
-        doc
-      );
-
+    APP.exportAnimations = collectProjectAnimations(doc);
   }
 
-
-  for(
-    const animation of
-    APP.exportAnimations
-  ){
-
+  for(const animation of APP.exportAnimations){
     try{
-
       animation.pause();
-
-      animation.currentTime =
-        t;
-
+      animation.currentTime = t;
     }catch{}
-
   }
-
 
   setPlayhead(t);
 
@@ -4076,119 +2737,42 @@ async function setProjectTime(
 
 function updateProjectInfo(){
 
-  const portrait =
-    APP.orientation ===
-    "portrait";
+  const portrait = APP.orientation === "portrait";
 
-  $("orientationInfo")
-    .textContent =
-      portrait
-        ? "عمودي 9:16"
-        : "أفقي 16:9";
+  $("orientationInfo").textContent = portrait ? "عمودي 9:16" : "أفقي 16:9";
+  $("durationInfo").textContent = formatDuration(APP.durationMs);
+  $("infoTitle").textContent = APP.title || "—";
+  $("infoSubject").textContent = APP.subject || "—";
+  $("infoGrade").textContent = APP.grade || "—";
+  $("infoOrientation").textContent = portrait ? "عمودي" : "أفقي";
+  $("infoDuration").textContent = formatDuration(APP.durationMs);
 
-  $("durationInfo")
-    .textContent =
-      formatDuration(
-        APP.durationMs
-      );
-
-  $("infoTitle")
-    .textContent =
-      APP.title || "—";
-
-  $("infoSubject")
-    .textContent =
-      APP.subject || "—";
-
-  $("infoGrade")
-    .textContent =
-      APP.grade || "—";
-
-  $("infoOrientation")
-    .textContent =
-      portrait
-        ? "عمودي"
-        : "أفقي";
-
-  $("infoDuration")
-    .textContent =
-      formatDuration(
-        APP.durationMs
-      );
-
-
-  const detected =
-    APP.detectedFonts || [];
-
-  const missing =
-    APP.missingFonts || [];
-
+  const detected = APP.detectedFonts || [];
+  const missing = APP.missingFonts || [];
 
   if($("infoFonts")){
-
-    if(
-      detected.length === 0
-    ){
-
-      $("infoFonts")
-        .textContent = "—";
-
-    }else if(
-      missing.length === 0
-    ){
-
-      $("infoFonts")
-        .textContent =
-          detected
-            .slice(0,2)
-            .join("، ") +
-          (
-            detected.length > 2
-              ? " +" +
-                (detected.length - 2)
-              : ""
-          );
-
+    if(detected.length === 0){
+      $("infoFonts").textContent = "—";
+    }else if(missing.length === 0){
+      $("infoFonts").textContent =
+        detected.slice(0,2).join("، ") +
+        (detected.length > 2 ? " +" + (detected.length - 2) : "");
     }else{
-
-      $("infoFonts")
-        .textContent =
-          detected
-            .slice(0,2)
-            .join("، ") +
-          " (" +
-          missing.length +
-          " ناقص)";
-
+      $("infoFonts").textContent =
+        detected.slice(0,2).join("، ") +
+        " (" + missing.length + " ناقص)";
     }
-
   }
 
-
-  const stats =
-    APP.preprocessStats ||
-    {};
+  const stats = APP.preprocessStats || {};
 
   if($("infoPreprocess")){
-
-    const total =
-      stats.total || 0;
-
+    const total = stats.total || 0;
     if(total === 0){
-
-      $("infoPreprocess")
-        .textContent =
-          "لا يوجد";
-
+      $("infoPreprocess").textContent = "لا يوجد";
     }else{
-
-      $("infoPreprocess")
-        .textContent =
-          total +
-          " عنصر معالج";
-
+      $("infoPreprocess").textContent = total + " عنصر معالج";
     }
-
   }
 
   resizePreview();
@@ -4202,96 +2786,48 @@ function updateProjectInfo(){
 
 function resizePreview(){
 
-  const wrap =
-    $("frameWrap");
+  const wrap = $("frameWrap");
+  const iframe = $("preview");
 
-  const iframe =
-    $("preview");
+  if(!wrap || !iframe) return;
 
-  if(!wrap || !iframe)
-    return;
+  const base = getBaseSize();
+  const mobile = window.innerWidth <= 650;
 
-  const base =
-    getBaseSize();
+  const maxWidth = mobile
+    ? window.innerWidth - 35
+    : Math.min(window.innerWidth - 390,900);
 
-  const mobile =
-    window.innerWidth <= 650;
+  const maxHeight = mobile
+    ? window.innerHeight * .55
+    : window.innerHeight * .68;
 
-  const maxWidth =
-    mobile
-      ? window.innerWidth - 35
-      : Math.min(
-          window.innerWidth - 390,
-          900
-        );
+  const aspect = base.width / base.height;
 
-  const maxHeight =
-    mobile
-      ? window.innerHeight * .55
-      : window.innerHeight * .68;
-
-  const aspect =
-    base.width /
-    base.height;
-
-  let dw =
-    maxWidth;
-
-  let dh =
-    dw / aspect;
+  let dw = maxWidth;
+  let dh = dw / aspect;
 
   if(dh > maxHeight){
-
-    dh =
-      maxHeight;
-
-    dw =
-      dh * aspect;
-
+    dh = maxHeight;
+    dw = dh * aspect;
   }
 
-  dw =
-    Math.max(
-      1,
-      Math.round(dw)
-    );
+  dw = Math.max(1,Math.round(dw));
+  dh = Math.max(1,Math.round(dh));
 
-  dh =
-    Math.max(
-      1,
-      Math.round(dh)
-    );
+  wrap.style.width = dw + "px";
+  wrap.style.height = dh + "px";
 
-  wrap.style.width =
-    dw + "px";
-
-  wrap.style.height =
-    dh + "px";
-
-  iframe.width =
-    base.width;
-
-  iframe.height =
-    base.height;
-
-  iframe.style.width =
-    base.width + "px";
-
-  iframe.style.height =
-    base.height + "px";
-
-  iframe.style.transform =
-    "scale(" +
-    (dw / base.width) +
-    ")";
+  iframe.width = base.width;
+  iframe.height = base.height;
+  iframe.style.width = base.width + "px";
+  iframe.style.height = base.height + "px";
+  iframe.style.transform = "scale(" + (dw / base.width) + ")";
 
 }
 
 
-window.addEventListener(
-  "resize",
-  resizePreview
-);
+window.addEventListener("resize",resizePreview);
 
 
 /* =========================================================
@@ -4300,145 +2836,59 @@ window.addEventListener(
 
 async function buildTimeline(){
 
-  const track =
-    $("timelineTrack");
-
+  const track = $("timelineTrack");
   track.innerHTML = "";
 
-  const doc =
-    $("preview")
-      .contentDocument;
+  const doc = $("preview").contentDocument;
+  if(!doc) return;
 
-  if(!doc)
-    return;
-
-  const scenes =
-    Array.from(
-      doc.querySelectorAll(
-        "[data-scene]"
-      )
-    );
+  const scenes = Array.from(doc.querySelectorAll("[data-scene]"));
 
   if(!scenes.length){
-
-    const scene =
-      document.createElement(
-        "div"
-      );
-
-    scene.className =
-      "scene";
-
-    scene.style.width =
-      "100%";
-
-    track.appendChild(
-      scene
-    );
-
+    const scene = document.createElement("div");
+    scene.className = "scene";
+    scene.style.width = "100%";
+    track.appendChild(scene);
     return;
-
   }
 
+  scenes.forEach((source,index)=>{
 
-  scenes.forEach(
-    (source,index)=>{
+    let start = Number(source.dataset.sceneStart);
+    let end = Number(source.dataset.sceneEnd);
 
-      let start =
-        Number(
-          source.dataset.sceneStart
-        );
-
-      let end =
-        Number(
-          source.dataset.sceneEnd
-        );
-
-      if(!Number.isFinite(start)){
-
-        start =
-          APP.durationMs *
-          index /
-          scenes.length;
-
-      }
-
-      if(!Number.isFinite(end)){
-
-        end =
-          APP.durationMs *
-          (index + 1) /
-          scenes.length;
-
-      }
-
-      const percentage =
-        Math.max(
-          .5,
-          (
-            (end - start) /
-            APP.durationMs
-          ) * 100
-        );
-
-      const element =
-        document.createElement(
-          "div"
-        );
-
-      element.className =
-        "scene";
-
-      element.style.width =
-        percentage + "%";
-
-      const label =
-        document.createElement(
-          "span"
-        );
-
-      label.textContent =
-        source.dataset.sceneName ||
-        ("مشهد " + (index + 1));
-
-      element.appendChild(
-        label
-      );
-
-      track.appendChild(
-        element
-      );
-
+    if(!Number.isFinite(start)){
+      start = APP.durationMs * index / scenes.length;
     }
-  );
+
+    if(!Number.isFinite(end)){
+      end = APP.durationMs * (index + 1) / scenes.length;
+    }
+
+    const percentage = Math.max(.5,((end - start) / APP.durationMs) * 100);
+
+    const element = document.createElement("div");
+    element.className = "scene";
+    element.style.width = percentage + "%";
+
+    const label = document.createElement("span");
+    label.textContent = source.dataset.sceneName || ("مشهد " + (index + 1));
+
+    element.appendChild(label);
+    track.appendChild(element);
+
+  });
 
 }
 
 
 function setPlayhead(ms){
 
-  if(
-    !APP.durationMs ||
-    APP.exporting
-  ){
+  if(!APP.durationMs || APP.exporting){ return; }
 
-    return;
+  const percentage = Math.max(0,Math.min(100,(ms / APP.durationMs) * 100));
 
-  }
-
-  const percentage =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        (ms / APP.durationMs) *
-        100
-      )
-    );
-
-  $("playhead")
-    .style.left =
-      percentage + "%";
+  $("playhead").style.left = percentage + "%";
 
 }
 
@@ -4449,306 +2899,129 @@ function setPlayhead(ms){
 
 async function validateProject(){
 
-  const box =
-    $("validation");
-
+  const box = $("validation");
   box.innerHTML = "";
 
   if(!APP.loaded){
-
-    addValidation(
-      "warn",
-      "المشروع غير محمل."
-    );
-
+    addValidation("warn","المشروع غير محمل.");
     return;
-
   }
 
-  const doc =
-    $("preview")
-      .contentDocument;
-
-  const win =
-    $("preview")
-      .contentWindow;
-
+  const doc = $("preview").contentDocument;
+  const win = $("preview").contentWindow;
 
   addValidation(
-
-    doc.documentElement.dir === "rtl"
-      ? "ok"
-      : "bad",
-
-    doc.documentElement.dir === "rtl"
-      ? "RTL مضبوط."
-      : 'لم يتم العثور على dir="rtl".'
-
+    doc.documentElement.dir === "rtl" ? "ok" : "bad",
+    doc.documentElement.dir === "rtl" ? "RTL مضبوط." : 'لم يتم العثور على dir="rtl".'
   );
-
 
   addValidation(
-
-    doc.documentElement.lang === "ar"
-      ? "ok"
-      : "warn",
-
-    doc.documentElement.lang === "ar"
-      ? "لغة المشروع عربية."
-      : 'لغة HTML ليست "ar".'
-
+    doc.documentElement.lang === "ar" ? "ok" : "warn",
+    doc.documentElement.lang === "ar" ? "لغة المشروع عربية." : 'لغة HTML ليست "ar".'
   );
 
-
-  const detected =
-    APP.detectedFonts || [];
-
-  const missing =
-    APP.missingFonts || [];
-
+  const detected = APP.detectedFonts || [];
+  const missing = APP.missingFonts || [];
 
   if(detected.length === 0){
-
-    addValidation(
-      "warn",
-      "لم يتم العثور على خطوط مخصصة."
-    );
-
+    addValidation("warn","لم يتم العثور على خطوط مخصصة.");
   }else if(missing.length === 0){
-
-    addValidation(
-      "ok",
-      "كل الخطوط محمّلة: " +
-      detected.join("، ")
-    );
-
+    addValidation("ok","كل الخطوط محمّلة: " + detected.join("، "));
   }else{
-
-    addValidation(
-      "bad",
-      "خطوط لم تُحمَّل: " +
-      missing.join("، ")
-    );
-
+    addValidation("bad","خطوط لم تُحمَّل: " + missing.join("، "));
   }
-
 
   let ls = false;
 
-  Array.from(
-    doc.querySelectorAll("*")
-  ).some(el=>{
-
+  Array.from(doc.querySelectorAll("*")).some(el=>{
     let s;
-
     try{
-
-      s =
-        win.getComputedStyle(
-          el
-        );
-
+      s = win.getComputedStyle(el);
     }catch{
-
       return false;
-
     }
-
-    if(
-      s.letterSpacing !==
-      "normal"
-    ){
-
+    if(s.letterSpacing !== "normal"){
       ls = true;
-
       return true;
-
     }
-
     return false;
-
   });
 
-
   addValidation(
-
     ls ? "bad" : "ok",
-
-    ls
-      ? "يوجد letter-spacing."
-      : "لا يوجد letter-spacing."
-
+    ls ? "يوجد letter-spacing." : "لا يوجد letter-spacing."
   );
 
-
   addValidation(
-
-    win.__PROJECT__ &&
-    typeof win.__PROJECT__.setTime ===
-      "function"
-
-      ? "ok"
-      : "warn",
-
-    win.__PROJECT__ &&
-    typeof win.__PROJECT__.setTime ===
-      "function"
-
+    win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function" ? "ok" : "warn",
+    win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function"
       ? "__PROJECT__.setTime موجود."
       : "لا يوجد setTime مخصص."
-
   );
 
-
-  const root =
-    getProjectRoot(doc);
+  const root = getProjectRoot(doc);
 
   addValidation(
-
-    root &&
-    root.id ===
-      "project-root"
-
-      ? "ok"
-      : "warn",
-
-    root &&
-    root.id ===
-      "project-root"
-
+    root && root.id === "project-root" ? "ok" : "warn",
+    root && root.id === "project-root"
       ? "project-root موجود."
       : "project-root غير موجود؛ سيتم استخدام body."
-
   );
 
-
-  const scenes =
-    doc.querySelectorAll(
-      "[data-scene]"
-    );
+  const scenes = doc.querySelectorAll("[data-scene]");
 
   addValidation(
-
+    scenes.length ? "ok" : "warn",
     scenes.length
-      ? "ok"
-      : "warn",
-
-    scenes.length
-      ? "تم اكتشاف " +
-        scenes.length +
-        " مشاهد."
+      ? "تم اكتشاف " + scenes.length + " مشاهد."
       : "لم يتم تعريف data-scene."
-
   );
 
-
-  const stats =
-    APP.preprocessStats ||
-    {};
+  const stats = APP.preprocessStats || {};
 
   if(stats.total > 0){
-
     const parts = [];
-
-    if(stats.clipText)
-      parts.push(
-        stats.clipText +
-        " نص متدرج"
-      );
-
-    if(stats.heavy)
-      parts.push(
-        stats.heavy +
-        " عنصر ثقيل"
-      );
-
-    addValidation(
-      "ok",
-      "تم معالجة " +
-      stats.total +
-      " عنصر: " +
-      parts.join("، ") +
-      "."
-    );
-
+    if(stats.clipText) parts.push(stats.clipText + " نص متدرج");
+    if(stats.heavy) parts.push(stats.heavy + " عنصر ثقيل");
+    addValidation("ok","تم معالجة " + stats.total + " عنصر: " + parts.join("، ") + ".");
   }else{
-
-    addValidation(
-      "ok",
-      "لا يحتاج المشروع معالجة CSS حديثة."
-    );
-
+    addValidation("ok","لا يحتاج المشروع معالجة CSS حديثة.");
   }
 
-
   if(checkOverflow(doc)){
-
-    addValidation(
-      "warn",
-      "قد توجد عناصر تتجاوز حدود المشروع."
-    );
-
+    addValidation("warn","قد توجد عناصر تتجاوز حدود المشروع.");
   }else{
-
-    addValidation(
-      "ok",
-      "لا يوجد Overflow واضح."
-    );
-
+    addValidation("ok","لا يوجد Overflow واضح.");
   }
 
 }
 
 
-function addValidation(
-  type,
-  text
-){
+function addValidation(type,text){
 
-  const item =
-    document.createElement(
-      "div"
-    );
+  const item = document.createElement("div");
+  item.className = "validation-item " + type;
 
-  item.className =
-    "validation-item " +
-    type;
-
-  const icon =
-    type === "ok"
-      ? "✓"
-      : type === "bad"
-        ? "!"
-        : "·";
+  const icon = type === "ok" ? "✓" : type === "bad" ? "!" : "·";
 
   item.innerHTML =
-    '<div class="validation-icon">' +
-    icon +
-    '</div><div>' +
-    escapeHTML(text) +
-    '</div>';
+    '<div class="validation-icon">' + icon + '</div><div>' +
+    escapeHTML(text) + '</div>';
 
-  $("validation")
-    .appendChild(item);
+  $("validation").appendChild(item);
 
 }
 
 
 function checkOverflow(doc){
 
-  const root =
-    doc.documentElement;
-
-  if(!root)
-    return false;
+  const root = doc.documentElement;
+  if(!root) return false;
 
   return (
-    root.scrollWidth >
-      root.clientWidth + 5
-  ) ||
-  (
-    root.scrollHeight >
-      root.clientHeight + 5
+    root.scrollWidth > root.clientWidth + 5
+  ) || (
+    root.scrollHeight > root.clientHeight + 5
   );
 
 }
@@ -4758,239 +3031,113 @@ function checkOverflow(doc){
    VALIDATE BUTTON
 ========================================================= */
 
-$("validate")
-.addEventListener(
-  "click",
-  async()=>{
+$("validate").addEventListener("click",async()=>{
 
-    if(!APP.loaded){
-
-      alert(
-        "شغّل المشروع أولًا."
-      );
-
-      return;
-
-    }
-
-    await waitForResources(
-      $("preview")
-        .contentDocument
-    );
-
-    APP.exportDoc =
-      $("preview")
-        .contentDocument;
-
-    APP.exportWin =
-      $("preview")
-        .contentWindow;
-
-    APP.exportRoot =
-      getProjectRoot(
-        APP.exportDoc
-      );
-
-    APP.exportAnimations =
-      collectProjectAnimations(
-        APP.exportDoc
-      );
-
-    await validateProject();
-
+  if(!APP.loaded){
+    alert("شغّل المشروع أولًا.");
+    return;
   }
-);
+
+  await waitForResources($("preview").contentDocument);
+
+  APP.exportDoc = $("preview").contentDocument;
+  APP.exportWin = $("preview").contentWindow;
+  APP.exportRoot = getProjectRoot(APP.exportDoc);
+  APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+
+  await validateProject();
+
+});
 
 
 /* =========================================================
    CLEAR
 ========================================================= */
 
-$("clear")
-.addEventListener(
-  "click",
-  ()=>{
+$("clear").addEventListener("click",()=>{
 
-    stopPreview();
+  stopPreview();
 
-    APP.html = "";
-    APP.loaded = false;
-    APP.durationMs = 0;
-    APP.title = "";
+  APP.html = "";
+  APP.loaded = false;
+  APP.durationMs = 0;
+  APP.title = "";
 
-    APP.detectedFonts = [];
-    APP.missingFonts = [];
+  APP.detectedFonts = [];
+  APP.missingFonts = [];
 
-    APP.preprocessStats = {
-      clipText:0,
-      heavy:0,
-      total:0
-    };
+  APP.preprocessStats = { clipText:0, heavy:0, total:0 };
 
-    APP.exportAnimations = [];
-    APP.exportDoc = null;
-    APP.exportWin = null;
-    APP.exportRoot = null;
+  APP.exportAnimations = [];
+  APP.exportDoc = null;
+  APP.exportWin = null;
+  APP.exportRoot = null;
 
-    $("code").value = "";
+  $("code").value = "";
+  $("preview").srcdoc = "";
 
-    $("preview").srcdoc =
-      "";
+  $("stateInfo").textContent = "لا يوجد مشروع";
+  $("durationInfo").textContent = "—";
+  $("formatInfo").textContent = "—";
+  $("infoTitle").textContent = "—";
+  $("infoDuration").textContent = "—";
 
-    $("stateInfo")
-      .textContent =
-        "لا يوجد مشروع";
+  if($("infoFonts")) $("infoFonts").textContent = "—";
+  if($("infoPreprocess")) $("infoPreprocess").textContent = "—";
 
-    $("durationInfo")
-      .textContent =
-        "—";
+  $("timelineTrack").innerHTML = "";
+  $("validation").innerHTML = "";
+  $("download").innerHTML = "";
+  $("download").classList.remove("show");
 
-    $("formatInfo")
-      .textContent =
-        "—";
+  setStatus("جاهز","ok");
 
-    $("infoTitle")
-      .textContent =
-        "—";
-
-    $("infoDuration")
-      .textContent =
-        "—";
-
-    if($("infoFonts"))
-      $("infoFonts")
-        .textContent =
-          "—";
-
-    if($("infoPreprocess"))
-      $("infoPreprocess")
-        .textContent =
-          "—";
-
-    $("timelineTrack")
-      .innerHTML =
-        "";
-
-    $("validation")
-      .innerHTML =
-        "";
-
-    $("download")
-      .innerHTML =
-        "";
-
-    $("download")
-      .classList
-      .remove("show");
-
-    setStatus(
-      "جاهز",
-      "ok"
-    );
-
-  }
-);
+});
 
 
 /* =========================================================
    FAST FRAME RENDERER (html2canvas)
 ========================================================= */
 
-async function renderFrame(
-  timeMs,
-  options = {}
-){
+async function renderFrame(timeMs,options = {}){
 
-  const doc =
-    options.doc ||
-    $("preview")
-      .contentDocument;
+  const doc = options.doc || $("preview").contentDocument;
 
   if(!doc){
-
-    throw new Error(
-      "تعذر الوصول إلى المشروع."
-    );
-
+    throw new Error("تعذر الوصول إلى المشروع.");
   }
 
-  const root =
-    options.root ||
-    getProjectRoot(doc);
+  const root = options.root || getProjectRoot(doc);
 
   if(!root){
-
-    throw new Error(
-      "مشروع HTML لا يحتوي body."
-    );
-
+    throw new Error("مشروع HTML لا يحتوي body.");
   }
 
-  const base =
-    getBaseSize();
-
-  const scale =
-    options.scale ||
-    getRenderScale();
-
+  const base = getBaseSize();
+  const scale = options.scale || getRenderScale();
 
   if(options.fastTime !== false){
-
-    setProjectTimeFast(
-      timeMs,
-      options.animations ||
-      APP.exportAnimations
-    );
-
+    setProjectTimeFast(timeMs,options.animations || APP.exportAnimations);
   }else{
-
-    await setProjectTime(
-      timeMs
-    );
-
+    await setProjectTime(timeMs);
   }
 
-
-  const rendered =
-    await html2canvas(
-      root,
-      {
-
-        width:
-          base.width,
-
-        height:
-          base.height,
-
-        windowWidth:
-          base.width,
-
-        windowHeight:
-          base.height,
-
-        scale,
-
-        backgroundColor:
-          "#000",
-
-        useCORS:true,
-
-        allowTaint:false,
-
-        logging:false,
-
-        imageTimeout:15000,
-
-        foreignObjectRendering:false,
-
-        removeContainer:true,
-
-        scrollX:0,
-
-        scrollY:0
-
-      }
-    );
+  const rendered = await html2canvas(root,{
+    width: base.width,
+    height: base.height,
+    windowWidth: base.width,
+    windowHeight: base.height,
+    scale,
+    backgroundColor: "#000",
+    useCORS: true,
+    allowTaint: false,
+    logging: false,
+    imageTimeout: 15000,
+    foreignObjectRendering: false,
+    removeContainer: true,
+    scrollX: 0,
+    scrollY: 0
+  });
 
   return rendered;
 
@@ -5001,114 +3148,63 @@ async function renderFrame(
    TEST FRAME
 ========================================================= */
 
-$("test")
-.addEventListener(
-  "click",
-  async()=>{
+$("test").addEventListener("click",async()=>{
 
-    if(!APP.loaded){
-
-      alert(
-        "شغّل المشروع أولًا."
-      );
-
-      return;
-
-    }
-
-    try{
-
-      APP.exporting = true;
-
-      APP.exportDoc =
-        $("preview")
-          .contentDocument;
-
-      APP.exportWin =
-        $("preview")
-          .contentWindow;
-
-      APP.exportRoot =
-        getProjectRoot(
-          APP.exportDoc
-        );
-
-      APP.exportAnimations =
-        collectProjectAnimations(
-          APP.exportDoc
-        );
-
-      setProjectTimeFast(
-        0,
-        APP.exportAnimations
-      );
-
-      const canvas =
-        await renderFrame(
-          0,
-          {
-            doc:APP.exportDoc,
-            root:APP.exportRoot,
-            animations:APP.exportAnimations,
-            scale:getRenderScale(),
-            fastTime:true
-          }
-        );
-
-      const url =
-        canvas.toDataURL(
-          "image/png"
-        );
-
-      const popup =
-        window.open(
-          "",
-          "_blank"
-        );
-
-      if(!popup){
-
-        alert(
-          "المتصفح منع نافذة المعاينة."
-        );
-
-        return;
-
-      }
-
-      popup.document.write(
-        "<!doctype html>" +
-        "<title>Frame</title>" +
-        "<style>" +
-        "body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}" +
-        "img{max-width:100%;height:auto;display:block}" +
-        "</style>" +
-        "<img src='" +
-        url +
-        "'>"
-      );
-
-      popup.document.close();
-
-    }catch(error){
-
-      console.error(
-        error
-      );
-
-      alert(
-        "فشل اختبار Frame:\n\n" +
-        error.message
-      );
-
-    }finally{
-
-      APP.exporting = false;
-
-    }
-
+  if(!APP.loaded){
+    alert("شغّل المشروع أولًا.");
+    return;
   }
-);
+
+  try{
+
+    APP.exporting = true;
+
+    APP.exportDoc = $("preview").contentDocument;
+    APP.exportWin = $("preview").contentWindow;
+    APP.exportRoot = getProjectRoot(APP.exportDoc);
+    APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+
+    setProjectTimeFast(0,APP.exportAnimations);
+
+    const canvas = await renderFrame(0,{
+      doc: APP.exportDoc,
+      root: APP.exportRoot,
+      animations: APP.exportAnimations,
+      scale: getRenderScale(),
+      fastTime: true
+    });
+
+    const url = canvas.toDataURL("image/png");
+
+    const popup = window.open("","_blank");
+
+    if(!popup){
+      alert("المتصفح منع نافذة المعاينة.");
+      return;
+    }
+
+    popup.document.write(
+      "<!doctype html>" +
+      "<title>Frame</title>" +
+      "<style>" +
+      "body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}" +
+      "img{max-width:100%;height:auto;display:block}" +
+      "</style>" +
+      "<img src='" + url + "'>"
+    );
+
+    popup.document.close();
+
+  }catch(error){
+
+    console.error(error);
+    alert("فشل اختبار Frame:\n\n" + error.message);
+
+  }finally{
+    APP.exporting = false;
+  }
+
+});
 
 
 /* =========================================================
@@ -5116,47 +3212,28 @@ $("test")
 ========================================================= */
 
 function isSafariBrowser(){
-
-  const ua =
-    navigator.userAgent || "";
-
-  return /^((?!chrome|android|crios|fxios|edgios).)*safari/i
-    .test(ua);
-
+  const ua = navigator.userAgent || "";
+  return /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
 }
 
 
 function getSupportedVideoMimeType(){
 
-  if(typeof MediaRecorder === "undefined")
-    return null;
+  if(typeof MediaRecorder === "undefined") return null;
 
   const candidates = [
-
     "video/mp4;codecs=avc1.42E01E",
     "video/mp4;codecs=h264",
     "video/mp4",
-
     "video/webm;codecs=vp9",
     "video/webm;codecs=vp8",
     "video/webm"
-
   ];
 
   for(const type of candidates){
-
     try{
-
-      if(
-        MediaRecorder.isTypeSupported(
-          type
-        )
-      ){
-        return type;
-      }
-
+      if(MediaRecorder.isTypeSupported(type)) return type;
     }catch{}
-
   }
 
   return null;
@@ -5165,295 +3242,150 @@ function getSupportedVideoMimeType(){
 
 
 function showSafariNote(){
-
   if(isSafariBrowser()){
-
-    const el =
-      $("safariNote");
-
-    if(el){
-      el.style.display =
-        "block";
-    }
-
+    const el = $("safariNote");
+    if(el) el.style.display = "block";
   }
-
 }
 
 
 function updateExportSystemUI(){
 
-  const system =
-    $("exportSystem").value;
+  const system = $("exportSystem").value;
+  APP.exportSystem = system;
 
-  APP.exportSystem =
-    system;
-
-  const act =
-    $("activateRecording");
+  const act = $("activateRecording");
+  const quickNote = $("quickNote");
 
   if(act){
+    act.style.display = system === "captureStream" ? "block" : "none";
+  }
 
-    act.style.display =
-      system === "captureStream"
-        ? "block"
-        : "none";
-
+  if(quickNote){
+    quickNote.style.display = system === "captureStream" ? "block" : "none";
   }
 
   if(system === "captureStream"){
-
     showSafariNote();
-
   }
 
 }
 
 
-$("exportSystem")
-  .addEventListener(
-    "change",
-    updateExportSystemUI
-  );
+$("exportSystem").addEventListener("change",updateExportSystemUI);
 
 
 /* =========================================================
    ACTIVATE RECORDING PERMISSION
 ========================================================= */
 
-$("activateRecording")
-.addEventListener(
-  "click",
-  async()=>{
+$("activateRecording").addEventListener("click",async()=>{
 
-    const btn =
-      $("activateRecording");
+  const btn = $("activateRecording");
 
-    if(APP.captureStream){
+  if(APP.captureStream){
+    btn.textContent = "✓ صلاحية التسجيل مفعّلة";
+    btn.classList.remove("pulse");
+    return;
+  }
 
-      btn.textContent =
-        "✓ صلاحية التسجيل مفعّلة";
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+    alert("متصفحك لا يدعم تسجيل الشاشة.");
+    return;
+  }
 
-      btn.classList.remove("pulse");
+  btn.classList.add("pulse");
 
-      return;
+  try{
 
-    }
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 30 },
+      audio: true
+    });
 
-    if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices
-        .getDisplayMedia
-    ){
+    APP.captureStream = stream;
 
-      alert(
-        "متصفحك لا يدعم تسجيل الشاشة."
-      );
+    btn.textContent = "✓ صلاحية التسجيل مفعّلة";
+    btn.classList.remove("pulse");
 
-      return;
-
-    }
-
-    btn.classList.add("pulse");
+    const badge = $("captureBadge");
+    if(badge) badge.classList.add("show");
 
     try{
-
-      const stream =
-        await navigator.mediaDevices
-          .getDisplayMedia({
-
-            video:{
-              frameRate:30
-            },
-
-            audio:true
-
-          });
-
-      APP.captureStream =
-        stream;
-
-      btn.textContent =
-        "✓ صلاحية التسجيل مفعّلة";
-
-      btn.classList.remove("pulse");
-
-      const badge =
-        $("captureBadge");
-
-      if(badge)
-        badge.classList.add("show");
-
-      try{
-
-        const win =
-          $("preview").contentWindow;
-
-        if(
-          win &&
-          win.AudioContext &&
-          win.__audioContext &&
-          win.__audioContext.state ===
-            "suspended"
-        ){
-
-          await win.__audioContext
-            .resume();
-
-        }
-
-      }catch{}
-
-      const track =
-        stream.getVideoTracks()[0];
-
-      if(track){
-
-        track.addEventListener(
-          "ended",
-          ()=>{
-
-            APP.captureStream =
-              null;
-
-            btn.textContent =
-              "تفعيل صلاحية التسجيل";
-
-            const b =
-              $("captureBadge");
-
-            if(b)
-              b.classList.remove("show");
-
-          }
-        );
-
+      const win = $("preview").contentWindow;
+      if(win && win.AudioContext && win.__audioContext && win.__audioContext.state === "suspended"){
+        await win.__audioContext.resume();
       }
+    }catch{}
 
-    }catch(error){
+    const track = stream.getVideoTracks()[0];
 
-      btn.classList.remove("pulse");
-
-      if(
-        error &&
-        error.name ===
-          "AbortError"
-      ){
-        return;
-      }
-
-      alert(
-        "فشل تفعيل التسجيل:\n" +
-        (error.message || error)
-      );
-
+    if(track){
+      track.addEventListener("ended",()=>{
+        APP.captureStream = null;
+        btn.textContent = "تفعيل صلاحية التسجيل";
+        const b = $("captureBadge");
+        if(b) b.classList.remove("show");
+      });
     }
 
+  }catch(error){
+
+    btn.classList.remove("pulse");
+
+    if(error && error.name === "AbortError") return;
+
+    alert("فشل تفعيل التسجيل:\n" + (error.message || error));
+
   }
-);
+
+});
 
 
 /* =========================================================
    CODEC DETECTION (Mediabunny)
 ========================================================= */
 
-async function findBestCodec(
-  lib,
-  width,
-  height,
-  fps
-){
+async function findBestCodec(lib,width,height,fps){
 
-  if(
-    typeof lib.getEncodableVideoCodecs ===
-      "function"
-  ){
+  if(typeof lib.getEncodableVideoCodecs === "function"){
 
     try{
 
-      const result =
-        await lib.getEncodableVideoCodecs({
-          width,
-          height,
-          frameRate:fps
-        });
+      const result = await lib.getEncodableVideoCodecs({
+        width, height, frameRate: fps
+      });
 
-      const list =
-        Array.isArray(result)
-          ? result
-          : [];
+      const list = Array.isArray(result) ? result : [];
 
-      const preferred =
-        ["avc","vp9","vp8"];
+      const preferred = ["avc","vp9","vp8"];
 
-      for(
-        const wanted of preferred
-      ){
-
-        if(
-          list.some(
-            item =>
-              typeof item === "string"
-                ? item === wanted
-                : (
-                    item &&
-                    (
-                      item.codec === wanted ||
-                      item.name === wanted
-                    )
-                  )
-          )
-        ){
-
+      for(const wanted of preferred){
+        if(list.some(item =>
+          typeof item === "string"
+            ? item === wanted
+            : (item && (item.codec === wanted || item.name === wanted))
+        )){
           return wanted;
-
         }
-
       }
 
     }catch(error){
-
-      console.warn(
-        "[Codec detection]",
-        error
-      );
-
+      console.warn("[Codec detection]",error);
     }
 
   }
 
-
-  if(
-    typeof lib.canEncodeVideo ===
-      "function"
-  ){
-
-    for(
-      const codec of
-      ["avc","vp9","vp8"]
-    ){
-
+  if(typeof lib.canEncodeVideo === "function"){
+    for(const codec of ["avc","vp9","vp8"]){
       try{
-
-        const supported =
-          await lib.canEncodeVideo(
-            codec,
-            {
-              width,
-              height,
-              frameRate:fps
-            }
-          );
-
-        if(supported)
-          return codec;
-
+        const supported = await lib.canEncodeVideo(codec,{
+          width, height, frameRate: fps
+        });
+        if(supported) return codec;
       }catch{}
-
     }
-
   }
-
 
   return "avc";
 
@@ -5464,72 +3396,37 @@ async function findBestCodec(
    OUTPUT FORMAT
 ========================================================= */
 
-function createVideoFormat(
-  lib,
-  codec
-){
+function createVideoFormat(lib,codec){
 
-  const isMP4 =
-    codec === "avc";
+  const isMP4 = codec === "avc";
 
   if(isMP4){
 
-    if(
-      typeof lib.Mp4OutputFormat !==
-        "function"
-    ){
-
-      throw new Error(
-        "إصدار Mediabunny الحالي لا يدعم MP4."
-      );
-
+    if(typeof lib.Mp4OutputFormat !== "function"){
+      throw new Error("إصدار Mediabunny الحالي لا يدعم MP4.");
     }
 
     try{
-
       return {
-        format:
-          new lib.Mp4OutputFormat({
-            fastStart:"in-memory"
-          }),
-
-        isMP4:true
-
+        format: new lib.Mp4OutputFormat({ fastStart:"in-memory" }),
+        isMP4: true
       };
-
     }catch{
-
       return {
-        format:
-          new lib.Mp4OutputFormat(),
-
-        isMP4:true
-
+        format: new lib.Mp4OutputFormat(),
+        isMP4: true
       };
-
     }
 
   }
 
-
-  if(
-    typeof lib.WebMOutputFormat !==
-      "function"
-  ){
-
-    throw new Error(
-      "إصدار Mediabunny الحالي لا يدعم WebM."
-    );
-
+  if(typeof lib.WebMOutputFormat !== "function"){
+    throw new Error("إصدار Mediabunny الحالي لا يدعم WebM.");
   }
 
   return {
-
-    format:
-      new lib.WebMOutputFormat(),
-
-    isMP4:false
-
+    format: new lib.WebMOutputFormat(),
+    isMP4: false
   };
 
 }
@@ -5539,37 +3436,17 @@ function createVideoFormat(
    CANVAS SOURCE
 ========================================================= */
 
-function createCanvasSource(
-  lib,
-  canvas,
-  codec
-){
+function createCanvasSource(lib,canvas,codec){
 
   try{
-
-    return new lib.CanvasSource(
-      canvas,
-      {
-        codec,
-        bitrate:8_000_000,
-        keyFrameInterval:2
-      }
-    );
-
+    return new lib.CanvasSource(canvas,{
+      codec,
+      bitrate: 8_000_000,
+      keyFrameInterval: 2
+    });
   }catch(error){
-
-    console.warn(
-      "[CanvasSource] fallback",
-      error
-    );
-
-    return new lib.CanvasSource(
-      canvas,
-      {
-        codec
-      }
-    );
-
+    console.warn("[CanvasSource] fallback",error);
+    return new lib.CanvasSource(canvas,{ codec });
   }
 
 }
@@ -5579,34 +3456,28 @@ function createCanvasSource(
    EXPORT ROUTER
 ========================================================= */
 
-$("export").addEventListener(
-  "click",
-  async()=>{
-    APP.quickMode = false;
-    if(APP.exportSystem === "captureStream"){
-      await exportViaCaptureStream(false);
-    }else{
-      await exportViaHtml2Canvas(false);
-    }
+$("export").addEventListener("click",async()=>{
+  APP.quickMode = false;
+  if(APP.exportSystem === "captureStream"){
+    await exportViaCaptureStream(false);
+  }else{
+    await exportViaHtml2Canvas(false);
   }
-);
+});
 
 
-$("quickExport").addEventListener(
-  "click",
-  async()=>{
-    APP.quickMode = true;
-    if(APP.exportSystem === "captureStream"){
-      await exportViaCaptureStream(true);
-    }else{
-      await exportViaHtml2Canvas(true);
-    }
+$("quickExport").addEventListener("click",async()=>{
+  APP.quickMode = true;
+  if(APP.exportSystem === "captureStream"){
+    await exportViaCaptureStream(true);
+  }else{
+    await exportViaHtml2Canvas(true);
   }
-);
+});
 
 
 /* =========================================================
-   EXPORT A — html2canvas + Mediabunny (الأساسي)
+   EXPORT A — html2canvas + Mediabunny
 ========================================================= */
 
 async function exportViaHtml2Canvas(quick){
@@ -5614,25 +3485,14 @@ async function exportViaHtml2Canvas(quick){
   if(APP.exporting) return;
 
   if(!APP.loaded){
-
-    alert(
-      "شغّل المشروع أولًا."
-    );
-
+    alert("شغّل المشروع أولًا.");
     return;
-
   }
-
 
   APP.exporting = true;
   APP.stop = false;
 
-  APP.exportStats = {
-    frames:0,
-    renderMs:0,
-    encodeMs:0
-  };
-
+  APP.exportStats = { frames:0, renderMs:0, encodeMs:0 };
 
   $("export").style.display = "none";
   $("quickExport").style.display = "none";
@@ -5640,562 +3500,205 @@ async function exportViaHtml2Canvas(quick){
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
 
-
-  updateProgress(
-    0,
-    "تجهيز محرك التصدير..."
-  );
-
+  updateProgress(0,"تجهيز محرك التصدير...");
 
   if(APP.exportObjectURL){
-
-    try{
-      URL.revokeObjectURL(
-        APP.exportObjectURL
-      );
-    }catch{}
-
+    try{ URL.revokeObjectURL(APP.exportObjectURL); }catch{}
     APP.exportObjectURL = null;
-
   }
-
 
   let output = null;
   let source = null;
 
-
   try{
 
-    updateProgress(
-      0,
-      "تجهيز الخطوط والصور..."
-    );
+    updateProgress(0,"تجهيز الخطوط والصور...");
 
-    await waitForResources(
-      $("preview").contentDocument
-    );
+    await waitForResources($("preview").contentDocument);
 
-
-    APP.exportDoc =
-      $("preview").contentDocument;
-
-    APP.exportWin =
-      $("preview").contentWindow;
-
-    APP.exportRoot =
-      getProjectRoot(
-        APP.exportDoc
-      );
-
+    APP.exportDoc = $("preview").contentDocument;
+    APP.exportWin = $("preview").contentWindow;
+    APP.exportRoot = getProjectRoot(APP.exportDoc);
 
     if(!APP.exportRoot){
-
-      throw new Error(
-        "تعذر تحديد مساحة المشروع."
-      );
-
+      throw new Error("تعذر تحديد مساحة المشروع.");
     }
 
+    APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
 
-    APP.exportAnimations =
-      collectProjectAnimations(
-        APP.exportDoc
-      );
+    const lib = await waitForMediabunny(20000);
 
+    const { Output, BufferTarget, CanvasSource } = lib;
 
-    const lib =
-      await waitForMediabunny(20000);
-
-
-    const {
-      Output,
-      BufferTarget,
-      CanvasSource
-    } = lib;
-
-
-    if(
-      !Output ||
-      !BufferTarget ||
-      !CanvasSource
-    ){
-
-      throw new Error(
-        "مكونات Mediabunny ناقصة."
-      );
-
+    if(!Output || !BufferTarget || !CanvasSource){
+      throw new Error("مكونات Mediabunny ناقصة.");
     }
 
+    const fps = quick ? 12 : Math.max(1,Number($("fps").value) || 24);
 
-    const fps =
-      quick
-        ? 12
-        : Math.max(
-            1,
-            Number(
-              $("fps").value
-            ) || 24
-          );
+    const exportSize = quick
+      ? (APP.orientation === "portrait"
+          ? {width:720,height:1280}
+          : {width:1280,height:720})
+      : getExportSize();
 
+    const baseSize = getBaseSize();
 
-    const exportSize =
-      quick
-        ? (
-            APP.orientation === "portrait"
-              ? {width:720,height:1280}
-              : {width:1280,height:720}
-          )
-        : getExportSize();
+    const renderScale = quick
+      ? Math.min(exportSize.width / baseSize.width, exportSize.height / baseSize.height)
+      : getRenderScale();
 
+    updateProgress(0,"فحص ترميز الفيديو...");
 
-    const baseSize =
-      getBaseSize();
+    const codec = await findBestCodec(lib,exportSize.width,exportSize.height,fps);
 
+    const { format, isMP4 } = createVideoFormat(lib,codec);
+    const target = new BufferTarget();
 
-    const renderScale =
-      quick
-        ? Math.min(
-            exportSize.width /
-              baseSize.width,
-            exportSize.height /
-              baseSize.height
-          )
-        : getRenderScale();
+    output = new Output({ format, target });
 
+    const canvas = document.createElement("canvas");
+    canvas.width = exportSize.width;
+    canvas.height = exportSize.height;
 
-    updateProgress(
-      0,
-      "فحص ترميز الفيديو..."
-    );
-
-
-    const codec =
-      await findBestCodec(
-        lib,
-        exportSize.width,
-        exportSize.height,
-        fps
-      );
-
-
-    const {
-      format,
-      isMP4
-    } = createVideoFormat(
-      lib,
-      codec
-    );
-
-
-    const target =
-      new BufferTarget();
-
-
-    output =
-      new Output({
-        format,
-        target
-      });
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-    canvas.width =
-      exportSize.width;
-
-    canvas.height =
-      exportSize.height;
-
-
-    const context =
-      canvas.getContext(
-        "2d",
-        {alpha:false}
-      );
-
+    const context = canvas.getContext("2d",{alpha:false});
 
     if(!context){
-
-      throw new Error(
-        "تعذر إنشاء Canvas للتصدير."
-      );
-
+      throw new Error("تعذر إنشاء Canvas للتصدير.");
     }
 
-
     context.fillStyle = "#000";
+    context.fillRect(0,0,exportSize.width,exportSize.height);
 
-    context.fillRect(
-      0,
-      0,
-      exportSize.width,
-      exportSize.height
-    );
+    source = createCanvasSource(lib,canvas,codec);
 
+    output.addVideoTrack(source,{ frameRate: fps });
 
-    source =
-      createCanvasSource(
-        lib,
-        canvas,
-        codec
-      );
+    $("formatInfo").textContent = isMP4
+      ? "MP4 / H.264"
+      : "WebM / " + codec.toUpperCase();
 
-
-    output.addVideoTrack(
-      source,
-      {
-        frameRate:fps
-      }
-    );
-
-
-    $("formatInfo").textContent =
-      isMP4
-        ? "MP4 / H.264"
-        : "WebM / " +
-          codec.toUpperCase();
-
-
-    updateProgress(
-      0,
-      "تهيئة الفيديو..."
-    );
-
+    updateProgress(0,"تهيئة الفيديو...");
 
     await output.start();
 
-
-    const totalFrames =
-      Math.max(
-        1,
-        Math.ceil(
-          (APP.durationMs / 1000) *
-          fps
-        )
-      );
-
-
+    const totalFrames = Math.max(1,Math.ceil((APP.durationMs / 1000) * fps));
     const frameDuration = 1 / fps;
     const root = APP.exportRoot;
-    const animations =
-      APP.exportAnimations;
+    const animations = APP.exportAnimations;
 
-
-    for(
-      let i = 0;
-      i < totalFrames;
-      i++
-    ){
+    for(let i = 0; i < totalFrames; i++){
 
       if(APP.stop){
-
-        throw new Error(
-          "تم إيقاف التصدير."
-        );
-
+        throw new Error("تم إيقاف التصدير.");
       }
 
+      const timestamp = i * frameDuration;
+      const timeMs = Math.min(APP.durationMs - 0.001,timestamp * 1000);
 
-      const timestamp =
-        i * frameDuration;
+      const renderStart = performance.now();
 
+      setProjectTimeFast(timeMs,animations);
 
-      const timeMs =
-        Math.min(
-          APP.durationMs - 0.001,
-          timestamp * 1000
-        );
+      const rendered = await html2canvas(root,{
+        width: baseSize.width,
+        height: baseSize.height,
+        windowWidth: baseSize.width,
+        windowHeight: baseSize.height,
+        scale: renderScale,
+        backgroundColor: "#000",
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+        imageTimeout: 15000,
+        foreignObjectRendering: false,
+        removeContainer: true,
+        scrollX: 0,
+        scrollY: 0
+      });
 
+      APP.exportStats.renderMs += performance.now() - renderStart;
 
-      const renderStart =
-        performance.now();
-
-
-      setProjectTimeFast(
-        timeMs,
-        animations
-      );
-
-
-      const rendered =
-        await html2canvas(
-          root,
-          {
-
-            width:
-              baseSize.width,
-
-            height:
-              baseSize.height,
-
-            windowWidth:
-              baseSize.width,
-
-            windowHeight:
-              baseSize.height,
-
-            scale:
-              renderScale,
-
-            backgroundColor:
-              "#000",
-
-            useCORS:true,
-
-            allowTaint:false,
-
-            logging:false,
-
-            imageTimeout:15000,
-
-            foreignObjectRendering:false,
-
-            removeContainer:true,
-
-            scrollX:0,
-
-            scrollY:0
-
-          }
-        );
-
-
-      APP.exportStats.renderMs +=
-        performance.now() -
-        renderStart;
-
-
-      if(
-        rendered.width ===
-          exportSize.width &&
-        rendered.height ===
-          exportSize.height
-      ){
-
-        context.drawImage(
-          rendered,
-          0,
-          0
-        );
-
+      if(rendered.width === exportSize.width && rendered.height === exportSize.height){
+        context.drawImage(rendered,0,0);
       }else{
-
-        context.drawImage(
-          rendered,
-          0,
-          0,
-          exportSize.width,
-          exportSize.height
-        );
-
+        context.drawImage(rendered,0,0,exportSize.width,exportSize.height);
       }
 
+      const encodeStart = performance.now();
 
-      const encodeStart =
-        performance.now();
+      await source.add(timestamp,frameDuration);
 
+      APP.exportStats.encodeMs += performance.now() - encodeStart;
+      APP.exportStats.frames = i + 1;
 
-      await source.add(
-        timestamp,
-        frameDuration
-      );
-
-
-      APP.exportStats.encodeMs +=
-        performance.now() -
-        encodeStart;
-
-
-      APP.exportStats.frames =
-        i + 1;
-
-
-      if(
-        i === 0 ||
-        i === totalFrames - 1 ||
-        i % Math.max(
-          1,
-          Math.floor(fps / 2)
-        ) === 0
-      ){
-
+      if(i === 0 || i === totalFrames - 1 || i % Math.max(1,Math.floor(fps / 2)) === 0){
         updateProgress(
-          ((i + 1) /
-            totalFrames) * 100,
-          "تصدير " +
-          (i + 1) +
-          " / " +
-          totalFrames
+          ((i + 1) / totalFrames) * 100,
+          "تصدير " + (i + 1) + " / " + totalFrames
         );
-
       }
 
     }
 
-
-    if(
-      source &&
-      typeof source.close ===
-        "function"
-    ){
-
-      try{
-        await source.close();
-      }catch{}
-
+    if(source && typeof source.close === "function"){
+      try{ await source.close(); }catch{}
     }
 
-
-    updateProgress(
-      100,
-      "إنهاء ملف الفيديو..."
-    );
-
+    updateProgress(100,"إنهاء ملف الفيديو...");
 
     await output.finalize();
 
-
-    const buffer =
-      target.buffer;
-
+    const buffer = target.buffer;
 
     if(!buffer){
-
-      throw new Error(
-        "لم يتم إنشاء ملف الفيديو."
-      );
-
+      throw new Error("لم يتم إنشاء ملف الفيديو.");
     }
 
+    const mime = isMP4 ? "video/mp4" : "video/webm";
+    const blob = new Blob([buffer],{ type: mime });
 
-    const mime =
-      isMP4
-        ? "video/mp4"
-        : "video/webm";
+    APP.exportObjectURL = URL.createObjectURL(blob);
 
-
-    const blob =
-      new Blob(
-        [buffer],
-        {type:mime}
-      );
-
-
-    APP.exportObjectURL =
-      URL.createObjectURL(blob);
-
-
-    const link =
-      document.createElement("a");
-
-    link.className =
-      "btn primary";
-
-    link.href =
-      APP.exportObjectURL;
-
-    link.download =
-      safeFileName(
-        APP.title || "مشروع-موشن"
-      ) +
-      "." +
-      (isMP4 ? "mp4" : "webm");
-
-    link.textContent =
-      "حفظ " +
-      (isMP4 ? "MP4" : "WebM");
-
+    const link = document.createElement("a");
+    link.className = "btn primary";
+    link.href = APP.exportObjectURL;
+    link.download = safeFileName(APP.title || "مشروع-موشن") + "." + (isMP4 ? "mp4" : "webm");
+    link.textContent = "حفظ " + (isMP4 ? "MP4" : "WebM");
 
     $("download").innerHTML = "";
     $("download").appendChild(link);
     $("download").classList.add("show");
 
+    updateProgress(100,"اكتمل التصدير • " + APP.exportStats.frames + " Frame");
 
-    updateProgress(
-      100,
-      "اكتمل التصدير • " +
-      APP.exportStats.frames +
-      " Frame"
-    );
-
-
-    console.log(
-      "[EXPORT html2canvas COMPLETE]",
-      {
-        frames:
-          APP.exportStats.frames,
-        codec,
-        isMP4,
-        exportSize,
-        renderScale,
-        quick
-      }
-    );
-
+    console.log("[EXPORT html2canvas COMPLETE]",{
+      frames: APP.exportStats.frames,
+      codec, isMP4, exportSize, renderScale, quick
+    });
 
   }catch(error){
 
-    console.error(
-      "EXPORT ERROR:",
-      error
-    );
-
+    console.error("EXPORT ERROR:",error);
 
     try{
-      if(
-        output &&
-        typeof output.cancel ===
-          "function"
-      ){
+      if(output && typeof output.cancel === "function"){
         await output.cancel();
       }
     }catch{}
 
-
     try{
-      if(
-        source &&
-        typeof source.close ===
-          "function"
-      ){
+      if(source && typeof source.close === "function"){
         await source.close();
       }
     }catch{}
 
-
-    if(
-      error &&
-      error.message ===
-        "تم إيقاف التصدير."
-    ){
-
-      updateProgress(
-        0,
-        "تم إيقاف التصدير"
-      );
-
+    if(error && error.message === "تم إيقاف التصدير."){
+      updateProgress(0,"تم إيقاف التصدير");
     }else{
-
-      alert(
-        "فشل التصدير:\n\n" +
-        (
-          error &&
-          error.message
-            ? error.message
-            : String(error)
-        )
-      );
-
-      updateProgress(
-        0,
-        "فشل التصدير"
-      );
-
+      alert("فشل التصدير:\n\n" + (error && error.message ? error.message : String(error)));
+      updateProgress(0,"فشل التصدير");
     }
-
 
   }finally{
 
@@ -6216,7 +3719,7 @@ async function exportViaHtml2Canvas(quick){
 
 
 /* =========================================================
-   EXPORT B — Live captureStream (Safari-friendly)
+   EXPORT B — Live captureStream (Safari-friendly) — نسخة محسّنة
 ========================================================= */
 
 async function exportViaCaptureStream(quick){
@@ -6224,58 +3727,39 @@ async function exportViaCaptureStream(quick){
   if(APP.exporting) return;
 
   if(!APP.loaded){
-
-    alert(
-      "شغّل المشروع أولًا."
-    );
-
+    alert("شغّل المشروع أولًا.");
     return;
-
   }
 
   if(typeof MediaRecorder === "undefined"){
-
-    alert(
-      "متصفحك لا يدعم MediaRecorder."
-    );
-
+    alert("متصفحك لا يدعم MediaRecorder.");
     return;
-
   }
 
-  const mimeType =
-    getSupportedVideoMimeType();
-
+  const mimeType = getSupportedVideoMimeType();
   if(!mimeType){
-
-    alert(
-      "المتصفح لا يدعم أي صيغة تسجيل (MP4/WebM).\n" +
-      "استخدم النظام الأساسي html2canvas بدلًا من ذلك."
-    );
-
+    alert("المتصفح لا يدعم أي صيغة تسجيل.\nاستخدم html2canvas بدلًا من ذلك.");
     return;
-
   }
 
   if(!APP.captureStream){
-
-    alert(
-      "يجب تفعيل صلاحية التسجيل أولًا.\n" +
-      "اضغط زر «تفعيل صلاحية التسجيل»."
-    );
-
-    $("activateRecording")
-      .classList
-      .add("pulse");
-
+    alert("يجب تفعيل صلاحية التسجيل أولًا.\nاضغط زر «تفعيل صلاحية التسجيل».");
+    $("activateRecording").classList.add("pulse");
     return;
-
   }
 
+  const videoTracks = APP.captureStream.getVideoTracks();
+  if(!videoTracks.length || videoTracks[0].readyState === "ended"){
+    APP.captureStream = null;
+    alert("انتهت صلاحية التسجيل. أعد تفعيلها من زر «تفعيل صلاحية التسجيل».");
+    $("activateRecording").classList.remove("pulse");
+    $("activateRecording").textContent = "تفعيل صلاحية التسجيل";
+    $("captureBadge").classList.remove("show");
+    return;
+  }
 
   APP.exporting = true;
   APP.stop = false;
-
 
   $("export").style.display = "none";
   $("quickExport").style.display = "none";
@@ -6283,190 +3767,130 @@ async function exportViaCaptureStream(quick){
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
 
-
-  updateProgress(
-    0,
-    "تجهيز التسجيل الحي..."
-  );
-
+  updateProgress(0,"تجهيز التسجيل الحي...");
 
   if(APP.exportObjectURL){
-
-    try{
-      URL.revokeObjectURL(
-        APP.exportObjectURL
-      );
-    }catch{}
-
+    try{ URL.revokeObjectURL(APP.exportObjectURL); }catch{}
     APP.exportObjectURL = null;
-
   }
-
 
   let canvasStream = null;
   let recorder = null;
   let videoEl = null;
   let stopDraw = null;
-
+  let visibilityHandler = null;
 
   try{
 
-    await waitForResources(
-      $("preview").contentDocument
-    );
+    await waitForResources($("preview").contentDocument);
 
+    APP.exportDoc = $("preview").contentDocument;
+    APP.exportWin = $("preview").contentWindow;
+    APP.exportRoot = getProjectRoot(APP.exportDoc);
+    APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
 
-    APP.exportDoc =
-      $("preview").contentDocument;
+    const exportSize = quick
+      ? (APP.orientation === "portrait"
+          ? {width:720,height:1280}
+          : {width:1280,height:720})
+      : getExportSize();
 
-    APP.exportWin =
-      $("preview").contentWindow;
+    const fps = quick ? 12 : Math.max(1,Number($("fps").value) || 24);
 
-    APP.exportRoot =
-      getProjectRoot(
-        APP.exportDoc
-      );
+    const canvas = document.createElement("canvas");
+    canvas.width = exportSize.width;
+    canvas.height = exportSize.height;
 
-    APP.exportAnimations =
-      collectProjectAnimations(
-        APP.exportDoc
-      );
-
-
-    const exportSize =
-      quick
-        ? (
-            APP.orientation === "portrait"
-              ? {width:720,height:1280}
-              : {width:1280,height:720}
-          )
-        : getExportSize();
-
-
-    const fps =
-      quick
-        ? 12
-        : Math.max(
-            1,
-            Number(
-              $("fps").value
-            ) || 24
-          );
-
-
-    const canvas =
-      document.createElement(
-        "canvas"
-      );
-
-    canvas.width =
-      exportSize.width;
-
-    canvas.height =
-      exportSize.height;
-
-
-    const ctx =
-      canvas.getContext(
-        "2d",
-        {alpha:false}
-      );
-
-
+    const ctx = canvas.getContext("2d",{alpha:false});
     ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    ctx.fillRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-
-    videoEl =
-      document.createElement(
-        "video"
-      );
-
-    videoEl.srcObject =
-      APP.captureStream;
-
+    videoEl = document.createElement("video");
+    videoEl.srcObject = APP.captureStream;
     videoEl.muted = true;
-
     videoEl.playsInline = true;
+    videoEl.autoplay = true;
 
+    try{
+      await videoEl.play();
+    }catch(playErr){
+      console.warn("[captureStream] play() failed, retrying…",playErr);
+      videoEl.play().catch(()=>{});
+    }
 
-    await videoEl.play();
+    await new Promise((resolve,reject)=>{
 
-
-    await new Promise(resolve=>{
-
-      if(videoEl.videoWidth)
+      if(videoEl.videoWidth > 0 && videoEl.videoHeight > 0){
         return resolve();
+      }
 
-      videoEl.onloadedmetadata =
-        resolve;
+      const timeout = setTimeout(()=>{
+        reject(new Error("لم يستجب تسجيل الشاشة خلال 8 ثوانٍ.\nتأكد من مشاركة التبويب الصحيح."));
+      },8000);
 
-      setTimeout(resolve,2000);
+      const onReady = ()=>{
+        if(videoEl.videoWidth > 0){
+          clearTimeout(timeout);
+          resolve();
+        }
+      };
+
+      videoEl.addEventListener("loadedmetadata",onReady,{once:true});
+      videoEl.addEventListener("canplay",onReady,{once:true});
+      videoEl.addEventListener("playing",onReady,{once:true});
 
     });
 
+    setProjectTimeFast(0,APP.exportAnimations);
+    await sleep(300);
 
-    setProjectTimeFast(
-      0,
-      APP.exportAnimations
-    );
-
-    await sleep(200);
-
-
-    const iframe =
-      $("preview");
-
-    const rect =
-      iframe.getBoundingClientRect();
-
-
-    const vw =
-      videoEl.videoWidth ||
-      window.innerWidth;
-
-    const vh =
-      videoEl.videoHeight ||
-      window.innerHeight;
-
-
-    const scaleX =
-      vw / window.innerWidth;
-
-    const scaleY =
-      vh / window.innerHeight;
-
+    const iframe = $("preview");
 
     let drawing = true;
-
+    let drawFrames = 0;
+    let dprLogged = false;
 
     function draw(){
 
       if(!drawing) return;
 
-      if(videoEl.readyState >= 2){
+      if(videoEl.readyState >= 2 && videoEl.videoWidth > 0){
 
         try{
 
+          const liveRect = iframe.getBoundingClientRect();
+          const captureW = window.innerWidth || 1;
+          const captureH = window.innerHeight || 1;
+
+          const scaleX = (videoEl.videoWidth || captureW) / captureW;
+          const scaleY = (videoEl.videoHeight || captureH) / captureH;
+
+          if(!dprLogged && Math.abs(scaleX - 1) > 0.05){
+            console.log("[captureStream] DPR detected:",{
+              devicePixelRatio: window.devicePixelRatio,
+              videoWidth: videoEl.videoWidth,
+              videoHeight: videoEl.videoHeight,
+              captureW, captureH, scaleX, scaleY
+            });
+            dprLogged = true;
+          }
+
           ctx.drawImage(
             videoEl,
-            rect.left * scaleX,
-            rect.top * scaleY,
-            rect.width * scaleX,
-            rect.height * scaleY,
-            0,
-            0,
+            liveRect.left * scaleX,
+            liveRect.top * scaleY,
+            liveRect.width * scaleX,
+            liveRect.height * scaleY,
+            0, 0,
             canvas.width,
             canvas.height
           );
 
-        }catch{}
+          drawFrames++;
+
+        }catch(err){
+          console.warn("[draw]",err);
+        }
 
       }
 
@@ -6474,137 +3898,111 @@ async function exportViaCaptureStream(quick){
 
     }
 
-
     draw();
+    stopDraw = ()=>{ drawing = false; };
 
-    stopDraw = ()=>{
-      drawing = false;
-    };
+    await sleep(500);
 
+    if(drawFrames < 5){
+      throw new Error("Canvas لم يتم تحديثه. تأكد من أن نافذة المتصفح مرئية بالكامل.");
+    }
 
-    canvasStream =
-      canvas.captureStream(fps);
+    canvasStream = canvas.captureStream(fps);
 
+    const capturedAudio = APP.captureStream.getAudioTracks();
+    capturedAudio.forEach(t=>{
+      try{ canvasStream.addTrack(t); }catch{}
+    });
 
-    APP.captureStream
-      .getAudioTracks()
-      .forEach(t=>{
+    if(capturedAudio.length === 0){
+      const cont = confirm(
+        "⚠️ تنبيه:\n\nلم يتم اكتشاف مسار صوتي.\n" +
+        "قد يكون المتصفح لم يمنح صلاحية مشاركة صوت التبويب.\n\n" +
+        "الفيديو سيُصدَّر بدون صوت. هل تريد المتابعة؟"
+      );
+      if(!cont) throw new Error("تم إلغاء التسجيل — لا يوجد صوت.");
+    }
 
-        try{
-          canvasStream.addTrack(t);
-        }catch{}
+    let usedMime = mimeType;
 
-      });
+    if(!MediaRecorder.isTypeSupported(usedMime)){
+      const alternatives = [
+        "video/webm;codecs=vp9",
+        "video/webm;codecs=vp8",
+        "video/webm"
+      ];
+      usedMime = alternatives.find(m => MediaRecorder.isTypeSupported(m));
+      if(!usedMime){
+        throw new Error("لا توجد صيغة MediaRecorder مدعومة.");
+      }
+    }
 
+    console.log("[captureStream] using:",{
+      mime: usedMime, fps, size: exportSize,
+      hasAudio: capturedAudio.length > 0
+    });
 
     const chunks = [];
 
+    recorder = new MediaRecorder(canvasStream,{
+      mimeType: usedMime,
+      videoBitsPerSecond: 8_000_000,
+      audioBitsPerSecond: 192_000
+    });
 
-    recorder =
-      new MediaRecorder(
-        canvasStream,
-        {
-          mimeType,
-          videoBitsPerSecond:
-            8_000_000,
-          audioBitsPerSecond:
-            192_000
-        }
+    recorder.ondataavailable = event=>{
+      if(event.data && event.data.size > 0){
+        chunks.push(event.data);
+      }
+    };
+
+    const recordingDone = new Promise((resolve,reject)=>{
+      recorder.onstop = ()=>resolve();
+      recorder.onerror = event=>reject(
+        event.error || new Error("خطأ في التسجيل.")
       );
-
-
-    recorder.ondataavailable =
-      event=>{
-
-        if(
-          event.data &&
-          event.data.size > 0
-        ){
-          chunks.push(event.data);
-        }
-
-      };
-
-
-    const recordingDone =
-      new Promise((resolve,reject)=>{
-
-        recorder.onstop =
-          ()=>resolve();
-
-        recorder.onerror =
-          event=>reject(
-            event.error ||
-            new Error(
-              "خطأ في التسجيل."
-            )
-          );
-
-      });
-
+    });
 
     recorder.start(250);
+    APP.recordingStart = performance.now();
 
-    APP.recordingStart =
-      performance.now();
+    let tabStopped = false;
 
+    visibilityHandler = ()=>{
+      if(document.hidden && recorder && recorder.state === "recording" && !tabStopped){
+        tabStopped = true;
+        updateProgress(0,"توقف التسجيل: التبويب انتقل للخلفية");
+        APP.stop = true;
+        try{ recorder.stop(); }catch{}
+      }
+    };
 
-    updateProgress(
-      0,
-      "بدء التسجيل الحي..."
-    );
+    document.addEventListener("visibilitychange",visibilityHandler);
 
+    updateProgress(0,"بدء التسجيل الحي...");
 
-    const startTime =
-      performance.now();
-
-    const duration =
-      APP.durationMs;
-
+    const startTime = performance.now();
+    const duration = APP.durationMs;
 
     await new Promise(resolve=>{
 
       function tick(){
 
-        if(APP.stop){
-          resolve();
-          return;
-        }
+        if(APP.stop){ resolve(); return; }
 
-        const elapsed =
-          performance.now() -
-          startTime;
+        const elapsed = performance.now() - startTime;
 
         if(elapsed >= duration){
-
-          setProjectTimeFast(
-            Math.max(
-              0,
-              duration - 1
-            ),
-            APP.exportAnimations
-          );
-
+          setProjectTimeFast(Math.max(0,duration - 1),APP.exportAnimations);
           resolve();
           return;
-
         }
 
-        setProjectTimeFast(
-          elapsed,
-          APP.exportAnimations
-        );
+        setProjectTimeFast(elapsed,APP.exportAnimations);
 
         updateProgress(
-          (elapsed / duration) *
-            100,
-          "التسجيل: " +
-          (elapsed / 1000)
-            .toFixed(1) +
-          " / " +
-          (duration / 1000)
-            .toFixed(1) +
-          " ث"
+          (elapsed / duration) * 100,
+          "التسجيل: " + (elapsed / 1000).toFixed(1) + " / " + (duration / 1000).toFixed(1) + " ث"
         );
 
         requestAnimationFrame(tick);
@@ -6615,187 +4013,75 @@ async function exportViaCaptureStream(quick){
 
     });
 
+    await sleep(500);
 
-    await sleep(300);
-
-
-    if(
-      recorder.state !==
-        "inactive"
-    ){
+    if(recorder.state !== "inactive"){
       recorder.stop();
     }
 
-
     await recordingDone;
 
+    if(chunks.length === 0){
+      throw new Error("لم يُسجَّل أي محتوى. تحقق من صلاحية مشاركة الشاشة.");
+    }
 
-    const blob =
-      new Blob(
-        chunks,
-        {type:mimeType}
-      );
+    const blob = new Blob(chunks,{ type: usedMime });
+    APP.exportObjectURL = URL.createObjectURL(blob);
 
+    const isMP4 = usedMime.indexOf("mp4") !== -1;
+    const ext = isMP4 ? "mp4" : "webm";
 
-    APP.exportObjectURL =
-      URL.createObjectURL(blob);
-
-
-    const isMP4 =
-      mimeType.indexOf("mp4") !== -1;
-
-    const ext =
-      isMP4 ? "mp4" : "webm";
-
-
-    const link =
-      document.createElement(
-        "a"
-      );
-
-    link.className =
-      "btn primary";
-
-    link.href =
-      APP.exportObjectURL;
-
-    link.download =
-      safeFileName(
-        APP.title || "مشروع-موشن"
-      ) +
-      "." +
-      ext;
-
-    link.textContent =
-      "حفظ " +
-      ext.toUpperCase();
-
+    const link = document.createElement("a");
+    link.className = "btn primary";
+    link.href = APP.exportObjectURL;
+    link.download = safeFileName(APP.title || "مشروع-موشن") + "." + ext;
+    link.textContent = "حفظ " + ext.toUpperCase();
 
     $("download").innerHTML = "";
     $("download").appendChild(link);
     $("download").classList.add("show");
 
+    $("formatInfo").textContent = isMP4
+      ? "MP4 / H.264"
+      : "WebM / " + (usedMime.indexOf("vp9") !== -1 ? "VP9" : "VP8");
 
-    $("formatInfo").textContent =
-      isMP4
-        ? "MP4 / H.264"
-        : "WebM / " +
-          (
-            mimeType.indexOf("vp9") !== -1
-              ? "VP9"
-              : "VP8"
-          );
-
-
-    updateProgress(
-      100,
-      "اكتمل التسجيل • " +
-      (blob.size / 1024 / 1024)
-        .toFixed(1) +
-      " MB"
-    );
-
-
-    console.log(
-      "[EXPORT captureStream COMPLETE]",
-      {
-        mimeType,
-        quick,
-        size: blob.size,
-        durationMs:
-          APP.durationMs
-      }
-    );
-
+    updateProgress(100,"اكتمل التسجيل • " + (blob.size/1024/1024).toFixed(1) + " MB");
 
   }catch(error){
 
-    console.error(
-      "EXPORT ERROR:",
-      error
-    );
+    console.error("[captureStream] EXPORT ERROR:",error);
 
-
-    if(
-      error &&
-      error.name ===
-        "AbortError"
-    ){
-
-      updateProgress(
-        0,
-        "تم إلغاء التسجيل"
-      );
-
+    if(error && error.name === "AbortError"){
+      updateProgress(0,"تم إلغاء التسجيل");
+    }else if(error && error.message && error.message.indexOf("تم إلغاء") === 0){
+      updateProgress(0,"تم إلغاء التسجيل");
     }else{
-
-      alert(
-        "فشل التسجيل:\n\n" +
-        (
-          error &&
-          error.message
-            ? error.message
-            : String(error)
-        )
-      );
-
-      updateProgress(
-        0,
-        "فشل التسجيل"
-      );
-
+      alert("فشل التسجيل:\n\n" + (error && error.message ? error.message : String(error)));
+      updateProgress(0,"فشل التسجيل");
     }
-
 
   }finally{
 
-    if(stopDraw){
-      try{ stopDraw(); }catch{}
+    if(visibilityHandler){
+      try{ document.removeEventListener("visibilitychange",visibilityHandler); }catch{}
     }
 
-    if(
-      recorder &&
-      recorder.state !==
-        "inactive"
-    ){
+    if(stopDraw){ try{ stopDraw(); }catch{} }
 
-      try{
-        recorder.stop();
-      }catch{}
-
+    if(recorder && recorder.state !== "inactive"){
+      try{ recorder.stop(); }catch{}
     }
 
     if(canvasStream){
-
       try{
-
-        canvasStream
-          .getVideoTracks()
-          .forEach(t=>{
-
-            try{
-              t.stop();
-            }catch{}
-
-          });
-
+        canvasStream.getVideoTracks().forEach(t=>{ try{ t.stop(); }catch{} });
       }catch{}
-
     }
 
     if(videoEl){
-
-      try{
-        videoEl.pause();
-      }catch{}
-
-      try{
-        videoEl.srcObject =
-          null;
-      }catch{}
-
+      try{ videoEl.pause(); }catch{}
+      try{ videoEl.srcObject = null; }catch{}
     }
-
 
     APP.exporting = false;
     APP.quickMode = false;
@@ -6817,50 +4103,27 @@ async function exportViaCaptureStream(quick){
    STOP
 ========================================================= */
 
-$("stop")
-.addEventListener(
-  "click",
-  ()=>{
+$("stop").addEventListener("click",()=>{
 
-    if(!APP.exporting)
-      return;
+  if(!APP.exporting) return;
 
-    APP.stop = true;
+  APP.stop = true;
 
-    updateProgress(
-      0,
-      "جارٍ الإيقاف..."
-    );
+  updateProgress(0,"جارٍ الإيقاف...");
 
-  }
-);
+});
 
 
 /* =========================================================
    PROGRESS
 ========================================================= */
 
-function updateProgress(
-  percent,
-  text
-){
+function updateProgress(percent,text){
 
-  const value =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        Number(percent) || 0
-      )
-    );
+  const value = Math.max(0,Math.min(100,Number(percent) || 0));
 
-  $("progressBar")
-    .style.width =
-      value + "%";
-
-  $("progressText")
-    .textContent =
-      text;
+  $("progressBar").style.width = value + "%";
+  $("progressText").textContent = text;
 
 }
 
@@ -6869,36 +4132,17 @@ function updateProgress(
    STATUS
 ========================================================= */
 
-function setStatus(
-  text,
-  kind
-){
+function setStatus(text,kind){
 
-  $("stateInfo")
-    .textContent =
-      text;
+  $("stateInfo").textContent = text;
+  $("globalStatus").textContent = text;
 
-  $("globalStatus")
-    .textContent =
-      text;
+  const dot = $("statusDot");
 
-  const dot =
-    $("statusDot");
+  dot.classList.remove("busy","error");
 
-  dot.classList.remove(
-    "busy",
-    "error"
-  );
-
-  if(kind === "busy")
-    dot.classList.add(
-      "busy"
-    );
-
-  if(kind === "error")
-    dot.classList.add(
-      "error"
-    );
+  if(kind === "busy") dot.classList.add("busy");
+  if(kind === "error") dot.classList.add("error");
 
 }
 
@@ -6907,43 +4151,27 @@ function setStatus(
    PREVIEW PLAYBACK
 ========================================================= */
 
-$("playBtn")
-.addEventListener(
-  "click",
-  ()=>{
+$("playBtn").addEventListener("click",()=>{
 
-    if(!APP.loaded){
-
-      alert(
-        "تحقق من تحميل المشروع أولاً."
-      );
-
-      return;
-
-    }
-
-    if(APP.previewPlaying)
-      stopPreview();
-    else
-      playPreview();
-
+  if(!APP.loaded){
+    alert("تحقق من تحميل المشروع أولاً.");
+    return;
   }
-);
+
+  if(APP.previewPlaying) stopPreview();
+  else playPreview();
+
+});
 
 
 function stopPreview(){
 
-  APP.previewPlaying =
-    false;
+  APP.previewPlaying = false;
 
-  const playBtn =
-    $("playBtn");
+  const playBtn = $("playBtn");
 
   if(playBtn){
-
-    playBtn.textContent =
-      "تشغيل العرض";
-
+    playBtn.textContent = "تشغيل العرض";
   }
 
 }
@@ -6951,62 +4179,25 @@ function stopPreview(){
 
 async function playPreview(){
 
-  if(
-    !APP.loaded ||
-    APP.previewPlaying
-  ){
+  if(!APP.loaded || APP.previewPlaying){ return; }
 
-    return;
+  APP.previewPlaying = true;
+  $("playBtn").textContent = "إيقاف العرض";
 
-  }
+  const startedAt = performance.now();
+  const initialTime = APP.currentTime;
 
-  APP.previewPlaying =
-    true;
+  while(APP.previewPlaying){
 
-  $("playBtn")
-    .textContent =
-      "إيقاف العرض";
+    const time = initialTime + (performance.now() - startedAt);
 
-
-  const startedAt =
-    performance.now();
-
-  const initialTime =
-    APP.currentTime;
-
-
-  while(
-    APP.previewPlaying
-  ){
-
-    const time =
-      initialTime +
-      (
-        performance.now() -
-        startedAt
-      );
-
-
-    if(
-      time >=
-      APP.durationMs
-    ){
-
-      await setProjectTime(
-        0
-      );
-
+    if(time >= APP.durationMs){
+      await setProjectTime(0);
       stopPreview();
-
       break;
-
     }
 
-
-    await setProjectTime(
-      time
-    );
-
+    await setProjectTime(time);
     await sleep(15);
 
   }
@@ -7018,51 +4209,22 @@ async function playPreview(){
    TIMELINE CLICK
 ========================================================= */
 
-$("timelineContainer")
-.addEventListener(
-  "click",
-  async event=>{
+$("timelineContainer").addEventListener("click",async event=>{
 
-    if(!APP.loaded)
-      return;
+  if(!APP.loaded) return;
 
-    const rect =
-      event.currentTarget
-        .getBoundingClientRect();
+  const rect = event.currentTarget.getBoundingClientRect();
 
-    const ratio =
-      Math.max(
-        0,
-        Math.min(
-          1,
-          (
-            event.clientX -
-            rect.left
-          ) /
-          rect.width
-        )
-      );
+  const ratio = Math.max(0,Math.min(1,(event.clientX - rect.left) / rect.width));
 
+  await setProjectTime(ratio * APP.durationMs);
 
-    await setProjectTime(
-      ratio *
-      APP.durationMs
-    );
-
-
-    if(APP.previewPlaying){
-
-      stopPreview();
-
-      setTimeout(
-        playPreview,
-        50
-      );
-
-    }
-
+  if(APP.previewPlaying){
+    stopPreview();
+    setTimeout(playPreview,50);
   }
-);
+
+});
 
 
 /* =========================================================
@@ -7070,93 +4232,40 @@ $("timelineContainer")
 ========================================================= */
 
 function sleep(ms){
-
-  return new Promise(
-    resolve =>
-      setTimeout(
-        resolve,
-        ms
-      )
-  );
-
+  return new Promise(resolve => setTimeout(resolve,ms));
 }
 
 
 function formatDuration(ms){
 
-  const s =
-    Math.round(
-      ms / 1000
-    );
+  const s = Math.round(ms / 1000);
 
   if(s < 60){
-
-    return (
-      s +
-      " ثانية"
-    );
-
+    return s + " ثانية";
   }
 
-  return (
-    Math.floor(s / 60) +
-    " د" +
-    (
-      s % 60
-        ? " " +
-          (s % 60) +
-          " ث"
-        : ""
-    )
+  return Math.floor(s / 60) + " د" + (
+    s % 60 ? " " + (s % 60) + " ث" : ""
   );
 
 }
 
 
 function safeFileName(v){
-
   return String(v || "")
-    .replace(
-      /[\\/:*?"<>|]/g,
-      ""
-    )
-    .replace(
-      /\s+/g,
-      "-"
-    )
-    .slice(
-      0,
-      80
-    ) ||
-    "مشروع-موشن";
-
+    .replace(/[\\/:*?"<>|]/g,"")
+    .replace(/\s+/g,"-")
+    .slice(0,80) || "مشروع-موشن";
 }
 
 
 function escapeHTML(v){
-
   return String(v)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
@@ -7164,9 +4273,7 @@ function escapeHTML(v){
    INIT
 ========================================================= */
 
-applyIframeCanvasSize(
-  APP.orientation
-);
+applyIframeCanvasSize(APP.orientation);
 
 resizePreview();
 
@@ -7175,28 +4282,14 @@ updateExportSystemUI();
 showSafariNote();
 
 
-window.addEventListener(
-  "mediabunny-ready",
-  ()=>{
-
-    console.log(
-      "[Platform] Mediabunny جاهز."
-    );
-
-  }
-);
+window.addEventListener("mediabunny-ready",()=>{
+  console.log("[Platform] Mediabunny جاهز.");
+});
 
 
-window.addEventListener(
-  "mediabunny-failed",
-  ()=>{
-
-    console.error(
-      "[Platform] فشل تحميل Mediabunny."
-    );
-
-  }
-);
+window.addEventListener("mediabunny-failed",()=>{
+  console.error("[Platform] فشل تحميل Mediabunny.");
+});
 
 </script>
 
