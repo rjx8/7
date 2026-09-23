@@ -259,13 +259,19 @@ button:disabled{opacity:.5;cursor:not-allowed}
   color:#8ec9e8;background:rgba(95,168,211,.08);border-color:rgba(95,168,211,.25)
 }
 
-.env-warning{
-  display:none;padding:10px;background:rgba(223,116,116,.1);
-  border:1px solid rgba(223,116,116,.4);border-radius:9px;
-  color:#f1a0a0;font-size:10px;line-height:1.7;margin-bottom:9px
+.desktop-only-note{
+  display:none;
+  padding:7px 10px;
+  background:rgba(95,168,211,.06);
+  border:1px solid rgba(95,168,211,.18);
+  border-radius:9px;
+  color:#8ec9e8;
+  font-size:9px;
+  line-height:1.6;
+  margin-bottom:9px
 }
 
-.env-warning.show{display:block}
+.desktop-only-note.show{display:block}
 
 .export-settings{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 
@@ -688,21 +694,16 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
         <h3>إعدادات التصدير</h3>
 
-        <div class="env-warning" id="envWarning">
-          ⚠️ <strong>تنبيه:</strong> الصفحة مفتوحة عبر <code>file://</code>.
-          ميزة <strong>تسجيل الشاشة</strong> لا تعمل إلا عبر
-          <code>https://</code> أو <code>http://localhost</code>.
-          <br><br>
-          الحل: استخدم Live Server أو ارفع الملف على Netlify.
-          النظام الأساسي (html2canvas) يعمل في كل الحالات.
-        </div>
-
         <div class="export-system">
           <label>نظام التصدير</label>
           <select id="exportSystem">
             <option value="html2canvas" selected>html2canvas + Mediabunny</option>
             <option value="captureStream">تسجيل حي captureStream</option>
           </select>
+        </div>
+
+        <div class="desktop-only-note" id="desktopOnlyNote">
+          ℹ️ التسجيل الحي متاح على المتصفحات المكتبية فقط
         </div>
 
         <div class="system-badge html2canvas" id="systemBadge">
@@ -715,14 +716,16 @@ button:disabled{opacity:.5;cursor:not-allowed}
             <select id="quality">
               <option value="720">720p — أسرع</option>
               <option value="native" selected>الدقة الأصلية</option>
+              <option value="x1.5">× 1.5 — جودة أعلى (أبطأ)</option>
+              <option value="x2">× 2 — جودة قصوى (الأبطأ)</option>
             </select>
           </div>
           <div>
             <label>الإطارات</label>
             <select id="fps">
-              <option value="24" selected>24 FPS</option>
+              <option value="24">24 FPS</option>
               <option value="30">30 FPS</option>
-              <option value="60">60 FPS</option>
+              <option value="60" selected>60 FPS</option>
             </select>
           </div>
         </div>
@@ -732,12 +735,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </div>
 
         <div class="safari-note" id="safariNote">
-          <strong>تنبيه Safari:</strong>
-          سيطلب المتصفح إذن مشاركة الشاشة.
-          اختر «مشاركة هذا التبويب» وليس الشاشة كاملة.
-          إذا لم يظهر خيار مشاركة الصوت، سيُصدَّر الفيديو بدون صوت.
-          <br><br>
-          <strong>مهم:</strong> لا تُغيّر التبويب ولا تُصغّر النافذة أثناء التسجيل.
+          <strong>تنبيه Safari:</strong> اختر «مشاركة هذا التبويب» عند طلب الإذن، ولا تُغيّر التبويب أثناء التسجيل.
         </div>
 
         <div style="height:9px"></div>
@@ -748,7 +746,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
         <div style="height:7px"></div>
 
-        <button class="btn" id="test">اختبار Frame</button>
+        <button class="btn" id="test">اختبار 3 إطارات (0/50/100%)</button>
 
         <div style="height:7px"></div>
 
@@ -841,13 +839,14 @@ const APP = {
   exportStats:{ frames:0, renderMs:0, encodeMs:0 },
   exportSystem:"html2canvas",
   captureStream:null,
-  recordingStart:0
+  recordingStart:0,
+  captureStreamAvailable:false
 };
 
 function $(id){ return document.getElementById(id); }
 
 /* =========================================================
-   ENVIRONMENT CHECK (Secure Context)
+   ENVIRONMENT / DEVICE DETECTION
 ========================================================= */
 
 function isSecureEnv(){
@@ -863,14 +862,54 @@ function supportsDisplayMedia(){
   return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
 }
 
-function checkEnvironment(){
-  const warn = $("envWarning");
-  if(!warn) return;
+/* كشف الجوال اعتمادًا على pointer + حجم الشاشة + UA كتحقق ثانوي */
+function isMobileDevice(){
+  try{
+    if(window.matchMedia){
+      if(window.matchMedia("(pointer: coarse)").matches) return true;
+      if(window.matchMedia("(hover: none)").matches &&
+         window.matchMedia("(pointer: coarse)").matches) return true;
+    }
+  }catch{}
 
-  if(!isSecureEnv() || !supportsDisplayMedia()){
-    warn.classList.add("show");
-  }else{
-    warn.classList.remove("show");
+  const sw = window.screen ? (window.screen.width || 0) : 0;
+  const sh = window.screen ? (window.screen.height || 0) : 0;
+  const minDim = Math.min(sw,sh);
+  if(minDim > 0 && minDim <= 600) return true;
+
+  const ua = navigator.userAgent || "";
+  if(/Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|Opera Mini|IEMobile|Windows Phone/i.test(ua)){
+    return true;
+  }
+
+  return false;
+}
+
+function shouldHideCaptureStreamOption(){
+  return isMobileDevice() || !supportsDisplayMedia();
+}
+
+function setupExportSystemOptions(){
+  const sel = $("exportSystem");
+  if(!sel) return;
+
+  const hideCapture = shouldHideCaptureStreamOption();
+  APP.captureStreamAvailable = !hideCapture;
+
+  const captureOpt = sel.querySelector('option[value="captureStream"]');
+  if(hideCapture && captureOpt){
+    captureOpt.remove();
+    sel.value = "html2canvas";
+  }
+
+  const note = $("desktopOnlyNote");
+  if(note){
+    note.classList.toggle("show", hideCapture && sel.value === "html2canvas");
+  }
+
+  const act = $("activateRecording");
+  if(act && hideCapture){
+    act.style.display = "none";
   }
 }
 
@@ -899,7 +938,7 @@ function toast(message,type,duration){
 }
 
 /* =========================================================
-   DIMENSIONS
+   DIMENSIONS  (يدعم الآن x1.5 و x2 كـ supersampling)
 ========================================================= */
 
 function getBaseSize(){
@@ -908,22 +947,49 @@ function getBaseSize(){
     : {width:1920,height:1080};
 }
 
-function getExportSize(){
-  const quality = $("quality").value;
-  const base = getBaseSize();
-
-  if(quality === "720"){
-    return APP.orientation === "portrait"
-      ? {width:720,height:1280}
-      : {width:1280,height:720};
-  }
-  return base;
+function getQualityMultiplier(){
+  const q = $("quality") ? $("quality").value : "native";
+  if(q === "x1.5") return 1.5;
+  if(q === "x2") return 2;
+  return 1;
 }
 
+/* إرجاع معامل الـ scale المستخدم في html2canvas */
 function getRenderScale(){
+  const q = $("quality") ? $("quality").value : "native";
   const base = getBaseSize();
-  const output = getExportSize();
-  return Math.min(output.width / base.width, output.height / base.height);
+
+  if(q === "720"){
+    // 720p: تصغير من 1080p
+    return APP.orientation === "portrait"
+      ? 720 / 1080
+      : 1280 / 1920;
+  }
+
+  return getQualityMultiplier();
+}
+
+function getExportSize(){
+  const base = getBaseSize();
+  const scale = getRenderScale();
+  return {
+    width: Math.max(2,Math.round(base.width * scale)),
+    height: Math.max(2,Math.round(base.height * scale))
+  };
+}
+
+/* حساب bitrate مناسب حسب الدقة و FPS */
+function getVideoBitrate(width,height,fps){
+  const pixels = width * height;
+  const base = 1920 * 1080;
+  const ratio = pixels / base;
+
+  let bitrate = 12_000_000 * ratio; // 12M عند 1080p
+
+  if(fps >= 50) bitrate *= 1.30;
+  else if(fps >= 40) bitrate *= 1.15;
+
+  return Math.max(4_000_000, Math.min(60_000_000, Math.round(bitrate)));
 }
 
 /* =========================================================
@@ -1021,14 +1087,6 @@ function getForm(){
   };
 }
 
-function escapePromptAttribute(value){
-  return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
-}
-
 /* =========================================================
    PROMPT
 ========================================================= */
@@ -1040,7 +1098,7 @@ function createPrompt(){
   const width = portrait ? 1080 : 1920;
   const height = portrait ? 1920 : 1080;
   const durationMs = data.duration * 1000;
-  const fps = Number($("fps").value) || 24;
+  const fps = Number($("fps").value) || 60;
   const idealScenes = Math.max(6,Math.min(12,Math.round(data.duration / 7)));
 
   const styleMap = {
@@ -1112,11 +1170,32 @@ ${style}
 ${styleSection}
 
 ==================================================
+🎯 الأسماء الحرفية المطلوبة (حرج للفحص والتصدير)
+==================================================
+
+نظام الفحص والتصدير يعتمد على هذين الاسمين حرفيًا:
+
+1) الحاوية الرئيسية:
+   <div id="project-root"> ... </div>
+   — يجب أن تكون موجودة مرة واحدة فقط
+   — يجب أن تحوي كل المشاهد بداخلها
+   — يتم البحث عنها عبر: document.getElementById("project-root")
+
+2) كل مشهد:
+   <section data-scene="N" data-scene-name="..." data-scene-start="MS" data-scene-end="MS">
+   — اسم data-scene حرفي (بالإنجليزية)
+   — الترقيم N يبدأ من 1
+   — data-scene-start و data-scene-end بالميلي ثانية
+   — يتم البحث عنها عبر: document.querySelectorAll("[data-scene]")
+
+⛔ لا تستبدل هذه الأسماء بكلاسات مشابهة (projectRoot, project_root, scene, scene-item ... إلخ).
+⛔ إن فُقد project-root أو data-scene، سيفشل الفحص والتصدير.
+
+==================================================
 📚 بنية المشاهد الإلزامية
 ==================================================
 
 عدد المشاهد المطلوب: ${idealScenes} مشهد بالضبط.
-
 كل مشهد له مدة 6-8 ثوانٍ فقط. لا تمدد مشهدًا لملء الوقت.
 
 البنية القصصية المقترحة:
@@ -1131,7 +1210,6 @@ ${idealScenes}. مشهد ختامي (شكر/رؤية)
 ==================================================
 
 هذه القاعدة غير قابلة للتفاوض:
-
 - كل مشهد يحتوي على 60-90 كلمة عربية فعلية مرئية على الشاشة
 - كل مشهد يحتوي على 3 عناصر معلومة على الأقل (بطاقة، رقم، رسم، جدول)
 - كل مشهد يحتوي على عنصر بصري واحد على الأقل (SVG، مخطط، شكل هندسي)
@@ -1141,6 +1219,55 @@ ${idealScenes}. مشهد ختامي (شكر/رؤية)
 - ضع شريطًا سفليًا يعرض رقم المشهد + اسم المرحلة
 - أضف زخارف خفيفة (شبكة، دوائر، خطوط) تملأ الحواف
 - استخدم أرقامًا كبيرة شفافة (opacity 0.05-0.1) كخلفيات
+
+==================================================
+✅ مثال كامل لمشهد واحد — اتبعه حرفيًا في كل مشهد
+==================================================
+
+<section data-scene="2"
+         data-scene-name="تعريف الطاقة"
+         data-scene-start="7000"
+         data-scene-end="14000"
+         class="scene">
+  <div class="scene-badge" data-role="content">المشهد 2 • التعريف</div>
+  <h2 class="scene-title" data-role="content">ما هي الطاقة؟</h2>
+  <p class="scene-lead" data-role="content">الطاقة هي القدرة على إنجاز شغل أو إحداث تغيير في المادة، وهي المحرك الأساسي لكل تفاعل في الكون.</p>
+  <div class="cards">
+    <div class="card" data-role="content">
+      <span class="num">01</span>
+      <strong>حركية</strong>
+      <p>طاقة الجسم المتحرك، وتزداد بزيادة السرعة والكتلة.</p>
+    </div>
+    <div class="card" data-role="content">
+      <span class="num">02</span>
+      <strong>كامنة</strong>
+      <p>طاقة مخزنة في الجسم بسبب موضعه أو حالته الفيزيائية.</p>
+    </div>
+    <div class="card" data-role="content">
+      <span class="num">03</span>
+      <strong>حرارية</strong>
+      <p>طاقة ناتجة عن حركة جزيئات المادة العشوائية.</p>
+    </div>
+  </div>
+  <svg class="decoration" data-role="content" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="1"/>
+  </svg>
+  <div class="scene-footer" data-role="content">المشهد 2 / ${idealScenes}</div>
+</section>
+
+ثم في window.__PROJECT__.setTime:
+if(timeMs >= 7000 && timeMs < 14000){
+  scene.style.display = "block";
+  const t = (timeMs - 7000) / 7000;
+  const ease = 1 - Math.pow(1 - Math.min(1, t / 0.20), 3);
+  title.style.opacity = ease;
+  title.style.transform = "translateY(" + ((1 - ease) * 24) + "px)";
+  // كل عنصر لاحق بتأخير 100-200ms، بنفس النمط
+  // من 30% إلى 80%: نبض خفيف (scale 1 ↔ 1.02)
+  // آخر 20%: خروج تدريجي (opacity 1 → 0, translateY -20)
+} else {
+  scene.style.display = "none";
+}
 
 ==================================================
 🎬 الحركة — إلزامية بـ setTime فقط
@@ -1166,23 +1293,6 @@ ${idealScenes}. مشهد ختامي (شكر/رؤية)
 - setTimeout/setInterval للحركة
 
 ==================================================
-🖼️ المشهد — التفاصيل التقنية
-==================================================
-
-كل مشهد:
-<section
-  data-scene="N"
-  data-scene-name="..."
-  data-scene-start="MS"
-  data-scene-end="MS"
-  class="scene">
-  ...
-</section>
-
-المشاهد غير النشطة: display:none.
-كل عنصر مهم يحمل data-role="content".
-
-==================================================
 🎯 نظام setTime — إلزامي
 ==================================================
 
@@ -1195,6 +1305,27 @@ window.__PROJECT__ = {
     // 3. لا تعتمد على الوقت الحقيقي
   }
 };
+
+==================================================
+⛔ خصائص CSS التي سيُزيلها النظام تلقائيًا قبل العرض
+==================================================
+
+النظام يعالج CSS الحديثة قبل العرض والتصدير (preprocessModernCSS).
+ستُزال/تُستبدل تلقائيًا هذه الخصائص:
+
+- filter: blur(px)        → تُستبدل بـ radial-gradient / background بديل
+- filter: drop-shadow(...) → يُستبدل بـ box-shadow مكافئ
+- backdrop-filter          → يُستبدل بـ background-color شبه شفاف
+- mask-image / -webkit-mask-image → تُزال بالكامل
+- mix-blend-mode           → يُعاد إلى normal
+- background-clip: text على النصوص العربية → يُستبدل بلون صلب
+- -webkit-text-fill-color: transparent → يُعاد إلى لون صلب
+
+لذلك:
+✅ لا تعتمد على أي من هذه الخصائص لتأثيرات بصرية أساسية
+✅ استخدم بدائل آمنة: box-shadow، radial-gradient، طبقات لونية معتمة، SVG filters داخل <svg>
+✅ إن أردت توهجًا: طبقة دائرية بتدرج لوني شفاف خلف العنصر
+✅ إن أردت ظلًا: box-shadow عادي
 
 ==================================================
 🎨 قواعد التصميم
@@ -1216,12 +1347,11 @@ window.__PROJECT__ = {
 - mask-image
 
 ==================================================
-🎯 قاعدة النص المتدرج
+🎯 قاعدة النص المتدرج على العربية
 ==================================================
 
 لا تستخدم background-clip:text على النصوص العربية
 (لأنه يكسر تشكيل الحروف ويستبدل الخط).
-
 للنصوص العربية استخدم لونًا صلبًا فقط.
 
 ==================================================
@@ -1234,14 +1364,15 @@ HTML واحد كامل يبدأ بـ <!doctype html>.
 لا Markdown، لا شرح خارج HTML.
 
 راجع قبل الإخراج:
-✓ project-root موجود
-✓ ${idealScenes} مشاهد بـ data-scene
+✓ <div id="project-root"> موجود بالاسم الحرفي
+✓ ${idealScenes} مشاهد بـ <section data-scene="N">
 ✓ كل مشهد ≥ 60 كلمة
 ✓ كل مشهد ≥ 5 حركات
 ✓ setTime يعمل
 ✓ لا يعتمد على وقت حقيقي
 ✓ RTL + lang="ar"
 ✓ لا يوجد background-clip:text على العربية
+✓ لا يوجد filter/backdrop-filter/mix-blend-mode/mask-image
 
 أخرج HTML فقط.
 `.trim();
@@ -1395,7 +1526,6 @@ async function loadProject(){
       await waitForResources(doc);
     }
 
-    // ✅ ترتيب صحيح: نُجهّز الحالة أولًا ثم نفعّل
     APP.exportDoc = doc;
     APP.exportWin = win;
     APP.exportRoot = getProjectRoot(doc);
@@ -1404,7 +1534,6 @@ async function loadProject(){
     APP.loaded = true;
     APP.currentTime = 0;
 
-    // ✅ عرض الإطار الأول
     setProjectTimeFast(0, APP.exportAnimations);
     setPlayhead(0);
     updatePlayerTime(0);
@@ -2385,6 +2514,10 @@ async function renderFrame(timeMs,options = {}){
   return rendered;
 }
 
+/* =========================================================
+   TEST FRAMES — 3 إطارات (0% / 50% / 100%)
+========================================================= */
+
 $("test").addEventListener("click",async()=>{
 
   if(!APP.loaded){
@@ -2392,24 +2525,51 @@ $("test").addEventListener("click",async()=>{
     return;
   }
 
-  try{
-    APP.exporting = true;
+  if(APP.exporting) return;
 
+  const btn = $("test");
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "جارٍ إنشاء الإطارات...";
+
+  APP.exporting = true;
+
+  try{
     APP.exportDoc = $("preview").contentDocument;
     APP.exportWin = $("preview").contentWindow;
     APP.exportRoot = getProjectRoot(APP.exportDoc);
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
 
-    setProjectTimeFast(0, APP.exportAnimations);
+    if(!APP.exportRoot) throw new Error("تعذر تحديد مساحة المشروع.");
 
-    const canvas = await renderFrame(0,{
-      doc: APP.exportDoc,
-      root: APP.exportRoot,
-      animations: APP.exportAnimations,
-      scale: getRenderScale()
-    });
+    const times = [
+      { t: 0, label: "البداية (0%)" },
+      { t: Math.round(APP.durationMs * 0.5), label: "المنتصف (50%)" },
+      { t: Math.max(0, Math.round(APP.durationMs) - 1), label: "النهاية (100%)" }
+    ];
 
-    const url = canvas.toDataURL("image/png");
+    // مقياس أصغر لسرعة المعاينة
+    const previewScale = Math.min(0.5, getRenderScale());
+
+    const frames = [];
+    for(const item of times){
+      const canvas = await renderFrame(item.t,{
+        doc: APP.exportDoc,
+        root: APP.exportRoot,
+        animations: APP.exportAnimations,
+        scale: previewScale
+      });
+      frames.push({
+        url: canvas.toDataURL("image/png"),
+        label: item.label
+      });
+    }
+
+    // استعادة وقت العرض إلى الحالة السابقة
+    setProjectTimeFast(APP.currentTime, APP.exportAnimations);
+    setPlayhead(APP.currentTime);
+    updatePlayerTime(APP.currentTime);
+
     const popup = window.open("","_blank");
 
     if(!popup){
@@ -2417,24 +2577,40 @@ $("test").addEventListener("click",async()=>{
       return;
     }
 
-    popup.document.write(
-      "<!doctype html>" +
-      "<title>Frame</title>" +
-      "<style>" +
-      "body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh}" +
-      "img{max-width:100%;height:auto;display:block}" +
-      "</style>" +
-      "<img src='" + url + "'>"
-    );
+    const html = '<!doctype html>' +
+      '<html lang="ar" dir="rtl"><head><meta charset="UTF-8">' +
+      '<title>اختبار الإطارات</title>' +
+      '<style>' +
+      'body{margin:0;background:#0d1117;color:#eef5f4;font-family:Tajawal,system-ui,sans-serif;padding:22px}' +
+      'h1{font-size:15px;margin:0 0 18px;color:#e3ca7c;font-weight:900}' +
+      '.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}' +
+      '@media(max-width:800px){.grid{grid-template-columns:1fr}}' +
+      '.card{background:#161b22;border:1px solid #2a323d;border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.35)}' +
+      '.card img{width:100%;height:auto;display:block;background:#000}' +
+      '.card .label{padding:10px 12px;font-size:12px;color:#c9a85a;text-align:center;font-weight:800;border-top:1px solid #2a323d}' +
+      '.note{margin-top:18px;color:#8ea4a8;font-size:11px;line-height:1.8}' +
+      '</style></head><body>' +
+      '<h1>اختبار 3 إطارات • ' + escapeHTML(APP.title || "مشروع") + '</h1>' +
+      '<div class="grid">' +
+      frames.map(function(f){
+        return '<div class="card"><img src="' + f.url + '" alt=""><div class="label">' + escapeHTML(f.label) + '</div></div>';
+      }).join("") +
+      '</div>' +
+      '<div class="note">استخدم هذه الإطارات لاكتشاف مشاكل مثل: نص خارج الحدود، خط لم يُحمّل في مشهد متأخر، عنصر مفقود في نهاية المشروع.</div>' +
+      '</body></html>';
+
+    popup.document.write(html);
     popup.document.close();
 
-    toast("تم إنشاء الإطار","success",2000);
+    toast("تم إنشاء 3 إطارات بنجاح","success",2500);
 
   }catch(error){
     console.error(error);
-    toast("فشل اختبار Frame: " + error.message,"error",6000);
+    toast("فشل اختبار الإطارات: " + (error.message || String(error)),"error",6000);
   }finally{
     APP.exporting = false;
+    btn.disabled = false;
+    btn.textContent = originalText;
   }
 });
 
@@ -2466,10 +2642,15 @@ function getSupportedVideoMimeType(){
   return null;
 }
 
+/* يظهر فقط على Safari المكتبي */
 function showSafariNote(){
-  if(isSafariBrowser()){
-    const el = $("safariNote");
-    if(el) el.style.display = "block";
+  const el = $("safariNote");
+  if(!el) return;
+
+  if(isSafariBrowser() && !isMobileDevice()){
+    el.style.display = "block";
+  }else{
+    el.style.display = "none";
   }
 }
 
@@ -2479,9 +2660,11 @@ function updateExportSystemUI(){
 
   const act = $("activateRecording");
   const badge = $("systemBadge");
+  const note = $("desktopOnlyNote");
 
   if(act){
-    act.style.display = system === "captureStream" ? "block" : "none";
+    const showAct = system === "captureStream" && APP.captureStreamAvailable;
+    act.style.display = showAct ? "block" : "none";
   }
 
   if(badge){
@@ -2494,9 +2677,16 @@ function updateExportSystemUI(){
     }
   }
 
+  if(note){
+    const showNote = !APP.captureStreamAvailable && system === "html2canvas";
+    note.classList.toggle("show", showNote);
+  }
+
   if(system === "captureStream"){
     showSafariNote();
-    checkEnvironment();
+  }else{
+    const el = $("safariNote");
+    if(el) el.style.display = "none";
   }
 }
 
@@ -2516,20 +2706,23 @@ $("activateRecording").addEventListener("click",async()=>{
     return;
   }
 
-  // ✅ تحقق شامل من البيئة
+  if(!APP.captureStreamAvailable){
+    toast("التسجيل الحي غير متاح على هذا الجهاز — استخدم html2canvas","warn",6000);
+    return;
+  }
+
   if(!isSecureEnv()){
     toast(
       "الصفحة مفتوحة عبر " + location.protocol + "//" +
       " — تسجيل الشاشة يتطلب https:// أو http://localhost",
       "error", 8000
     );
-    checkEnvironment();
     return;
   }
 
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+  if(!supportsDisplayMedia()){
     toast(
-      "متصفحك لا يدعم getDisplayMedia. جرّب Chrome أو Safari الحديث، أو استخدم html2canvas.",
+      "متصفحك لا يدعم getDisplayMedia. استخدم html2canvas.",
       "error", 8000
     );
     return;
@@ -2639,16 +2832,25 @@ function createVideoFormat(lib,codec){
   return { format: new lib.WebMOutputFormat(), isMP4: false };
 }
 
-function createCanvasSource(lib,canvas,codec){
+function createCanvasSource(lib,canvas,codec,options){
+  const opts = options || {};
+  const bitrate = opts.bitrate || 12_000_000;
+  const keyFrameInterval = opts.keyFrameInterval || 2;
+
   try{
     return new lib.CanvasSource(canvas,{
       codec,
-      bitrate: 8_000_000,
-      keyFrameInterval: 2
+      bitrate,
+      keyFrameInterval
     });
   }catch(error){
-    console.warn("[CanvasSource] fallback",error);
-    return new lib.CanvasSource(canvas,{ codec });
+    console.warn("[CanvasSource] fallback to minimal options",error);
+    try{
+      return new lib.CanvasSource(canvas,{ codec });
+    }catch(error2){
+      console.warn("[CanvasSource] second fallback",error2);
+      return new lib.CanvasSource(canvas,{});
+    }
   }
 }
 
@@ -2657,7 +2859,7 @@ function createCanvasSource(lib,canvas,codec){
 ========================================================= */
 
 $("export").addEventListener("click",async()=>{
-  if(APP.exportSystem === "captureStream"){
+  if(APP.exportSystem === "captureStream" && APP.captureStreamAvailable){
     await exportViaCaptureStream();
   }else{
     await exportViaHtml2Canvas();
@@ -2665,8 +2867,15 @@ $("export").addEventListener("click",async()=>{
 });
 
 /* =========================================================
-   EXPORT A — html2canvas
+   EXPORT A — html2canvas (مع fallback تلقائي للجودة)
 ========================================================= */
+
+function buildQualityFallbackChain(original){
+  const order = ["x2","x1.5","native","720"];
+  const idx = order.indexOf(original);
+  if(idx === -1) return [original,"720"];
+  return order.slice(idx);
+}
 
 async function exportViaHtml2Canvas(){
 
@@ -2698,6 +2907,61 @@ async function exportViaHtml2Canvas(){
     APP.exportObjectURL = null;
   }
 
+  const originalQuality = $("quality").value;
+  const chain = buildQualityFallbackChain(originalQuality);
+
+  let lastError = null;
+  let succeeded = false;
+
+  for(let attempt = 0; attempt < chain.length; attempt++){
+
+    if(APP.stop) break;
+
+    const q = chain[attempt];
+
+    if(attempt > 0){
+      $("quality").value = q;
+      toast("فشل الترميز — إعادة المحاولة تلقائيًا بجودة أقل (" + q + ")","warn",6000);
+      updateProgress(0,"إعادة المحاولة بجودة " + q + "...");
+      await sleep(600);
+      if(APP.stop) break;
+    }
+
+    try{
+      await runHtml2CanvasExportOnce();
+      succeeded = true;
+      lastError = null;
+      break;
+    }catch(error){
+      lastError = error;
+      if(error && error.message === "تم إيقاف التصدير.") break;
+      console.warn("[export] attempt failed:",error);
+    }
+  }
+
+  $("quality").value = originalQuality;
+
+  if(!succeeded && lastError){
+    if(lastError.message !== "تم إيقاف التصدير."){
+      toast("فشل التصدير: " + (lastError.message || String(lastError)),"error",8000);
+      updateProgress(0,"فشل التصدير");
+    }else{
+      updateProgress(0,"تم إيقاف التصدير");
+    }
+  }
+
+  APP.exporting = false;
+  APP.exportDoc = null;
+  APP.exportWin = null;
+  APP.exportRoot = null;
+  APP.exportAnimations = [];
+
+  $("export").style.display = "block";
+  $("stop").style.display = "none";
+}
+
+async function runHtml2CanvasExportOnce(){
+
   let output = null;
   let source = null;
 
@@ -2722,7 +2986,7 @@ async function exportViaHtml2Canvas(){
       throw new Error("مكونات Mediabunny ناقصة.");
     }
 
-    const fps = Math.max(1,Number($("fps").value) || 24);
+    const fps = Math.max(1,Number($("fps").value) || 60);
     const exportSize = getExportSize();
     const baseSize = getBaseSize();
     const renderScale = getRenderScale();
@@ -2744,10 +3008,14 @@ async function exportViaHtml2Canvas(){
     context.fillStyle = "#000";
     context.fillRect(0,0,exportSize.width,exportSize.height);
 
-    source = createCanvasSource(lib,canvas,codec);
+    const bitrate = getVideoBitrate(exportSize.width,exportSize.height,fps);
+
+    source = createCanvasSource(lib,canvas,codec,{ bitrate, keyFrameInterval:2 });
     output.addVideoTrack(source,{ frameRate: fps });
 
-    $("formatInfo").textContent = isMP4 ? "MP4 / H.264" : "WebM / " + codec.toUpperCase();
+    $("formatInfo").textContent = isMP4
+      ? "MP4 / H.264 • " + exportSize.width + "×" + exportSize.height
+      : "WebM / " + codec.toUpperCase() + " • " + exportSize.width + "×" + exportSize.height;
 
     updateProgress(5,"تهيئة الفيديو...");
     await output.start();
@@ -2757,7 +3025,7 @@ async function exportViaHtml2Canvas(){
     const root = APP.exportRoot;
     const animations = APP.exportAnimations;
 
-    toast("بدء التصدير: " + totalFrames + " إطار","info",3000);
+    toast("بدء التصدير: " + totalFrames + " إطار • " + exportSize.width + "×" + exportSize.height,"info",3500);
 
     for(let i = 0; i < totalFrames; i++){
 
@@ -2824,7 +3092,8 @@ async function exportViaHtml2Canvas(){
     link.className = "btn primary";
     link.href = APP.exportObjectURL;
     link.download = safeFileName(APP.title || "مشروع-موشن") + "." + (isMP4 ? "mp4" : "webm");
-    link.textContent = "حفظ " + (isMP4 ? "MP4" : "WebM");
+    link.textContent = "حفظ " + (isMP4 ? "MP4" : "WebM") +
+      " (" + (blob.size/1024/1024).toFixed(1) + " MB)";
 
     $("download").innerHTML = "";
     $("download").appendChild(link);
@@ -2839,22 +3108,7 @@ async function exportViaHtml2Canvas(){
     try{ if(output && typeof output.cancel === "function") await output.cancel(); }catch{}
     try{ if(source && typeof source.close === "function") await source.close(); }catch{}
 
-    if(error && error.message === "تم إيقاف التصدير."){
-      updateProgress(0,"تم إيقاف التصدير");
-    }else{
-      toast("فشل التصدير: " + (error && error.message ? error.message : String(error)),"error",8000);
-      updateProgress(0,"فشل التصدير");
-    }
-
-  }finally{
-    APP.exporting = false;
-    APP.exportDoc = null;
-    APP.exportWin = null;
-    APP.exportRoot = null;
-    APP.exportAnimations = [];
-
-    $("export").style.display = "block";
-    $("stop").style.display = "none";
+    throw error;
   }
 }
 
@@ -2871,18 +3125,21 @@ async function exportViaCaptureStream(){
     return;
   }
 
-  // ✅ تحقق شامل من البيئة قبل المتابعة
+  if(!APP.captureStreamAvailable){
+    toast("التسجيل الحي غير متاح على هذا الجهاز — استخدم html2canvas","warn",8000);
+    return;
+  }
+
   if(!isSecureEnv()){
     toast(
       "الصفحة مفتوحة عبر " + location.protocol +
       " — تسجيل الشاشة يتطلب https:// أو http://localhost",
       "error", 8000
     );
-    checkEnvironment();
     return;
   }
 
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+  if(!supportsDisplayMedia()){
     toast("متصفحك لا يدعم getDisplayMedia — استخدم html2canvas","error",8000);
     return;
   }
@@ -2946,7 +3203,7 @@ async function exportViaCaptureStream(){
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
 
     const exportSize = getExportSize();
-    const fps = Math.max(1,Number($("fps").value) || 24);
+    const fps = Math.max(1,Number($("fps").value) || 60);
 
     const canvas = document.createElement("canvas");
     canvas.width = exportSize.width;
@@ -3049,9 +3306,9 @@ async function exportViaCaptureStream(){
 
     if(capturedAudio.length === 0){
       const cont = confirm(
-        "⚠️ تنبيه:\n\nلم يتم اكتشاف مسار صوتي.\n" +
-        "قد يكون المتصفح لم يمنح صلاحية مشاركة صوت التبويب.\n\n" +
-        "الفيديو سيُصدَّر بدون صوت. هل تريد المتابعة؟"
+        "⚠️ لم يتم اكتشاف مسار صوتي.\n\n" +
+        "قد لا يكون المتصفح قد منح صلاحية مشاركة صوت التبويب، أو أن التبويب الحالي لا يحتوي صوتًا.\n\n" +
+        "سيُصدَّر الفيديو بدون صوت. هل تريد المتابعة؟"
       );
       if(!cont) throw new Error("تم إلغاء التسجيل — لا يوجد صوت.");
     }
@@ -3069,9 +3326,11 @@ async function exportViaCaptureStream(){
 
     const chunks = [];
 
+    const recBitrate = getVideoBitrate(exportSize.width, exportSize.height, fps);
+
     recorder = new MediaRecorder(canvasStream,{
       mimeType: usedMime,
-      videoBitsPerSecond: 8_000_000,
+      videoBitsPerSecond: recBitrate,
       audioBitsPerSecond: 192_000
     });
 
@@ -3153,7 +3412,8 @@ async function exportViaCaptureStream(){
     link.className = "btn primary";
     link.href = APP.exportObjectURL;
     link.download = safeFileName(APP.title || "مشروع-موشن") + "." + ext;
-    link.textContent = "حفظ " + ext.toUpperCase();
+    link.textContent = "حفظ " + ext.toUpperCase() +
+      " (" + (blob.size/1024/1024).toFixed(1) + " MB)";
 
     $("download").innerHTML = "";
     $("download").appendChild(link);
@@ -3317,22 +3577,21 @@ document.addEventListener("keydown",(event)=>{
    INIT
 ========================================================= */
 
+setupExportSystemOptions();
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
 updateExportSystemUI();
 showSafariNote();
-checkEnvironment();
-
-// فحص دوري للبيئة (في حال تغيّر شيء)
-setInterval(checkEnvironment, 5000);
 
 console.log(
   "[Platform] Environment:",
   {
     protocol: location.protocol,
     isSecureContext: window.isSecureContext,
-    hasMediaDevices: !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia),
-    hasMediaRecorder: typeof MediaRecorder !== "undefined"
+    isMobile: isMobileDevice(),
+    hasDisplayMedia: supportsDisplayMedia(),
+    hasMediaRecorder: typeof MediaRecorder !== "undefined",
+    captureStreamAvailable: APP.captureStreamAvailable
   }
 );
 
