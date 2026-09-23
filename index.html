@@ -518,6 +518,28 @@ button:disabled{opacity:.5;cursor:not-allowed}
   text-align:left
 }
 
+.export-system{
+  display:grid;
+  gap:6px;
+  margin-bottom:9px;
+}
+
+.export-system label{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.export-system select{
+  width:100%;
+  border:1px solid var(--line);
+  background:#071114;
+  color:#fff;
+  border-radius:10px;
+  padding:9px;
+  outline:0;
+  font-size:10px;
+}
+
 .export-settings{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -540,6 +562,50 @@ button:disabled{opacity:.5;cursor:not-allowed}
   padding:9px;
   outline:0;
   font-size:10px
+}
+
+.safari-note{
+  display:none;
+  padding:9px;
+  background:rgba(201,168,90,.08);
+  border:1px solid rgba(201,168,90,.25);
+  border-radius:9px;
+  color:#d7c38c;
+  font-size:9px;
+  line-height:1.7;
+  margin-top:9px;
+}
+
+.capture-badge{
+  display:none;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  background:rgba(73,200,155,.1);
+  border:1px solid rgba(73,200,155,.3);
+  border-radius:999px;
+  color:#8ee0c1;
+  font-size:9px;
+  margin-top:8px;
+}
+
+.capture-badge.show{display:inline-flex}
+
+.capture-badge i{
+  width:6px;height:6px;border-radius:50%;
+  background:#49c89b;
+  animation:blink 1.2s infinite;
+}
+
+@keyframes blink{50%{opacity:.3}}
+
+@keyframes pulseGold{
+  0%,100%{box-shadow:0 0 0 0 rgba(201,168,90,.4)}
+  50%{box-shadow:0 0 0 8px rgba(201,168,90,0)}
+}
+
+.btn.pulse{
+  animation:pulseGold 1.6s ease-in-out infinite;
 }
 
 .validation{
@@ -1112,34 +1178,57 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
         <h3>إعدادات التصدير</h3>
 
+        <div class="export-system">
+          <label>نظام التصدير</label>
+          <select id="exportSystem">
+            <option value="html2canvas" selected>
+              html2canvas + Mediabunny (الأساسي)
+            </option>
+            <option value="captureStream">
+              تسجيل حي captureStream (Safari)
+            </option>
+          </select>
+        </div>
+
         <div class="export-settings">
 
           <div>
-
             <label>الجودة</label>
-
             <select id="quality">
               <option value="720">720p — أسرع</option>
               <option value="native" selected>الدقة الأصلية</option>
             </select>
-
           </div>
 
           <div>
-
             <label>الإطارات</label>
-
             <select id="fps">
               <option value="24" selected>24 FPS — موصى به</option>
               <option value="30">30 FPS</option>
               <option value="60">60 FPS</option>
             </select>
-
           </div>
 
         </div>
 
+        <div class="capture-badge" id="captureBadge">
+          <i></i><span>التسجيل الحي مفعّل</span>
+        </div>
+
+        <div class="safari-note" id="safariNote">
+          تنبيه Safari: سيطلب المتصفح إذن مشاركة الشاشة.
+          اختر «مشاركة هذا التبويب» وليس الشاشة كاملة.
+          لا تُغيّر التبويب أثناء التسجيل.
+          مدة التصدير ستساوي مدة الفيديو الفعلية.
+        </div>
+
         <div style="height:9px"></div>
+
+        <button class="btn green" id="activateRecording" style="display:none;">
+          تفعيل صلاحية التسجيل
+        </button>
+
+        <div style="height:7px"></div>
 
         <button class="btn" id="test">
           اختبار Frame
@@ -1149,6 +1238,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
         <button class="btn primary" id="export">
           تصدير الفيديو
+        </button>
+
+        <div style="height:7px"></div>
+
+        <button class="btn" id="quickExport">
+          معاينة سريعة (720p / 12fps)
         </button>
 
         <button
@@ -1307,7 +1402,15 @@ const APP = {
     frames:0,
     renderMs:0,
     encodeMs:0
-  }
+  },
+
+  exportSystem:"html2canvas",
+
+  captureStream:null,
+
+  recordingStart:0,
+
+  quickMode:false
 
 };
 
@@ -1694,6 +1797,17 @@ ${data.extra || "لا توجد"}
 لا تجعل جميع المشاهد متشابهة.
 
 ==================================================
+الحد الأدنى الإلزامي للمحتوى
+==================================================
+
+- عدد المشاهد: 6-8 مشاهد.
+- كل مشهد: 40-70 كلمة عربية فعلية كحد أدنى (نص حقيقي لا عناوين فقط).
+- كل مشهد: 3 عناصر معلومة على الأقل (نقاط/أرقام/أمثلة).
+- كل مشهد: عنصر بصري واحد على الأقل (رسم/أيقونة/رقم كبير/مخطط).
+
+هذا الحد إلزامي. أي مشهد أقل من ذلك يُعد ناقصًا ويجب إعادة بنائه.
+
+==================================================
 ROOT CONTAINER — مهم جدًا للأداء
 ==================================================
 
@@ -1752,6 +1866,17 @@ MOTION
 
 لا تستخدم حركة سريعة أو مزعجة.
 
+كل مشهد يجب أن يحتوي على 4-6 حركات دخول متتابعة (staggered).
+
+استخدم مزيجًا من:
+- fade + translateY(20-40px)
+- scale من 0.9 إلى 1
+- رسم خطوط عبر stroke-dashoffset
+- عدادات أرقام متصاعدة
+
+استخدم Web Animations API (element.animate) كآلية أساسية
+للحركة حتى يبقى التحكم بالزمن دقيقًا ومتوافقًا مع setTime.
+
 ==================================================
 LAYOUT
 ==================================================
@@ -1771,6 +1896,18 @@ LAYOUT
 absolute مسموح للزخارف والخلفيات فقط.
 
 ضع data-role="content" على كل عنصر أساسي يحمل معلومة مهمة في كل مشهد.
+
+==================================================
+نظام المسافات والطباعة — إلزامي
+==================================================
+
+- مقياس مسافات ثابت: 8 / 16 / 24 / 32 / 48 / 64 px.
+- padding خارجي للمشهد لا يقل عن 5% من أبعاد project-root.
+- line-height بين 1.6 و1.9 للنصوص العادية.
+- مسافة لا تقل عن 16px بين أي عنصرين نصيين متجاورين.
+- max-width للفقرات لا يتجاوز 70% من عرض المشهد.
+- منع ترك أكثر من 20% من مساحة أي مشهد فارغة، مع بدائل محددة لملء الفراغ:
+  زخرفة، رقم كبير شفاف، عنصر معلومة إضافي، مخطط صغير.
 
 ==================================================
 قواعد الأداء — إلزامية جدًا
@@ -2116,6 +2253,9 @@ HTML
 - عدم استخدام mix-blend-mode
 - المشاهد غير النشطة display:none
 - المشروع كامل داخل project-root
+- عدم وجود فراغ يتجاوز 20% من مساحة أي مشهد
+- كل مشهد فيه 40 كلمة على الأقل
+- كل مشهد فيه 4 حركات دخول منفصلة على الأقل
 
 أخرج HTML فقط.
 
@@ -2924,7 +3064,6 @@ function convertGradientTextToSVG(
   const bgImage =
     styles.backgroundImage || "";
 
-  // ⚡ إصلاح: regex صحيح لاستخراج الألوان من التدرج
   const colors =
     bgImage.match(
       /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
@@ -3257,7 +3396,6 @@ function preprocessModernCSS(
       const bg =
         styles.backgroundImage || "";
 
-      // ⚡ إصلاح: regex صحيح لاستخراج الألوان
       const cols =
         bg.match(
           /(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g
@@ -3356,7 +3494,6 @@ function preprocessModernCSS(
       (styles.filter || "")
         .toLowerCase();
 
-    // ⚡ إصلاح: regex صحيح لـ blur
     const blurMatch =
       filter.match(
         /blur\((\d+(?:\.\d+)?)px\)/i
@@ -3401,7 +3538,6 @@ function preprocessModernCSS(
       Drop shadow
     */
 
-    // ⚡ إصلاح: regex صحيح لـ drop-shadow
     const dm =
       filter.match(
         /drop-shadow\(([^)]+)\)/i
@@ -3582,6 +3718,10 @@ function preprocessModernCSS(
 
   }
 
+  try{
+    if(doc) doc.__preprocessed = true;
+  }catch{}
+
   return stats;
 
 }
@@ -3625,10 +3765,18 @@ async function waitForResources(doc){
 
   }catch{}
 
-  preprocessModernCSS(
-    doc,
-    win
-  );
+  if(!doc.__preprocessed){
+
+    preprocessModernCSS(
+      doc,
+      win
+    );
+
+    try{
+      doc.__preprocessed = true;
+    }catch{}
+
+  }
 
   try{
 
@@ -4745,7 +4893,7 @@ $("clear")
 
 
 /* =========================================================
-   FAST FRAME RENDERER
+   FAST FRAME RENDERER (html2canvas)
 ========================================================= */
 
 async function renderFrame(
@@ -4964,7 +5112,249 @@ $("test")
 
 
 /* =========================================================
-   CODEC DETECTION
+   SAFARI / CODEC DETECTION
+========================================================= */
+
+function isSafariBrowser(){
+
+  const ua =
+    navigator.userAgent || "";
+
+  return /^((?!chrome|android|crios|fxios|edgios).)*safari/i
+    .test(ua);
+
+}
+
+
+function getSupportedVideoMimeType(){
+
+  if(typeof MediaRecorder === "undefined")
+    return null;
+
+  const candidates = [
+
+    "video/mp4;codecs=avc1.42E01E",
+    "video/mp4;codecs=h264",
+    "video/mp4",
+
+    "video/webm;codecs=vp9",
+    "video/webm;codecs=vp8",
+    "video/webm"
+
+  ];
+
+  for(const type of candidates){
+
+    try{
+
+      if(
+        MediaRecorder.isTypeSupported(
+          type
+        )
+      ){
+        return type;
+      }
+
+    }catch{}
+
+  }
+
+  return null;
+
+}
+
+
+function showSafariNote(){
+
+  if(isSafariBrowser()){
+
+    const el =
+      $("safariNote");
+
+    if(el){
+      el.style.display =
+        "block";
+    }
+
+  }
+
+}
+
+
+function updateExportSystemUI(){
+
+  const system =
+    $("exportSystem").value;
+
+  APP.exportSystem =
+    system;
+
+  const act =
+    $("activateRecording");
+
+  if(act){
+
+    act.style.display =
+      system === "captureStream"
+        ? "block"
+        : "none";
+
+  }
+
+  if(system === "captureStream"){
+
+    showSafariNote();
+
+  }
+
+}
+
+
+$("exportSystem")
+  .addEventListener(
+    "change",
+    updateExportSystemUI
+  );
+
+
+/* =========================================================
+   ACTIVATE RECORDING PERMISSION
+========================================================= */
+
+$("activateRecording")
+.addEventListener(
+  "click",
+  async()=>{
+
+    const btn =
+      $("activateRecording");
+
+    if(APP.captureStream){
+
+      btn.textContent =
+        "✓ صلاحية التسجيل مفعّلة";
+
+      btn.classList.remove("pulse");
+
+      return;
+
+    }
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices
+        .getDisplayMedia
+    ){
+
+      alert(
+        "متصفحك لا يدعم تسجيل الشاشة."
+      );
+
+      return;
+
+    }
+
+    btn.classList.add("pulse");
+
+    try{
+
+      const stream =
+        await navigator.mediaDevices
+          .getDisplayMedia({
+
+            video:{
+              frameRate:30
+            },
+
+            audio:true
+
+          });
+
+      APP.captureStream =
+        stream;
+
+      btn.textContent =
+        "✓ صلاحية التسجيل مفعّلة";
+
+      btn.classList.remove("pulse");
+
+      const badge =
+        $("captureBadge");
+
+      if(badge)
+        badge.classList.add("show");
+
+      try{
+
+        const win =
+          $("preview").contentWindow;
+
+        if(
+          win &&
+          win.AudioContext &&
+          win.__audioContext &&
+          win.__audioContext.state ===
+            "suspended"
+        ){
+
+          await win.__audioContext
+            .resume();
+
+        }
+
+      }catch{}
+
+      const track =
+        stream.getVideoTracks()[0];
+
+      if(track){
+
+        track.addEventListener(
+          "ended",
+          ()=>{
+
+            APP.captureStream =
+              null;
+
+            btn.textContent =
+              "تفعيل صلاحية التسجيل";
+
+            const b =
+              $("captureBadge");
+
+            if(b)
+              b.classList.remove("show");
+
+          }
+        );
+
+      }
+
+    }catch(error){
+
+      btn.classList.remove("pulse");
+
+      if(
+        error &&
+        error.name ===
+          "AbortError"
+      ){
+        return;
+      }
+
+      alert(
+        "فشل تفعيل التسجيل:\n" +
+        (error.message || error)
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   CODEC DETECTION (Mediabunny)
 ========================================================= */
 
 async function findBestCodec(
@@ -5146,7 +5536,7 @@ function createVideoFormat(
 
 
 /* =========================================================
-   QUALITY / ENCODING CONFIG
+   CANVAS SOURCE
 ========================================================= */
 
 function createCanvasSource(
@@ -5186,20 +5576,42 @@ function createCanvasSource(
 
 
 /* =========================================================
-   EXPORT VIDEO
+   EXPORT ROUTER
 ========================================================= */
 
-$("export")
-.addEventListener(
+$("export").addEventListener(
   "click",
-  exportVideo
+  async()=>{
+    APP.quickMode = false;
+    if(APP.exportSystem === "captureStream"){
+      await exportViaCaptureStream(false);
+    }else{
+      await exportViaHtml2Canvas(false);
+    }
+  }
 );
 
 
-async function exportVideo(){
+$("quickExport").addEventListener(
+  "click",
+  async()=>{
+    APP.quickMode = true;
+    if(APP.exportSystem === "captureStream"){
+      await exportViaCaptureStream(true);
+    }else{
+      await exportViaHtml2Canvas(true);
+    }
+  }
+);
 
-  if(APP.exporting)
-    return;
+
+/* =========================================================
+   EXPORT A — html2canvas + Mediabunny (الأساسي)
+========================================================= */
+
+async function exportViaHtml2Canvas(quick){
+
+  if(APP.exporting) return;
 
   if(!APP.loaded){
 
@@ -5212,11 +5624,8 @@ async function exportVideo(){
   }
 
 
-  APP.exporting =
-    true;
-
-  APP.stop =
-    false;
+  APP.exporting = true;
+  APP.stop = false;
 
   APP.exportStats = {
     frames:0,
@@ -5225,21 +5634,11 @@ async function exportVideo(){
   };
 
 
-  $("export")
-    .style.display =
-      "none";
-
-  $("stop")
-    .style.display =
-      "block";
-
-  $("progressWrap")
-    .classList
-    .add("show");
-
-  $("download")
-    .classList
-    .remove("show");
+  $("export").style.display = "none";
+  $("quickExport").style.display = "none";
+  $("stop").style.display = "block";
+  $("progressWrap").classList.add("show");
+  $("download").classList.remove("show");
 
 
   updateProgress(
@@ -5251,21 +5650,19 @@ async function exportVideo(){
   if(APP.exportObjectURL){
 
     try{
-
       URL.revokeObjectURL(
         APP.exportObjectURL
       );
-
     }catch{}
 
-    APP.exportObjectURL =
-      null;
+    APP.exportObjectURL = null;
 
   }
 
 
   let output = null;
   let source = null;
+
 
   try{
 
@@ -5275,18 +5672,15 @@ async function exportVideo(){
     );
 
     await waitForResources(
-      $("preview")
-        .contentDocument
+      $("preview").contentDocument
     );
 
 
     APP.exportDoc =
-      $("preview")
-        .contentDocument;
+      $("preview").contentDocument;
 
     APP.exportWin =
-      $("preview")
-        .contentWindow;
+      $("preview").contentWindow;
 
     APP.exportRoot =
       getProjectRoot(
@@ -5310,9 +5704,7 @@ async function exportVideo(){
 
 
     const lib =
-      await waitForMediabunny(
-        20000
-      );
+      await waitForMediabunny(20000);
 
 
     const {
@@ -5336,16 +5728,24 @@ async function exportVideo(){
 
 
     const fps =
-      Math.max(
-        1,
-        Number(
-          $("fps").value
-        ) || 24
-      );
+      quick
+        ? 12
+        : Math.max(
+            1,
+            Number(
+              $("fps").value
+            ) || 24
+          );
 
 
     const exportSize =
-      getExportSize();
+      quick
+        ? (
+            APP.orientation === "portrait"
+              ? {width:720,height:1280}
+              : {width:1280,height:720}
+          )
+        : getExportSize();
 
 
     const baseSize =
@@ -5353,7 +5753,14 @@ async function exportVideo(){
 
 
     const renderScale =
-      getRenderScale();
+      quick
+        ? Math.min(
+            exportSize.width /
+              baseSize.width,
+            exportSize.height /
+              baseSize.height
+          )
+        : getRenderScale();
 
 
     updateProgress(
@@ -5374,11 +5781,10 @@ async function exportVideo(){
     const {
       format,
       isMP4
-    } =
-      createVideoFormat(
-        lib,
-        codec
-      );
+    } = createVideoFormat(
+      lib,
+      codec
+    );
 
 
     const target =
@@ -5404,13 +5810,10 @@ async function exportVideo(){
       exportSize.height;
 
 
-    // ⚡ إصلاح: إزالة desynchronized لتفادي مشاكل Safari
     const context =
       canvas.getContext(
         "2d",
-        {
-          alpha:false
-        }
+        {alpha:false}
       );
 
 
@@ -5423,8 +5826,7 @@ async function exportVideo(){
     }
 
 
-    context.fillStyle =
-      "#000";
+    context.fillStyle = "#000";
 
     context.fillRect(
       0,
@@ -5450,12 +5852,11 @@ async function exportVideo(){
     );
 
 
-    $("formatInfo")
-      .textContent =
-        isMP4
-          ? "MP4 / H.264"
-          : "WebM / " +
-            codec.toUpperCase();
+    $("formatInfo").textContent =
+      isMP4
+        ? "MP4 / H.264"
+        : "WebM / " +
+          codec.toUpperCase();
 
 
     updateProgress(
@@ -5471,21 +5872,14 @@ async function exportVideo(){
       Math.max(
         1,
         Math.ceil(
-          (
-            APP.durationMs /
-            1000
-          ) * fps
+          (APP.durationMs / 1000) *
+          fps
         )
       );
 
 
-    const frameDuration =
-      1 / fps;
-
-
-    const root =
-      APP.exportRoot;
-
+    const frameDuration = 1 / fps;
+    const root = APP.exportRoot;
     const animations =
       APP.exportAnimations;
 
@@ -5569,12 +5963,8 @@ async function exportVideo(){
         );
 
 
-      const renderEnd =
-        performance.now();
-
-
       APP.exportStats.renderMs +=
-        renderEnd -
+        performance.now() -
         renderStart;
 
 
@@ -5614,12 +6004,8 @@ async function exportVideo(){
       );
 
 
-      const encodeEnd =
-        performance.now();
-
-
       APP.exportStats.encodeMs +=
-        encodeEnd -
+        performance.now() -
         encodeStart;
 
 
@@ -5636,15 +6022,9 @@ async function exportVideo(){
         ) === 0
       ){
 
-        const percent =
-          (
-            (i + 1) /
-            totalFrames
-          ) * 100;
-
-
         updateProgress(
-          percent,
+          ((i + 1) /
+            totalFrames) * 100,
           "تصدير " +
           (i + 1) +
           " / " +
@@ -5663,17 +6043,8 @@ async function exportVideo(){
     ){
 
       try{
-
         await source.close();
-
-      }catch(error){
-
-        console.warn(
-          "[CanvasSource.close]",
-          error
-        );
-
-      }
+      }catch{}
 
     }
 
@@ -5709,23 +6080,16 @@ async function exportVideo(){
     const blob =
       new Blob(
         [buffer],
-        {
-          type:mime
-        }
+        {type:mime}
       );
 
 
     APP.exportObjectURL =
-      URL.createObjectURL(
-        blob
-      );
+      URL.createObjectURL(blob);
 
 
     const link =
-      document.createElement(
-        "a"
-      );
-
+      document.createElement("a");
 
     link.className =
       "btn primary";
@@ -5735,85 +6099,39 @@ async function exportVideo(){
 
     link.download =
       safeFileName(
-        APP.title ||
-        "مشروع-موشن"
+        APP.title || "مشروع-موشن"
       ) +
       "." +
-      (
-        isMP4
-          ? "mp4"
-          : "webm"
-      );
-
-
-    const renderAverage =
-      APP.exportStats
-        .renderMs /
-      Math.max(
-        1,
-        APP.exportStats.frames
-      );
-
+      (isMP4 ? "mp4" : "webm");
 
     link.textContent =
       "حفظ " +
-      (
-        isMP4
-          ? "MP4"
-          : "WebM"
-      );
+      (isMP4 ? "MP4" : "WebM");
 
 
-    $("download")
-      .innerHTML = "";
-
-
-    $("download")
-      .appendChild(
-        link
-      );
-
-
-    $("download")
-      .classList
-      .add("show");
+    $("download").innerHTML = "";
+    $("download").appendChild(link);
+    $("download").classList.add("show");
 
 
     updateProgress(
       100,
       "اكتمل التصدير • " +
       APP.exportStats.frames +
-      " Frame • متوسط الرسم " +
-      renderAverage.toFixed(0) +
-      "ms"
+      " Frame"
     );
 
 
     console.log(
-      "[EXPORT COMPLETE]",
+      "[EXPORT html2canvas COMPLETE]",
       {
         frames:
           APP.exportStats.frames,
-
-        renderMs:
-          APP.exportStats.renderMs,
-
-        encodeMs:
-          APP.exportStats.encodeMs,
-
-        averageRenderMs:
-          renderAverage,
-
         codec,
-
-        format:
-          isMP4
-            ? "MP4"
-            : "WebM",
-
+        isMP4,
         exportSize,
-
-        renderScale
+        renderScale,
+        quick
       }
     );
 
@@ -5827,32 +6145,24 @@ async function exportVideo(){
 
 
     try{
-
       if(
         output &&
         typeof output.cancel ===
           "function"
       ){
-
         await output.cancel();
-
       }
-
     }catch{}
 
 
     try{
-
       if(
         source &&
         typeof source.close ===
           "function"
       ){
-
         await source.close();
-
       }
-
     }catch{}
 
 
@@ -5889,23 +6199,16 @@ async function exportVideo(){
 
   }finally{
 
-    APP.exporting =
-      false;
-
+    APP.exporting = false;
+    APP.quickMode = false;
     APP.exportDoc = null;
     APP.exportWin = null;
     APP.exportRoot = null;
-
     APP.exportAnimations = [];
 
-
-    $("export")
-      .style.display =
-        "block";
-
-    $("stop")
-      .style.display =
-        "none";
+    $("export").style.display = "block";
+    $("quickExport").style.display = "block";
+    $("stop").style.display = "none";
 
   }
 
@@ -5913,7 +6216,605 @@ async function exportVideo(){
 
 
 /* =========================================================
-   STOP EXPORT
+   EXPORT B — Live captureStream (Safari-friendly)
+========================================================= */
+
+async function exportViaCaptureStream(quick){
+
+  if(APP.exporting) return;
+
+  if(!APP.loaded){
+
+    alert(
+      "شغّل المشروع أولًا."
+    );
+
+    return;
+
+  }
+
+  if(typeof MediaRecorder === "undefined"){
+
+    alert(
+      "متصفحك لا يدعم MediaRecorder."
+    );
+
+    return;
+
+  }
+
+  const mimeType =
+    getSupportedVideoMimeType();
+
+  if(!mimeType){
+
+    alert(
+      "المتصفح لا يدعم أي صيغة تسجيل (MP4/WebM).\n" +
+      "استخدم النظام الأساسي html2canvas بدلًا من ذلك."
+    );
+
+    return;
+
+  }
+
+  if(!APP.captureStream){
+
+    alert(
+      "يجب تفعيل صلاحية التسجيل أولًا.\n" +
+      "اضغط زر «تفعيل صلاحية التسجيل»."
+    );
+
+    $("activateRecording")
+      .classList
+      .add("pulse");
+
+    return;
+
+  }
+
+
+  APP.exporting = true;
+  APP.stop = false;
+
+
+  $("export").style.display = "none";
+  $("quickExport").style.display = "none";
+  $("stop").style.display = "block";
+  $("progressWrap").classList.add("show");
+  $("download").classList.remove("show");
+
+
+  updateProgress(
+    0,
+    "تجهيز التسجيل الحي..."
+  );
+
+
+  if(APP.exportObjectURL){
+
+    try{
+      URL.revokeObjectURL(
+        APP.exportObjectURL
+      );
+    }catch{}
+
+    APP.exportObjectURL = null;
+
+  }
+
+
+  let canvasStream = null;
+  let recorder = null;
+  let videoEl = null;
+  let stopDraw = null;
+
+
+  try{
+
+    await waitForResources(
+      $("preview").contentDocument
+    );
+
+
+    APP.exportDoc =
+      $("preview").contentDocument;
+
+    APP.exportWin =
+      $("preview").contentWindow;
+
+    APP.exportRoot =
+      getProjectRoot(
+        APP.exportDoc
+      );
+
+    APP.exportAnimations =
+      collectProjectAnimations(
+        APP.exportDoc
+      );
+
+
+    const exportSize =
+      quick
+        ? (
+            APP.orientation === "portrait"
+              ? {width:720,height:1280}
+              : {width:1280,height:720}
+          )
+        : getExportSize();
+
+
+    const fps =
+      quick
+        ? 12
+        : Math.max(
+            1,
+            Number(
+              $("fps").value
+            ) || 24
+          );
+
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+    canvas.width =
+      exportSize.width;
+
+    canvas.height =
+      exportSize.height;
+
+
+    const ctx =
+      canvas.getContext(
+        "2d",
+        {alpha:false}
+      );
+
+
+    ctx.fillStyle = "#000";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    videoEl =
+      document.createElement(
+        "video"
+      );
+
+    videoEl.srcObject =
+      APP.captureStream;
+
+    videoEl.muted = true;
+
+    videoEl.playsInline = true;
+
+
+    await videoEl.play();
+
+
+    await new Promise(resolve=>{
+
+      if(videoEl.videoWidth)
+        return resolve();
+
+      videoEl.onloadedmetadata =
+        resolve;
+
+      setTimeout(resolve,2000);
+
+    });
+
+
+    setProjectTimeFast(
+      0,
+      APP.exportAnimations
+    );
+
+    await sleep(200);
+
+
+    const iframe =
+      $("preview");
+
+    const rect =
+      iframe.getBoundingClientRect();
+
+
+    const vw =
+      videoEl.videoWidth ||
+      window.innerWidth;
+
+    const vh =
+      videoEl.videoHeight ||
+      window.innerHeight;
+
+
+    const scaleX =
+      vw / window.innerWidth;
+
+    const scaleY =
+      vh / window.innerHeight;
+
+
+    let drawing = true;
+
+
+    function draw(){
+
+      if(!drawing) return;
+
+      if(videoEl.readyState >= 2){
+
+        try{
+
+          ctx.drawImage(
+            videoEl,
+            rect.left * scaleX,
+            rect.top * scaleY,
+            rect.width * scaleX,
+            rect.height * scaleY,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+        }catch{}
+
+      }
+
+      requestAnimationFrame(draw);
+
+    }
+
+
+    draw();
+
+    stopDraw = ()=>{
+      drawing = false;
+    };
+
+
+    canvasStream =
+      canvas.captureStream(fps);
+
+
+    APP.captureStream
+      .getAudioTracks()
+      .forEach(t=>{
+
+        try{
+          canvasStream.addTrack(t);
+        }catch{}
+
+      });
+
+
+    const chunks = [];
+
+
+    recorder =
+      new MediaRecorder(
+        canvasStream,
+        {
+          mimeType,
+          videoBitsPerSecond:
+            8_000_000,
+          audioBitsPerSecond:
+            192_000
+        }
+      );
+
+
+    recorder.ondataavailable =
+      event=>{
+
+        if(
+          event.data &&
+          event.data.size > 0
+        ){
+          chunks.push(event.data);
+        }
+
+      };
+
+
+    const recordingDone =
+      new Promise((resolve,reject)=>{
+
+        recorder.onstop =
+          ()=>resolve();
+
+        recorder.onerror =
+          event=>reject(
+            event.error ||
+            new Error(
+              "خطأ في التسجيل."
+            )
+          );
+
+      });
+
+
+    recorder.start(250);
+
+    APP.recordingStart =
+      performance.now();
+
+
+    updateProgress(
+      0,
+      "بدء التسجيل الحي..."
+    );
+
+
+    const startTime =
+      performance.now();
+
+    const duration =
+      APP.durationMs;
+
+
+    await new Promise(resolve=>{
+
+      function tick(){
+
+        if(APP.stop){
+          resolve();
+          return;
+        }
+
+        const elapsed =
+          performance.now() -
+          startTime;
+
+        if(elapsed >= duration){
+
+          setProjectTimeFast(
+            Math.max(
+              0,
+              duration - 1
+            ),
+            APP.exportAnimations
+          );
+
+          resolve();
+          return;
+
+        }
+
+        setProjectTimeFast(
+          elapsed,
+          APP.exportAnimations
+        );
+
+        updateProgress(
+          (elapsed / duration) *
+            100,
+          "التسجيل: " +
+          (elapsed / 1000)
+            .toFixed(1) +
+          " / " +
+          (duration / 1000)
+            .toFixed(1) +
+          " ث"
+        );
+
+        requestAnimationFrame(tick);
+
+      }
+
+      tick();
+
+    });
+
+
+    await sleep(300);
+
+
+    if(
+      recorder.state !==
+        "inactive"
+    ){
+      recorder.stop();
+    }
+
+
+    await recordingDone;
+
+
+    const blob =
+      new Blob(
+        chunks,
+        {type:mimeType}
+      );
+
+
+    APP.exportObjectURL =
+      URL.createObjectURL(blob);
+
+
+    const isMP4 =
+      mimeType.indexOf("mp4") !== -1;
+
+    const ext =
+      isMP4 ? "mp4" : "webm";
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+    link.className =
+      "btn primary";
+
+    link.href =
+      APP.exportObjectURL;
+
+    link.download =
+      safeFileName(
+        APP.title || "مشروع-موشن"
+      ) +
+      "." +
+      ext;
+
+    link.textContent =
+      "حفظ " +
+      ext.toUpperCase();
+
+
+    $("download").innerHTML = "";
+    $("download").appendChild(link);
+    $("download").classList.add("show");
+
+
+    $("formatInfo").textContent =
+      isMP4
+        ? "MP4 / H.264"
+        : "WebM / " +
+          (
+            mimeType.indexOf("vp9") !== -1
+              ? "VP9"
+              : "VP8"
+          );
+
+
+    updateProgress(
+      100,
+      "اكتمل التسجيل • " +
+      (blob.size / 1024 / 1024)
+        .toFixed(1) +
+      " MB"
+    );
+
+
+    console.log(
+      "[EXPORT captureStream COMPLETE]",
+      {
+        mimeType,
+        quick,
+        size: blob.size,
+        durationMs:
+          APP.durationMs
+      }
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "EXPORT ERROR:",
+      error
+    );
+
+
+    if(
+      error &&
+      error.name ===
+        "AbortError"
+    ){
+
+      updateProgress(
+        0,
+        "تم إلغاء التسجيل"
+      );
+
+    }else{
+
+      alert(
+        "فشل التسجيل:\n\n" +
+        (
+          error &&
+          error.message
+            ? error.message
+            : String(error)
+        )
+      );
+
+      updateProgress(
+        0,
+        "فشل التسجيل"
+      );
+
+    }
+
+
+  }finally{
+
+    if(stopDraw){
+      try{ stopDraw(); }catch{}
+    }
+
+    if(
+      recorder &&
+      recorder.state !==
+        "inactive"
+    ){
+
+      try{
+        recorder.stop();
+      }catch{}
+
+    }
+
+    if(canvasStream){
+
+      try{
+
+        canvasStream
+          .getVideoTracks()
+          .forEach(t=>{
+
+            try{
+              t.stop();
+            }catch{}
+
+          });
+
+      }catch{}
+
+    }
+
+    if(videoEl){
+
+      try{
+        videoEl.pause();
+      }catch{}
+
+      try{
+        videoEl.srcObject =
+          null;
+      }catch{}
+
+    }
+
+
+    APP.exporting = false;
+    APP.quickMode = false;
+    APP.exportDoc = null;
+    APP.exportWin = null;
+    APP.exportRoot = null;
+    APP.exportAnimations = [];
+
+    $("export").style.display = "block";
+    $("quickExport").style.display = "block";
+    $("stop").style.display = "none";
+
+  }
+
+}
+
+
+/* =========================================================
+   STOP
 ========================================================= */
 
 $("stop")
@@ -5924,12 +6825,11 @@ $("stop")
     if(!APP.exporting)
       return;
 
-    APP.stop =
-      true;
+    APP.stop = true;
 
     updateProgress(
       0,
-      "جارٍ إيقاف التصدير..."
+      "جارٍ الإيقاف..."
     );
 
   }
@@ -6269,6 +7169,10 @@ applyIframeCanvasSize(
 );
 
 resizePreview();
+
+updateExportSystemUI();
+
+showSafariNote();
 
 
 window.addEventListener(
