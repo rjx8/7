@@ -72,12 +72,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 .generate{width:100%;height:54px;margin-top:16px;border:0;border-radius:15px;background:linear-gradient(135deg,var(--gold2),#a17d34);color:#101010;font-weight:900;font-size:12px}
 
-.prompt-box{display:none;margin-top:16px}
+.prompt-box{display:none;margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}
 .prompt-box.show{display:block}
-.prompt-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.prompt-head strong{font-size:12px}
-.copy{border:1px solid var(--line);background:var(--panel);color:#fff;border-radius:10px;padding:8px 12px;font-size:10px}
-#prompt{width:100%;min-height:450px;resize:vertical;background:#040b0e;color:#dce8e8;border:1px solid var(--line);border-radius:14px;padding:14px;outline:0;direction:rtl;text-align:right;line-height:1.8;font-size:10px;font-family:ui-monospace,monospace}
+.prompt-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.prompt-head strong{font-size:12px;color:var(--gold2)}
+.prompt-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.prompt-meta .chip{background:rgba(201,168,90,.06);border-color:rgba(201,168,90,.2);color:#d7c38c}
+.copy{border:1px solid var(--line);background:#091419;color:#fff;border-radius:10px;padding:8px 14px;font-size:10px;font-weight:800}
+.copy.copied{background:rgba(73,200,155,.15);border-color:rgba(73,200,155,.4);color:#8ee0c1}
+#prompt{width:100%;min-height:460px;resize:vertical;background:#040b0e;color:#dce8e8;border:1px solid var(--line);border-radius:14px;padding:14px;outline:0;direction:rtl;text-align:right;line-height:1.8;font-size:10px;font-family:ui-monospace,monospace}
 
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
 .preview-panel{min-width:0}
@@ -236,14 +239,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="panel">
       <div class="panel-title">بيانات المشروع</div>
       <div class="fields">
-        <div class="field full">
-          <label>عنوان البحث أو العرض</label>
-          <input id="title" placeholder="مثال: الطاقة وعلاقتها بالإنسان">
-        </div>
+        <div class="field full"><label>عنوان البحث أو العرض</label><input id="title" placeholder="مثال: الطاقة وعلاقتها بالإنسان"></div>
         <div class="field"><label>المادة</label><input id="subject" placeholder="الفيزياء"></div>
         <div class="field"><label>الصف</label><input id="grade" placeholder="أول ثانوي"></div>
-        <div class="field"><label>اسم الطالب / المقدم</label><input id="student" placeholder="أيمن"></div>
-        <div class="field"><label>اسم المعلم / المعلمة</label><input id="teacher" placeholder="أ. رهان"></div>
+        <div class="field"><label>اسم الطالب / المقدم</label><input id="student" placeholder="اسم الطالب"></div>
+        <div class="field"><label>اسم المعلم / المعلمة</label><input id="teacher" placeholder="اسم المعلم"></div>
         <div class="field"><label>العام الدراسي</label><input id="year" placeholder="1446 هـ"></div>
         <div class="field"><label>مدة المشروع بالثواني</label><input id="duration" type="number" min="5" max="600" value="60"></div>
         <div class="field full">
@@ -260,10 +260,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
             <option value="saudi-modern">سعودي حديث — أخضر/ذهبي</option>
           </select>
         </div>
-        <div class="field full">
-          <label>متطلبات إضافية (اختياري)</label>
-          <textarea id="extra" placeholder="مثال: أريد التركيز على الطاقة المتجددة..."></textarea>
-        </div>
+        <div class="field full"><label>متطلبات إضافية (اختياري)</label><textarea id="extra" placeholder="مثال: أريد التركيز على الطاقة المتجددة..."></textarea></div>
         <div class="field full">
           <label>اتجاه المشروع</label>
           <div class="orientation">
@@ -293,8 +290,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
   <div class="prompt-box" id="promptBox">
     <div class="prompt-head">
-      <strong>Prompt المشروع</strong>
-      <button class="copy" id="copyPrompt">نسخ</button>
+      <strong>Prompt المشروع — جاهز للنسخ</strong>
+      <button class="copy" id="copyPrompt">نسخ البرومبت</button>
+    </div>
+    <div class="prompt-meta" id="promptMeta">
+      <span class="chip" id="pmScenes">— مشهد</span>
+      <span class="chip" id="pmDuration">— ثانية</span>
+      <span class="chip" id="pmOrientation">—</span>
+      <span class="chip" id="pmChars">— حرف</span>
     </div>
     <textarea id="prompt" readonly></textarea>
   </div>
@@ -411,7 +414,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
         <div style="height:9px"></div>
         <button class="btn green" id="activateRecording" style="display:none;">تفعيل صلاحية التسجيل</button>
         <div style="height:7px"></div>
-        <button class="btn" id="test">اختبار 3 إطارات (0/50/100%)</button>
+        <button class="btn" id="test">اختبار 3 إطارات (بداية/منتصف/نهاية)</button>
         <div style="height:7px"></div>
         <button class="btn primary" id="export">تصدير الفيديو</button>
         <button class="btn red" id="stop" style="display:none;margin-top:7px;">إيقاف التصدير</button>
@@ -579,6 +582,108 @@ function getVideoBitrate(width,height,fps){
   if(fps >= 50) bitrate *= 1.30;
   else if(fps >= 40) bitrate *= 1.15;
   return Math.max(4_000_000, Math.min(60_000_000, Math.round(bitrate)));
+}
+
+/* ============================================================
+   CAPTURE SANITIZER — الحل الجذري لمشكلة "المشروع في الزاوية"
+   يُنقل #project-root مباشرة إلى <body> في (0,0) بأبعاده الكاملة
+   ويُخفى كل شيء آخر. يُستدعى فقط في onclone (نسخة الالتقاط)
+============================================================ */
+function sanitizeRootForCapture(doc){
+  if(!doc) return;
+  if(typeof doc.getElementById !== "function") return;
+
+  const root = doc.getElementById("project-root");
+  if(!root) return;
+
+  /* 1) نقل الجذر إلى body مباشرة (خارج أي wrapper) */
+  try{
+    if(root.parentNode && root.parentNode !== doc.body){
+      doc.body.appendChild(root);
+    }
+  }catch(e){ console.warn("[sanitize] move failed", e); }
+
+  /* 2) فرض موضع وحجم الجذر */
+  const base = (typeof getBaseSize === "function") ? getBaseSize() : {width:1080, height:1920};
+
+  const rootStyles = {
+    "position": "absolute",
+    "top": "0",
+    "left": "0",
+    "right": "auto",
+    "bottom": "auto",
+    "inset": "auto",
+    "margin": "0",
+    "padding": "0",
+    "transform": "none",
+    "-webkit-transform": "none",
+    "transform-origin": "top left",
+    "z-index": "1",
+    "width": base.width + "px",
+    "height": base.height + "px",
+    "max-width": "none",
+    "max-height": "none",
+    "min-width": "0",
+    "min-height": "0",
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1"
+  };
+
+  for(const k in rootStyles){
+    try{ root.style.setProperty(k, rootStyles[k], "important"); }catch{}
+  }
+
+  /* 3) تنظيف html و body */
+  const html = doc.documentElement;
+  const body = doc.body;
+
+  const commonCleanup = {
+    "margin": "0",
+    "padding": "0",
+    "background": "#000",
+    "display": "block",
+    "transform": "none",
+    "-webkit-transform": "none",
+    "transform-origin": "top left",
+    "align-items": "initial",
+    "justify-content": "initial",
+    "flex-direction": "initial",
+    "min-height": "0",
+    "width": "auto",
+    "height": "auto",
+    "overflow": "visible",
+    "position": "relative"
+  };
+
+  if(html){
+    for(const k in commonCleanup){
+      try{ html.style.setProperty(k, commonCleanup[k], "important"); }catch{}
+    }
+    try{ html.style.setProperty("overflow", "hidden", "important"); }catch{}
+  }
+  if(body){
+    for(const k in commonCleanup){
+      try{ body.style.setProperty(k, commonCleanup[k], "important"); }catch{}
+    }
+  }
+
+  /* 4) إخفاء كل عناصر body ما عدا الجذر */
+  try{
+    const children = Array.from(doc.body.children);
+    children.forEach(child => {
+      if(child !== root){
+        child.style.setProperty("display", "none", "important");
+        child.style.setProperty("visibility", "hidden", "important");
+      }
+    });
+  }catch(e){}
+
+  /* 5) إخفاء عناصر تحكم تفاعلية لو وُجدت داخل الجذر */
+  try{
+    doc.querySelectorAll("#interactive-controls, [data-interactive-controls], .project-controls")
+      .forEach(c => c.style.setProperty("display", "none", "important"));
+  }catch(e){}
 }
 
 /* ===== MEDIABUNNY LOADER ===== */
@@ -754,8 +859,15 @@ ${idealScenes}) الختامي: أسماء الطالب والمعلم + شكر 
    <meta name="project-duration-ms" content="${durationMs}">
    <meta name="project-title" content="${escapePromptAttribute(data.title)}">
 
+⛔⛔⛔ قواعد حرجة للأبعاد (تسبب فشل التصدير إذا خولفت):
+1. لا تستخدم transform:scale() على #project-root أو على أي غلاف حوله.
+2. #project-root يجب أن يأخذ أبعاده الحقيقية مباشرة: ${width}px × ${height}px.
+3. لا تضع #project-root داخل wrapper بـ max-width أو overflow:hidden.
+4. لا تستخدم display:flex على body لتمركز المشروع.
+5. body يجب ألا يحتوي على أي عنصر آخر غير #project-root (أو عناصر خفية فقط).
+
+⛔ إذا خالفت هذه القواعد، سيظهر المشروع المصدَّر في زاوية صغيرة أو أسود بالكامل.
 ⛔ إن كانت project-orientation خاطئة، يُصدَّر الفيديو بأبعاد مغلوطة.
-⛔ إن فُقد project-root أو data-scene، يفشل النظام.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎬 الحركة — setTime فقط
@@ -800,7 +912,7 @@ HTML واحد كامل يبدأ بـ <!doctype html> مع lang="ar" dir="rtl".
 كل CSS وJS داخل الملف. لا Markdown، لا شرح خارج HTML.
 
 راجع قبل الإخراج:
-✓ <div id="project-root"> موجود
+✓ <div id="project-root"> بأبعاد ${width}px × ${height}px مباشرة (بدون transform أو wrapper)
 ✓ ${idealScenes} مشهد بـ <section data-scene="N">
 ✓ meta الاتجاه والمدة والعنوان في <head>
 ✓ تنويع الأنماط (لا تخطيط مكرر في مشهدين متتاليين)
@@ -809,6 +921,7 @@ HTML واحد كامل يبدأ بـ <!doctype html> مع lang="ar" dir="rtl".
 ✓ الأسماء في المشهد الأخير فقط
 ✓ setTime يعمل ولا يعتمد على وقت حقيقي
 ✓ لا filter/backdrop-filter/mix-blend-mode/mask-image
+✓ لا transform:scale على #project-root
 
 أخرج HTML فقط.
 `.trim();
@@ -822,20 +935,39 @@ $("generate").addEventListener("click",()=>{
     $("title").focus();
     return;
   }
-  $("prompt").value = createPrompt();
+
+  const promptText = createPrompt();
+  $("prompt").value = promptText;
+
+  const idealScenes = Math.max(6,Math.min(12,Math.round(data.duration / 6)));
+  $("pmScenes").textContent = idealScenes + " مشهد";
+  $("pmDuration").textContent = data.duration + " ثانية";
+  $("pmOrientation").textContent = APP.orientation === "portrait" ? "عمودي 9:16" : "أفقي 16:9";
+  $("pmChars").textContent = promptText.length.toLocaleString("ar-EG") + " حرف";
+
   $("promptBox").classList.add("show");
+  $("copyPrompt").classList.remove("copied");
+  $("copyPrompt").textContent = "نسخ البرومبت";
   toast("تم إنشاء البرومبت","success",3000);
 });
+
 $("copyPrompt").addEventListener("click",async()=>{
+  const btn = $("copyPrompt");
+  const text = $("prompt").value;
+  if(!text){ toast("أنشئ البرومبت أولًا","warn"); return; }
   try{
-    await navigator.clipboard.writeText($("prompt").value);
+    await navigator.clipboard.writeText(text);
     toast("تم نسخ البرومبت","success",2000);
   }catch{
     $("prompt").select();
     try{ document.execCommand("copy"); toast("تم النسخ","success",2000); }catch{}
   }
-  $("copyPrompt").textContent = "تم النسخ";
-  setTimeout(()=>{ $("copyPrompt").textContent = "نسخ"; },1200);
+  btn.classList.add("copied");
+  btn.textContent = "✓ تم النسخ";
+  setTimeout(()=>{
+    btn.classList.remove("copied");
+    btn.textContent = "نسخ البرومبت";
+  },1600);
 });
 
 /* ===== NORMALIZE / META ===== */
@@ -906,18 +1038,12 @@ async function loadProject(){
     APP.subject = $("subject").value.trim();
     APP.grade = $("grade").value.trim();
 
-    // ✅ FIX: احترام اختيار المستخدم — meta تُستخدم فقط إذا صرّحت بشكل صحيح
     let resolvedOrientation = APP.orientation;
     if(meta.orientation === "portrait" || meta.orientation === "landscape"){
       resolvedOrientation = meta.orientation;
     }
-
     const orientationChanged = resolvedOrientation !== APP.orientation;
     APP.orientation = resolvedOrientation;
-
-    if(meta.orientation && meta.orientation !== $("orientationInfo").dataset.userChoice){
-      // لا شيء — فقط لمعلومات
-    }
 
     if(orientationChanged){
       applyIframeCanvasSize(APP.orientation);
@@ -931,10 +1057,14 @@ async function loadProject(){
     APP.exportAnimations = collectProjectAnimations(doc);
 
     APP.loaded = true;
-    APP.currentTime = 0;
-    setProjectTimeFast(0, APP.exportAnimations);
-    setPlayhead(0);
-    updatePlayerTime(0);
+
+    /* ✅ ابدأ على إطار مرئي (بعد fade-in الافتتاحية) بدل t=0 الأسود */
+    const initialTime = Math.min(1000, Math.round(APP.durationMs * 0.05));
+    APP.currentTime = initialTime;
+    setProjectTimeFast(initialTime, APP.exportAnimations);
+    setPlayhead(initialTime);
+    updatePlayerTime(initialTime);
+
     updateProjectInfo();
     await buildTimeline();
     await validateProject();
@@ -1164,7 +1294,7 @@ function preprocessModernCSS(doc,win){
   return stats;
 }
 
-/* ===== WAIT FOR RESOURCES ===== */
+/* ===== WAIT FOR RESOURCES (بدون لمس العرض المباشر) ===== */
 async function waitForResources(doc){
   if(!doc) return;
   const win = doc.defaultView || window;
@@ -1404,6 +1534,17 @@ async function validateProject(){
   if(detected.length === 0) addValidation("warn","لم يتم العثور على خطوط مخصصة.");
   else if(missing.length === 0) addValidation("ok","كل الخطوط محمّلة: " + detected.join("، "));
   else addValidation("bad","خطوط لم تُحمَّل: " + missing.join("، "));
+
+  const rootEl = doc.getElementById("project-root");
+  if(rootEl){
+    const rootTransform = win.getComputedStyle(rootEl).transform;
+    if(rootTransform && rootTransform !== "none"){
+      addValidation("ok","project-root به transform — سيُعالج تلقائيًا أثناء التصدير.");
+    }else{
+      addValidation("ok","project-root بدون transform (آمن للتصدير).");
+    }
+  }
+
   let ls = false;
   Array.from(doc.querySelectorAll("*")).some(el=>{
     let s; try{ s = win.getComputedStyle(el); }catch{ return false; }
@@ -1413,9 +1554,9 @@ async function validateProject(){
   addValidation(ls ? "bad" : "ok", ls ? "يوجد letter-spacing." : "لا يوجد letter-spacing.");
   addValidation(win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function" ? "ok" : "warn",
     win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function" ? "__PROJECT__.setTime موجود." : "لا يوجد setTime مخصص.");
-  const root = getProjectRoot(doc);
-  addValidation(root && root.id === "project-root" ? "ok" : "warn",
-    root && root.id === "project-root" ? "project-root موجود." : "project-root غير موجود؛ سيتم استخدام body.");
+  const resolvedRoot = getProjectRoot(doc);
+  addValidation(resolvedRoot && resolvedRoot.id === "project-root" ? "ok" : "warn",
+    resolvedRoot && resolvedRoot.id === "project-root" ? "project-root موجود." : "project-root غير موجود؛ سيتم استخدام body.");
   const scenes = doc.querySelectorAll("[data-scene]");
   addValidation(scenes.length ? "ok" : "warn",
     scenes.length ? "تم اكتشاف " + scenes.length + " مشاهد." : "لم يتم تعريف data-scene.");
@@ -1472,7 +1613,7 @@ $("clear").addEventListener("click",()=>{
   setStatus("جاهز","ok");
 });
 
-/* ===== RENDER FRAME ===== */
+/* ===== RENDER FRAME (مع onclone) ===== */
 async function renderFrame(timeMs,options = {}){
   const doc = options.doc || $("preview").contentDocument;
   if(!doc) throw new Error("تعذر الوصول إلى المشروع.");
@@ -1481,17 +1622,22 @@ async function renderFrame(timeMs,options = {}){
   const base = getBaseSize();
   const scale = options.scale || getRenderScale();
   setProjectTimeFast(timeMs, options.animations || APP.exportAnimations);
+
   const rendered = await html2canvas(root,{
     width: base.width, height: base.height,
     windowWidth: base.width, windowHeight: base.height,
     scale, backgroundColor: "#000", useCORS: true, allowTaint: false,
     logging: false, imageTimeout: 15000, foreignObjectRendering: false,
-    removeContainer: true, scrollX: 0, scrollY: 0
+    removeContainer: true, scrollX: 0, scrollY: 0,
+    onclone: (clonedDoc) => {
+      try{ sanitizeRootForCapture(clonedDoc); }
+      catch(e){ console.warn("[onclone sanitize]", e); }
+    }
   });
   return rendered;
 }
 
-/* ===== TEST FRAMES ===== */
+/* ===== TEST FRAMES — إطارات مرئية (بعد fade-in وقبل fade-out) ===== */
 $("test").addEventListener("click",async()=>{
   if(!APP.loaded){ toast("شغّل المشروع أولًا","warn"); return; }
   if(APP.exporting) return;
@@ -1506,11 +1652,17 @@ $("test").addEventListener("click",async()=>{
     APP.exportRoot = getProjectRoot(APP.exportDoc);
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
     if(!APP.exportRoot) throw new Error("تعذر تحديد مساحة المشروع.");
+
+    const startT = Math.min(1000, Math.round(APP.durationMs * 0.05));
+    const midT = Math.round(APP.durationMs * 0.5);
+    const endT = Math.max(1000, Math.round(APP.durationMs) - 1000);
+
     const times = [
-      { t: 0, label: "البداية (0%)" },
-      { t: Math.round(APP.durationMs * 0.5), label: "المنتصف (50%)" },
-      { t: Math.max(0, Math.round(APP.durationMs) - 1), label: "النهاية (100%)" }
+      { t: startT, label: "البداية (~5%)" },
+      { t: midT, label: "المنتصف (50%)" },
+      { t: endT, label: "النهاية (~95%)" }
     ];
+
     const previewScale = Math.min(0.5, getRenderScale());
     const frames = [];
     for(const item of times){
@@ -1539,7 +1691,7 @@ $("test").addEventListener("click",async()=>{
       '<div class="grid">' +
       frames.map(function(f){ return '<div class="card"><img src="' + f.url + '" alt=""><div class="label">' + escapeHTML(f.label) + '</div></div>'; }).join("") +
       '</div>' +
-      '<div class="note">استخدم هذه الإطارات لاكتشاف مشاكل مثل: نص خارج الحدود، خط لم يُحمّل في مشهد متأخر، عنصر مفقود في نهاية المشروع.</div>' +
+      '<div class="note">الإطارات مأخوذة من 5% و 50% و 95% من مدة المشروع — تم تجنّب 0% و 100% لأن المشروع يبدأ وينتهي بتلاشٍ تدريجي (fade). استخدم هذه الإطارات لاكتشاف مشاكل مثل: نص خارج الحدود، خط لم يُحمّل في مشهد متأخر، عنصر مفقود.</div>' +
       '</body></html>';
     popup.document.write(html);
     popup.document.close();
@@ -1833,7 +1985,11 @@ async function runHtml2CanvasExportOnce(){
         scale: renderScale, backgroundColor: "#000",
         useCORS: true, allowTaint: false, logging: false,
         imageTimeout: 15000, foreignObjectRendering: false,
-        removeContainer: true, scrollX: 0, scrollY: 0
+        removeContainer: true, scrollX: 0, scrollY: 0,
+        onclone: (clonedDoc) => {
+          try{ sanitizeRootForCapture(clonedDoc); }
+          catch(e){ console.warn("[onclone sanitize]", e); }
+        }
       });
 
       APP.exportStats.renderMs += performance.now() - renderStart;
