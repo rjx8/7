@@ -5,18 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>منصة المشاريع المرئية المتحركة</title>
 
-<!-- ============================================================
-     إصلاح الخطوط #1: تحميل كل الخطوط العربية الشائعة مسبقًا
-     ------------------------------------------------------------
-     المشكلة: المنصة كانت تعتمد على خطوط النظام فقط، والمشاريع
-     المولّدة تحمّل خطوطها من Google Fonts داخل iframe. النتيجة
-     أن الخطوط تُحمّل مرتين، وفي بعض الأحيان لا تُحمّل إطلاقًا
-     بسبب ترتيب الأحداث داخل iframe.
-
-     الحل: نحمّل الخطوط هنا في المنصة الأم. وبما أن iframe
-     يستخدم allow-same-origin، فإن كاش المتصفح مشترك — أي أن
-     أي طلب لاحق من داخل iframe سيُخدَم فورًا من الكاش.
-============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;900&family=Noto+Sans+Arabic:wght@400;500;700;900&family=Almarai:wght@400;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -36,7 +24,6 @@ button{cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 .app{min-height:100vh}
 
-/* TOP BAR */
 .topbar{position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;
   justify-content:space-between;padding:0 22px;background:rgba(7,16,19,.94);
   border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
@@ -51,17 +38,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .status-dot.busy{background:var(--gold);box-shadow:0 0 12px rgba(201,168,90,.7)}
 .status-dot.error{background:var(--red);box-shadow:0 0 12px rgba(223,116,116,.7)}
 
-/* NAV */
 .nav{max-width:1180px;margin:20px auto 0;padding:0 18px;display:flex;gap:8px}
 .nav button{border:1px solid var(--line);background:var(--panel);color:var(--muted);
   padding:10px 16px;border-radius:12px;font-size:11px}
 .nav button.active{color:#fff;background:rgba(201,168,90,.1);border-color:rgba(201,168,90,.35)}
 
-/* PAGES */
 .page{display:none;max-width:1180px;margin:auto;padding:22px 18px 60px}
 .page.active{display:block}
 
-/* HERO */
 .hero{padding:30px;margin-bottom:17px;border:1px solid var(--line);border-radius:24px;
   background:radial-gradient(circle at 85% 5%,rgba(201,168,90,.12),transparent 28%),
              radial-gradient(circle at 5% 90%,rgba(73,200,155,.07),transparent 30%),var(--panel)}
@@ -69,7 +53,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .hero h1{margin:0;font-size:clamp(28px,5vw,46px);line-height:1.18}
 .hero p{max-width:800px;margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.9}
 
-/* GENERATOR */
 .generator-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:16px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
 .panel-title{margin-bottom:15px;font-size:13px;font-weight:900}
@@ -101,7 +84,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .generate{width:100%;height:54px;margin-top:16px;border:0;border-radius:15px;
   background:linear-gradient(135deg,var(--gold2),#a17d34);color:#101010;font-weight:900;font-size:12px}
 
-/* PROMPT */
 .prompt-box{display:none;margin-top:16px}
 .prompt-box.show{display:block}
 .prompt-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
@@ -112,7 +94,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   border:1px solid var(--line);border-radius:14px;padding:14px;outline:0;direction:rtl;
   text-align:right;line-height:1.8;font-size:10px}
 
-/* WORKSPACE */
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
 .preview-panel{min-width:0}
 .preview{background:#030607;border:1px solid var(--line);border-radius:20px;padding:12px}
@@ -124,7 +105,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .frame-wrap{position:relative;overflow:hidden;display:block;max-width:100%;max-height:72vh}
 #preview{display:block;border:0;background:#000;transform-origin:top left}
 
-/* SIDE */
 .side{display:flex;flex-direction:column;gap:12px}
 .side-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px}
 .side-panel h3{margin:0 0 11px;font-size:12px}
@@ -143,13 +123,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .info-row span:first-child{color:var(--muted)}
 .info-row span:last-child{font-weight:800;text-align:left}
 
-/* EXPORT SETTINGS */
 .export-settings{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .export-settings label{color:var(--muted);font-size:9px;margin-bottom:4px;display:block}
 .export-settings select{width:100%;border:1px solid var(--line);background:#071114;color:#fff;
   border-radius:10px;padding:9px;outline:0;font-size:10px}
 
-/* VALIDATION */
 .validation{display:grid;gap:6px}
 .validation-item{display:flex;gap:7px;padding:8px;border-radius:9px;border:1px solid var(--line);
   font-size:9px;line-height:1.7}
@@ -159,7 +137,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .validation-icon{width:17px;height:17px;flex:none;display:grid;place-items:center;
   border-radius:5px;background:rgba(255,255,255,.04)}
 
-/* TIMELINE */
 .timeline-panel{margin-top:12px}
 .timeline{height:64px;border:1px solid var(--line);border-radius:12px;background:#071114;
   position:relative;overflow:hidden;direction:ltr;cursor:pointer}
@@ -172,7 +149,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .playhead{position:absolute;top:0;bottom:0;left:0;width:2px;background:#fff;
   box-shadow:0 0 12px #fff;pointer-events:none}
 
-/* PROGRESS */
 .progress-wrap{display:none;margin-top:9px}
 .progress-wrap.show{display:block}
 .progress{height:7px;border-radius:99px;background:#050b0d;overflow:hidden}
@@ -180,12 +156,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
   transition:width .12s linear}
 .progress-text{margin-top:6px;text-align:center;color:var(--muted);font-size:9px}
 
-/* DOWNLOAD */
 .download{display:none;margin-top:9px}
 .download.show{display:block}
 .download a{display:block;text-decoration:none;text-align:center}
 
-/* MOBILE */
 .mobile-nav{display:none}
 @media(max-width:900px){
   .generator-grid{grid-template-columns:1fr}
@@ -242,7 +216,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <button data-page="workspace">مساحة المشروع</button>
 </nav>
 
-<!-- GENERATOR -->
 <section class="page active" id="page-generator">
   <div class="hero">
     <div class="kicker">EDUCATIONAL MOTION PROJECT</div>
@@ -332,7 +305,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </div>
 </section>
 
-<!-- WORKSPACE -->
 <section class="page" id="page-workspace">
   <div class="workspace">
     <div class="preview-panel">
@@ -374,6 +346,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
           <div class="info-row"><span>الاتجاه</span><span id="infoOrientation">—</span></div>
           <div class="info-row"><span>المدة</span><span id="infoDuration">—</span></div>
           <div class="info-row"><span>الخطوط</span><span id="infoFonts">—</span></div>
+          <div class="info-row"><span>محرك الرسم</span><span id="infoRenderer">—</span></div>
         </div>
       </div>
 
@@ -435,17 +408,21 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </nav>
 
 <!-- ============================================================
-     LIBRARIES
+     LIBRARIES — إصدارات مثبّتة (لا @latest)
+     ------------------------------------------------------------
+     • html2canvas@1.4.1 — ثابت من الأصل، احتياطي فقط
+     • modern-screenshot@4.7.0 — الإصدار الأحدث المستقر
+     • Mediabunny — مثبّت على الإصدار الرئيسي 1 (بدل @latest)
 ============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
 
 <script type="module">
-  // تحميل Mediabunny كـ ES Module مع مصادر احتياطية.
   (async () => {
     const sources = [
-      'https://cdn.jsdelivr.net/npm/mediabunny@latest/+esm',
-      'https://esm.sh/mediabunny@latest',
-      'https://cdn.jsdelivr.net/npm/mediabunny@1/+esm'
+      'https://cdn.jsdelivr.net/npm/mediabunny@1/+esm',
+      'https://esm.sh/mediabunny@1',
+      'https://cdn.jsdelivr.net/npm/mediabunny@1.15.0/+esm'
     ];
     for (const url of sources) {
       try {
@@ -487,6 +464,14 @@ const APP = {
   detectedFonts:[],
   missingFonts:[]
 };
+
+/* -----------------------------------------------------
+   حالة محرك الرسم — تُختار مرة واحدة لكل مشروع
+   PICKED_RENDERER: "modern" | "html2canvas" | null
+   MODERN_CTX: كائن السياق المُعاد استخدامه من modern-screenshot
+----------------------------------------------------- */
+let PICKED_RENDERER = null;
+let MODERN_CTX = null;
 
 function $(id){ return document.getElementById(id); }
 
@@ -541,6 +526,99 @@ function waitForMediabunny(timeoutMs){
 }
 
 /* =====================================================
+   RENDERER PICKER — يُنفّذ مرة واحدة فقط
+   ------------------------------------------------------------
+   إصلاح جوهري: بدل تبديل المحرك وسط التصدير (الذي ينتج
+   إطارات غير متسقة)، نختبر كل محرك مرة واحدة قبل البدء،
+   ثم نثبّت المحرك المستخدم لكل الإطارات.
+===================================================== */
+async function pickRenderer(){
+  if(PICKED_RENDERER) return PICKED_RENDERER;
+
+  // اختبار modern-screenshot بعنصر وهمي داخل الـ iframe
+  if(window.modernScreenshot && typeof window.modernScreenshot.domToCanvas === "function"){
+    try {
+      const iframe = $("preview");
+      const doc = iframe.contentDocument;
+      if(doc && doc.body){
+        const probe = doc.createElement("div");
+        probe.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:20px;height:20px;background:#c9a85a;";
+        doc.body.appendChild(probe);
+        let testCanvas = null;
+        try {
+          testCanvas = await withTimeout(
+            window.modernScreenshot.domToCanvas(probe, { width:20, height:20, scale:1 }),
+            5000
+          );
+        } finally {
+          if(probe.parentNode) probe.parentNode.removeChild(probe);
+        }
+        if(testCanvas && testCanvas.width > 0){
+          PICKED_RENDERER = "modern";
+          if($("infoRenderer")) $("infoRenderer").textContent = "modern-screenshot";
+          console.log("[Renderer] Picked: modern-screenshot");
+          return PICKED_RENDERER;
+        }
+      }
+    } catch(err){
+      console.warn("[Renderer] modern-screenshot probe failed:", err);
+    }
+  }
+
+  // احتياطي: html2canvas
+  if(typeof html2canvas === "function"){
+    PICKED_RENDERER = "html2canvas";
+    if($("infoRenderer")) $("infoRenderer").textContent = "html2canvas (احتياطي)";
+    console.log("[Renderer] Picked: html2canvas (fallback)");
+    return PICKED_RENDERER;
+  }
+
+  throw new Error("لا يوجد محرك رسم متاح — تحقق من الاتصال بالإنترنت.");
+}
+
+/* =====================================================
+   MODERN-SCREENSHOT CONTEXT
+   ------------------------------------------------------------
+   إصلاح جوهري للأداء: نُنشئ createContext مرة واحدة للـbody،
+   ثم نعيد استخدامه عبر draw() لكل إطار. هذا يوفّر إعادة
+   تحليل CSS وبناء هيكل SVG من الصفر في كل إطار.
+===================================================== */
+async function setupModernContext(){
+  if(PICKED_RENDERER !== "modern") return null;
+  if(MODERN_CTX) return MODERN_CTX;
+
+  if(!window.modernScreenshot || typeof window.modernScreenshot.createContext !== "function"){
+    console.log("[ModernCtx] createContext غير متوفر — سيُستخدم domToCanvas لكل إطار.");
+    return null;
+  }
+
+  const iframe = $("preview");
+  const doc = iframe.contentDocument;
+  if(!doc || !doc.body) return null;
+
+  const base = getBaseSize();
+
+  try {
+    MODERN_CTX = await withTimeout(
+      window.modernScreenshot.createContext(doc.body, {
+        width: base.width,
+        height: base.height,
+        scale: 1,
+        backgroundColor: "#000",
+        fetch: { requestInit: { cache: "force-cache" } }
+      }),
+      15000
+    );
+    console.log("[ModernCtx] تم إنشاء السياق بنجاح — سيُعاد استخدامه لكل الإطارات.");
+    return MODERN_CTX;
+  } catch(err){
+    console.warn("[ModernCtx] فشل إنشاء السياق:", err);
+    MODERN_CTX = null;
+    return null;
+  }
+}
+
+/* =====================================================
    NAVIGATION
 ===================================================== */
 document.querySelectorAll("[data-page]").forEach(button => {
@@ -558,9 +636,6 @@ document.querySelectorAll("[data-page]").forEach(button => {
   });
 });
 
-/* =====================================================
-   ORIENTATION
-===================================================== */
 document.querySelectorAll("[data-orientation]").forEach(button => {
   button.addEventListener("click", () => {
     APP.orientation = button.dataset.orientation;
@@ -598,14 +673,6 @@ function escapePromptAttribute(value){
 
 /* =====================================================
    PROMPT TEMPLATE
-   -----------------------------------------------------
-   إصلاح: أضفنا قسم "الخطوط (إلزامي)" وأعدنا صياغة قسم
-   العربية ليفرض على الذكاء الاصطناعي:
-     - تحميل الخطوط عبر <link> من Google Fonts بشكل صريح
-     - استخدام font-family مع fallback واضح
-     - انتظار document.fonts.load() لكل وزن مستخدم
-     - إضافة كلاس fonts-ready بعد التحميل
-   هذا يضمن ظهور الخط في المعاينة والتصدير معًا.
 ===================================================== */
 function createPrompt(){
   const data = getForm();
@@ -808,6 +875,35 @@ data-role="content"
    في حال فشل التحميل، يجب أن يبقى المشروع قابلًا للقراءة بـ fallback واضح.
 
 8. ممنوع استخدام font-weight: bold وحده دون التأكد من تحميل الوزن 700.
+
+==================================================
+تأثيرات النصوص (مهم للتصدير)
+==================================================
+
+المشروع يدعم تأثيرات النصوص الحديثة، ومنها:
+
+- background-clip:text (نص متدرج اللون)
+- mix-blend-mode
+- filter: blur / drop-shadow
+- mask-image
+
+يُسمح باستخدامها، لكن:
+
+1. استخدم background-clip:text باعتدال (مرة إلى مرتين في المشروع).
+
+2. إذا استخدمته، أضف fallback لوني قبله:
+   color:#22d3ee;
+   background:linear-gradient(...);
+   -webkit-background-clip:text;
+   background-clip:text;
+   -webkit-text-fill-color:transparent;
+
+3. لا تستخدمه على نص طويل جدًا (أكثر من 8 كلمات).
+
+4. اللون الصلب color:#22d3ee أبسط وأسرع وأكثر أمانًا.
+
+5. تجنّب تمامًا mix-blend-mode على العناصر الأساسية —
+   استخدمه فقط على طبقات زخرفية شفافة.
 
 ==================================================
 العربية
@@ -1111,6 +1207,12 @@ async function loadProject(){
   }
 
   stopPreview();
+
+  // إعادة تعيين حالة محرك الرسم — سيُعاد اختياره في الفحص/التصدير
+  PICKED_RENDERER = null;
+  MODERN_CTX = null;
+  if($("infoRenderer")) $("infoRenderer").textContent = "—";
+
   APP.html = html;
   APP.loaded = false;
   setStatus("جارٍ تحميل المشروع...", "busy");
@@ -1223,20 +1325,6 @@ function setIframe(html){
 
 /* =====================================================
    RESOURCES
-   -----------------------------------------------------
-   إصلاح الخطوط #2: انتظار تحميل الخطوط بشكل صريح
-   ------------------------------------------------------------
-   المشكلة السابقة: doc.fonts.ready يحل مبكرًا في حالة أن
-   الصفحة لم تطلب أي خط بعد (لأن CSS لم يُطبَّق على عنصر
-   ظاهر بعد)، أو يحل قبل أن يُحمَّل خط معيّن مستخدم.
-
-   الحل: 
-     1) فرض layout (offsetHeight) لتشغيل طلبات الخط
-     2) جمع كل عائلات الخطوط المستخدمة فعليًا عبر
-        getComputedStyle لكل عنصر
-     3) طلب تحميل كل عائلة بكل الأوزان الشائعة صراحة
-        عبر document.fonts.load()
-     4) ثم انتظر document.fonts.ready نهائيًا
 ===================================================== */
 function withTimeout(promise, ms){
   return Promise.race([
@@ -1256,14 +1344,11 @@ const GENERIC_FAMILIES = new Set([
 async function waitForFonts(doc, win){
   if(!doc.fonts || !win) return;
 
-  // 1) فرض layout لتشغيل طلبات الخط في CSS
   try { void doc.documentElement.offsetHeight; } catch{}
   try { void (doc.body && doc.body.offsetHeight); } catch{}
 
-  // 2) انتظار أولي قصير
   try { await withTimeout(doc.fonts.ready, 4000); } catch{}
 
-  // 3) جمع عائلات الخطوط الفعلية
   const families = new Set();
   let elements = [];
   try {
@@ -1282,7 +1367,6 @@ async function waitForFonts(doc, win){
     });
   }
 
-  // 4) طلب صريح لكل عائلة بكل الأوزان الشائعة
   const loads = [];
   const weights = ['400', '500', '700', '900'];
   families.forEach(fam => {
@@ -1297,13 +1381,10 @@ async function waitForFonts(doc, win){
     try { await withTimeout(Promise.all(loads), 10000); } catch{}
   }
 
-  // 5) انتظار نهائي
   try { await withTimeout(doc.fonts.ready, 5000); } catch{}
 
-  // 6) حفظ قائمة العائلات المكتشفة للعرض
   APP.detectedFonts = Array.from(families);
 
-  // 7) فحص العائلات الناقصة
   const missing = [];
   families.forEach(fam => {
     try {
@@ -1316,8 +1397,6 @@ async function waitForFonts(doc, win){
   });
   APP.missingFonts = missing;
 
-  // 8) إضافة كلاس fonts-ready على <html> إن لم يكن موجودًا
-  //    (المشاريع التي تعتمد على كشف الظهور عبر هذا الكلاس)
   try {
     doc.documentElement.classList.add('fonts-ready');
     doc.documentElement.setAttribute('data-fonts-ready', '1');
@@ -1332,7 +1411,6 @@ async function waitForResources(doc){
   const images = Array.from(doc.images || []);
   await Promise.all(images.map(image => waitForImage(image)));
 
-  // إعادة انتظار سريعة للتأكد من استقرار الحالة
   try { await withTimeout(doc.fonts.ready, 2000); } catch{}
 
   await sleep(120);
@@ -1411,7 +1489,6 @@ function updateProjectInfo(){
   $("infoOrientation").textContent = portrait ? "عمودي" : "أفقي";
   $("infoDuration").textContent = formatDuration(APP.durationMs);
 
-  // عرض الخطوط المكتشفة
   const detected = APP.detectedFonts || [];
   const missing  = APP.missingFonts || [];
   if($("infoFonts")){
@@ -1516,9 +1593,6 @@ async function buildTimeline(){
   });
 }
 
-/* =====================================================
-   PLAYHEAD
-===================================================== */
 function setPlayhead(ms){
   if(!APP.durationMs) return;
   const percentage = Math.max(0, Math.min(100, (ms / APP.durationMs) * 100));
@@ -1553,7 +1627,6 @@ async function validateProject(){
     addValidation("warn", 'لغة HTML ليست "ar".');
   }
 
-  /* فحص الخطوط */
   const detected = APP.detectedFonts || [];
   const missing  = APP.missingFonts || [];
 
@@ -1565,7 +1638,6 @@ async function validateProject(){
     addValidation("bad", "خطوط لم تُحمَّل: " + missing.join("، "));
   }
 
-  // كشف <link> لجوجل فونتس
   const hasGoogleFontsLink = Array.from(doc.querySelectorAll('link[href*="fonts.googleapis.com"]')).length > 0;
   if(hasGoogleFontsLink){
     addValidation("ok", "رابط Google Fonts موجود.");
@@ -1634,6 +1706,17 @@ async function validateProject(){
     addValidation("ok", 'لا يوجد تداخل واضح (فحص تقريبي؛ أضف data-role="content" لدقة أعلى).');
   }else{
     addValidation("ok", "لا يوجد تداخل واضح بين العناصر الأساسية.");
+  }
+
+  // فحص محركات الرسم
+  const modernAvailable = !!(window.modernScreenshot && typeof window.modernScreenshot.domToCanvas === "function");
+  const modernHasCtx = !!(window.modernScreenshot && typeof window.modernScreenshot.createContext === "function");
+  if(modernAvailable){
+    addValidation("ok", "محرك modern-screenshot متوفر" + (modernHasCtx ? " مع دعم createContext." : "."));
+  }else if(typeof html2canvas === "function"){
+    addValidation("warn", "modern-screenshot غير متوفر — سيُستخدم html2canvas (لا يدعم background-clip:text).");
+  }else{
+    addValidation("bad", "لا يوجد أي محرك رسم متاح.");
   }
 }
 
@@ -1719,6 +1802,8 @@ $("clear").addEventListener("click", () => {
   APP.title = "";
   APP.detectedFonts = [];
   APP.missingFonts = [];
+  PICKED_RENDERER = null;
+  MODERN_CTX = null;
   $("code").value = "";
   $("preview").srcdoc = "";
   $("stateInfo").textContent = "لا يوجد مشروع";
@@ -1727,6 +1812,7 @@ $("clear").addEventListener("click", () => {
   $("infoTitle").textContent = "—";
   $("infoDuration").textContent = "—";
   if($("infoFonts")) $("infoFonts").textContent = "—";
+  if($("infoRenderer")) $("infoRenderer").textContent = "—";
   $("timelineTrack").innerHTML = "";
   $("validation").innerHTML = "";
   $("download").innerHTML = "";
@@ -1743,6 +1829,10 @@ $("test").addEventListener("click", async () => {
     return;
   }
   try{
+    // إصلاح: نختبر محرك الرسم مرة واحدة قبل التقاط الإطار
+    await pickRenderer();
+    await setupModernContext();
+
     await setProjectTime(0);
     const canvas = await renderFrame(0);
     const url = canvas.toDataURL("image/png");
@@ -1764,7 +1854,12 @@ $("test").addEventListener("click", async () => {
 });
 
 /* =====================================================
-   RENDER FRAME
+   RENDER FRAME — بمحرك واحد ثابت فقط
+   ------------------------------------------------------------
+   إصلاح جوهري: أزلنا الـ fallback المتغيّر. المحرك يُختار
+   مرة واحدة عبر pickRenderer() قبل البدء، ولا يتغير حتى
+   لو فشل — في هذه الحالة يتوقف التصدير بدل إنتاج إطارات
+   غير متسقة.
 ===================================================== */
 async function renderFrame(timeMs){
   await setProjectTime(timeMs);
@@ -1772,31 +1867,52 @@ async function renderFrame(timeMs){
 
   const iframe = $("preview");
   const doc = iframe.contentDocument;
-  if(!doc){
-    throw new Error("تعذر الوصول إلى المشروع.");
-  }
+  if(!doc) throw new Error("تعذر الوصول إلى المشروع.");
   const body = doc.body;
-  if(!body){
-    throw new Error("مشروع HTML لا يحتوي body.");
-  }
+  if(!body) throw new Error("مشروع HTML لا يحتوي body.");
 
   const base = getBaseSize();
 
-  const canvas = await html2canvas(body, {
-    width: base.width,
-    height: base.height,
-    windowWidth: base.width,
-    windowHeight: base.height,
-    scale: 1,
-    backgroundColor: "#000",
-    useCORS: true,
-    allowTaint: false,
-    logging: false,
-    imageTimeout: 15000,
-    foreignObjectRendering: false
-  });
+  if(PICKED_RENDERER === "modern"){
+    // المسار المُسرّع: سياق معاد استخدامه (createContext)
+    if(MODERN_CTX){
+      try {
+        const canvas = await MODERN_CTX.draw();
+        if(canvas && canvas.width > 0) return canvas;
+      } catch(err){
+        console.warn("[Render] MODERN_CTX.draw() فشل — تعطيل السياق والتحول إلى domToCanvas:", err);
+        MODERN_CTX = null; // لا نحاول مرة أخرى
+      }
+    }
 
-  return canvas;
+    // المسار الأساسي: domToCanvas لكل إطار
+    const canvas = await window.modernScreenshot.domToCanvas(body, {
+      width: base.width,
+      height: base.height,
+      scale: 1,
+      backgroundColor: "#000",
+      fetch: { requestInit: { cache: "force-cache" } }
+    });
+    return canvas;
+  }
+
+  if(PICKED_RENDERER === "html2canvas"){
+    return await html2canvas(body, {
+      width: base.width,
+      height: base.height,
+      windowWidth: base.width,
+      windowHeight: base.height,
+      scale: 1,
+      backgroundColor: "#000",
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 15000,
+      foreignObjectRendering: false
+    });
+  }
+
+  throw new Error("لم يتم اختيار محرك رسم — أعد تشغيل المشروع.");
 }
 
 /* =====================================================
@@ -1825,9 +1941,19 @@ async function exportVideo(){
   }
 
   try{
-    // التأكد من تحميل الخطوط قبل بدء التصدير
     await waitForResources($("preview").contentDocument);
 
+    // 1) اختيار محرك الرسم مرة واحدة قبل البدء
+    updateProgress(0, "اختبار محرك الرسم...");
+    await pickRenderer();
+
+    // 2) إعداد سياق modern-screenshot (إن أمكن) لإعادة استخدامه
+    if(PICKED_RENDERER === "modern"){
+      updateProgress(0, "تهيئة سياق الرسم...");
+      await setupModernContext();
+    }
+
+    // 3) تحميل محرك التصدير
     const lib = await waitForMediabunny(20000);
     const {
       Output, BufferTarget, CanvasSource, Mp4OutputFormat, WebMOutputFormat, Quality, canEncodeVideo
@@ -2080,7 +2206,6 @@ function escapeHTML(value){
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
 
-// انتظار جاهزية خطوط المنصة نفسها قبل الاعتماد عليها
 if(document.fonts && document.fonts.ready){
   document.fonts.ready.then(() => {
     console.log('[Platform] خطوط المنصة جاهزة.');
@@ -2092,6 +2217,13 @@ window.addEventListener('mediabunny-ready', () => {
 });
 window.addEventListener('mediabunny-failed', () => {
   console.error('[Platform] فشل تحميل Mediabunny.');
+});
+
+window.addEventListener('load', () => {
+  const hasModern = !!(window.modernScreenshot && window.modernScreenshot.domToCanvas);
+  const hasCtx = !!(window.modernScreenshot && window.modernScreenshot.createContext);
+  const hasH2C = typeof html2canvas === "function";
+  console.log('[Platform] Renderers → modern:', hasModern, '| createContext:', hasCtx, '| html2canvas:', hasH2C);
 });
 
 </script>
