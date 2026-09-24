@@ -148,7 +148,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .timeline{height:56px;border:1px solid var(--line);border-radius:12px;background:#071114;position:relative;overflow:hidden;direction:ltr;cursor:pointer;user-select:none;touch-action:none}
 .timeline:hover{border-color:rgba(201,168,90,.35)}
 .timeline.scrubbing{border-color:rgba(201,168,90,.6)}
-.timeline-track{position:absolute;inset:14px 8px;display:flex;gap:2px;pointer-events:none}
+.timeline-track{position:absolute;inset:14px 0;display:flex;gap:2px;pointer-events:none}
 .scene{position:relative;min-width:2px;border-radius:5px;background:rgba(201,168,90,.12);border:1px solid rgba(201,168,90,.25);transition:background .15s}
 .timeline:hover .scene{background:rgba(201,168,90,.2)}
 .scene span{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:8px;color:#d7c38c;direction:rtl;white-space:nowrap;pointer-events:none;overflow:hidden;max-width:calc(100% - 10px);text-overflow:ellipsis}
@@ -492,7 +492,8 @@ const APP = {
   exportSystem:"html2canvas",
   captureStream:null,
   recordingStart:0,
-  captureStreamAvailable:false
+  captureStreamAvailable:false,
+  _warnedSetTime:false
 };
 
 function $(id){ return document.getElementById(id); }
@@ -1065,9 +1066,17 @@ async function loadProject(){
     setPlayhead(initialTime);
     updatePlayerTime(initialTime);
 
+    APP._warnedSetTime = false;
+    const rr = APP.exportRoot ? APP.exportRoot.getBoundingClientRect() : null;
+    if(!win.__PROJECT__){
+      toast("الكود لا يحتوي window.__PROJECT__ — لن تظهر الحركة","warn",9000);
+    }else if(!rr || rr.width < 50 || rr.height < 50){
+      toast("project-root أبعاده صفر — مشكلة في تخطيط الكود","warn",9000);
+    }
+
     updateProjectInfo();
-    await buildTimeline();
-    await validateProject();
+    try{ await buildTimeline(); }catch(e){ console.warn("timeline",e); }
+    try{ await validateProject(); }catch(e){ console.warn("validate",e); }
 
     setStatus("جاهز","ok");
     toast("تم تحميل المشروع • اضغط ▶ للتشغيل","success",4000);
@@ -1115,7 +1124,7 @@ const GENERIC_FAMILIES = new Set([
 async function waitForFonts(doc,win){
   if(!doc.fonts || !win) return;
   try{ void doc.documentElement.offsetHeight; }catch{}
-  try{ await withTimeout(doc.fonts.ready,4000); }catch{}
+  try{ await withTimeout(doc.fonts.ready,2500); }catch{}
   const families = new Set();
   let elements = [];
   try{ elements = Array.from(doc.querySelectorAll("*")).slice(0,1200); }catch{}
@@ -1131,8 +1140,8 @@ async function waitForFonts(doc,win){
   const loads = [];
   const weights = ["400","500","700","900"];
   families.forEach(fam=>{ weights.forEach(w=>{ try{ loads.push(doc.fonts.load(w+' 24px "'+fam+'"')); }catch{} }); });
-  if(loads.length){ try{ await withTimeout(Promise.all(loads),10000); }catch{} }
-  try{ await withTimeout(doc.fonts.ready,5000); }catch{}
+  if(loads.length){ try{ await withTimeout(Promise.all(loads),4000); }catch{} }
+  try{ await withTimeout(doc.fonts.ready,1500); }catch{}
   APP.detectedFonts = Array.from(families);
   const missing = [];
   families.forEach(fam=>{ try{ if(!doc.fonts.check('400 16px "'+fam+'"')) missing.push(fam); }catch{ missing.push(fam); } });
@@ -1335,7 +1344,14 @@ function setProjectTimeFast(timeMs, animations){
   t = Math.max(0,Math.min(APP.durationMs,t));
   APP.currentTime = t;
   if(win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function"){
-    try{ win.__PROJECT__.setTime(t); }catch(error){ console.warn("setTime error:",error); }
+    try{ win.__PROJECT__.setTime(t); }
+    catch(error){
+      console.warn("setTime error:",error);
+      if(!APP._warnedSetTime){
+        APP._warnedSetTime = true;
+        toast("خطأ داخل كود مشروعك: " + (error.message || error),"error",9000);
+      }
+    }
   }
   if(animations && animations.length){
     for(let i = 0; i < animations.length; i++){
@@ -1444,12 +1460,12 @@ function playPreview(){
   APP.previewPlaying = true;
   $("playBtn").textContent = "⏸";
   $("playState").textContent = "يشغّل";
-  const startedAt = performance.now();
+  let startedAt = null;
   const initialTime = APP.currentTime;
   function tick(now){
     if(!APP.previewPlaying){ APP.previewRafId = 0; return; }
-    const elapsed = now - startedAt;
-    const time = initialTime + elapsed;
+    if(startedAt === null) startedAt = now;
+    const time = initialTime + (now - startedAt);
     if(time >= APP.durationMs){
       setProjectTimeFast(APP.durationMs, APP.exportAnimations);
       setPlayhead(APP.durationMs);
@@ -2270,6 +2286,7 @@ function escapeHTML(v){
 document.addEventListener("keydown",(event)=>{
   const tag = (event.target && event.target.tagName) || "";
   if(tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  if(tag === "BUTTON" && document.activeElement) document.activeElement.blur();
   const page = document.querySelector(".page.active");
   if(!page || page.id !== "page-workspace") return;
   if(event.code === "Space"){
