@@ -28,6 +28,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .brand-name{font-size:14px;font-weight:900}
 .brand-sub{font-size:9px;color:var(--muted);margin-top:3px}
 .top-status{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px}
+.top-actions{display:flex;gap:8px;align-items:center}
+.top-btn{border:1px solid var(--line);background:#091419;color:#e8eeee;border-radius:9px;padding:7px 12px;font-size:10px;font-weight:800}
+.top-btn:hover{border-color:rgba(201,168,90,.5)}
+.top-btn.red{color:#f1a0a0;border-color:rgba(223,116,116,.3)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(73,200,155,.7)}
 .status-dot.busy{background:var(--gold);box-shadow:0 0 12px rgba(201,168,90,.7)}
 .status-dot.error{background:var(--red);box-shadow:0 0 12px rgba(223,116,116,.7)}
@@ -62,7 +66,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .orientation strong{display:block;font-size:12px}
 .orientation span{display:block;margin-top:4px;font-size:9px;color:var(--muted)}
 
-/* Scenes list */
 .scenes-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
 .scene-row{display:grid;grid-template-columns:32px minmax(0,1fr) 90px 24px;gap:8px;align-items:center;background:#071114;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .scene-row input[type="text"]{border:0;background:transparent;color:#fff;outline:0;font-size:11px;padding:4px 2px;width:100%}
@@ -100,10 +103,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
 .preview-panel{min-width:0}
 .preview{background:#030607;border:1px solid var(--line);border-radius:20px;padding:12px}
-.preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:5px 8px;font-size:9px}
 .chip.time-chip{color:#d7c38c;border-color:rgba(201,168,90,.3);font-family:ui-monospace,monospace;font-weight:700}
+.chip.toggle-chip{cursor:pointer;user-select:none}
+.chip.toggle-chip.on{background:rgba(201,168,90,.15);color:#e3ca7c;border-color:rgba(201,168,90,.5)}
 .stage{min-height:420px;display:grid;place-items:center;border-radius:14px;overflow:hidden;background:radial-gradient(circle,#18282c 1px,transparent 1px);background-size:15px 15px}
 .frame-wrap{position:relative;overflow:hidden;display:block;max-width:100%;max-height:72vh}
 #preview{display:block;border:0;background:#000;transform-origin:top left;pointer-events:none}
@@ -187,7 +192,25 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .toast.warn{border-color:rgba(255,200,90,.4);color:#ffd166}
 @keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ============ Image manager ============ */
+/* Error log */
+.error-log-panel{margin-top:9px}
+.error-log-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:6px;background:#091419;border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:#e8eeee;font-size:10px;font-weight:800;cursor:pointer}
+.error-log-toggle:hover{border-color:rgba(201,168,90,.4)}
+.error-log-badge{background:rgba(223,116,116,.2);color:#f1a0a0;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.error-log-badge.zero{background:rgba(73,200,155,.15);color:#8ee0c1}
+.error-log-body{display:none;margin-top:7px;background:#050b0d;border:1px solid var(--line);border-radius:10px;padding:9px;max-height:220px;overflow-y:auto;font-family:ui-monospace,monospace;font-size:9px;line-height:1.6;direction:ltr;text-align:left}
+.error-log-body.show{display:block}
+.error-log-entry{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);color:#cbd5e1;word-break:break-word}
+.error-log-entry:last-child{border-bottom:0}
+.error-log-entry.error{color:#f1a0a0}
+.error-log-entry.warn{color:#ffd166}
+.error-log-entry.info{color:#8ec9e8}
+.error-log-entry .time{color:#64748b;margin-left:5px;margin-right:5px}
+.error-log-copy{width:100%;margin-top:7px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px;border-radius:6px;font-size:9px;cursor:pointer;font-weight:800}
+.error-log-copy:hover{color:#fff;border-color:rgba(201,168,90,.5)}
+.error-log-empty{color:#64748b;text-align:center;padding:8px}
+
+/* Image manager */
 .img-manager{display:none;margin-top:10px;padding:10px;background:#0b1216;border:1px solid var(--line);border-radius:12px}
 .img-manager.visible{display:block}
 .img-manager-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:6px}
@@ -238,7 +261,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .img-refresh{width:100%;margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px;border-radius:6px;cursor:pointer;font-size:9px;font-weight:800}
 .img-refresh:hover{background:#0f1a1e;color:#fff}
 
-/* ============ Modals (crop + bg) ============ */
+/* Modals */
 .modal-overlay{position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.90);display:none;align-items:center;justify-content:center;padding:12px}
 .modal-overlay.visible{display:flex}
 .modal{width:min(720px,100%);max-height:calc(100vh - 24px);overflow-y:auto;background:#0d191d;border:1px solid #334155;border-radius:14px;box-shadow:0 25px 60px rgba(0,0,0,.65);padding:14px}
@@ -334,9 +357,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
       <div class="brand-sub">مشاريع دراسية بأسلوب الموشن</div>
     </div>
   </div>
-  <div class="top-status">
-    <span class="status-dot" id="statusDot"></span>
-    <span id="globalStatus">جاهز</span>
+  <div class="top-actions">
+    <button class="top-btn red" id="newSessionBtn" title="مسح الحفظ المحلي وبدء جلسة جديدة">🗑 جلسة جديدة</button>
+    <div class="top-status">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="globalStatus">جاهز</span>
+    </div>
   </div>
 </header>
 
@@ -440,6 +466,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
             <span class="chip" id="orientationInfo">أفقي 16:9</span>
             <span class="chip" id="durationInfo">—</span>
             <span class="chip" id="formatInfo">—</span>
+            <span class="chip toggle-chip" id="exportModeToggle" title="محاكاة المعالجة التي تحدث أثناء التصدير">👁 معاينة وضع التصدير</span>
           </div>
           <span class="chip" id="stateInfo">لا يوجد مشروع</span>
         </div>
@@ -575,6 +602,20 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
         <div class="download" id="download"></div>
       </div>
+
+      <div class="side-panel">
+        <h3>سجل الأخطاء</h3>
+        <div class="error-log-panel">
+          <button type="button" class="error-log-toggle" id="errorLogToggle">
+            <span>عرض سجل الأخطاء</span>
+            <span class="error-log-badge zero" id="errorLogBadge">0</span>
+          </button>
+          <div class="error-log-body" id="errorLogBody">
+            <div class="error-log-empty">لا توجد أخطاء</div>
+          </div>
+          <button type="button" class="error-log-copy" id="errorLogCopy">📋 نسخ السجل</button>
+        </div>
+      </div>
     </aside>
   </div>
 </section>
@@ -586,7 +627,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ============ Crop Modal ============ -->
+<!-- Crop Modal -->
 <div id="cropModal" class="modal-overlay" aria-hidden="true">
   <div class="modal">
     <div class="modal-header">
@@ -615,7 +656,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </div>
 </div>
 
-<!-- ============ BG Removal Modal ============ -->
+<!-- BG Removal Modal -->
 <div id="bgModal" class="modal-overlay" aria-hidden="true">
   <div class="modal">
     <div class="modal-header">
@@ -688,7 +729,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
         return;
       }
     }catch(error){
-      console.warn("[Mediabunny] failed:",url,error);
+      console.warn("[Mediabunny] failed:",url,error && error.message);
     }
   }
   window.dispatchEvent(new Event("mediabunny-failed"));
@@ -725,11 +766,15 @@ const APP = {
   captureStream:null,
   recordingStart:0,
   captureStreamAvailable:false,
-  _warnedSetTime:false
+  _warnedSetTime:false,
+  errorLog:[],
+  exportModePreview:false,
+  mediabunnyReady:false
 };
 
-/* Scenes state */
 let SCENES = [];
+let SAVE_TIMER = null;
+const SESSION_KEY = "motion-platform-session-v1";
 
 function $(id){ return document.getElementById(id); }
 
@@ -745,28 +790,73 @@ function supportsDisplayMedia(){
   return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
 }
 function isMobileDevice(){
-  try{
-    if(window.matchMedia){
-      if(window.matchMedia("(pointer: coarse)").matches) return true;
-    }
-  }catch{}
+  try{ if(window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return true; }catch(e){}
   const ua = navigator.userAgent || "";
-  if(/Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|Opera Mini|IEMobile|Windows Phone/i.test(ua)) return true;
-  return false;
+  return /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|Opera Mini|IEMobile|Windows Phone/i.test(ua);
 }
-function shouldHideCaptureStreamOption(){
-  return isMobileDevice() || !supportsDisplayMedia();
+function shouldHideCaptureStreamOption(){ return isMobileDevice() || !supportsDisplayMedia(); }
+
+/* ===== ERROR LOG ===== */
+function logError(level, message, error){
+  const lvl = level || "error";
+  let detail = "";
+  if(error){
+    if(typeof error === "string") detail = error;
+    else if(error.message) detail = error.message;
+    else { try{ detail = String(error); }catch(e){ detail = "[unknown]"; } }
+  }
+  APP.errorLog.push({
+    t: Date.now(),
+    level: lvl,
+    message: String(message || ""),
+    detail: detail
+  });
+  // keep last 200
+  if(APP.errorLog.length > 200) APP.errorLog.splice(0, APP.errorLog.length - 200);
+  if(lvl === "error") console.error("[Log]", message, error || "");
+  else if(lvl === "warn") console.warn("[Log]", message, error || "");
+  else console.log("[Log]", message, error || "");
+  renderErrorLog();
 }
-function setupExportSystemOptions(){
-  const sel = $("exportSystem");
-  if(!sel) return;
-  const hideCapture = shouldHideCaptureStreamOption();
-  APP.captureStreamAvailable = !hideCapture;
-  const captureOpt = sel.querySelector('option[value="captureStream"]');
-  if(hideCapture && captureOpt){ captureOpt.remove(); sel.value = "html2canvas"; }
-  const note = $("desktopOnlyNote");
-  if(note) note.classList.toggle("show", hideCapture && sel.value === "html2canvas");
+function renderErrorLog(){
+  const body = $("errorLogBody");
+  const badge = $("errorLogBadge");
+  if(!body || !badge) return;
+  const errCount = APP.errorLog.filter(e => e.level === "error").length;
+  const warnCount = APP.errorLog.filter(e => e.level === "warn").length;
+  badge.textContent = String(APP.errorLog.length);
+  badge.classList.toggle("zero", APP.errorLog.length === 0);
+  if(APP.errorLog.length === 0){
+    body.innerHTML = '<div class="error-log-empty">لا توجد أخطاء</div>';
+    return;
+  }
+  const fmt = (ts)=>{
+    try{ return new Date(ts).toLocaleTimeString("ar-EG",{hour12:false}); }catch(e){ return ""; }
+  };
+  body.innerHTML = APP.errorLog.slice().reverse().map(e=>{
+    const cls = e.level === "error" ? "error" : e.level === "warn" ? "warn" : "info";
+    const detail = e.detail ? " — " + escapeHTML(e.detail) : "";
+    return '<div class="error-log-entry ' + cls + '"><span class="time">[' + fmt(e.t) + ']</span>[' + cls.toUpperCase() + '] ' + escapeHTML(e.message) + detail + '</div>';
+  }).join("");
 }
+(function(){
+  const btn = $("errorLogToggle");
+  const body = $("errorLogBody");
+  const copyBtn = $("errorLogCopy");
+  if(btn && body){
+    btn.addEventListener("click", ()=>{ body.classList.toggle("show"); });
+  }
+  if(copyBtn){
+    copyBtn.addEventListener("click", async ()=>{
+      const text = APP.errorLog.map(e=>{
+        const dt = (e.detail ? " | " + e.detail : "");
+        return "[" + new Date(e.t).toISOString() + "] [" + e.level + "] " + e.message + dt;
+      }).join("\n") || "لا توجد سجلات";
+      try{ await navigator.clipboard.writeText(text); toast("تم نسخ السجل","success",2000); }
+      catch(e){ logError("warn","تعذر نسخ السجل", e); toast("تعذر النسخ — انسخه يدويًا","warn"); }
+    });
+  }
+})();
 
 /* ===== TOASTS ===== */
 function toast(message,type,duration){
@@ -781,7 +871,7 @@ function toast(message,type,duration){
     el.style.opacity = "0";
     el.style.transform = "translateY(20px)";
     el.style.transition = "all .3s";
-    setTimeout(()=>{ try{ el.remove(); }catch{} },300);
+    setTimeout(()=>{ try{ el.remove(); }catch(e){ /* ignore */ } },300);
   },duration);
 }
 
@@ -813,7 +903,7 @@ function getVideoBitrate(width,height,fps){
   return Math.max(4_000_000, Math.min(60_000_000, Math.round(bitrate)));
 }
 
-/* ===== SANITIZE FOR CAPTURE ===== */
+/* ===== SANITIZE / CONSTRAINTS ===== */
 function sanitizeRootForCapture(doc){
   if(!doc) return;
   if(typeof doc.getElementById !== "function") return;
@@ -821,23 +911,23 @@ function sanitizeRootForCapture(doc){
   if(!root) return;
   try{
     if(root.parentNode && root.parentNode !== doc.body){ doc.body.appendChild(root); }
-  }catch(e){ console.warn("[sanitize] move failed", e); }
+  }catch(e){ logError("warn","تعذر نقل project-root إلى body", e); }
   const base = getBaseSize();
   const rootStyles = {
     "position":"absolute","top":"0","left":"0","right":"auto","bottom":"auto","inset":"auto",
     "margin":"0","padding":"0","transform":"none","-webkit-transform":"none","transform-origin":"top left",
     "z-index":"1","width":base.width+"px","height":base.height+"px","max-width":"none","max-height":"none",
-    "min-width":"0","min-height":"0","display":"block","visibility":"visible","opacity":"1"
+    "min-width":"0","min-height":"0","display":"block","visibility":"visible","opacity":"1","overflow":"hidden"
   };
-  for(const k in rootStyles){ try{ root.style.setProperty(k, rootStyles[k], "important"); }catch{} }
+  for(const k in rootStyles){ try{ root.style.setProperty(k, rootStyles[k], "important"); }catch(e){} }
   const html = doc.documentElement, body = doc.body;
   const clean = {
     "margin":"0","padding":"0","background":"#000","display":"block","transform":"none","-webkit-transform":"none",
     "transform-origin":"top left","align-items":"initial","justify-content":"initial","flex-direction":"initial",
-    "min-height":"0","width":"auto","height":"auto","overflow":"visible","position":"relative"
+    "min-height":"0","width":"auto","height":"auto","overflow":"hidden","position":"relative"
   };
-  if(html){ for(const k in clean){ try{ html.style.setProperty(k, clean[k], "important"); }catch{} } try{ html.style.setProperty("overflow","hidden","important"); }catch{} }
-  if(body){ for(const k in clean){ try{ body.style.setProperty(k, clean[k], "important"); }catch{} } }
+  if(html){ for(const k in clean){ try{ html.style.setProperty(k, clean[k], "important"); }catch(e){} } }
+  if(body){ for(const k in clean){ try{ body.style.setProperty(k, clean[k], "important"); }catch(e){} } }
   try{
     Array.from(doc.body.children).forEach(child => {
       if(child !== root){
@@ -845,13 +935,129 @@ function sanitizeRootForCapture(doc){
         child.style.setProperty("visibility","hidden","important");
       }
     });
-  }catch(e){}
+  }catch(e){ logError("warn","تعذر إخفاء عناصر body", e); }
+}
+
+/* Bند 1: قيد أبعاد #project-root على المعاينة الحية */
+function enforceRootConstraints(doc){
+  if(!doc) return;
+  const base = getBaseSize();
+  const root = doc.getElementById("project-root");
+  if(root){
+    try{
+      root.style.setProperty("position","absolute","important");
+      root.style.setProperty("top","0","important");
+      root.style.setProperty("left","0","important");
+      root.style.setProperty("right","auto","important");
+      root.style.setProperty("bottom","auto","important");
+      root.style.setProperty("width", base.width + "px","important");
+      root.style.setProperty("height", base.height + "px","important");
+      root.style.setProperty("max-width", base.width + "px","important");
+      root.style.setProperty("max-height", base.height + "px","important");
+      root.style.setProperty("min-width","0","important");
+      root.style.setProperty("min-height","0","important");
+      root.style.setProperty("overflow","hidden","important");
+      root.style.setProperty("margin","0","important");
+      root.style.setProperty("padding","0","important");
+      root.style.setProperty("transform","none","important");
+    }catch(e){ logError("warn","تعذر تثبيت أبعاد project-root", e); }
+  }
+  if(doc.body){
+    try{
+      doc.body.style.setProperty("overflow","hidden","important");
+      doc.body.style.setProperty("margin","0","important");
+      doc.body.style.setProperty("padding","0","important");
+      doc.body.style.setProperty("width", base.width + "px","important");
+      doc.body.style.setProperty("height", base.height + "px","important");
+    }catch(e){ logError("warn","تعذر تثبيت أبعاد body", e); }
+  }
+  if(doc.documentElement){
+    try{
+      doc.documentElement.style.setProperty("overflow","hidden","important");
+      doc.documentElement.style.setProperty("margin","0","important");
+      doc.documentElement.style.setProperty("padding","0","important");
+    }catch(e){}
+  }
+}
+
+/* بند 3: تثبيت حاويات الصور */
+function enforceImageContainers(doc){
+  if(!doc) return;
+  const win = doc.defaultView || window;
+  const imgs = Array.from(doc.querySelectorAll("img"));
+  imgs.forEach(img => {
+    const parent = img.parentElement;
+    if(!parent || parent === doc.body || parent.id === "project-root") return;
+    let ps;
+    try{ ps = win.getComputedStyle(parent); }catch(e){ return; }
+    const needsOverflow = ps.overflow !== "hidden" || ps.overflowX !== "hidden" || ps.overflowY !== "hidden";
+    const needsPosition = ps.position === "static";
+    const rect = parent.getBoundingClientRect();
+    if(needsOverflow || needsPosition){
+      try{
+        if(needsPosition) parent.style.setProperty("position","relative","important");
+        parent.style.setProperty("overflow","hidden","important");
+        parent.style.setProperty("max-width", Math.max(1, Math.round(rect.width)) + "px","important");
+        parent.style.setProperty("max-height", Math.max(1, Math.round(rect.height)) + "px","important");
+      }catch(e){ logError("warn","تعذر تثبيت حاوية img", e); }
+    }
+    try{
+      img.style.setProperty("max-width","100%","important");
+      img.style.setProperty("max-height","100%","important");
+      if(!img.style.objectFit) img.style.setProperty("object-fit","cover","important");
+    }catch(e){}
+  });
+  const all = Array.from(doc.querySelectorAll("*")).slice(0, 2500);
+  all.forEach(el => {
+    let bg = "";
+    try{ bg = win.getComputedStyle(el).backgroundImage || ""; }catch(e){ return; }
+    if(!bg || bg === "none") return;
+    let ps;
+    try{ ps = win.getComputedStyle(el); }catch(e){ return; }
+    if(ps.overflow !== "hidden"){
+      try{ el.style.setProperty("overflow","hidden","important"); }catch(e){}
+    }
+  });
+}
+
+/* بند 5: انتظر اكتمال تحميل كل الصور فعليًا */
+async function waitForAllImages(doc){
+  if(!doc) return;
+  const imgs = Array.from(doc.images || []);
+  await Promise.all(imgs.map(img => waitForImage(img)));
+  const win = doc.defaultView || window;
+  const all = Array.from(doc.querySelectorAll("*")).slice(0, 1500);
+  const bgPromises = [];
+  all.forEach(el => {
+    let bg = "";
+    try{ bg = win.getComputedStyle(el).backgroundImage || ""; }catch(e){ return; }
+    if(!bg || bg === "none") return;
+    const urls = extractImageUrls(bg);
+    urls.forEach(u => {
+      if(u.indexOf("data:") === 0){
+        bgPromises.push(new Promise(res => {
+          const im = new Image();
+          im.onload = im.onerror = () => res();
+          im.src = u;
+        }));
+      } else {
+        bgPromises.push(new Promise(res => {
+          const im = new Image();
+          im.crossOrigin = "anonymous";
+          im.onload = im.onerror = () => res();
+          im.src = u;
+          setTimeout(res, 8000);
+        }));
+      }
+    });
+  });
+  await Promise.all(bgPromises);
 }
 
 /* ===== MEDIABUNNY ===== */
 function waitForMediabunny(timeoutMs){
   timeoutMs = timeoutMs || 20000;
-  if(window.Mediabunny) return Promise.resolve(window.Mediabunny);
+  if(window.Mediabunny){ APP.mediabunnyReady = true; return Promise.resolve(window.Mediabunny); }
   return new Promise((resolve,reject)=>{
     let done = false, poll = null, timer = null;
     const finish = (err,lib)=>{
@@ -860,13 +1066,13 @@ function waitForMediabunny(timeoutMs){
       window.removeEventListener("mediabunny-failed",onFail);
       if(poll) clearInterval(poll);
       if(timer) clearTimeout(timer);
-      if(err) reject(err); else resolve(lib);
+      if(err) reject(err); else { APP.mediabunnyReady = true; resolve(lib); }
     };
     const onReady = ()=>{ finish(null,window.Mediabunny); };
-    const onFail = ()=>{ finish(new Error("تعذر تحميل Mediabunny من الشبكة.")); };
+    const onFail = ()=>{ finish(new Error("تعذر تحميل مكتبة Mediabunny من جميع المصادر. تحقق من اتصالك بالإنترنت ثم أعد المحاولة.")); };
     window.addEventListener("mediabunny-ready",onReady,{once:true});
     window.addEventListener("mediabunny-failed",onFail,{once:true});
-    timer = setTimeout(()=>{ finish(new Error("انتهت مهلة تحميل Mediabunny.")); },timeoutMs);
+    timer = setTimeout(()=>{ finish(new Error("انتهت مهلة تحميل مكتبة الترميز (Mediabunny).")); },timeoutMs);
     poll = setInterval(()=>{ if(window.Mediabunny) finish(null,window.Mediabunny); },150);
   });
 }
@@ -887,10 +1093,11 @@ document.querySelectorAll("[data-orientation]").forEach(button=>{
     if(APP.exporting) return;
     APP.orientation = button.dataset.orientation;
     document.querySelectorAll("[data-orientation]").forEach(item=>{ item.classList.toggle("active",item === button); });
+    scheduleAutoSave();
   });
 });
 
-/* ===== SCENES MANAGEMENT ===== */
+/* ===== SCENES ===== */
 function escapeHTML(v){
   return String(v == null ? "" : v)
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
@@ -899,13 +1106,10 @@ function escapeHTML(v){
 function escapePromptAttr(v){
   return String(v || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-
 function makeScene(i, title, duration){
   return { index: i+1, title: title || "", duration: Math.max(2, Math.min(60, Number(duration) || 6)) };
 }
-
 function defaultSceneTitles(count){
-  const defs = ["الافتتاحية","التمهيد","المحتوى","المحتوى","المحتوى","الخلاصة","الختامي"];
   const arr = [];
   for(let i=0;i<count;i++){
     if(i === 0) arr.push("الافتتاحية");
@@ -916,7 +1120,6 @@ function defaultSceneTitles(count){
   }
   return arr;
 }
-
 function renderScenesList(){
   const wrap = $("scenesList");
   if(!wrap) return;
@@ -945,17 +1148,17 @@ function renderScenesList(){
         SCENES[i].duration = v;
       }
       updateTotalDuration();
+      scheduleAutoSave();
     });
+    inp.addEventListener("change", () => scheduleAutoSave());
   });
   updateTotalDuration();
 }
-
 function updateTotalDuration(){
   const total = SCENES.reduce((s,sc) => s + (sc.duration||0), 0);
   const el = $("totalDuration");
   if(el) el.textContent = total + " ثانية";
 }
-
 function buildTimingTable(){
   let cum = 0;
   return SCENES.map((sc,i) => {
@@ -971,7 +1174,6 @@ function buildTimingTable(){
     };
   });
 }
-
 function setScenesCount(n){
   n = Math.max(3, Math.min(20, Number(n) || 6));
   const old = SCENES.slice();
@@ -982,20 +1184,22 @@ function setScenesCount(n){
   }
   SCENES.forEach((sc,i) => sc.index = i+1);
   renderScenesList();
+  scheduleAutoSave();
 }
-
-$("scenesCount").addEventListener("input", e => {
+/* بند 11: change/blur بدل input */
+$("scenesCount").addEventListener("change", e => {
   let n = Number(e.target.value);
-  if(!Number.isFinite(n)) return;
+  if(!Number.isFinite(n)) n = 6;
   n = Math.max(3, Math.min(20, n));
-  setScenesCount(n);
+  e.target.value = n;
+  if(n !== SCENES.length) setScenesCount(n);
 });
 $("scenesCount").addEventListener("blur", e => {
   let n = Number(e.target.value);
   if(!Number.isFinite(n)) n = 6;
   n = Math.max(3, Math.min(20, n));
   e.target.value = n;
-  setScenesCount(n);
+  if(n !== SCENES.length) setScenesCount(n);
 });
 $("unifyBtn").addEventListener("click", () => {
   const v = Math.max(2, Math.min(60, Number($("unifyDuration").value) || 6));
@@ -1004,7 +1208,7 @@ $("unifyBtn").addEventListener("click", () => {
   toast("تم توحيد المدة على " + v + " ثانية","success",2500);
 });
 
-/* ===== FORM ===== */
+/* ===== FORM / AUTOSAVE ===== */
 function getForm(){
   return {
     title:$("title").value.trim(),
@@ -1018,9 +1222,120 @@ function getForm(){
     imageCount: Math.max(0, Math.min(20, Number($("imageCount").value) || 0))
   };
 }
+function scheduleAutoSave(){
+  if(SAVE_TIMER) clearTimeout(SAVE_TIMER);
+  SAVE_TIMER = setTimeout(saveSession, 400);
+}
+function saveSession(){
+  try{
+    const data = {
+      ts: Date.now(),
+      form: getForm(),
+      scenes: SCENES.map(s => ({ title: s.title, duration: s.duration })),
+      orientation: APP.orientation,
+      code: $("code").value,
+      quality: $("quality").value,
+      fps: $("fps").value,
+      exportSystem: $("exportSystem").value
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+  }catch(e){ logError("warn","تعذر الحفظ التلقائي", e); }
+}
+function restoreSession(){
+  try{
+    const raw = localStorage.getItem(SESSION_KEY);
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    if(!data) return false;
+    const f = data.form || {};
+    if(f.title != null) $("title").value = f.title;
+    if(f.subject != null) $("subject").value = f.subject;
+    if(f.grade != null) $("grade").value = f.grade;
+    if(f.student != null) $("student").value = f.student;
+    if(f.teacher != null) $("teacher").value = f.teacher;
+    if(f.year != null) $("year").value = f.year;
+    if(f.extra != null) $("extra").value = f.extra;
+    if(f.visualStyle != null && $("visualStyle")) $("visualStyle").value = f.visualStyle;
+    if(f.imageCount != null) $("imageCount").value = f.imageCount;
+    if(data.orientation === "portrait" || data.orientation === "landscape"){
+      APP.orientation = data.orientation;
+      document.querySelectorAll("[data-orientation]").forEach(item=>{
+        item.classList.toggle("active", item.dataset.orientation === data.orientation);
+      });
+    }
+    if(Array.isArray(data.scenes) && data.scenes.length){
+      SCENES = data.scenes.map((s,i)=>({
+        index: i+1,
+        title: typeof s.title === "string" ? s.title : "",
+        duration: Math.max(2, Math.min(60, Number(s.duration) || 6))
+      }));
+      if($("scenesCount")) $("scenesCount").value = String(SCENES.length);
+      renderScenesList();
+    }
+    if(typeof data.code === "string") $("code").value = data.code;
+    if(data.quality && $("quality")) $("quality").value = data.quality;
+    if(data.fps && $("fps")) $("fps").value = data.fps;
+    if(data.exportSystem && $("exportSystem")) $("exportSystem").value = data.exportSystem;
+    logError("info","تم استرجاع الجلسة السابقة");
+    return true;
+  }catch(e){ logError("warn","تعذر استرجاع الجلسة", e); return false; }
+}
+function clearSession(){
+  try{ localStorage.removeItem(SESSION_KEY); }catch(e){ logError("warn","تعذر مسح الحفظ", e); }
+}
+/* autosave hooks */
+["title","subject","grade","student","teacher","year","extra","imageCount","visualStyle"].forEach(id=>{
+  const el = $(id);
+  if(el){ el.addEventListener("input", scheduleAutoSave); el.addEventListener("change", scheduleAutoSave); }
+});
+$("code").addEventListener("input", scheduleAutoSave);
+$("quality").addEventListener("change", scheduleAutoSave);
+$("fps").addEventListener("change", scheduleAutoSave);
+$("exportSystem").addEventListener("change", scheduleAutoSave);
+
+$("newSessionBtn").addEventListener("click", ()=>{
+  if(APP.exporting){ toast("أوقف التصدير أولًا","warn"); return; }
+  if(!confirm("سيتم مسح الحفظ المحلي وبدء جلسة جديدة. متابعة؟")) return;
+  clearSession();
+  try{
+    $("title").value = ""; $("subject").value = ""; $("grade").value = "";
+    $("student").value = ""; $("teacher").value = ""; $("year").value = "";
+    $("extra").value = ""; $("imageCount").value = "3";
+    if($("visualStyle")) $("visualStyle").value = "auto";
+    $("code").value = "";
+    $("prompt").value = "";
+    $("promptBox").classList.remove("show");
+    SCENES = [];
+    $("scenesCount").value = "6";
+    setScenesCount(6);
+    APP.orientation = "landscape";
+    document.querySelectorAll("[data-orientation]").forEach(item=>{
+      item.classList.toggle("active", item.dataset.orientation === "landscape");
+    });
+    // reset workspace
+    stopPreview();
+    APP.html = ""; APP.loaded = false; APP.durationMs = 0; APP.title = ""; APP.currentTime = 0;
+    APP.detectedFonts = []; APP.missingFonts = [];
+    APP.exportAnimations = []; APP.exportDoc = null; APP.exportWin = null; APP.exportRoot = null;
+    IMG_MGR.items = []; IMG_MGR.replacements.clear(); IMG_MGR.selected.clear();
+    renderImageManager();
+    $("preview").srcdoc = "";
+    $("stateInfo").textContent = "لا يوجد مشروع";
+    $("durationInfo").textContent = "—"; $("formatInfo").textContent = "—";
+    $("infoTitle").textContent = "—"; $("infoDuration").textContent = "—";
+    if($("infoFonts")) $("infoFonts").textContent = "—";
+    if($("infoImages")) $("infoImages").textContent = "—";
+    $("timelineTrack").innerHTML = ""; $("validation").innerHTML = "";
+    $("download").innerHTML = ""; $("download").classList.remove("show");
+    $("playerTime").textContent = "00:00 / 00:00"; $("playhead").style.left = "0%";
+    APP.errorLog = []; renderErrorLog();
+    setStatus("جاهز","ok");
+    toast("تم بدء جلسة جديدة","success",3000);
+  }catch(e){ logError("error","فشل بدء جلسة جديدة", e); }
+});
 
 /* =========================================================
-   PROMPT — جدول توقيت دقيق + قواعد قصيرة + إبداع
+   PROMPT (بند 13)
 ========================================================= */
 function createPrompt(){
   const data = getForm();
@@ -1058,8 +1373,48 @@ function createPrompt(){
     return `- **الشريحة ${t.n}** (${t.title}) — فكرة واحدة عميقة (نمط بصري مختلف عن الجارتين). (${t.start}–${t.end}ms)`;
   }).join("\n");
 
-  const imgLine = data.imageCount > 0
-    ? `أضف **${data.imageCount} صورة بالضبط** داخل المشروع، موزعة على الشرائح.`
+  // جدول توقيت الصور (بند 13)
+  const imageCount = data.imageCount;
+  let imageTimingTable = "";
+  if(imageCount > 0){
+    const sceneCount = timing.length;
+    const perScene = Math.max(1, Math.floor(sceneCount / imageCount));
+    const rows = [];
+    for(let k = 0; k < imageCount; k++){
+      const sceneIdx = Math.min(sceneCount, 1 + Math.floor(k * sceneCount / imageCount));
+      const t = timing[sceneIdx - 1] || timing[0];
+      const frameW = portrait ? 800 : 1000;
+      const frameH = portrait ? 1000 : 700;
+      rows.push(`| img-${k+1} | الشريحة ${sceneIdx} | ${frameW}×${frameH} | ${t.start}–${t.end} | داخل .img-frame في المشهد ${sceneIdx} |`);
+    }
+    imageTimingTable = `
+**جدول توقيت الصور (إلزامي — يجب مطابقة أبعاد كل حاوية .img-frame بالأرقام أدناه):**
+
+| image | المشهد | الحاوية (.img-frame) | ضمن التوقيت | ملاحظة |
+|-------|--------|----------------------|-------------|--------|
+${rows.join("\n")}
+
+⚠️ ممنوع تمامًا استخدام أي من التالي على الصور أو حاوياتها:
+   • width/height بقيم نسبية مثل % أو vw أو vh أو auto.
+   • position:fixed على الصور.
+   • transform:scale يكسر الحاوية.
+   • أي عنصر خارج #project-root يتجاوز حدوده.
+
+✅ مثال كود صحيح لا لبس فيه:
+\`\`\`html
+<!-- img-1 (${portrait ? "800×1000" : "1000×700"} px) — يظهر ضمن المشهد 1 -->
+<div class="img-frame" style="width:${portrait ? "800px" : "1000px"};height:${portrait ? "1000px" : "700px"};position:relative;overflow:hidden;">
+  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${portrait?800:1000}' height='${portrait?1000:700}'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3C/svg%3E"
+       alt="وصف"
+       data-image-name="img-1"
+       style="width:100%;height:100%;object-fit:cover;display:block;">
+</div>
+\`\`\`
+`;
+  }
+
+  const imgLine = imageCount > 0
+    ? `أضف **${imageCount} صورة بالضبط** داخل المشروع، موزعة على الشرائح وفق جدول توقيت الصور أدناه.`
     : "بدون صور نهائيًا (لا `<img>` ولا `background-image`).";
 
   const styleLine = isAuto
@@ -1117,7 +1472,7 @@ ${scenesBreakdown}
 2. body يحتوي #project-root فقط.
 3. كل شريحة: <section data-scene="N" data-scene-name="..." data-scene-start="MS" data-scene-end="MS">.
 4. في <head> فقط: project-orientation="${APP.orientation}" ، project-duration-ms="${totalMs}" ، project-title.
-5. كل الحركة داخل window.__PROJECT__.setTime(timeMs) فقط. شكلها:
+5. كل الحركة داخل window.__PROJECT__.setTime(timeMs) فقط:
    window.__PROJECT__ = { duration: ${totalMs}, orientation: "${APP.orientation}", setTime: function(ms){ /* ... */ } };
 6. ممنوع: CSS animation/transition كآلية أساسية، requestAnimationFrame، setTimeout للحركة.
 7. ممنوع في CSS: filter:blur، drop-shadow، backdrop-filter، mask-image، mix-blend-mode، background-clip:text على العربية.
@@ -1141,27 +1496,21 @@ ${scenesBreakdown}
 - إبراز الرقم أو الكلمة المهمة: scale من 1 إلى 1.05–1.15 ثم عودة.
 - حركة الصور: تكبير خفيف (1 → 1.05) أو كشف تدريجي أو انزلاق.
 - عند نهاية كل شريحة (آخر 20%): خروج ناعم.
-- بين الشرائح: crossfade 300ms (تتلاشى نهاية المشهد وتظهر بداية المشهد التالي).
+- بين الشرائح: crossfade 300ms.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🖼️ الصور
+🖼️ الصور وحاوياتها (متطلب تقني صريح وقابل للتحقق آليًا)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ${imgLine}
+${imageTimingTable}
 
-${data.imageCount > 0 ? `
-لكل صورة التزم بالضبط بهذا الشكل:
-<div class="img-frame">
-  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23334155'/%3E%3Cstop offset='100%25' stop-color='%2364748b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='600' fill='url(%23g)'/%3E%3C/svg%3E"
-       alt="وصف دقيق لمحتوى الصورة"
-       data-image-name="وصف-قصير-فريد">
-</div>
-
-شروط إلزامية للصور:
-- .img-frame حاوية بأبعاد ثابتة (px) و position:relative و overflow:hidden.
-- img داخل الحاوية: width:100%، height:100%، object-fit:cover.
-- الصورة المؤقتة هي SVG data URL بتدرج لوني (كما فوق) — المستخدم سيستبدلها من مدير الصور.
-- ممنوع أي رابط محلي أو مسار نسبي.
-` : "لا تضع أي صورة أو background-image."}
+القاعدة الصارمة:
+  • كل صورة داخل حاوية .img-frame بأبعاد ثابتة بالبكسل، مطابقة تمامًا لعمود "الحاوية" في جدول توقيت الصور أعلاه.
+  • .img-frame: position:relative، overflow:hidden، width و height بوحدات px فقط (ممنوع %، vw، vh، auto، rem، em).
+  • img داخل الحاوية: width:100%، height:100%، object-fit:cover، display:block.
+  • ممنوع أي عنصر بأبعاد نسبية (%) أو auto يتجاوز حدود #project-root.
+  • ممنوع أي موضع (position) يخرج عن إطار الحاوية أو #project-root.
+  • الصورة المؤقتة هي SVG data URL بتدرج لوني (كما في المثال) — المستخدم سيستبدلها من مدير الصور.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📤 الإخراج
@@ -1179,6 +1528,7 @@ HTML واحد كامل يبدأ بـ <!doctype html> مع lang="ar" dir="rtl".
 ✓ الأسماء في الشريحة الأخيرة فقط.
 ✓ لا filter/backdrop-filter/mix-blend-mode/mask-image.
 ✓ لا transform:scale على #project-root.
+${imageCount > 0 ? "✓ كل صورة داخل .img-frame بأبعاد البكسل المحددة في جدول توقيت الصور." : "✓ لا صور ولا background-image."}
 
 أخرج HTML فقط.
 `.trim();
@@ -1187,16 +1537,8 @@ HTML واحد كامل يبدأ بـ <!doctype html> مع lang="ar" dir="rtl".
 /* ===== GENERATE / COPY ===== */
 $("generate").addEventListener("click",()=>{
   const data = getForm();
-  if(!data.title){
-    toast("اكتب عنوان المشروع أولًا","warn");
-    $("title").focus();
-    return;
-  }
-  if(!SCENES.length){
-    toast("حدد شرائح المشروع","warn");
-    return;
-  }
-
+  if(!data.title){ toast("اكتب عنوان المشروع أولًا","warn"); $("title").focus(); return; }
+  if(!SCENES.length){ toast("حدد شرائح المشروع","warn"); return; }
   const promptText = createPrompt();
   $("prompt").value = promptText;
   const timing = buildTimingTable();
@@ -1210,24 +1552,19 @@ $("generate").addEventListener("click",()=>{
   $("copyPrompt").textContent = "نسخ البرومبت";
   toast("تم إنشاء البرومبت مع جدول التوقيت","success",3000);
 });
-
 $("copyPrompt").addEventListener("click",async()=>{
   const btn = $("copyPrompt");
   const text = $("prompt").value;
   if(!text){ toast("أنشئ البرومبت أولًا","warn"); return; }
-  try{
-    await navigator.clipboard.writeText(text);
-    toast("تم نسخ البرومبت","success",2000);
-  }catch{
+  try{ await navigator.clipboard.writeText(text); toast("تم نسخ البرومبت","success",2000); }
+  catch(e){
+    logError("warn","Clipboard API فشل", e);
     $("prompt").select();
-    try{ document.execCommand("copy"); toast("تم النسخ","success",2000); }catch{}
+    try{ document.execCommand("copy"); toast("تم النسخ","success",2000); }
+    catch(e2){ logError("error","تعذر النسخ", e2); toast("تعذر النسخ","error"); }
   }
-  btn.classList.add("copied");
-  btn.textContent = "✓ تم النسخ";
-  setTimeout(()=>{
-    btn.classList.remove("copied");
-    btn.textContent = "نسخ البرومبت";
-  },1600);
+  btn.classList.add("copied"); btn.textContent = "✓ تم النسخ";
+  setTimeout(()=>{ btn.classList.remove("copied"); btn.textContent = "نسخ البرومبت"; },1600);
 });
 
 /* ===== NORMALIZE ===== */
@@ -1256,6 +1593,37 @@ function readMeta(doc){
   };
 }
 
+/* ===== EXPORT MODE PREVIEW (بند 2) ===== */
+$("exportModeToggle").addEventListener("click", async ()=>{
+  if(!APP.loaded){ toast("حمّل المشروع أولًا","warn"); return; }
+  APP.exportModePreview = !APP.exportModePreview;
+  $("exportModeToggle").classList.toggle("on", APP.exportModePreview);
+  toast(APP.exportModePreview ? "وضع التصدير: سيُطبَّق تبسيط CSS على المعاينة" : "وضع المعاينة الحقيقي", "info", 3000);
+  // reload html so preprocessing is applied only when in export mode
+  if(APP.html){
+    stopPreview();
+    try{
+      await setIframe(APP.html);
+      await waitForResources($("preview").contentDocument);
+      applyIframeCanvasSize(APP.orientation);
+      APP.exportDoc = $("preview").contentDocument;
+      APP.exportWin = $("preview").contentWindow;
+      APP.exportRoot = getProjectRoot(APP.exportDoc);
+      APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+      if(APP.exportModePreview && APP.exportDoc && APP.exportWin){
+        try{ preprocessModernCSS(APP.exportDoc, APP.exportWin); }catch(e){ logError("warn","فشل معالجة CSS", e); }
+      }
+      enforceRootConstraints(APP.exportDoc);
+      enforceImageContainers(APP.exportDoc);
+      analyzeIframeImages();
+      applyStoredReplacementsToIframe();
+      const t = APP.currentTime || 0;
+      setProjectTimeFast(t, APP.exportAnimations);
+      setPlayhead(t); updatePlayerTime(t);
+    }catch(e){ logError("error","تعذر تحديث المعاينة", e); }
+  }
+});
+
 /* ===== LOAD PROJECT ===== */
 $("load").addEventListener("click",loadProject);
 
@@ -1268,12 +1636,9 @@ async function loadProject(){
   APP.html = html;
   APP.loaded = false;
   APP.exportAnimations = [];
-  APP.exportDoc = null;
-  APP.exportWin = null;
-  APP.exportRoot = null;
+  APP.exportDoc = null; APP.exportWin = null; APP.exportRoot = null;
 
   setStatus("جارٍ تحميل المشروع...","busy");
-
   try{
     applyIframeCanvasSize(APP.orientation);
     await setIframe(html);
@@ -1299,9 +1664,7 @@ async function loadProject(){
     APP.grade = $("grade").value.trim();
 
     let resolvedOrientation = APP.orientation;
-    if(meta.orientation === "portrait" || meta.orientation === "landscape"){
-      resolvedOrientation = meta.orientation;
-    }
+    if(meta.orientation === "portrait" || meta.orientation === "landscape") resolvedOrientation = meta.orientation;
     const orientationChanged = resolvedOrientation !== APP.orientation;
     APP.orientation = resolvedOrientation;
 
@@ -1316,35 +1679,36 @@ async function loadProject(){
     APP.exportRoot = getProjectRoot(doc);
     APP.exportAnimations = collectProjectAnimations(doc);
 
-    APP.loaded = true;
+    // بند 1: تثبيت أبعاد project-root على المعاينة الحية
+    enforceRootConstraints(doc);
+    // بند 3: تثبيت حاويات الصور
+    enforceImageContainers(doc);
+    // بند 2: preprocessModernCSS فقط عند تفعيل وضع التصدير
+    if(APP.exportModePreview){
+      try{ preprocessModernCSS(doc, win); }catch(e){ logError("warn","فشل معالجة CSS", e); }
+    }
 
+    APP.loaded = true;
     const initialTime = Math.min(1000, Math.round(APP.durationMs * 0.05));
     APP.currentTime = initialTime;
     setProjectTimeFast(initialTime, APP.exportAnimations);
-    setPlayhead(initialTime);
-    updatePlayerTime(initialTime);
+    setPlayhead(initialTime); updatePlayerTime(initialTime);
 
     APP._warnedSetTime = false;
     const rr = APP.exportRoot ? APP.exportRoot.getBoundingClientRect() : null;
-    if(!win.__PROJECT__){
-      toast("الكود لا يحتوي window.__PROJECT__ — لن تظهر الحركة","warn",9000);
-    }else if(!rr || rr.width < 50 || rr.height < 50){
-      toast("project-root أبعاده صفر — مشكلة في تخطيط الكود","warn",9000);
-    }
+    if(!win.__PROJECT__) toast("الكود لا يحتوي window.__PROJECT__ — لن تظهر الحركة","warn",9000);
+    else if(!rr || rr.width < 50 || rr.height < 50) toast("project-root أبعاده صفر — مشكلة في تخطيط الكود","warn",9000);
 
     updateProjectInfo();
-    try{ await buildTimeline(); }catch(e){ console.warn("timeline",e); }
-    try{ await validateProject(); }catch(e){ console.warn("validate",e); }
-
-    /* Analyze images from the live iframe doc */
-    try{ analyzeIframeImages(); }catch(e){ console.warn("analyze images",e); }
-    /* Re-apply stored replacements */
-    try{ applyStoredReplacementsToIframe(); }catch(e){ console.warn("apply replacements",e); }
+    try{ await buildTimeline(); }catch(e){ logError("warn","فشل بناء الـ timeline", e); }
+    try{ await validateProject(); }catch(e){ logError("warn","فشل الفحص", e); }
+    try{ analyzeIframeImages(); }catch(e){ logError("warn","فشل تحليل الصور", e); }
+    try{ applyStoredReplacementsToIframe(); }catch(e){ logError("warn","فشل تطبيق الاستبدالات", e); }
 
     setStatus("جاهز","ok");
     toast("تم تحميل المشروع • اضغط ▶ للتشغيل","success",4000);
   }catch(error){
-    console.error(error);
+    logError("error", error.message || "فشل تحميل المشروع", error);
     APP.loaded = false;
     setStatus("خطأ","error");
     toast(error.message || "حدث خطأ أثناء تحميل المشروع","error",6000);
@@ -1356,10 +1720,8 @@ function applyIframeCanvasSize(orientation){
   APP.orientation = orientation;
   const base = getBaseSize();
   const iframe = $("preview");
-  iframe.width = base.width;
-  iframe.height = base.height;
-  iframe.style.width = base.width + "px";
-  iframe.style.height = base.height + "px";
+  iframe.width = base.width; iframe.height = base.height;
+  iframe.style.width = base.width + "px"; iframe.style.height = base.height + "px";
   resizePreview();
 }
 function setIframe(html){
@@ -1386,14 +1748,14 @@ const GENERIC_FAMILIES = new Set([
 ]);
 async function waitForFonts(doc,win){
   if(!doc.fonts || !win) return;
-  try{ void doc.documentElement.offsetHeight; }catch{}
-  try{ await withTimeout(doc.fonts.ready,2500); }catch{}
+  try{ void doc.documentElement.offsetHeight; }catch(e){}
+  try{ await withTimeout(doc.fonts.ready,2500); }catch(e){}
   const families = new Set();
   let elements = [];
-  try{ elements = Array.from(doc.querySelectorAll("*")).slice(0,1200); }catch{}
+  try{ elements = Array.from(doc.querySelectorAll("*")).slice(0,1200); }catch(e){}
   for(const el of elements){
     let ff = "";
-    try{ ff = win.getComputedStyle(el).fontFamily || ""; }catch{}
+    try{ ff = win.getComputedStyle(el).fontFamily || ""; }catch(e){}
     if(!ff) continue;
     ff.split(",").forEach(name=>{
       const clean = name.trim().replace(/^["']|["']$/g,"");
@@ -1402,14 +1764,14 @@ async function waitForFonts(doc,win){
   }
   const loads = [];
   const weights = ["400","500","700","900"];
-  families.forEach(fam=>{ weights.forEach(w=>{ try{ loads.push(doc.fonts.load(w+' 24px "'+fam+'"')); }catch{} }); });
-  if(loads.length){ try{ await withTimeout(Promise.all(loads),4000); }catch{} }
-  try{ await withTimeout(doc.fonts.ready,1500); }catch{}
+  families.forEach(fam=>{ weights.forEach(w=>{ try{ loads.push(doc.fonts.load(w+' 24px "'+fam+'"')); }catch(e){} }); });
+  if(loads.length){ try{ await withTimeout(Promise.all(loads),4000); }catch(e){} }
+  try{ await withTimeout(doc.fonts.ready,1500); }catch(e){}
   APP.detectedFonts = Array.from(families);
   const missing = [];
-  families.forEach(fam=>{ try{ if(!doc.fonts.check('400 16px "'+fam+'"')) missing.push(fam); }catch{ missing.push(fam); } });
+  families.forEach(fam=>{ try{ if(!doc.fonts.check('400 16px "'+fam+'"')) missing.push(fam); }catch(e){ missing.push(fam); } });
   APP.missingFonts = missing;
-  try{ doc.documentElement.classList.add("fonts-ready"); doc.documentElement.setAttribute("data-fonts-ready","1"); }catch{}
+  try{ doc.documentElement.classList.add("fonts-ready"); doc.documentElement.setAttribute("data-fonts-ready","1"); }catch(e){}
 }
 function waitForImage(image){
   return new Promise(resolve=>{
@@ -1421,8 +1783,6 @@ function waitForImage(image){
     setTimeout(finish,10000);
   });
 }
-
-/* ===== ARABIC / GRADIENT ===== */
 function containsArabic(text){
   return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(String(text || ""));
 }
@@ -1479,10 +1839,10 @@ function preprocessModernCSS(doc,win){
   if(!doc || !win) return {total:0};
   const stats = { clipText:0, heavy:0, total:0 };
   let elements = [];
-  try{ elements = Array.from(doc.querySelectorAll("*")).slice(0,3000); }catch{ return stats; }
+  try{ elements = Array.from(doc.querySelectorAll("*")).slice(0,3000); }catch(e){ logError("warn","تعذر جلب عناصر CSS", e); return stats; }
   for(const el of elements){
     let styles;
-    try{ styles = win.getComputedStyle(el); }catch{ continue; }
+    try{ styles = win.getComputedStyle(el); }catch(e){ continue; }
     const clip = (styles.webkitBackgroundClip || styles.backgroundClip || "").toLowerCase();
     if(clip === "text"){
       const textContent = (el.textContent || "").trim();
@@ -1490,77 +1850,92 @@ function preprocessModernCSS(doc,win){
         const bg = styles.backgroundImage || "";
         const cols = bg.match(/(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g) || [];
         const solid = cols[0] || styles.color || "#38bdf8";
-        el.style.setProperty("-webkit-background-clip","border-box","important");
-        el.style.setProperty("background-clip","border-box","important");
-        el.style.setProperty("background-image","none","important");
-        el.style.setProperty("background","none","important");
-        el.style.setProperty("color",solid,"important");
-        el.style.setProperty("-webkit-text-fill-color",solid,"important");
+        try{
+          el.style.setProperty("-webkit-background-clip","border-box","important");
+          el.style.setProperty("background-clip","border-box","important");
+          el.style.setProperty("background-image","none","important");
+          el.style.setProperty("background","none","important");
+          el.style.setProperty("color",solid,"important");
+          el.style.setProperty("-webkit-text-fill-color",solid,"important");
+        }catch(e){}
         stats.clipText++; stats.total++; continue;
       }
       if(convertGradientTextToSVG(el,win,doc)){ stats.clipText++; stats.total++; continue; }
       const bg = styles.backgroundImage || "";
       const cols = bg.match(/(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g) || [];
       const solid = cols[0] || styles.color || "#22d3ee";
-      el.style.setProperty("-webkit-background-clip","border-box","important");
-      el.style.setProperty("background-clip","border-box","important");
-      el.style.setProperty("background-image","none","important");
-      el.style.setProperty("background","none","important");
-      el.style.setProperty("color",solid,"important");
-      el.style.setProperty("-webkit-text-fill-color",solid,"important");
+      try{
+        el.style.setProperty("-webkit-background-clip","border-box","important");
+        el.style.setProperty("background-clip","border-box","important");
+        el.style.setProperty("background-image","none","important");
+        el.style.setProperty("background","none","important");
+        el.style.setProperty("color",solid,"important");
+        el.style.setProperty("-webkit-text-fill-color",solid,"important");
+      }catch(e){}
       stats.clipText++; stats.total++; continue;
     }
     const fill = (styles.webkitTextFillColor || "").toLowerCase();
     if(fill === "transparent"){
       const color = styles.color && styles.color !== "rgba(0, 0, 0, 0)" ? styles.color : "#eef2ff";
-      el.style.setProperty("-webkit-text-fill-color",color,"important");
-      el.style.setProperty("color",color,"important");
+      try{
+        el.style.setProperty("-webkit-text-fill-color",color,"important");
+        el.style.setProperty("color",color,"important");
+      }catch(e){}
       stats.total++;
     }
     const filter = (styles.filter || "").toLowerCase();
     const blurMatch = filter.match(/blur\((\d+(?:\.\d+)?)px\)/i);
     if(blurMatch && parseFloat(blurMatch[1]) >= 15){
-      el.style.setProperty("filter","none","important");
-      const bg = styles.backgroundColor || "#5b6cff";
-      el.style.setProperty("background",`radial-gradient(circle, ${bg} 0%, transparent 70%)`,"important");
-      el.style.setProperty("border-radius","50%","important");
+      try{
+        el.style.setProperty("filter","none","important");
+        const bg = styles.backgroundColor || "#5b6cff";
+        el.style.setProperty("background",`radial-gradient(circle, ${bg} 0%, transparent 70%)`,"important");
+        el.style.setProperty("border-radius","50%","important");
+      }catch(e){}
       stats.heavy++; stats.total++; continue;
     }
     const dm = filter.match(/drop-shadow\(([^)]+)\)/i);
     if(dm){
-      el.style.setProperty("filter","none","important");
-      el.style.setProperty("box-shadow",dm[1],"important");
+      try{
+        el.style.setProperty("filter","none","important");
+        el.style.setProperty("box-shadow",dm[1],"important");
+      }catch(e){}
       stats.heavy++; stats.total++; continue;
     }
     if(filter && filter !== "none"){
-      el.style.setProperty("filter","none","important");
-      el.style.setProperty("-webkit-filter","none","important");
+      try{
+        el.style.setProperty("filter","none","important");
+        el.style.setProperty("-webkit-filter","none","important");
+      }catch(e){}
       stats.heavy++; stats.total++;
     }
     const bf = (styles.backdropFilter || styles.webkitBackdropFilter || "").toLowerCase();
     if(bf && bf !== "none"){
-      const bgColor = styles.backgroundColor || "";
-      el.style.setProperty("backdrop-filter","none","important");
-      el.style.setProperty("-webkit-backdrop-filter","none","important");
-      if(!bgColor || bgColor === "rgba(0, 0, 0, 0)" || bgColor === "transparent"){
-        el.style.setProperty("background-color","rgba(15, 25, 55, 0.85)","important");
-      }
+      try{
+        const bgColor = styles.backgroundColor || "";
+        el.style.setProperty("backdrop-filter","none","important");
+        el.style.setProperty("-webkit-backdrop-filter","none","important");
+        if(!bgColor || bgColor === "rgba(0, 0, 0, 0)" || bgColor === "transparent"){
+          el.style.setProperty("background-color","rgba(15, 25, 55, 0.85)","important");
+        }
+      }catch(e){}
       stats.heavy++; stats.total++;
     }
     const mask = (styles.maskImage || styles.webkitMaskImage || "").toLowerCase();
     if(mask && mask !== "none"){
-      el.style.setProperty("mask-image","none","important");
-      el.style.setProperty("-webkit-mask-image","none","important");
+      try{
+        el.style.setProperty("mask-image","none","important");
+        el.style.setProperty("-webkit-mask-image","none","important");
+      }catch(e){}
       stats.heavy++; stats.total++;
     }
     const bm = (styles.mixBlendMode || "normal").toLowerCase();
     if(bm !== "normal"){
-      el.style.setProperty("mix-blend-mode","normal","important");
+      try{ el.style.setProperty("mix-blend-mode","normal","important"); }catch(e){}
       stats.heavy++; stats.total++;
     }
   }
   APP.preprocessStats = stats;
-  try{ if(doc) doc.__preprocessed = true; }catch{}
   return stats;
 }
 
@@ -1570,9 +1945,8 @@ async function waitForResources(doc){
   await waitForFonts(doc,win);
   const images = Array.from(doc.images || []);
   await Promise.all(images.map(image => waitForImage(image)));
-  try{ await withTimeout(doc.fonts.ready,2000); }catch{}
-  if(!doc.__preprocessed){ preprocessModernCSS(doc,win); try{ doc.__preprocessed = true; }catch{} }
-  try{ void doc.documentElement.offsetHeight; }catch{}
+  try{ await withTimeout(doc.fonts.ready,2000); }catch(e){}
+  try{ void doc.documentElement.offsetHeight; }catch(e){}
   await sleep(40);
 }
 
@@ -1588,8 +1962,8 @@ function collectProjectAnimations(doc){
       const animations = doc.getAnimations({subtree:true});
       return Array.from(animations || []);
     }
-  }catch(error){ console.warn("[Animations]",error); }
-  try{ return Array.from(doc.getAnimations() || []); }catch{ return []; }
+  }catch(error){ logError("warn","فشل قراءة الحركات", error); }
+  try{ return Array.from(doc.getAnimations() || []); }catch(e){ return []; }
 }
 
 /* ===== TIME CONTROL ===== */
@@ -1606,7 +1980,7 @@ function setProjectTimeFast(timeMs, animations){
   if(win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function"){
     try{ win.__PROJECT__.setTime(t); }
     catch(error){
-      console.warn("setTime error:",error);
+      logError("error","خطأ داخل window.__PROJECT__.setTime", error);
       if(!APP._warnedSetTime){
         APP._warnedSetTime = true;
         toast("خطأ داخل كود مشروعك: " + (error.message || error),"error",9000);
@@ -1615,7 +1989,7 @@ function setProjectTimeFast(timeMs, animations){
   }
   if(animations && animations.length){
     for(let i = 0; i < animations.length; i++){
-      try{ animations[i].pause(); animations[i].currentTime = t; }catch{}
+      try{ animations[i].pause(); animations[i].currentTime = t; }catch(e){ /* per-animation */ }
     }
   }
 }
@@ -1727,8 +2101,7 @@ function playPreview(){
     const time = initialTime + (now - startedAt);
     if(time >= APP.durationMs){
       setProjectTimeFast(APP.durationMs, APP.exportAnimations);
-      setPlayhead(APP.durationMs);
-      updatePlayerTime(APP.durationMs);
+      setPlayhead(APP.durationMs); updatePlayerTime(APP.durationMs);
       APP.currentTime = APP.durationMs;
       stopPreview();
       setTimeout(()=>{
@@ -1778,7 +2151,7 @@ timelineEl.addEventListener("pointerdown",(event)=>{
   if(wasPlaying) stopPreview();
   APP.scrubbing = true;
   timelineEl.classList.add("scrubbing");
-  try{ timelineEl.setPointerCapture(event.pointerId); }catch{}
+  try{ timelineEl.setPointerCapture(event.pointerId); }catch(e){}
   scrubbingTo(event.clientX);
   timelineEl.__wasPlaying = wasPlaying;
 });
@@ -1787,7 +2160,7 @@ function endScrub(event){
   if(!APP.scrubbing) return;
   APP.scrubbing = false;
   timelineEl.classList.remove("scrubbing");
-  try{ timelineEl.releasePointerCapture(event.pointerId); }catch{}
+  try{ timelineEl.releasePointerCapture(event.pointerId); }catch(e){}
   timelineEl.__wasPlaying = false;
 }
 timelineEl.addEventListener("pointerup",endScrub);
@@ -1841,6 +2214,8 @@ $("validate").addEventListener("click",async()=>{
   APP.exportWin = $("preview").contentWindow;
   APP.exportRoot = getProjectRoot(APP.exportDoc);
   APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+  enforceRootConstraints(APP.exportDoc);
+  enforceImageContainers(APP.exportDoc);
   analyzeIframeImages();
   applyStoredReplacementsToIframe();
   await validateProject();
@@ -1865,14 +2240,15 @@ $("clear").addEventListener("click",()=>{
   $("download").innerHTML = ""; $("download").classList.remove("show");
   $("playerTime").textContent = "00:00 / 00:00"; $("playhead").style.left = "0%";
   setStatus("جاهز","ok");
+  scheduleAutoSave();
 });
 
 /* =========================================================
-   IMAGE MANAGER (from file B, adapted for iframe)
+   IMAGE MANAGER
 ========================================================= */
 const IMG_MGR = {
   items: [],
-  replacements: new Map(), // key -> {dataUrl, fileName, mimeType, originalDataUrl, originalFileName, originalMimeType}
+  replacements: new Map(),
   selected: new Set(),
   pendingBatch: null
 };
@@ -1933,8 +2309,7 @@ function getStableSelector(el, doc){
   if(el.id) return "#" + CSS.escape(el.id);
   const classes = Array.from(el.classList || []).filter(Boolean);
   if(classes.length){
-    const sel = el.tagName.toLowerCase() +
-      classes.slice(0,3).map(c => "." + CSS.escape(c)).join("");
+    const sel = el.tagName.toLowerCase() + classes.slice(0,3).map(c => "." + CSS.escape(c)).join("");
     try{ if(doc.querySelectorAll(sel).length === 1) return sel; }catch(e){}
   }
   const path = [];
@@ -1976,7 +2351,7 @@ function toSafeDataURL(src){
     if(!src){ reject(new Error("مصدر فارغ")); return; }
     if(src.indexOf("data:") === 0){ resolve(src); return; }
     fetch(src,{mode:"cors",credentials:"omit"})
-      .then(res => res.ok ? res.blob() : Promise.reject(new Error("fetch failed")))
+      .then(res => res.ok ? res.blob() : Promise.reject(new Error("fetch failed (" + res.status + ")")))
       .then(blobToDataURL).then(resolve).catch(()=>{
         const img = new Image();
         img.crossOrigin = "anonymous";
@@ -1987,7 +2362,7 @@ function toSafeDataURL(src){
             const ctx = c.getContext("2d");
             ctx.drawImage(img,0,0);
             resolve(c.toDataURL("image/png"));
-          }catch(err){ reject(new Error("لا يمكن قراءة بكسلات الصورة (CORS).")); }
+          }catch(err){ reject(new Error("لا يمكن قراءة بكسلات الصورة (CORS)")); }
         };
         img.onerror = ()=>reject(new Error("تعذر تحميل الصورة"));
         img.src = src;
@@ -2010,7 +2385,6 @@ function loadImageEl(src){
     img.src = src;
   });
 }
-
 function createImageKey(item){
   return [
     item.type, item.subtype || "",
@@ -2018,12 +2392,11 @@ function createImageKey(item){
     item.backgroundIndex != null ? item.backgroundIndex : ""
   ].join("|");
 }
-
 function analyzeIframeImages(){
   const doc = APP.exportDoc || ($("preview") ? $("preview").contentDocument : null);
   const manager = $("imgManager");
   const empty = $("imgManagerEmpty");
-  if(!doc){ return; }
+  if(!doc) return;
 
   const found = [];
   const imgs = Array.from(doc.querySelectorAll("img"));
@@ -2033,8 +2406,7 @@ function analyzeIframeImages(){
     const rect = img.getBoundingClientRect();
     const naturalRatio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth/img.naturalHeight) : 0;
     found.push({
-      type: "img",
-      index: found.length,
+      type: "img", index: found.length,
       target: getStableSelector(img, doc),
       name: getImageDisplayName(img, i, "img", src),
       alt: img.getAttribute("alt") || "",
@@ -2048,25 +2420,19 @@ function analyzeIframeImages(){
       el: img
     });
   });
-
-  // background images from computed styles
   const all = Array.from(doc.querySelectorAll("*")).slice(0, 2000);
   all.forEach(el => {
     let bg = "";
-    try{ bg = (el.ownerDocument.defaultView || window).getComputedStyle(el).backgroundImage || ""; }
-    catch(e){ return; }
+    try{ bg = (el.ownerDocument.defaultView || window).getComputedStyle(el).backgroundImage || ""; }catch(e){ return; }
     if(!bg || bg === "none") return;
     const urls = extractImageUrls(bg);
     urls.forEach((src, bgIdx) => {
       const rect = el.getBoundingClientRect();
       found.push({
-        type: "background",
-        index: found.length,
+        type: "background", index: found.length,
         target: getStableSelector(el, doc),
         name: getImageDisplayName(el, found.length, "background", src),
-        alt: "",
-        src: src,
-        backgroundIndex: bgIdx,
+        alt: "", src: src, backgroundIndex: bgIdx,
         frameWidth: Math.round(rect.width) || 0,
         frameHeight: Math.round(rect.height) || 0,
         ratio: rect.height > 0 ? rect.width/rect.height : 1,
@@ -2075,15 +2441,11 @@ function analyzeIframeImages(){
       });
     });
   });
-
   found.forEach(item => { item.key = createImageKey(item); });
 
-  // preserve replacements + selection by key
   const old = IMG_MGR.replacements;
   const next = new Map();
-  found.forEach(item => {
-    if(old.has(item.key)) next.set(item.key, old.get(item.key));
-  });
+  found.forEach(item => { if(old.has(item.key)) next.set(item.key, old.get(item.key)); });
   IMG_MGR.replacements = next;
 
   IMG_MGR.items = found;
@@ -2101,7 +2463,6 @@ function analyzeIframeImages(){
   if(empty) empty.style.display = "none";
   renderImageManager();
 
-  // async get natural size for bg images too
   found.forEach(item => {
     if(item.naturalWidth) return;
     loadImageEl(item.src).then(im => {
@@ -2109,7 +2470,7 @@ function analyzeIframeImages(){
       item.naturalHeight = im.naturalHeight;
       item.naturalRatio = im.naturalHeight ? (im.naturalWidth/im.naturalHeight) : 0;
       renderImageManager();
-    }).catch(()=>{});
+    }).catch(e => logError("warn","تعذر تحميل بيانات الصورة: " + (item.name||item.src), e));
   });
   updateProjectInfo();
 }
@@ -2128,12 +2489,8 @@ function renderImageManager(){
     const isSelected = IMG_MGR.selected.has(item.key);
     const previewSrc = rep ? rep.dataUrl : item.src;
     const displayName = rep ? rep.fileName : item.name;
-    const natural = (item.naturalWidth && item.naturalHeight)
-      ? (item.naturalWidth + "×" + item.naturalHeight)
-      : "—";
-    const defined = (item.frameWidth && item.frameHeight)
-      ? (item.frameWidth + "×" + item.frameHeight)
-      : "—";
+    const natural = (item.naturalWidth && item.naturalHeight) ? (item.naturalWidth + "×" + item.naturalHeight) : "—";
+    const defined = (item.frameWidth && item.frameHeight) ? (item.frameWidth + "×" + item.frameHeight) : "—";
     const typeLabel = item.type === "img" ? "IMG" : "خلفية";
 
     const thumb = previewSrc
@@ -2207,7 +2564,6 @@ function keepSelectedImages(){
   applyStoredReplacementsToIframe();
   renderImageManager();
 }
-
 function chooseReplacementImage(index){
   const item = IMG_MGR.items[index];
   if(!item) return;
@@ -2228,10 +2584,8 @@ function replaceSelectedImages(){
   if(!firstItem) return;
   openFilePicker(dataUrl => {
     IMG_MGR.pendingBatch = {
-      keys: keysArray,
-      dataUrl: dataUrl.dataUrl,
-      fileName: dataUrl.fileName,
-      mimeType: dataUrl.mimeType
+      keys: keysArray, dataUrl: dataUrl.dataUrl,
+      fileName: dataUrl.fileName, mimeType: dataUrl.mimeType
     };
     openCropEditor({
       item: firstItem,
@@ -2254,7 +2608,7 @@ function openFilePicker(cb){
     }
     readFileAsDataURL(file).then(dataUrl => {
       cb({ dataUrl: dataUrl, fileName: file.name, mimeType: file.type });
-    }).catch(()=>toast("تعذر قراءة الصورة","error")).finally(()=>input.remove());
+    }).catch(e => { logError("error","تعذر قراءة الصورة", e); toast("تعذر قراءة الصورة","error"); }).finally(()=>input.remove());
   }, { once: true });
   input.click();
 }
@@ -2280,32 +2634,36 @@ function keepOriginalImage(index){
   renderImageManager();
 }
 
-/* ===== Apply replacements to live iframe ===== */
-function applyStoredReplacementsToIframe(){
+/* بند 5: انتظر تحميل الصور بعد كل استبدال */
+async function applyStoredReplacementsToIframe(){
   if(!APP.exportDoc) return;
   const doc = APP.exportDoc;
   let applied = 0;
+  const loadPromises = [];
 
   IMG_MGR.items.forEach(item => {
     const rep = IMG_MGR.replacements.get(item.key);
-    if(!rep){
-      // restore original for img if it was replaced before
-      return;
-    }
+    if(!rep) return;
     if(item.type === "img"){
       const imgs = Array.from(doc.querySelectorAll("img"));
       let target = null;
-      if(item.target){
-        try{ target = doc.querySelector(item.target); }catch(e){}
-      }
+      if(item.target){ try{ target = doc.querySelector(item.target); }catch(e){} }
       if(!target) target = imgs[item.index] || null;
       if(target){
         target.setAttribute("src", rep.dataUrl);
         target.removeAttribute("srcset");
         target.removeAttribute("sizes");
+        loadPromises.push(new Promise(res => {
+          if(target.complete && target.naturalWidth > 0) { res(); return; }
+          let done = false;
+          const fin = ()=>{ if(done) return; done = true; res(); };
+          target.addEventListener("load", fin, {once:true});
+          target.addEventListener("error", fin, {once:true});
+          setTimeout(fin, 8000);
+        }));
         applied++;
       }
-    }else if(item.type === "background"){
+    } else if(item.type === "background"){
       let el = null;
       if(item.target){ try{ el = doc.querySelector(item.target); }catch(e){} }
       if(el && item.src){
@@ -2313,17 +2671,18 @@ function applyStoredReplacementsToIframe(){
         if(inline && inline.indexOf(item.src) !== -1){
           el.setAttribute("style", inline.split(item.src).join(rep.dataUrl));
         }
+        loadPromises.push(new Promise(res => {
+          const im = new Image();
+          im.onload = im.onerror = ()=>res();
+          im.src = rep.dataUrl;
+          setTimeout(res, 8000);
+        }));
       }
       applied++;
     }
   });
   if(applied > 0) console.log("[ImageMgr] applied " + applied + " replacements to iframe");
-}
-
-/* Also return original src for img when no replacement (safety) */
-function restoreOriginalImagesIfNeeded(){
-  if(!APP.exportDoc) return;
-  // no-op fallback
+  await Promise.all(loadPromises);
 }
 
 /* ===== Crop editor ===== */
@@ -2332,7 +2691,6 @@ function getImageFrameRatio(item){
   if(item.ratio && isFinite(item.ratio) && item.ratio > 0) return item.ratio;
   return (item.naturalRatio && isFinite(item.naturalRatio) && item.naturalRatio > 0) ? item.naturalRatio : 1;
 }
-
 function calculateCropFrame(){
   const stage = $("cropStage");
   const frame = $("cropFrame");
@@ -2348,13 +2706,11 @@ function calculateCropFrame(){
   fh = Math.max(80, Math.min(fh, maxH));
   const left = (sw - fw) / 2;
   const top = (sh - fh) / 2;
-
   CROP_STATE.frame = { left, top, width: fw, height: fh };
   frame.style.left = left + "px";
   frame.style.top = top + "px";
   frame.style.width = fw + "px";
   frame.style.height = fh + "px";
-
   if(CROP_STATE.image && CROP_STATE.naturalWidth && CROP_STATE.naturalHeight){
     const sx = fw / CROP_STATE.naturalWidth;
     const sy = fh / CROP_STATE.naturalHeight;
@@ -2362,7 +2718,6 @@ function calculateCropFrame(){
     CROP_STATE.displayScale = CROP_STATE.baseScale * CROP_STATE.zoom;
   }
 }
-
 function openCropEditor(options){
   const modal = $("cropModal");
   const img = $("cropImage");
@@ -2405,12 +2760,12 @@ function openCropEditor(options){
       calculateCropFrame();
       cropReset();
     }));
-  }).catch(()=>{
+  }).catch(e => {
+    logError("error","تعذر فتح الصورة للقص", e);
     closeCropModal();
     toast("تعذر فتح الصورة","error");
   });
 }
-
 function cropReset(){
   if(!CROP_STATE.image || !CROP_STATE.naturalWidth) return;
   calculateCropFrame();
@@ -2427,7 +2782,6 @@ function cropReset(){
   updateCropImageElement();
   const pw = $("cropPreviewWrap"); if(pw) pw.classList.remove("visible");
 }
-
 function cropZoom(delta){
   if(!CROP_STATE.image) return;
   const oldZ = CROP_STATE.zoom;
@@ -2450,7 +2804,6 @@ function cropZoom(delta){
   updateCropImageElement();
   const pw = $("cropPreviewWrap"); if(pw) pw.classList.remove("visible");
 }
-
 function constrainCropImage(){
   const f = CROP_STATE.frame;
   const iw = CROP_STATE.naturalWidth * CROP_STATE.displayScale;
@@ -2554,15 +2907,14 @@ function previewCrop(){
   p.src = r.dataUrl;
   w.classList.add("visible");
 }
-function applyCrop(){
+async function applyCrop(){
   const r = createCroppedDataURL();
   if(!r){ toast("تعذر اعتماد القص","error"); return; }
   const item = CROP_STATE.item;
   if(!item) return;
   const buildReplacement = (targetItem) => {
     const old = IMG_MGR.replacements.get(targetItem.key);
-    const ext = r.mimeType === "image/jpeg" ? ".jpg"
-      : r.mimeType === "image/webp" ? ".webp" : ".png";
+    const ext = r.mimeType === "image/jpeg" ? ".jpg" : r.mimeType === "image/webp" ? ".webp" : ".png";
     const cleanName = (CROP_STATE.sourceFileName || "image").replace(/\.[^.]+$/, "");
     return {
       dataUrl: r.dataUrl,
@@ -2574,7 +2926,6 @@ function applyCrop(){
       cropped: true
     };
   };
-
   if(IMG_MGR.pendingBatch && IMG_MGR.pendingBatch.keys.indexOf(item.key) !== -1){
     const keys = IMG_MGR.pendingBatch.keys.slice();
     keys.forEach(k => {
@@ -2589,8 +2940,7 @@ function applyCrop(){
     IMG_MGR.pendingBatch = null;
     IMG_MGR.selected.delete(item.key);
   }
-
-  applyStoredReplacementsToIframe();
+  await applyStoredReplacementsToIframe();
   closeCropModal();
   renderImageManager();
   toast("تم تطبيق القص","success",2500);
@@ -2647,7 +2997,6 @@ function openBgInternal(opts){
   const modal = $("bgModal");
   const img = $("bgPreviewImg");
   if(!modal || !img) return;
-
   BG_STATE = {
     item: opts.item, safeDataUrl: "",
     sourceFileName: opts.sourceFileName || "image",
@@ -2657,7 +3006,6 @@ function openBgInternal(opts){
     targetColor: null, tolerance: 30, feather: 2,
     resultDataUrl: null, batchKeys: opts.batchKeys
   };
-
   $("bgColorSwatch").textContent = "لم يُحدد";
   $("bgColorSwatch").style.background = "#020609";
   $("bgColorInfo").innerHTML = "<strong>اللون المحدد:</strong> —<br><strong>RGB:</strong> —";
@@ -2681,10 +3029,7 @@ function openBgInternal(opts){
   document.body.style.overflow = "hidden";
 
   toSafeDataURL(opts.sourceDataUrl)
-    .then(safe => {
-      BG_STATE.safeDataUrl = safe;
-      return loadImageEl(safe);
-    })
+    .then(safe => { BG_STATE.safeDataUrl = safe; return loadImageEl(safe); })
     .then(loaded => {
       BG_STATE.imageEl = loaded;
       BG_STATE.naturalWidth = loaded.naturalWidth;
@@ -2698,6 +3043,7 @@ function openBgInternal(opts){
     .catch(err => {
       $("bgLoading").classList.remove("visible");
       $("bgErrorNote").textContent = "❌ " + (err && err.message ? err.message : "تعذر تحميل الصورة.");
+      logError("error","فشل تحميل الصورة لإزالة الخلفية", err);
     });
 }
 function closeBgModal(){
@@ -2738,6 +3084,7 @@ function handleBgClick(event){
     BG_STATE.targetColor = { r: data[0], g: data[1], b: data[2] };
   }catch(err){
     $("bgErrorNote").textContent = "❌ لا يمكن قراءة لون الصورة (CORS).";
+    logError("warn","تعذر قراءة لون الصورة", err);
     return;
   }
   const c = BG_STATE.targetColor;
@@ -2804,9 +3151,9 @@ function previewBgRemoval(){
       $("bgResultNote").textContent = "✅ معاينة جاهزة — اضغط اعتماد الإزالة.";
       $("bgErrorNote").textContent = "";
     })
-    .catch(e => { $("bgErrorNote").textContent = "❌ تعذر إنشاء المعاينة."; });
+    .catch(e => { $("bgErrorNote").textContent = "❌ تعذر إنشاء المعاينة."; logError("warn","فشل معاينة إزالة الخلفية", e); });
 }
-function applyBgRemoval(){
+async function applyBgRemoval(){
   if(!BG_STATE.resultDataUrl){ toast("قم بالمعاينة أولاً","warn"); return; }
   const item = BG_STATE.item;
   if(!item) return;
@@ -2833,22 +3180,32 @@ function applyBgRemoval(){
   } else {
     IMG_MGR.replacements.set(item.key, buildReplacement(item));
   }
-  applyStoredReplacementsToIframe();
+  await applyStoredReplacementsToIframe();
   closeBgModal();
   renderImageManager();
   toast("تم إزالة الخلفية","success",2500);
 }
-
-/* hook refresh button */
-$("refreshImages").addEventListener("click", () => {
+$("refreshImages").addEventListener("click", async () => {
   analyzeIframeImages();
-  applyStoredReplacementsToIframe();
+  await applyStoredReplacementsToIframe();
   toast("تم تحديث قائمة الصور","success",2000);
 });
 
-/* ===== Pre-export: inline external images to data URLs ===== */
+/* ===== INLINE EXTERNAL IMAGES (بند 4) ===== */
+function makePlaceholderDataURL(text){
+  const label = String(text || "صورة غير متوفرة").slice(0, 60);
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">' +
+    '<rect width="800" height="600" fill="#334155"/>' +
+    '<rect x="20" y="20" width="760" height="560" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="12 8"/>' +
+    '<text x="400" y="280" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="26" font-weight="700">' + escapePromptAttr(label) + '</text>' +
+    '<text x="400" y="320" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="18">تعذر تحميل الصورة الأصلية</text>' +
+    '</svg>';
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
 async function inlineExternalImagesForExport(doc){
-  if(!doc) return;
+  if(!doc) return { failed: [], replacedImgs: 0, replacedBgs: 0 };
+  const failed = [];
+  let replacedImgs = 0, replacedBgs = 0;
   const imgs = Array.from(doc.querySelectorAll("img"));
   await Promise.all(imgs.map(async (img) => {
     const src = img.getAttribute("src") || "";
@@ -2858,16 +3215,21 @@ async function inlineExternalImagesForExport(doc){
       img.setAttribute("src", dataUrl);
       img.removeAttribute("srcset");
       img.removeAttribute("sizes");
+      replacedImgs++;
     }catch(e){
-      console.warn("[inline]", e);
+      const name = img.getAttribute("data-image-name") || img.getAttribute("alt") || getFileNameFromURL(src) || src.slice(0, 60);
+      logError("warn","فشل تحميل صورة خارجية: " + name, e);
+      failed.push({ type:"img", src, name });
+      const ph = makePlaceholderDataURL(name);
+      img.setAttribute("src", ph);
+      img.removeAttribute("srcset");
+      img.removeAttribute("sizes");
     }
   }));
-  // backgrounds
   const all = Array.from(doc.querySelectorAll("*")).slice(0, 1500);
   await Promise.all(all.map(async (el) => {
     let bg = "";
-    try{ bg = (el.ownerDocument.defaultView || window).getComputedStyle(el).backgroundImage || ""; }
-    catch(e){ return; }
+    try{ bg = (el.ownerDocument.defaultView || window).getComputedStyle(el).backgroundImage || ""; }catch(e){ return; }
     if(!bg || bg === "none") return;
     const urls = extractImageUrls(bg);
     if(!urls.length) return;
@@ -2876,11 +3238,24 @@ async function inlineExternalImagesForExport(doc){
       if(url.indexOf("data:") === 0) continue;
       try{
         const dataUrl = await toSafeDataURL(url);
-        if(inline.indexOf(url) !== -1) inline = inline.split(url).join(dataUrl);
-      }catch(e){ console.warn("[inline bg]", e); }
+        if(inline.indexOf(url) !== -1){
+          inline = inline.split(url).join(dataUrl);
+          replacedBgs++;
+        }
+      }catch(e){
+        const name = getFileNameFromURL(url) || url.slice(0, 60);
+        logError("warn","فشل تحميل خلفية خارجية: " + name, e);
+        failed.push({ type:"bg", src:url, name });
+        // Replace with solid fallback color (can't easily inline a placeholder in CSS url)
+        if(inline.indexOf(url) !== -1){
+          inline = inline.split(url).join("none");
+          el.style.setProperty("background-color", "#334155", "important");
+        }
+      }
     }
     if(inline && inline !== el.getAttribute("style")) el.setAttribute("style", inline);
   }));
+  return { failed, replacedImgs, replacedBgs };
 }
 
 /* ===== RENDER FRAME ===== */
@@ -2900,8 +3275,14 @@ async function renderFrame(timeMs,options = {}){
     logging: false, imageTimeout: 15000, foreignObjectRendering: false,
     removeContainer: true, scrollX: 0, scrollY: 0,
     onclone: (clonedDoc) => {
-      try{ sanitizeRootForCapture(clonedDoc); }
-      catch(e){ console.warn("[onclone sanitize]", e); }
+      try{
+        sanitizeRootForCapture(clonedDoc);
+        // بند 2: preprocessModernCSS فقط أثناء الالتقاط
+        const clonedWin = clonedDoc.defaultView || window;
+        preprocessModernCSS(clonedDoc, clonedWin);
+        enforceRootConstraints(clonedDoc);
+        enforceImageContainers(clonedDoc);
+      }catch(e){ logError("warn","فشل تحضير onclone", e); }
     }
   });
   return rendered;
@@ -2913,8 +3294,7 @@ $("test").addEventListener("click",async()=>{
   if(APP.exporting) return;
   const btn = $("test");
   const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "جارٍ إنشاء الإطارات...";
+  btn.disabled = true; btn.textContent = "جارٍ إنشاء الإطارات...";
   APP.exporting = true;
   try{
     APP.exportDoc = $("preview").contentDocument;
@@ -2923,17 +3303,16 @@ $("test").addEventListener("click",async()=>{
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
     if(!APP.exportRoot) throw new Error("تعذر تحديد مساحة المشروع.");
     await inlineExternalImagesForExport(APP.exportDoc);
+    await waitForAllImages(APP.exportDoc);
 
     const startT = Math.min(1000, Math.round(APP.durationMs * 0.05));
     const midT = Math.round(APP.durationMs * 0.5);
     const endT = Math.max(1000, Math.round(APP.durationMs) - 1000);
-
     const times = [
       { t: startT, label: "البداية (~5%)" },
       { t: midT, label: "المنتصف (50%)" },
       { t: endT, label: "النهاية (~95%)" }
     ];
-
     const previewScale = Math.min(0.5, getRenderScale());
     const frames = [];
     for(const item of times){
@@ -2968,12 +3347,11 @@ $("test").addEventListener("click",async()=>{
     popup.document.close();
     toast("تم إنشاء 3 إطارات","success",2500);
   }catch(error){
-    console.error(error);
+    logError("error","فشل اختبار الإطارات", error);
     toast("فشل اختبار الإطارات: " + (error.message || String(error)),"error",6000);
   }finally{
     APP.exporting = false;
-    btn.disabled = false;
-    btn.textContent = originalText;
+    btn.disabled = false; btn.textContent = originalText;
   }
 });
 
@@ -2989,7 +3367,7 @@ function getSupportedVideoMimeType(){
     "video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"
   ];
   for(const type of candidates){
-    try{ if(MediaRecorder.isTypeSupported(type)) return type; }catch{}
+    try{ if(MediaRecorder.isTypeSupported(type)) return type; }catch(e){}
   }
   return null;
 }
@@ -3053,6 +3431,7 @@ $("activateRecording").addEventListener("click",async()=>{
   }catch(error){
     btn.classList.remove("pulse");
     if(error && error.name === "AbortError") return;
+    logError("error","فشل تفعيل التسجيل", error);
     toast("فشل تفعيل التسجيل: " + (error.message || String(error)),"error",6000);
   }
 });
@@ -3070,7 +3449,7 @@ async function findBestCodec(lib,width,height,fps){
           : (item && (item.codec === wanted || item.name === wanted))
         )) return wanted;
       }
-    }catch(error){ console.warn("[Codec]",error); }
+    }catch(error){ logError("warn","فشل استعلام الترميزات", error); }
   }
   return "avc";
 }
@@ -3079,7 +3458,7 @@ function createVideoFormat(lib,codec){
   if(isMP4){
     if(typeof lib.Mp4OutputFormat !== "function") throw new Error("Mediabunny لا يدعم MP4.");
     try{ return { format: new lib.Mp4OutputFormat({ fastStart:"in-memory" }), isMP4: true }; }
-    catch{ return { format: new lib.Mp4OutputFormat(), isMP4: true }; }
+    catch(e){ return { format: new lib.Mp4OutputFormat(), isMP4: true }; }
   }
   if(typeof lib.WebMOutputFormat !== "function") throw new Error("Mediabunny لا يدعم WebM.");
   return { format: new lib.WebMOutputFormat(), isMP4: false };
@@ -3100,17 +3479,67 @@ $("export").addEventListener("click",async()=>{
   else await exportViaHtml2Canvas();
 });
 
-/* ===== EXPORT: html2canvas ===== */
+/* ===== بند 6: تقدير الوقت ===== */
+function estimateExportTime(totalFrames){
+  const perFrameMs = isMobileDevice() ? 220 : 70;
+  return totalFrames * perFrameMs;
+}
+function formatEstimate(ms){
+  const s = Math.round(ms/1000);
+  if(s < 60) return "~" + s + " ثانية";
+  const m = Math.floor(s/60);
+  return "~" + m + " د " + (s%60) + " ث";
+}
+/* بند 7: إعادة المحاولة - توضيح */
 function buildQualityFallbackChain(original){
   const order = ["x2","x1.5","native","720"];
   const idx = order.indexOf(original);
   if(idx === -1) return [original,"720"];
   return order.slice(idx);
 }
+
+/* ===== بند 15: توحيد حفظ الملف ===== */
+function finalizeExport(blob, mime, ext, formatLabel){
+  if(APP.exportObjectURL){ try{ URL.revokeObjectURL(APP.exportObjectURL); }catch(e){} }
+  APP.exportObjectURL = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.className = "btn primary";
+  link.href = APP.exportObjectURL;
+  link.download = safeFileName(APP.title || "مشروع-موشن") + "." + ext;
+  link.textContent = "حفظ " + ext.toUpperCase() + " (" + (blob.size/1024/1024).toFixed(1) + " MB)";
+  $("download").innerHTML = "";
+  $("download").appendChild(link);
+  $("download").classList.add("show");
+  if(formatLabel) $("formatInfo").textContent = formatLabel;
+}
+/* بند 6: yield للمتصفح */
+async function yieldToBrowser(){
+  return new Promise(resolve => {
+    if(typeof requestAnimationFrame === "function"){
+      requestAnimationFrame(()=> setTimeout(resolve, 0));
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+}
+
+/* ===== EXPORT: html2canvas ===== */
 async function exportViaHtml2Canvas(){
   if(APP.exporting) return;
   if(!APP.loaded){ toast("شغّل المشروع أولًا","warn"); return; }
   if(typeof html2canvas !== "function"){ toast("html2canvas غير محمّل","error",6000); return; }
+
+  // بند 6: تحقق من المدة/الإطارات قبل البدء
+  const fps0 = Math.max(1, Number($("fps").value) || 60);
+  const estimatedFrames = Math.ceil((APP.durationMs/1000) * fps0);
+  if(estimatedFrames > 500){
+    const est = formatEstimate(estimateExportTime(estimatedFrames));
+    if(isMobileDevice()){
+      if(!confirm("تحذير: العدد المتوقع للإطارات " + estimatedFrames + " والوقت التقديري " + est + ".\nالجودة الحالية قد تتسبب في انهيار التبويب على الجوال. يُنصح بجودة 720p و FPS أقل.\n\nهل تريد المتابعة؟")) return;
+    } else {
+      if(!confirm("العدد المتوقع للإطارات: " + estimatedFrames + "\nالوقت التقديري: " + est + "\n\nقد تتجمد الواجهة جزئيًا أثناء التصدير (سنترك مساحة للمتصفح).\nمتابعة؟")) return;
+    }
+  }
 
   APP.exporting = true;
   APP.stop = false;
@@ -3120,40 +3549,62 @@ async function exportViaHtml2Canvas(){
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
   updateProgress(0,"تجهيز محرك التصدير...");
-
-  if(APP.exportObjectURL){ try{ URL.revokeObjectURL(APP.exportObjectURL); }catch{} APP.exportObjectURL = null; }
+  if(APP.exportObjectURL){ try{ URL.revokeObjectURL(APP.exportObjectURL); }catch(e){} APP.exportObjectURL = null; }
 
   const originalQuality = $("quality").value;
   const chain = buildQualityFallbackChain(originalQuality);
   let lastError = null, succeeded = false;
 
   try{
-    // Inline external images once before export loop
     APP.exportDoc = $("preview").contentDocument;
     APP.exportWin = $("preview").contentWindow;
     APP.exportRoot = getProjectRoot(APP.exportDoc);
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+    enforceRootConstraints(APP.exportDoc);
+    enforceImageContainers(APP.exportDoc);
     if(APP.exportDoc){
       updateProgress(1,"تحويل الصور إلى data URL...");
-      await inlineExternalImagesForExport(APP.exportDoc);
+      const result = await inlineExternalImagesForExport(APP.exportDoc);
+      // بند 4: تحذير الصور الفاشلة
+      if(result && result.failed && result.failed.length > 0){
+        const names = result.failed.slice(0,5).map(f => "• " + f.name + " (" + f.type + ")").join("\n");
+        const more = result.failed.length > 5 ? "\n...و" + (result.failed.length - 5) + " أخرى" : "";
+        const msg = "تعذر تحويل " + result.failed.length + " صورة/خلفية إلى data URL:\n\n" + names + more +
+                    "\n\nسيتم استبدالها بعنصر مؤقت. هل تريد المتابعة بالتصدير؟";
+        if(!confirm(msg)){
+          APP.exporting = false;
+          $("export").style.display = "block";
+          $("stop").style.display = "none";
+          $("progressWrap").classList.remove("show");
+          toast("تم إلغاء التصدير","warn",4000);
+          return;
+        }
+      }
+      // بند 5: انتظر تحميل كل الصور
+      updateProgress(2,"انتظار تحميل الصور...");
+      await waitForAllImages(APP.exportDoc);
     }
-  }catch(e){ console.warn("pre-export prep", e); }
+  }catch(e){ logError("warn","فشل تحضير ما قبل التصدير", e); }
 
   for(let attempt = 0; attempt < chain.length; attempt++){
     if(APP.stop) break;
     const q = chain[attempt];
     if(attempt > 0){
       $("quality").value = q;
-      toast("إعادة المحاولة بجودة " + q,"warn",6000);
+      const msg = "إعادة المحاولة بجودة " + q + ". سيبدأ التصدير من جديد (لن تُحفظ الإطارات السابقة).";
+      toast(msg, "warn", 6000);
+      logError("warn", msg);
       updateProgress(0,"إعادة المحاولة...");
       await sleep(600);
       if(APP.stop) break;
     }
-    try{ await runHtml2CanvasExportOnce(); succeeded = true; lastError = null; break; }
-    catch(error){
+    try{
+      await runHtml2CanvasExportOnce();
+      succeeded = true; lastError = null; break;
+    }catch(error){
       lastError = error;
       if(error && error.message === "تم إيقاف التصدير.") break;
-      console.warn("[export] attempt failed:",error);
+      logError("warn","فشلت محاولة التصدير بجودة " + q, error);
     }
   }
   $("quality").value = originalQuality;
@@ -3162,7 +3613,7 @@ async function exportViaHtml2Canvas(){
     if(lastError.message !== "تم إيقاف التصدير."){
       toast("فشل التصدير: " + (lastError.message || String(lastError)),"error",8000);
       updateProgress(0,"فشل التصدير");
-    }else updateProgress(0,"تم إيقاف التصدير");
+    } else updateProgress(0,"تم إيقاف التصدير");
   }
 
   APP.exporting = false;
@@ -3179,7 +3630,7 @@ async function runHtml2CanvasExportOnce(){
     if(!APP.exportRoot) throw new Error("تعذر تحديد مساحة المشروع.");
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
 
-    updateProgress(2,"تحميل محرك الترميز...");
+    updateProgress(3,"تحميل محرك الترميز...");
     const lib = await waitForMediabunny(30000);
     const { Output, BufferTarget, CanvasSource } = lib;
     if(!Output || !BufferTarget || !CanvasSource) throw new Error("مكونات Mediabunny ناقصة.");
@@ -3189,7 +3640,7 @@ async function runHtml2CanvasExportOnce(){
     const baseSize = getBaseSize();
     const renderScale = getRenderScale();
 
-    updateProgress(4,"فحص ترميز الفيديو...");
+    updateProgress(5,"فحص ترميز الفيديو...");
     const codec = await findBestCodec(lib,exportSize.width,exportSize.height,fps);
     const { format, isMP4 } = createVideoFormat(lib,codec);
     const target = new BufferTarget();
@@ -3206,17 +3657,21 @@ async function runHtml2CanvasExportOnce(){
     source = createCanvasSource(lib,canvas,codec,{ bitrate, keyFrameInterval:2 });
     output.addVideoTrack(source,{ frameRate: fps });
 
-    $("formatInfo").textContent = isMP4
+    const formatLabel = isMP4
       ? "MP4 / H.264 • " + exportSize.width + "×" + exportSize.height
       : "WebM / " + codec.toUpperCase() + " • " + exportSize.width + "×" + exportSize.height;
+    $("formatInfo").textContent = formatLabel;
 
-    updateProgress(5,"تهيئة الفيديو...");
+    updateProgress(7,"تهيئة الفيديو...");
     await output.start();
 
     const totalFrames = Math.max(1,Math.ceil((APP.durationMs / 1000) * fps));
     const frameDuration = 1 / fps;
     const root = APP.exportRoot;
     const animations = APP.exportAnimations;
+
+    // بند 6: yield كل N فريمات
+    const YIELD_EVERY = isMobileDevice() ? 2 : 6;
 
     for(let i = 0; i < totalFrames; i++){
       if(APP.stop) throw new Error("تم إيقاف التصدير.");
@@ -3233,8 +3688,13 @@ async function runHtml2CanvasExportOnce(){
         imageTimeout: 15000, foreignObjectRendering: false,
         removeContainer: true, scrollX: 0, scrollY: 0,
         onclone: (clonedDoc) => {
-          try{ sanitizeRootForCapture(clonedDoc); }
-          catch(e){ console.warn("[onclone sanitize]", e); }
+          try{
+            sanitizeRootForCapture(clonedDoc);
+            const clonedWin = clonedDoc.defaultView || window;
+            preprocessModernCSS(clonedDoc, clonedWin);
+            enforceRootConstraints(clonedDoc);
+            enforceImageContainers(clonedDoc);
+          }catch(e){ logError("warn","فشل onclone", e); }
         }
       });
 
@@ -3248,35 +3708,29 @@ async function runHtml2CanvasExportOnce(){
       await source.add(timestamp,frameDuration);
       APP.exportStats.encodeMs += performance.now() - encodeStart;
       APP.exportStats.frames = i + 1;
-      updateProgress(5 + ((i+1)/totalFrames)*90, "تصدير " + (i+1) + " / " + totalFrames);
+      updateProgress(7 + ((i+1)/totalFrames)*88, "تصدير " + (i+1) + " / " + totalFrames);
+
+      if((i+1) % YIELD_EVERY === 0) await yieldToBrowser();
     }
 
-    if(source && typeof source.close === "function"){ try{ await source.close(); }catch{} }
-    updateProgress(95,"إنهاء ملف الفيديو...");
+    if(source && typeof source.close === "function"){ try{ await source.close(); }catch(e){ logError("warn","فشل إغلاق source", e); } }
+    updateProgress(96,"إنهاء ملف الفيديو...");
     await output.finalize();
 
     const buffer = target.buffer;
     if(!buffer) throw new Error("لم يتم إنشاء ملف الفيديو.");
 
     const mime = isMP4 ? "video/mp4" : "video/webm";
+    const ext = isMP4 ? "mp4" : "webm";
     const blob = new Blob([buffer],{ type: mime });
-    APP.exportObjectURL = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.className = "btn primary";
-    link.href = APP.exportObjectURL;
-    link.download = safeFileName(APP.title || "مشروع-موشن") + "." + (isMP4 ? "mp4" : "webm");
-    link.textContent = "حفظ " + (isMP4 ? "MP4" : "WebM") + " (" + (blob.size/1024/1024).toFixed(1) + " MB)";
-    $("download").innerHTML = "";
-    $("download").appendChild(link);
-    $("download").classList.add("show");
+    finalizeExport(blob, mime, ext, formatLabel);
 
     updateProgress(100,"اكتمل التصدير • " + APP.exportStats.frames + " إطار");
     toast("تم التصدير بنجاح","success",6000);
   }catch(error){
-    console.error("EXPORT ERROR:",error);
-    try{ if(output && typeof output.cancel === "function") await output.cancel(); }catch{}
-    try{ if(source && typeof source.close === "function") await source.close(); }catch{}
+    logError("error","فشل التصدير بـ html2canvas", error);
+    try{ if(output && typeof output.cancel === "function") await output.cancel(); }catch(e){}
+    try{ if(source && typeof source.close === "function") await source.close(); }catch(e){}
     throw error;
   }
 }
@@ -3312,7 +3766,7 @@ async function exportViaCaptureStream(){
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
   updateProgress(0,"تجهيز التسجيل الحي...");
-  if(APP.exportObjectURL){ try{ URL.revokeObjectURL(APP.exportObjectURL); }catch{} APP.exportObjectURL = null; }
+  if(APP.exportObjectURL){ try{ URL.revokeObjectURL(APP.exportObjectURL); }catch(e){} APP.exportObjectURL = null; }
 
   let canvasStream = null, recorder = null, videoEl = null, stopDraw = null, visibilityHandler = null;
   try{
@@ -3322,6 +3776,10 @@ async function exportViaCaptureStream(){
     APP.exportWin = $("preview").contentWindow;
     APP.exportRoot = getProjectRoot(APP.exportDoc);
     APP.exportAnimations = collectProjectAnimations(APP.exportDoc);
+    enforceRootConstraints(APP.exportDoc);
+    enforceImageContainers(APP.exportDoc);
+    await inlineExternalImagesForExport(APP.exportDoc);
+    await waitForAllImages(APP.exportDoc);
 
     const exportSize = getExportSize();
     const fps = Math.max(1,Number($("fps").value) || 60);
@@ -3335,7 +3793,7 @@ async function exportViaCaptureStream(){
     videoEl = document.createElement("video");
     videoEl.srcObject = APP.captureStream;
     videoEl.muted = true; videoEl.playsInline = true; videoEl.autoplay = true;
-    try{ await videoEl.play(); } catch{ videoEl.play().catch(()=>{}); }
+    try{ await videoEl.play(); }catch(e){ videoEl.play().catch(()=>{}); }
 
     await new Promise((resolve,reject)=>{
       if(videoEl.videoWidth > 0) return resolve();
@@ -3371,7 +3829,7 @@ async function exportViaCaptureStream(){
 
     canvasStream = canvas.captureStream(fps);
     const aud = APP.captureStream.getAudioTracks();
-    aud.forEach(t => { try{ canvasStream.addTrack(t); }catch{} });
+    aud.forEach(t => { try{ canvasStream.addTrack(t); }catch(e){} });
 
     let usedMime = mimeType;
     if(!MediaRecorder.isTypeSupported(usedMime)){
@@ -3394,7 +3852,7 @@ async function exportViaCaptureStream(){
     visibilityHandler = ()=>{
       if(document.hidden && recorder.state === "recording"){
         APP.stop = true;
-        try{ recorder.stop(); }catch{}
+        try{ recorder.stop(); }catch(e){}
       }
     };
     document.addEventListener("visibilitychange",visibilityHandler);
@@ -3425,35 +3883,26 @@ async function exportViaCaptureStream(){
     if(chunks.length === 0) throw new Error("لم يُسجَّل أي محتوى.");
 
     const blob = new Blob(chunks,{ type: usedMime });
-    APP.exportObjectURL = URL.createObjectURL(blob);
     const isMP4 = usedMime.indexOf("mp4") !== -1;
     const ext = isMP4 ? "mp4" : "webm";
+    const formatLabel = isMP4 ? "MP4 / H.264" : "WebM / " + (usedMime.indexOf("vp9") !== -1 ? "VP9" : "VP8");
+    finalizeExport(blob, usedMime, ext, formatLabel);
 
-    const link = document.createElement("a");
-    link.className = "btn primary";
-    link.href = APP.exportObjectURL;
-    link.download = safeFileName(APP.title || "مشروع-موشن") + "." + ext;
-    link.textContent = "حفظ " + ext.toUpperCase() + " (" + (blob.size/1024/1024).toFixed(1) + " MB)";
-    $("download").innerHTML = "";
-    $("download").appendChild(link);
-    $("download").classList.add("show");
-
-    $("formatInfo").textContent = isMP4 ? "MP4 / H.264" : "WebM / " + (usedMime.indexOf("vp9") !== -1 ? "VP9" : "VP8");
     updateProgress(100,"اكتمل التسجيل");
     toast("تم التسجيل بنجاح","success",6000);
   }catch(error){
-    console.error("[captureStream] EXPORT ERROR:",error);
+    logError("error","فشل تصدير captureStream", error);
     if(error && error.name === "AbortError") updateProgress(0,"تم إلغاء التسجيل");
     else{
       toast("فشل التسجيل: " + (error && error.message ? error.message : String(error)),"error",8000);
       updateProgress(0,"فشل التسجيل");
     }
   }finally{
-    if(visibilityHandler){ try{ document.removeEventListener("visibilitychange",visibilityHandler); }catch{} }
-    if(stopDraw){ try{ stopDraw(); }catch{} }
-    if(recorder && recorder.state !== "inactive"){ try{ recorder.stop(); }catch{} }
-    if(canvasStream){ try{ canvasStream.getVideoTracks().forEach(t => { try{ t.stop(); }catch{} }); }catch{} }
-    if(videoEl){ try{ videoEl.pause(); }catch{} try{ videoEl.srcObject = null; }catch{} }
+    if(visibilityHandler){ try{ document.removeEventListener("visibilitychange",visibilityHandler); }catch(e){} }
+    if(stopDraw){ try{ stopDraw(); }catch(e){} }
+    if(recorder && recorder.state !== "inactive"){ try{ recorder.stop(); }catch(e){} }
+    if(canvasStream){ try{ canvasStream.getVideoTracks().forEach(t => { try{ t.stop(); }catch(e){} }); }catch(e){} }
+    if(videoEl){ try{ videoEl.pause(); }catch(e){} try{ videoEl.srcObject = null; }catch(e){} }
     APP.exporting = false;
     $("export").style.display = "block";
     $("stop").style.display = "none";
@@ -3544,21 +3993,46 @@ document.addEventListener("keydown",(event)=>{
   window.addEventListener("resize", () => {
     const m = $("cropModal");
     if(!m || !m.classList.contains("visible")) return;
-    setTimeout(() => {
-      calculateCropFrame();
-      cropReset();
-    }, 150);
+    setTimeout(() => { calculateCropFrame(); cropReset(); }, 150);
   });
 })();
 
 /* ===== INIT ===== */
+function setupExportSystemOptions(){
+  const sel = $("exportSystem");
+  if(!sel) return;
+  const hideCapture = shouldHideCaptureStreamOption();
+  APP.captureStreamAvailable = !hideCapture;
+  const captureOpt = sel.querySelector('option[value="captureStream"]');
+  if(hideCapture && captureOpt){ captureOpt.remove(); sel.value = "html2canvas"; }
+  const note = $("desktopOnlyNote");
+  if(note) note.classList.toggle("show", hideCapture && sel.value === "html2canvas");
+}
+
 SCENES = [];
-setScenesCount(6);
+// بند 12: استرجاع تلقائي
+const restored = restoreSession();
+if(!restored) setScenesCount(6);
+else if(!SCENES.length) setScenesCount(6);
+else renderScenesList();
+
+// بند 14: الجودة الافتراضية على الجوال 720p
+if(isMobileDevice()){
+  if($("quality")) $("quality").value = "720";
+  if($("fps")) $("fps").value = "30";
+  logError("info","تم ضبط الجودة افتراضيًا على 720p و30FPS نظرًا لأنك تستخدم جوالًا");
+}
+
 setupExportSystemOptions();
 applyIframeCanvasSize(APP.orientation);
 resizePreview();
 updateExportSystemUI();
 showSafariNote();
+renderErrorLog();
+
+logError("info","التطبيق جاهز. بروتوكول: " + location.protocol +
+  " | سياق آمن: " + (window.isSecureContext ? "نعم" : "لا") +
+  " | جوال: " + (isMobileDevice() ? "نعم" : "لا"));
 
 console.log("[Platform]", {
   protocol: location.protocol,
