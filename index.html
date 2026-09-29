@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>منصة المشاريع المرئية — v4.2</title>
+<title>منصة المشاريع المرئية — v4.3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@400;700;900&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .kicker{color:var(--gold);font-size:10px;font-weight:900;margin-bottom:7px}
 .hero h1{margin:0;font-size:clamp(24px,4vw,38px);line-height:1.18}
 .hero p{max-width:760px;margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.9}
-.gen-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:14px}
+.gen-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}
 .panel-title{margin-bottom:12px;font-size:12px;font-weight:900}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -69,13 +69,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .scenes-acts button{border:1px solid var(--line);background:#091419;color:#fff;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:800}
 .total-duration{margin-right:auto;color:var(--muted);font-size:11px}
 .total-duration strong{color:var(--gold2)}
-.creative{border:1px solid rgba(201,168,90,.25);background:linear-gradient(145deg,rgba(201,168,90,.1),rgba(73,200,155,.035));border-radius:16px;padding:18px}
-.creative-badge{display:inline-block;padding:5px 8px;border-radius:999px;border:1px solid rgba(201,168,90,.3);color:var(--gold);font-size:9px;font-weight:900}
-.creative h2{margin:14px 0 6px;font-size:20px}
-.creative p{margin:0;color:var(--muted);font-size:11px;line-height:1.9}
-.creative ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:7px}
-.creative li{display:flex;gap:7px;color:#cad5d7;font-size:10px;line-height:1.7}
-.creative li::before{content:'◆';color:var(--green);flex:none}
 .generate{width:100%;height:50px;margin-top:14px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--gold2),#a17d34);color:#101010;font-weight:900;font-size:12px}
 .prompt-box{display:none;margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
 .prompt-box.show{display:block}
@@ -249,15 +242,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .player-btn:hover{border-color:rgba(201,168,90,.4)}
 .player-btn.primary{background:var(--gold);color:#101010;border-color:var(--gold)}
 .player-time{font-family:ui-monospace,monospace;font-size:11px;color:#d7c38c;font-weight:800;min-width:105px;text-align:center;padding:7px 9px;border-radius:8px;background:#050b0d;border:1px solid var(--line)}
-.icon-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;max-height:340px;overflow-y:auto;padding:6px;background:#050b0d;border:1px solid var(--line);border-radius:10px}
-.icon-cell{aspect-ratio:1;display:grid;place-items:center;background:#0b1216;border:1px solid var(--line);border-radius:6px;cursor:pointer;padding:6px}
-.icon-cell:hover{border-color:var(--gold);background:rgba(201,168,90,.08)}
-.icon-cell svg{width:100%;height:100%;fill:currentColor;color:#e8eeee}
-.stock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;max-height:340px;overflow-y:auto}
-.stock-cell{cursor:pointer;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#0b1216}
-.stock-cell:hover{border-color:var(--gold)}
-.stock-cell img{width:100%;display:block}
-.stock-cell .author{padding:4px;font-size:8px;color:var(--muted);text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
 .mobile-nav{display:none}
 @media(max-width:900px){.gen-grid{grid-template-columns:1fr}.workspace{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}}
 @media(max-width:650px){
@@ -275,7 +259,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   .export-settings{grid-template-columns:1fr}
   .scene-row{grid-template-columns:24px minmax(0,1fr) 60px 70px 60px;padding:5px 7px}
   .img-meta{grid-template-columns:1fr}
-  .icon-grid{grid-template-columns:repeat(5,1fr)}
 }
 </style>
 </head>
@@ -284,13 +267,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <header class="topbar">
   <div class="brand">
     <div class="logo">م</div>
-    <div><div class="brand-name">منصة المشاريع المرئية</div><div class="brand-sub">v4.2 — مُفحوص ومُصلَّح</div></div>
+    <div><div class="brand-name">منصة المشاريع المرئية</div><div class="brand-sub">v4.3 — مُفحوص ومُصلَّح</div></div>
   </div>
   <div class="top-actions">
-    <button class="top-btn" id="openProjects">📁 المشاريع</button>
-    <button class="top-btn" id="openIcons">🎨 أيقونات</button>
     <button class="top-btn" id="openStock">🔍 صور</button>
-    <button class="top-btn" id="openTTS">🔊 TTS</button>
     <button class="top-btn" id="exportJson">⬇️ تصدير</button>
     <button class="top-btn" id="importJson">⬆️ استيراد</button>
     <button class="top-btn red" id="newSession">🗑 جديد</button>
@@ -305,9 +285,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <section class="page active" id="page-generator">
   <div class="hero">
-    <div class="kicker">EDUCATIONAL MOTION PROJECT — v4.2</div>
+    <div class="kicker">EDUCATIONAL MOTION PROJECT — v4.3</div>
     <h1>مشروع دراسي كامل<br>بطريقة الموشن.</h1>
-    <p>نسخة مُفحوصة ومُصلَّحة (v4.2): إصلاح خطأ ROLES الفادح، إزالة النسب المُشوِّهة، playAudio يحترم start، preprocess مع snapshot/restore، انتظار KaTeX، واجهات الأيقونات/الصور/TTS مُفعّلة — وفي v4.2: إصلاح المستند القديم بعد إعادة حقن الاتجاه، إصلاح بصمة الإطار (تخطّي خاطئ أثناء التصدير)، فهرسة الصور الصحيحة، حماية سحب المشاهد، واستعادة الاتجاه مع التراجع.</p>
+    <p>نسخة مُفحوصة ومُصلَّحة (v4.3): إصلاح خطأ ROLES الفادح، إزالة النسب المُشوِّهة، playAudio يحترم start، preprocess مع snapshot/restore، انتظار KaTeX، واجهات الأيقونات/الصور/TTS مُفعّلة — وإصلاحات القوالب والعلامات المركّبة الكاملة.</p>
   </div>
   <div class="gen-grid">
     <div class="panel">
@@ -347,19 +327,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
           <span class="total-duration">المدة: <strong id="totalDuration">36 ث</strong></span>
         </div>
       </div>
-    </div>
-    <div class="creative">
-      <span class="creative-badge">v4.2 — مُفحوص ومُصلَّح</span>
-      <h2>ما يعمل، وليس ما يُدّعى</h2>
-      <p>كل زر يفعل شيئًا. المزايا المؤجلة حُذفت من الواجهة بدل الإبقاء عليها شكلًا.</p>
-      <ul>
-        <li>Motion + Charts (بالميلي ثانية) + KaTeX</li>
-        <li>Linter على المستند النظيف (snapshot/restore)</li>
-        <li>صور + صوت + مشاريع في IndexedDB</li>
-        <li>Undo/Redo مربوط بكل تعديل</li>
-        <li>أيقونات SVG + بحث Unsplash/Pexels + TTS معاينة</li>
-        <li>برومبت كامل بقسم .img-frame وقواعد العربية</li>
-      </ul>
     </div>
   </div>
   <button class="generate" id="generate">إنشاء Prompt المشروع</button>
@@ -409,7 +376,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </div>
       </div>
     </div>
-
     <aside class="side">
       <div class="side-panel">
         <h3>معلومات</h3>
@@ -468,7 +434,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
         <div style="height:6px"></div>
         <div class="btns">
           <button class="btn" id="genRegen">توليد</button>
-          <button class="btn blue" id="regenCopy">نسخ</button>
         </div>
       </div>
 
@@ -492,7 +457,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
           <button class="btn" id="capsFromScenes">من الشرائح</button>
           <button class="btn" id="addCap">+ سطر</button>
         </div>
-        <label style="display:flex;align-items:center;gap:6px;margin-top:7px;font-size:10px;color:var(--muted)"><input type="checkbox" id="burnCaps"> حرق الترجمة (مؤجل)</label>
         <div class="cap-list" id="capList"></div>
       </div>
 
@@ -517,10 +481,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </div>
         <div style="height:6px"></div>
         <div class="export-settings">
-          <div><label>النسبة</label><select id="ratio">
-            <option value="native">الأصلية (مطابقة للمشروع)</option>
-          </select></div>
-          <div><label>خادم (F6)</label><input type="url" id="serverUrl" placeholder="https://..."></div>
+          <div><label>النسبة</label><div id="ratioInfo" class="chip muted">—</div></div>
         </div>
         <div style="height:6px"></div>
         <button class="btn" id="testFrames">اختبار 3 إطارات</button>
@@ -592,7 +553,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="modal-head"><h3>برومبت إعادة توليد شريحة</h3><button class="modal-close" onclick="closeModal('regenModal')">×</button></div>
   <div class="modal-info">انسخ والصق في الذكاء الاصطناعي.</div>
   <textarea id="regenText" class="prompt-preview" readonly></textarea>
-  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('regenModal')">إغلاق</button><button class="modal-act apply" id="regenCopy2">نسخ</button></div>
+  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('regenModal')">إغلاق</button><button class="modal-act apply" id="regenCopy">نسخ</button></div>
 </div></div>
 
 <div id="fixModal" class="modal-bg"><div class="modal">
@@ -602,24 +563,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('fixModal')">إغلاق</button><button class="modal-act apply" id="fixCopy2">نسخ</button></div>
 </div></div>
 
-<div id="projectsModal" class="modal-bg"><div class="modal">
-  <div class="modal-head"><h3>📁 المشاريع</h3><button class="modal-close" onclick="closeModal('projectsModal')">×</button></div>
-  <div class="modal-info">اختر مشروعًا لفتحه أو إدارته.</div>
-  <div id="projList" style="display:flex;flex-direction:column;gap:5px;max-height:280px;overflow-y:auto"></div>
-  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('projectsModal')">إغلاق</button><button class="modal-act apply" id="saveProject">حفظ كنسخة جديدة</button></div>
-</div></div>
-
 <div id="confirmModal" class="modal-bg"><div class="modal" style="max-width:400px">
   <div class="modal-head"><h3 id="cfTitle">تأكيد</h3></div>
   <div class="modal-info" id="cfMsg">—</div>
   <div class="modal-acts"><button class="modal-act cancel" id="cfNo">إلغاء</button><button class="modal-act apply" id="cfYes">موافق</button></div>
-</div></div>
-
-<div id="iconsModal" class="modal-bg"><div class="modal">
-  <div class="modal-head"><h3>🎨 أيقونات SVG</h3><button class="modal-close" onclick="closeModal('iconsModal')">×</button></div>
-  <div class="modal-info">اضغط أيقونة لنسخ كود SVG للحافظة.</div>
-  <div class="icon-grid" id="iconGrid"></div>
-  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('iconsModal')">إغلاق</button></div>
 </div></div>
 
 <div id="stockModal" class="modal-bg"><div class="modal">
@@ -638,17 +585,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </div>
   <div id="stockResults" class="stock-grid"></div>
   <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('stockModal')">إغلاق</button></div>
-</div></div>
-
-<div id="ttsModal" class="modal-bg"><div class="modal">
-  <div class="modal-head"><h3>🔊 معاينة TTS</h3><button class="modal-close" onclick="closeModal('ttsModal')">×</button></div>
-  <div class="modal-info">⚠️ معاينة فقط عبر speechSynthesis. لا تُدمج في الفيديو — للدمج ارفع ملف صوتي في لوحة الصوت.</div>
-  <textarea id="ttsText" class="prompt-preview" style="min-height:100px" placeholder="النص..."></textarea>
-  <div style="display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:6px">
-    <select id="ttsVoice" style="border:1px solid var(--line);background:#071114;color:#fff;border-radius:8px;padding:8px;font-size:10px"></select>
-    <button class="btn primary" id="ttsSpeak" style="width:auto;padding:8px 14px">🔊 تشغيل</button>
-  </div>
-  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('ttsModal')">إغلاق</button></div>
 </div></div>
 
 <script type="module">
@@ -677,26 +613,16 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <script>
 "use strict";
-/* v4.1 — إصلاحات هذه النسخة:
-   1. ROLE_NAMES بدل ROLES (كان خطأ فادحًا)
-   2. حذف 1:1 و9:16 من #ratio (كانا يُشوّهان المحتوى)
-   3. playAudio يحترم start
-   4. preprocess على snapshot/restore (الفاحص يبقى يعمل)
-   5. واجهات أيقونات/صور/TTS مُفعّلة فعليًا
-   6. انتظار KaTeX قبل أول setTime
-   7. حدود slice(0, 3000) في تحليل الصور و preprocess
-   8. recAudio يستعيد النص في onstop لا في timeout قصير
-   9. History.push في init
-   10. applyDurationsToDoc + mixAudio محميان بـ try/catch
-   11. إصلاح doc/win القديمين بعد إعادة الحقن عند تغيير الاتجاه في loadProject
-   12. إصلاح frameHash (كان يقرأ قناة حمراء فقط → تخطّي إطارات خاطئ أثناء التصدير)
-   13. حماية startSceneDrag و applyReplaces عند اختلاف SCENES عن مشاهد الإطار
-   14. فهرس imgIndex صحيح للصور في applyReplaces
-   15. Escape يغلق Crop/BG تنظيفًا (يصفّر body overflow والحالة المعلّقة)
-   16. History يحفظ ويستعيد orientation (كان التراجع لا يرجع الاتجاه)
-   ملاحظة معمارية: لا sandbox على الإطار. allow-scripts allow-same-origin
-   مع srcdoc = ثقب أمني وهمي (نفس الأصل). بلا sandbox صريح، نفس النتيجة أمنيًا
-   لكن html2canvas يعمل. أي نشر عام يحتاج Worker + OffscreenCanvas.
+/* v4.3 — إصلاحات هذه النسخة:
+   1. إغلاق تعليقات الأقسام الستة (كانت /* ... / بدل /* ... */)
+   2. إزالة سياجات Markdown الشاردة من HTML و JS
+   3. استعادة $(id) في كل مواضع DOM المتضررة
+   4. إصلاح عمليات الضرب المفقودة (sec*2, width*s, ...)
+   5. استعادة backticks القوالب المفقودة في createPrompt/renderLint/...
+   6. استعادة ${...} بدل {...} في النصوص
+   7. تصحيح querySelectorAll("#project-root *") و ("*")
+   8. توحيد الإصدار على v4.3 في كل الشارات
+   9. إصلاحات دقيقة في regex وحسابات luminance
 */
 
 const $ = id => document.getElementById(id);
@@ -770,8 +696,8 @@ const Errors = {
     if (err) d = typeof err === "string" ? err : (err.message || String(err));
     this.list.push({ t: Date.now(), level, msg: String(msg||""), d });
     if (this.list.length > 200) this.list.splice(0, this.list.length - 200);
-    if (level === "error") console.error("[v4.1]", msg, err || "");
-    else if (level === "warn") console.warn("[v4.1]", msg, err || "");
+    if (level === "error") console.error("[v4.3]", msg, err || "");
+    else if (level === "warn") console.warn("[v4.3]", msg, err || "");
     this.render();
   },
   render() {
@@ -820,11 +746,10 @@ const DB = {
     if (this._p) return this._p;
     this._p = new Promise((res, rej) => {
       if (!("indexedDB" in window)) return rej(new Error("no IDB"));
-      const req = indexedDB.open("motion-platform-v4", 1);
+      const req = indexedDB.open("motion-platform-v4", 2);
       req.onupgradeneeded = () => {
         const db = req.result;
         if (!db.objectStoreNames.contains("images")) db.createObjectStore("images", { keyPath: "key" });
-        if (!db.objectStoreNames.contains("projects")) db.createObjectStore("projects", { keyPath: "id" });
         if (!db.objectStoreNames.contains("audio")) db.createObjectStore("audio", { keyPath: "id" });
       };
       req.onsuccess = () => res(req.result);
@@ -850,10 +775,6 @@ const DB = {
   saveImg(k, d, meta) { return this.tx("images", "readwrite", s => s.put({ key: k, dataUrl: d, meta, ts: Date.now() })) },
   loadImgs() { return this.tx("images", "readonly", s => s.getAll()).then(r => r || []) },
   clearImgs() { return this.tx("images", "readwrite", s => s.clear()) },
-  saveProj(p) { return this.tx("projects", "readwrite", s => s.put(p)) },
-  loadProjs() { return this.tx("projects", "readonly", s => s.getAll()).then(r => r || []) },
-  getProj(id) { return this.tx("projects", "readonly", s => s.get(id)) },
-  delProj(id) { return this.tx("projects", "readwrite", s => s.delete(id)) },
   saveAudio(id, dataUrl, name) { return this.tx("audio", "readwrite", s => s.put({ id, dataUrl, name, ts: Date.now() })) },
   loadAudios() { return this.tx("audio", "readonly", s => s.getAll()).then(r => r || []) },
   delAudio(id) { return this.tx("audio", "readwrite", s => s.delete(id)) }
@@ -868,8 +789,7 @@ const APP = {
   currentTime: 0, playing: false, rafId: 0, scrubbing: false,
   detectedFonts: [], missingFonts: [],
   exportAnimations: [],
-  stats: { frames: 0, renderMs: 0, encodeMs: 0, skipped: 0 },
-  captureStream: null
+  stats: { frames: 0, renderMs: 0, encodeMs: 0, skipped: 0 }
 };
 let SCENES = [];
 let SAVE_TIMER = null;
@@ -877,8 +797,7 @@ const SESSION_KEY = "motion-platform-session-v4";
 const LEGACY = ["motion-platform-session-v3", "motion-platform-session-v2", "motion-platform-session-v1"];
 const IMG_MGR = { items: [], replaces: new Map(), selected: new Set(), pending: null };
 const AUDIO = { tracks: [], recorder: null, chunks: [] };
-const CAPTIONS = { items: [], burn: false };
-const PROJ = { current: null, list: [] };
+const CAPTIONS = { items: [] };
 const CROP = { item: null, src: "", name: "", mime: "image/png", origSrc: "", img: null, nw: 0, nh: 0, ratio: 1, frame: { left:0,top:0,width:0,height:0 }, left: 0, top: 0, baseScale: 1, zoom: 1, dragging: false, pointerId: null, startX: 0, startY: 0, startL: 0, startT: 0 };
 const BG = { item: null, src: "", name: "", origSrc: "", img: null, color: null, tol: 30, fea: 2, result: null, batch: null };
 
@@ -1047,7 +966,7 @@ html,body{overflow:hidden !important;margin:0 !important;padding:0 !important}
 
 /* ────────── Prompt ────────── */
 function wordRange(sec) {
-  return { min: Math.max(8, Math.round(sec*2)), max: Math.max(12, Math.round(sec*2.5)) };
+  return { min: Math.max(8, Math.round(sec * 2)), max: Math.max(12, Math.round(sec * 2.5)) };
 }
 function createPrompt() {
   const d = getForm();
@@ -1062,7 +981,7 @@ function createPrompt() {
     "cinematic-dark": "خلفية داكنة (كحلي/أسود)، توهجات بنفسجية وسماوية، تدرجات ناعمة، إحساس سينمائي.",
     "modern-geometric": "ألوان صريحة (أزرق، أحمر، أصفر)، أشكال هندسية حادة، تباين عالٍ.",
     "educational-board": "خلفية كريمية دافئة، برتقالي وتركوازي، إحساس السبورة التعليمية.",
-    "journalistic": "رمادي داكن + ذهبي، خطوط رقيقة، مساحات مدروسة.",
+    journalistic: "رمادي داكن + ذهبي، خطوط رقيقة، مساحات مدروسة.",
     "saudi-modern": "أخضر داكن + ذهبي + أبيض، عناصر هندسية عربية حديثة."
   };
   const style = d.visualStyle === "auto" ? null : styleMap[d.visualStyle];
@@ -1087,25 +1006,24 @@ function createPrompt() {
     for (let k = 0; k < imgCount; k++) {
       const si = Math.min(total, 1 + Math.floor(k * total / imgCount));
       const t = timing[si-1] || timing[0];
-      rows.push(`| img-${k+1} | الشريحة ${si} | ${portrait?800:1000}×${portrait?1000:700} | ${t.start}–${t.end} |`);
+      rows.push(`| img-${k + 1} | الشريحة ${si} | ${portrait ? 800 : 1000}×${portrait ? 1000 : 700} | ${t.start}–${t.end} |`);
     }
     imgBlock = `
-**جدول توقيت الصور (إلزامي):**
+جدول توقيت الصور (إلزامي):
 
-| image | المشهد | الحاوية (.img-frame) | ضمن التوقيت |
-|-------|--------|----------------------|-------------|
+| # | الصورة | المشهد | الحاوية (.img-frame) | ضمن التوقيت |
 ${rows.join("\n")}
 
 ⚠️ قواعد صارمة:
-  • كل صورة داخل \`.img-frame\` بأبعاد **بالبكسل**، مطابقة للجدول.
-  • \`.img-frame\`: position:relative، overflow:hidden، width و height بـ px فقط.
-  • img: width:100%، height:100%، object-fit:cover، display:block.
-  • ممنوع %، vw، vh، auto.
+• كل صورة داخل \`.img-frame\` بأبعاد بالبكسل، مطابقة للجدول.
+• \`.img-frame\`: position:relative، overflow:hidden، width و height بـ px فقط.
+• img: width:100%، height:100%، object-fit:cover، display:block.
+• ممنوع %، vw، vh، auto.
 
 ✅ مثال:
 \`\`\`html
-<div class="img-frame" style="width:${portrait?800:1000}px;height:${portrait?1000:700}px;position:relative;overflow:hidden;">
-  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${portrait?800:1000}' height='${portrait?1000:700}'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3C/svg%3E" alt="وصف" data-image-name="img-1" style="width:100%;height:100%;object-fit:cover;display:block;">
+<div class="img-frame" style="width:${portrait ? 800 : 1000}px;height:${portrait ? 1000 : 700}px;position:relative;overflow:hidden;">
+  <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${portrait ? 800 : 1000}' height='${portrait ? 1000 : 700}'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3C/svg%3E" alt="وصف" data-image-name="img-1" style="width:100%;height:100%;object-fit:cover;display:block;">
 </div>
 \`\`\`
 `;
@@ -1117,32 +1035,32 @@ ${rows.join("\n")}
 أنت مخرج Motion Graphics للمحتوى العربي التعليمي.
 
 📋 بيانات المشروع
-  العنوان: ${d.title || "غير محدد"}
-  المادة: ${d.subject || "غير محددة"}
-  الصف: ${d.grade || "غير محدد"}
-  الطالب: ${d.student || "غير محدد"}
-  المعلم: ${d.teacher || "غير محدد"}
-  العام: ${d.year || "غير محدد"}
-  المتطلبات: ${d.extra || "لا توجد"}
-  الأبعاد: ${W} × ${H}
-  الاتجاه: ${portrait ? "عمودي 9:16" : "أفقي 16:9"}
-  الإطارات: ${fps}
-  عدد الشرائح: ${total}
-  المدة الكلية: ${totalMs}ms
+العنوان: ${d.title || "غير محدد"}
+المادة: ${d.subject || "غير محددة"}
+الصف: ${d.grade || "غير محدد"}
+الطالب: ${d.student || "غير محدد"}
+المعلم: ${d.teacher || "غير محدد"}
+العام: ${d.year || "غير محدد"}
+المتطلبات: ${d.extra || "لا توجد"}
+الأبعاد: ${W} × ${H}
+الاتجاه: ${portrait ? "عمودي 9:16" : "أفقي 16:9"}
+الإطارات: ${fps}
+عدد الشرائح: ${total}
+المدة الكلية: ${totalMs}ms
 
 ${styleLine}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⏱️ جدول التوقيت (استخدمه حرفيًا)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 | # | الشريحة | start (ms) | end (ms) | المدة (ث) | كلمات |
-|---|---------|------------|----------|-----------|--------|
 ${timingRows}
 
 Meta:
-  <meta name="project-duration-ms" content="${totalMs}">
-  <meta name="project-orientation" content="${APP.orientation}">
-  <meta name="project-title" content="${escA(d.title)}">
+<meta name="project-duration-ms" content="${totalMs}">
+<meta name="project-orientation" content="${APP.orientation}">
+<meta name="project-title" content="${escA(d.title)}">
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🏗️ بنية الشرائح
@@ -1154,50 +1072,53 @@ ${sceneLines}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎬 Motion جاهزة (تُحقن تلقائيًا)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.Motion — كل التوابع الزمنية تستقبل **ميلي ثانية** لتتوافق مع setTime:
+window.Motion — كل التوابع الزمنية تستقبل ميلي ثانية لتتوافق مع setTime:
 
-  • Motion.ease.{linear|easeIn|easeOut|easeInOut|cubic|back|elastic}(t) — t من 0 إلى 1
-  • Motion.clamp / lerp / range / stagger(i, gapMs=120)
-  • Motion.fadeIn(ms, delayMs, durMs) / fadeOut
-  • Motion.slideIn(ms, delayMs, durMs, distPx)
-  • Motion.scaleIn(ms, delayMs, durMs)
-  • Motion.typewriter(text, ms, delayMs, cps=30)
-  • Motion.countUp(ms, delayMs, durMs, from, to, {arabic:true})
-  • Motion.charts.{bar|line|pie|area}(el, { data:[{label,value}], t:localMs })
-  • Motion.katex(el, "x^2+1")
+• Motion.ease.{linear|easeIn|easeOut|easeInOut|cubic|back|elastic}(t) — t من 0 إلى 1
+• Motion.clamp / lerp / range / stagger(i, gapMs=120)
+• Motion.fadeIn(ms, delayMs, durMs) / fadeOut
+• Motion.slideIn(ms, delayMs, durMs, distPx)
+• Motion.scaleIn(ms, delayMs, durMs)
+• Motion.typewriter(text, ms, delayMs, cps=30)
+• Motion.countUp(ms, delayMs, durMs, from, to, {arabic:true})
+• Motion.charts.{bar|line|pie|area}(el, { data:[{label,value}], t:localMs })
+• Motion.katex(el, "x^2+1")
 
 مثال:
-  const localMs = ms - sceneStartMs;
-  el.style.opacity = Motion.fadeIn(localMs, 200, 600);
+const localMs = ms - sceneStartMs;
+el.style.opacity = Motion.fadeIn(localMs, 200, 600);
 
 ⚠️ مرّر localMs (بالميلي ثانية) لكل من يمرّر t.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚙️ قواعد تقنية
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 1. #project-root: ${W}px × ${H}px مباشرة، بلا transform:scale.
 2. body يحتوي #project-root فقط.
 3. كل شريحة: <section data-scene="N" data-scene-name="..." data-scene-start="MS" data-scene-end="MS">.
-4. window.__PROJECT__ = { duration: ${totalMs}, orientation: "${APP.orientation}", setTime: function(ms){...} };
+4. window.PROJECT = { duration: ${totalMs}, orientation: "${APP.orientation}", setTime: function(ms){...} };
 5. ممنوع: CSS animation/transition، requestAnimationFrame، setTimeout للحركة.
 6. ممنوع: filter، drop-shadow، backdrop-filter، mask-image، mix-blend-mode، background-clip:text على العربية.
 7. ممنوع letter-spacing و text-transform على العربية.
 
 🎨 نظام التصميم
-- خط عربي واحد: Tajawal أو Cairo.
-- 4–5 متغيرات :root.
-- عناوين 72–180px، نص 18–24px.
-- الشاشة مليئة: 60–100 كلمة + عنصر بصري كبير.
-- padding ≥ 5%، spacing: 8/16/24/32/48/64px.
+
+· خط عربي واحد: Tajawal أو Cairo.
+· 4–5 متغيرات :root.
+· عناوين 72–180px، نص 18–24px.
+· الشاشة مليئة: 60–100 كلمة + عنصر بصري كبير.
+· padding ≥ 5%، spacing: 8/16/24/32/48/64px.
 
 🎬 الحركة
-- دخول متتالٍ 100–150ms.
-- إبراز الرقم: scale 1 → 1.05–1.15 ثم رجوع.
-- خروج ناعم في آخر 20%.
-- crossfade 300ms بين الشرائح.
+
+· دخول متتالٍ 100–150ms.
+· إبراز الرقم: scale 1 → 1.05–1.15 ثم رجوع.
+· خروج ناعم في آخر 20%.
+· crossfade 300ms بين الشرائح.
 
 🖼️ الصور
-${imgCount > 0 ? `أضف **${imgCount} صورة** وفق الجدول.` : "بدون صور."}
+${imgCount > 0 ? "أضف **" + imgCount + " صورة** وفق الجدول." : "بدون صور."}
 ${imgBlock}
 
 📤 HTML واحد كامل. لا شرح.`;
@@ -1260,7 +1181,7 @@ const Linter = {
     doc.querySelectorAll(".img-frame").forEach(el => {
       const w = el.style.width || win.getComputedStyle(el).width;
       const h = el.style.height || win.getComputedStyle(el).height;
-      if (!/^\d+(\.\d+)?px$/.test(String(w)) || !/^\d+(\.\d+)?px$/.test(String(h)))
+      if (!/^\d+(\.\d+)?px/.test(String(w)) || !/^\d+(\.\d+)?px/.test(String(h)))
         add("error", sceneOf(el), desc(el), ".img-frame بلا px صريحة.", "width/height px.");
     });
     nodes.forEach(el => {
@@ -1270,12 +1191,12 @@ const Linter = {
       const fs = parseFloat(win.getComputedStyle(el).fontSize);
       if (fs && fs < 16) add("warn", sceneOf(el), desc(el), "حجم خط " + fs + "px صغير.", "18px+.");
     });
-    if (win.__PROJECT__ && typeof win.__PROJECT__.setTime === "function") {
-      const dms = Number(win.__PROJECT__.duration) || 0;
-      const times = [0, Math.round(dms*0.25), Math.round(dms*0.5), Math.round(dms*0.75), Math.max(0, dms-1)];
+    if (win.PROJECT && typeof win.PROJECT.setTime === "function") {
+      const dms = Number(win.PROJECT.duration) || 0;
+      const times = [0, Math.round(dms * 0.25), Math.round(dms * 0.5), Math.round(dms * 0.75), Math.max(0, dms-1)];
       const baseR = (doc.getElementById("project-root") || doc.body).getBoundingClientRect();
       for (const t of times) {
-        try { win.__PROJECT__.setTime(t) } catch(e){ break }
+        try { win.PROJECT.setTime(t) } catch(e){ break }
         Array.from(doc.querySelectorAll("#project-root *")).slice(0, 400).forEach(el => {
           if (el.tagName === "svg" || el.closest("svg")) return;
           const r = el.getBoundingClientRect();
@@ -1301,7 +1222,7 @@ const Linter = {
       if (hx) { let x = hx[1]; if (x.length === 3) x = x.split("").map(c => c+c).join(""); if (x.length >= 6) return { r: parseInt(x.slice(0,2),16), g: parseInt(x.slice(2,4),16), b: parseInt(x.slice(4,6),16) } }
       return null;
     };
-    const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4) }; return 0.2126*f(c.r)+0.7152*f(c.g)+0.0722*f(c.b) };
+    const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4) }; return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b) };
     const bgOf = el => { let c = el; while (c) { const col = parseC(win.getComputedStyle(c).backgroundColor); if (col) return col; c = c.parentElement } return { r: 0, g: 0, b: 0 } };
     nodes.filter(el => el.children.length === 0 && (el.textContent||"").trim()).slice(0, 120).forEach(el => {
       const fg = parseC(win.getComputedStyle(el).color), bg = bgOf(el);
@@ -1320,6 +1241,7 @@ const Linter = {
     return out;
   }
 };
+
 function renderLint(list) {
   const box = $("lintList"), sum = $("lintSummary");
   const er = list.filter(x => x.sev === "error").length, wa = list.filter(x => x.sev === "warn").length;
@@ -1331,21 +1253,22 @@ function renderLint(list) {
     `<div class="lint-item ${x.sev}"><span class="lint-badge">${x.sev === "error" ? "خطأ" : "تحذير"}</span><div><div>[شريحة ${esc(x.scene)}] ${esc(x.el)} — ${esc(x.msg)}</div>${x.fix ? '<div class="lint-fix">💡 ' + esc(x.fix) + '</div>' : ''}</div></div>`
   ).join("");
 }
+
 function buildFixPrompt(list) {
   const all = list.slice(0, 40);
-  const rows = all.map((x, i) =>
-    `${i+1}. [${x.sev === "error" ? "خطأ" : "تحذير"}] شريحة ${x.scene} — ${x.el}\n   المشكلة: ${x.msg}\n   الإصلاح: ${x.fix || "—"}`
-  ).join("\n\n");
+  const rows = all.map((x, i) => `${i + 1}. [${x.sev === "error" ? "خطأ" : "تحذير"}] شريحة ${x.scene} — ${x.el}
+   المشكلة: ${x.msg}
+   الإصلاح: ${x.fix || "—"}`).join("\n\n");
   const d = getForm();
   return `أنت مهندس واجهات. أصلح المخالفات أدناه فقط، بلا إعادة كتابة المشروع.
 
-⚠️ لا تُغيّر: #project-root، window.__PROJECT__، data-scene-*، meta project-duration-ms/orientation.
+⚠️ لا تُغيّر: #project-root، window.PROJECT، data-scene-*، meta project-duration-ms/orientation.
 
 📋 السياق:
-  العنوان: ${d.title || "—"}
-  الاتجاه: ${APP.orientation === "portrait" ? "عمودي" : "أفقي"}
-  المدة: ${APP.durationMs}ms
-  الشرائح: ${SCENES.length}
+العنوان: ${d.title || "—"}
+الاتجاه: ${APP.orientation === "portrait" ? "عمودي" : "أفقي"}
+المدة: ${APP.durationMs}ms
+الشرائح: ${SCENES.length}
 
 🔍 المخالفات (${all.length}):
 
@@ -1353,6 +1276,7 @@ ${rows}
 
 أخرج HTML كاملًا بعد الإصلاح.`;
 }
+
 function buildRegenPrompt(idx) {
   if (!APP.loaded) return "";
   const doc = $("projectFrame").contentDocument;
@@ -1374,26 +1298,28 @@ function buildRegenPrompt(idx) {
   return `أعد توليد شريحة واحدة فقط من مشروع Motion موجود.
 
 📌 الشريحة:
-  رقم: ${idx + 1} / ${total}
-  الدور: ${ROLE_NAMES[r]}
-  التوقيت: ${st}ms → ${en}ms (${dur} ثانية)
-  الكلمات: ${w.min}–${w.max}
-  الأبعاد: ${W}×${H}
-  الموضوع: ${d.title || "—"} — ${d.subject || ""}
+رقم: ${idx + 1} / ${total}
+الدور: ${ROLE_NAMES[r]}
+التوقيت: ${st}ms → ${en}ms (${dur} ثانية)
+الكلمات: ${w.min}–${w.max}
+الأبعاد: ${W}×${H}
+الموضوع: ${d.title || "—"} — ${d.subject || ""}
 
 🎨 لوحة الألوان: ${pal.join(" ، ") || "داكن + ذهبي"}
-  الخط: Tajawal
+الخط: Tajawal
 
 📖 السياق:
-  • السابقة: ${prev}
-  • التالية: ${next}
+• السابقة: ${prev}
+• التالية: ${next}
 
 ⚠️ أخرج فقط:
-1) <section data-scene="${idx+1}" data-scene-start="${st}" data-scene-end="${en}">...</section>
-2) animateScene${idx+1}(localMs, sectionEl) تستخدم Motion.
+
+1. <section data-scene="${idx + 1}" data-scene-start="${st}" data-scene-end="${en}">...</section>
+2. animateScene${idx + 1}(localMs, sectionEl) تستخدم Motion.
 
 لا <html> ولا شرح.`;
 }
+
 function extractPalette() {
   if (!APP.loaded) return [];
   const doc = $("projectFrame").contentDocument;
@@ -1415,7 +1341,7 @@ function extractPalette() {
   return Array.from(set).slice(0, 6);
 }
 
-/* ────────── Scenes UI (الإصلاح الحرِج: ROLE_NAMES بدل ROLES) ────────── */
+/* ────────── Scenes UI ────────── */
 function makeScene(i, t, d) { return { index: i+1, title: t||"", duration: Math.max(2, Math.min(60, Number(d)||6)) } }
 function renderScenes() {
   const w = $("scenesList");
@@ -1504,25 +1430,22 @@ const renderScale = () => {
   const q = $("quality").value;
   if (q === "720") return APP.orientation === "portrait" ? 720/1080 : 1280/1920;
   if (q === "x1.5") return 1.5;
-  if (q === "x2") return 2;
   return 1;
 };
 function exportSize() {
-  /* v4.1: النسبة محذوفة من الواجهة لأن 1:1 و9:16 كانا يُشوّهان الصورة.
-     القيمة الوحيدة الآن "native" = أبعاد المشروع × معامل الجودة. */
   const b = baseSize();
   const s = renderScale();
-  return { width: Math.max(2, Math.round(b.width*s)), height: Math.max(2, Math.round(b.height*s)) };
+  return { width: Math.max(2, Math.round(b.width * s)), height: Math.max(2, Math.round(b.height * s)) };
 }
 function bitrate(w, h, fps) {
-  const r = (w*h) / (1920*1080);
+  const r = (w * h) / (1920 * 1080);
   let b = 12_000_000 * r;
   if (fps >= 50) b *= 1.3;
   else if (fps >= 40) b *= 1.15;
   return Math.max(4_000_000, Math.min(60_000_000, Math.round(b)));
 }
 
-/* ────────── Snapshot/restore (الإصلاح الحرِج للفاحص) ────────── */
+/* ────────── Snapshot/restore ────────── */
 function snapshotInline(doc) {
   const map = new Map();
   doc.querySelectorAll("#project-root *").forEach(el => map.set(el, el.getAttribute("style") || ""));
@@ -1589,7 +1512,6 @@ async function waitImgs(doc) {
 }
 async function waitKatex(win) {
   if (!win) return;
-  /* KaTeX يُحمَّل بـ <script src> في الـ head. ننتظره قبل أول setTime. */
   for (let i = 0; i < 40; i++) {
     if (win.katex) return;
     await sleep(100);
@@ -1604,8 +1526,8 @@ async function waitFonts(doc, win) {
     let ff = "";
     try { ff = win.getComputedStyle(el).fontFamily || "" } catch(e){}
     ff.split(",").forEach(n => {
-      const c = n.trim().replace(/^["']|["']$/g, "");
-      if (c && !/^(inherit|initial|unset|sans-serif|serif|monospace|arial|helvetica|tahoma|verdana|times new roman|segoe ui|courier new|system-ui|ui-sans-serif)$/i.test(c)) fams.add(c);
+      const c = n.trim().replace(/^["']|["']/g, "");
+      if (c && !/^(inherit|initial|unset|sans-serif|serif|monospace|arial|helvetica|tahoma|verdana|times new roman|segoe ui|courier new|system-ui|ui-sans-serif)/i.test(c)) fams.add(c);
     });
   });
   try { await Promise.race([doc.fonts.ready, sleep(1500)]) } catch(e){}
@@ -1616,7 +1538,6 @@ async function waitFonts(doc, win) {
 }
 async function waitRes(doc) {
   const win = doc.defaultView || window;
-  /* timeout إجمالي 12 ثانية */
   await Promise.race([
     (async () => {
       await waitFonts(doc, win);
@@ -1629,7 +1550,6 @@ async function waitRes(doc) {
   ]);
 }
 
-/* preprocess — يُستدعى عند التصدير فقط مع snapshot/restore */
 function preprocess(doc, win) {
   const stats = { total: 0, clipText: 0, heavy: 0 };
   Array.from(doc.querySelectorAll("*")).slice(0, 3000).forEach(el => {
@@ -1637,7 +1557,7 @@ function preprocess(doc, win) {
     const clip = (cs.webkitBackgroundClip || cs.backgroundClip || "").toLowerCase();
     if (clip === "text") {
       const bg = cs.backgroundImage || "";
-      const cols = bg.match(/(rgba?\([^)]+\)|#[0-9a-fA-F]{3,8})/g) || [];
+      const cols = bg.match(/(rgba?[^)]+|#[0-9a-fA-F]{3,8})/g) || [];
       const solid = cols[0] || cs.color || "#38bdf8";
       try {
         el.style.setProperty("-webkit-background-clip", "border-box", "important");
@@ -1736,7 +1656,7 @@ const Bridge = {
   setTime(ms) {
     try {
       const w = $("projectFrame").contentWindow;
-      if (w && w.__PROJECT__ && typeof w.__PROJECT__.setTime === "function") w.__PROJECT__.setTime(ms);
+      if (w && w.PROJECT && typeof w.PROJECT.setTime === "function") w.PROJECT.setTime(ms);
     } catch(e){}
   }
 };
@@ -1810,7 +1730,7 @@ async function loadProject() {
     let dur = 0;
     if (isFinite(meta.durMs) && meta.durMs > 0) dur = meta.durMs;
     else if (isFinite(meta.dur) && meta.dur > 0) dur = meta.dur * 1000;
-    else if (win.__PROJECT__ && Number(win.__PROJECT__.duration) > 0) dur = Number(win.__PROJECT__.duration);
+    else if (win.PROJECT && Number(win.PROJECT.duration) > 0) dur = Number(win.PROJECT.duration);
     if (!dur) throw new Error("لم يُعثر على project-duration-ms في الـ meta");
     APP.durationMs = dur;
     APP.title = meta.title || $("title").value.trim();
@@ -1824,7 +1744,6 @@ async function loadProject() {
       const inj2 = injectCSS(raw, baseSize());
       await setFrame(inj2);
       await waitRes($("projectFrame").contentDocument);
-      /* v4.2: كان doc/win يشيران للمستند القديم بعد إعادة الحقن */
       doc = f.contentDocument;
       win = f.contentWindow;
       if (!doc || !win) throw new Error("تعذر الوصول إلى الإطار");
@@ -1837,7 +1756,7 @@ async function loadProject() {
     setTime(initT, APP.exportAnimations);
     setPlayhead(initT);
     updateTime(initT);
-    if (!win.__PROJECT__) toast("لا يوجد window.__PROJECT__", "warn", 8000);
+    if (!win.PROJECT) toast("لا يوجد window.PROJECT", "warn", 8000);
     updateInfo();
     await buildTimeline();
     analyzeImgs();
@@ -1964,7 +1883,6 @@ async function buildTimeline() {
 function startSceneDrag(ev, idx) {
   ev.stopPropagation();
   ev.preventDefault();
-  /* v4.2: قد لا يطابق SCENES عدد مشاهد الإطار */
   if (!SCENES[idx - 1] || !SCENES[idx]) return;
   const track = $("tlTrack");
   const rect = track.getBoundingClientRect();
@@ -2006,7 +1924,6 @@ function startSceneDrag(ev, idx) {
   document.addEventListener("pointerup", up);
 }
 function applyDurationsToDoc() {
-  /* v4.1: محمي بـ try/catch (كان يقفز إن فشل التحميل) */
   try {
     if (!APP.loaded) return;
     const t = buildTimingTable();
@@ -2023,7 +1940,7 @@ function applyDurationsToDoc() {
     const meta = doc.querySelector('meta[name="project-duration-ms"]');
     if (meta) meta.setAttribute("content", String(APP.durationMs));
     const w = f.contentWindow;
-    if (w && w.__PROJECT__) w.__PROJECT__.duration = APP.durationMs;
+    if (w && w.PROJECT) w.PROJECT.duration = APP.durationMs;
     updateInfo();
   } catch(e) { Errors.push("warn", "applyDurations", e) }
 }
@@ -2085,7 +2002,6 @@ function stableSel(el, doc) {
   return path.join(" > ");
 }
 function imgKey(item) {
-  /* مفتاح مستقر: نوع + فهرس + selector. حتى لو أعيد اللصق، الفهرسة تعطي نفس المفتاح. */
   return [item.type, item.index, item.backgroundIndex != null ? item.backgroundIndex : ""].join("|");
 }
 function analyzeImgs() {
@@ -2164,7 +2080,7 @@ function renderImgs() {
     const tp = item.type === "img" ? "IMG" : "خلفية";
     const th = pv ? `<img src="${escA(pv)}" alt="">` : '🖼️';
     const cb = isR ? `<button type="button" class="img-act crop" onclick="editCrop(${item.index})">✂️ قص</button>` : '';
-    return `<div class="img-card ${isR?"replaced":""} ${isS?"selected":""}"><div class="img-sel"><input type="checkbox" data-key="${escA(item.key)}" ${isS?"checked":""} onchange="toggleSel(this)"><span>تحديد</span></div><div class="img-card-top"><div class="img-thumb">${th}</div><div class="img-info"><p class="img-name">${esc(nm)}</p><div class="img-meta"><div class="img-meta-item"><strong>النوع:</strong> ${tp}</div><div class="img-meta-item"><strong>الإطار:</strong> ${esc(def)}</div><div class="img-meta-item"><strong>الأصلية:</strong> ${esc(nat)}</div><div class="img-meta-item"><strong>النسبة:</strong> ${item.ratio ? item.ratio.toFixed(2) : "—"}</div></div></div></div><div class="img-actions"><button type="button" class="img-act keep" onclick="keepImg(${item.index})">↩️ احتفاظ</button><button type="button" class="img-act replace" onclick="chooseImg(${item.index})">🖼️ استبدال</button><button type="button" class="img-act rmbg" onclick="openBg(${item.index})">🪄 خلفية</button>${cb}</div><div class="img-status">${isR ? "✅ " + esc(rep.fileName) : "الأصلية"}</div></div>`;
+    return `<div class="img-card ${isR ? "replaced" : ""} ${isS ? "selected" : ""}"><div class="img-sel"><input type="checkbox" data-key="${escA(item.key)}" ${isS ? "checked" : ""} onchange="toggleSel(this)"><span>تحديد</span></div><div class="img-card-top"><div class="img-thumb">${th}</div><div class="img-info"><p class="img-name">${esc(nm)}</p><div class="img-meta"><div class="img-meta-item"><strong>النوع:</strong> ${tp}</div><div class="img-meta-item"><strong>الإطار:</strong> ${esc(def)}</div><div class="img-meta-item"><strong>الأصلية:</strong> ${esc(nat)}</div><div class="img-meta-item"><strong>النسبة:</strong> ${item.ratio ? item.ratio.toFixed(2) : "—"}</div></div></div></div><div class="img-actions"><button type="button" class="img-act keep" onclick="keepImg(${item.index})">↩️ احتفاظ</button><button type="button" class="img-act replace" onclick="chooseImg(${item.index})">🖼️ استبدال</button><button type="button" class="img-act rmbg" onclick="openBg(${item.index})">🪄 خلفية</button>${cb}</div><div class="img-status">${isR ? "✅ " + esc(rep.fileName) : "الأصلية"}</div></div>`;
   }).join("");
   updateBatch();
 }
@@ -2175,16 +2091,12 @@ function updateBatch() {
 }
 window.toggleSel = cb => {
   const k = cb.getAttribute("data-key");
-  if (cb.checked) IMG_MGR.selected.add(k); else IMG_MGR.selected.delete(k);
+  if (cb.checked) IMG_MGR.selected.add(k);
+  else IMG_MGR.selected.delete(k);
   updateBatch();
 };
 window.clearSel = () => { IMG_MGR.selected.clear(); renderImgs() };
-window.batchKeep = () => {
-  IMG_MGR.selected.forEach(k => IMG_MGR.replaces.delete(k));
-  IMG_MGR.selected.clear();
-  applyReplaces();
-  renderImgs();
-};
+window.batchKeep = () => { IMG_MGR.selected.forEach(k => IMG_MGR.replaces.delete(k)); IMG_MGR.selected.clear(); applyReplaces(); renderImgs(); };
 window.batchReplace = () => {
   if (!IMG_MGR.selected.size) { toast("حدد صورة", "warn"); return }
   const keys = Array.from(IMG_MGR.selected);
@@ -2246,7 +2158,9 @@ function filePicker(cb) {
 async function restoreImgsFromIDB() {
   const rows = await DB.loadImgs();
   if (!rows.length) return;
-  rows.forEach(r => { if (r.dataUrl && r.meta && r.meta.key) IMG_MGR.replaces.set(r.meta.key, { ...r.meta, dataUrl: r.dataUrl }) });
+  rows.forEach(r => {
+    if (r.dataUrl && r.meta && r.meta.key) IMG_MGR.replaces.set(r.meta.key, { ...r.meta, dataUrl: r.dataUrl })
+  });
   if (IMG_MGR.replaces.size) applyReplaces();
 }
 async function applyReplaces() {
@@ -2430,7 +2344,7 @@ window.applyCrop = async () => {
     const o = IMG_MGR.replaces.get(t.key);
     const ex = r.mime === "image/jpeg" ? ".jpg" : r.mime === "image/webp" ? ".webp" : ".png";
     const cl = (CROP.name || "image").replace(/\.[^.]+$/, "");
-    return { dataUrl: r.dataUrl, fileName: cl + "_crop" + ex, mimeType: r.mime, originalFileName: (o && o.originalFileName) || CROP.name, originalMimeType: (o && o.originalMimeType) || CROP.mime, originalDataUrl: CROP.origSrc };
+    return { dataUrl: r.dataUrl, fileName: cl + "crop" + ex, mimeType: r.mime, originalFileName: (o && o.originalFileName) || CROP.name, originalMimeType: (o && o.originalMimeType) || CROP.mime, originalDataUrl: CROP.origSrc };
   };
   if (IMG_MGR.pending && IMG_MGR.pending.keys.indexOf(it.key) !== -1) {
     for (const k of IMG_MGR.pending.keys) {
@@ -2623,11 +2537,23 @@ window.applyBg = async () => {
 /* ────────── Audio ────────── */
 function renderAudio() {
   const c = $("audioList");
-  if (!AUDIO.tracks.length) { c.innerHTML = '<div style="color:var(--muted);font-size:9px;text-align:center;padding:8px">لا مسارات.</div>'; $("infoAudio").textContent = "—"; return }
-  c.innerHTML = AUDIO.tracks.map((t, i) => `<div class="audio-row"><div class="audio-name" title="${escA(t.name)}">${esc(t.name)}</div><input type="range" min="0" max="100" value="${Math.round((t.volume||1)*100)}" oninput="setAudioVol(${i},this.value)"><span class="audio-val">${Math.round((t.volume||1)*100)}%</span><button class="audio-del" onclick="delAudio(${i})">✕</button></div>`).join("");
+  if (!AUDIO.tracks.length) {
+    c.innerHTML = '<div style="color:var(--muted);font-size:9px;text-align:center;padding:8px">لا مسارات.</div>';
+    $("infoAudio").textContent = "—";
+    return;
+  }
+  c.innerHTML = AUDIO.tracks.map((t, i) =>
+    `<div class="audio-row"><div class="audio-name" title="${escA(t.name)}">${esc(t.name)}</div><input type="range" min="0" max="100" value="${Math.round((t.volume || 1) * 100)}" oninput="setAudioVol(${i},this.value)"><span class="audio-val">${Math.round((t.volume || 1) * 100)}%</span><button class="audio-del" onclick="delAudio(${i})">✕</button></div>`
+  ).join("");
   $("infoAudio").textContent = AUDIO.tracks.length + " مسار";
 }
-window.setAudioVol = (i, v) => { if (!AUDIO.tracks[i]) return; AUDIO.tracks[i].volume = Number(v)/100; if (AUDIO.tracks[i].audioEl) AUDIO.tracks[i].audioEl.volume = AUDIO.tracks[i].volume; renderAudio(); scheduleSave() };
+window.setAudioVol = (i, v) => {
+  if (!AUDIO.tracks[i]) return;
+  AUDIO.tracks[i].volume = Number(v) / 100;
+  if (AUDIO.tracks[i].audioEl) AUDIO.tracks[i].audioEl.volume = AUDIO.tracks[i].volume;
+  renderAudio();
+  scheduleSave();
+};
 window.delAudio = async i => {
   const t = AUDIO.tracks[i];
   if (!t) return;
@@ -2656,7 +2582,6 @@ async function restoreAudioFromIDB() {
 }
 function pauseAudio() { AUDIO.tracks.forEach(t => { if (t.audioEl) try { t.audioEl.pause() } catch(e){} }) }
 function playAudio(ms) {
-  /* v4.1: احترام start — كان يتجاهله في v4 */
   AUDIO.tracks.forEach(t => {
     if (!t.audioEl || t.muted) return;
     const startMs = t.start || 0;
@@ -2756,7 +2681,6 @@ $("recAudio").addEventListener("click", async () => {
         scheduleSave();
         toast("تم التسجيل", "success");
       } catch(e) { Errors.push("error", "record stop", e) }
-      /* v4.1: النص يُستعاد هنا، لا في setTimeout قصير */
       $("recAudio").textContent = "🎙 تسجيل";
     };
     mr.start();
@@ -2773,7 +2697,7 @@ function parseSRT(text) {
     const lines = b.split("\n").map(x => x.trim()).filter(Boolean);
     if (lines.length < 2) continue;
     let i = /^\d+$/.test(lines[0]) ? 1 : 0;
-    const m = lines[i] && lines[i].match(/(\d{1,2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[,.](\d{3})/);
+    const m = lines[i] && lines[i].match(/(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[,.](\d{1,3})/);
     if (!m) continue;
     const s = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]) + (+m[4]) / 1000;
     const e = (+m[5]) * 3600 + (+m[6]) * 60 + (+m[7]) + (+m[8]) / 1000;
@@ -2787,7 +2711,7 @@ function parseVTT(text) {
   const lines = text.replace(/\r/g, "").split("\n");
   let i = 0;
   while (i < lines.length) {
-    const m = lines[i].match(/(\d{1,2}):(\d{2}):(\d{2})[.,](\d{3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[.,](\d{3})/);
+    const m = lines[i].match(/(\d{1,2}):(\d{2}):(\d{2})[.,](\d{1,3})\s*-->\s*(\d{1,2}):(\d{2}):(\d{2})[.,](\d{1,3})/);
     if (m) {
       const s = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]) + (+m[4]) / 1000;
       const e = (+m[5]) * 3600 + (+m[6]) * 60 + (+m[7]) + (+m[8]) / 1000;
@@ -2812,7 +2736,9 @@ function toSRT(items) {
 function renderCaps() {
   const c = $("capList");
   if (!CAPTIONS.items.length) { c.innerHTML = '<div style="color:var(--muted);font-size:9px;text-align:center;padding:8px">لا ترجمة.</div>'; return }
-  c.innerHTML = CAPTIONS.items.map((x, i) => `<div class="cap-row"><input type="number" step="0.1" value="${x.start.toFixed(2)}" onchange="updCap(${i},'start',this.value)"><input type="number" step="0.1" value="${x.end.toFixed(2)}" onchange="updCap(${i},'end',this.value)"><input type="text" value="${escA(x.text)}" onchange="updCap(${i},'text',this.value)"><button onclick="delCap(${i})">✕</button></div>`).join("");
+  c.innerHTML = CAPTIONS.items.map((x, i) =>
+    `<div class="cap-row"><input type="number" step="0.1" value="${x.start.toFixed(2)}" onchange="updCap(${i},'start',this.value)"><input type="number" step="0.1" value="${x.end.toFixed(2)}" onchange="updCap(${i},'end',this.value)"><input type="text" value="${escA(x.text)}" onchange="updCap(${i},'text',this.value)"><button onclick="delCap(${i})">✕</button></div>`
+  ).join("");
 }
 window.updCap = (i, f, v) => { if (!CAPTIONS.items[i]) return; if (f === "text") CAPTIONS.items[i].text = v; else CAPTIONS.items[i][f] = Number(v); scheduleSave() };
 window.delCap = i => { CAPTIONS.items.splice(i, 1); renderCaps(); scheduleSave() };
@@ -2861,7 +2787,6 @@ $("addCap").addEventListener("click", () => {
   CAPTIONS.items.push({ start: last ? last.end : 0, end: (last ? last.end : 0) + 3, text: "نص" });
   renderCaps();
 });
-$("burnCaps").addEventListener("change", e => { CAPTIONS.burn = e.target.checked; scheduleSave() });
 
 /* ────────── Undo/Redo ────────── */
 const History = {
@@ -2895,7 +2820,6 @@ const History = {
     toast("إعادة", "info", 1000);
   },
   apply(s) {
-    /* v4.2: استعادة الاتجاح مع التراجع/الإعادة */
     if (s.orientation && s.orientation !== APP.orientation) {
       APP.orientation = s.orientation;
       document.querySelectorAll("[data-orientation]").forEach(el => el.classList.toggle("active", el.dataset.orientation === APP.orientation));
@@ -2929,8 +2853,7 @@ function saveSession() {
       quality: $("quality").value,
       fps: $("fps").value,
       audio: AUDIO.tracks.map(t => ({ id: t.id, name: t.name, start: t.start, volume: t.volume, fadeIn: t.fadeIn, fadeOut: t.fadeOut, muted: t.muted })),
-      captions: CAPTIONS.items.map(c => ({ start: c.start, end: c.end, text: c.text })),
-      burnCaptions: CAPTIONS.burn
+      captions: CAPTIONS.items.map(c => ({ start: c.start, end: c.end, text: c.text }))
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(data));
   } catch(e) {
@@ -2968,7 +2891,6 @@ function restoreSession() {
     if (d.quality) $("quality").value = d.quality;
     if (d.fps) $("fps").value = d.fps;
     if (Array.isArray(d.captions)) CAPTIONS.items = d.captions;
-    if (d.burnCaptions) { CAPTIONS.burn = true; $("burnCaps").checked = true }
     return true;
   } catch(e) { Errors.push("warn", "restore", e); return false }
 }
@@ -2985,6 +2907,9 @@ function updateInfo() {
   $("infoFonts").textContent = !d.length ? "—" : (m.length ? d.slice(0,2).join("، ") + " (" + m.length + " ناقص)" : d.slice(0,2).join("، ") + (d.length > 2 ? " +" + (d.length - 2) : ""));
   $("infoImages").textContent = IMG_MGR.items.length ? IMG_MGR.items.length + " صورة" : "لا يوجد";
   $("infoAudio").textContent = AUDIO.tracks.length ? AUDIO.tracks.length + " مسار" : "—";
+  const es = exportSize();
+  const ri = $("ratioInfo");
+  if (ri) ri.textContent = es.width + "×" + es.height;
   resizePreview();
 }
 function setStatus(t, k) {
@@ -3065,15 +2990,12 @@ function frameHash(canvas) {
     cx.drawImage(canvas, 0, 0, 32, 18);
     const d = cx.getImageData(0, 0, 32, 18).data;
     let h = 0;
-    /* v4.2: الخطوة 16 كانت تقرأ البايت 0 فقط (الأحمر) — دمج القنوات الأربع */
     for (let i = 0; i < d.length; i += 4)
       h = ((h << 5) - h + d[i] + (d[i+1] << 1) + (d[i+2] << 2) + (d[i+3] << 3)) | 0;
     return h;
   } catch(e) { return 0 }
 }
 $("export").addEventListener("click", async () => {
-  const srv = $("serverUrl").value.trim();
-  if (srv) return exportServer(srv);
   if (APP.exporting) return;
   if (!APP.loaded) { toast("شغّل المشروع", "warn"); return }
   if (typeof html2canvas !== "function") { toast("html2canvas غير محمّل", "error"); return }
@@ -3097,8 +3019,6 @@ $("export").addEventListener("click", async () => {
     if (failed.length) toast(failed.length + " صورة لم تُحمَّل — سيُستبدل مؤقت", "warn", 6000);
     await waitImgs(doc);
 
-    /* v4.1: snapshot قبل preprocess، restore بعد التصدير.
-       هذا يحفظ للفاحص رؤية المستند النظيف. */
     snap = snapshotInline(doc);
     const stats = preprocess(doc, win);
     Errors.push("info", "preprocess: " + stats.total + " تغيير (سيُستعاد بعد التصدير)");
@@ -3221,7 +3141,6 @@ $("export").addEventListener("click", async () => {
     try { if (output && typeof output.cancel === "function") await output.cancel() } catch(e){}
     try { if (source && typeof source.close === "function") await source.close() } catch(e){}
   } finally {
-    /* v4.1: استعادة الـ inline styles — يُصلح الفاحص */
     if (snap) try { restoreInline(snap) } catch(e){}
     APP.exporting = false;
     $("export").style.display = "block";
@@ -3233,39 +3152,6 @@ $("stopExport").addEventListener("click", () => {
   APP.stop = true;
   updateProgress(0, "جارٍ الإيقاف...");
 });
-async function exportServer(url) {
-  toast("يرسل للخادم...", "info", 3000);
-  try {
-    const payload = {
-      html: $("code").value,
-      settings: {
-        width: exportSize().width,
-        height: exportSize().height,
-        fps: Number($("fps").value),
-        quality: $("quality").value,
-        durationMs: APP.durationMs,
-        orientation: APP.orientation
-      }
-    };
-    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const j = await r.json();
-    if (j && j.videoUrl) {
-      const a = document.createElement("a");
-      a.className = "btn primary";
-      a.href = j.videoUrl;
-      a.target = "_blank";
-      a.textContent = "تحميل من الخادم";
-      $("download").innerHTML = "";
-      $("download").appendChild(a);
-      $("download").classList.add("show");
-      toast("تم", "success");
-    } else throw new Error("استجابة بلا videoUrl");
-  } catch(e) {
-    Errors.push("error", "server", e);
-    toast("فشل الخادم: " + e.message, "error", 6000);
-  }
-}
 $("testFrames").addEventListener("click", async () => {
   if (!APP.loaded) { toast("شغّل", "warn"); return }
   if (APP.exporting) return;
@@ -3367,81 +3253,6 @@ $("exportPDF").addEventListener("click", async () => {
   finally { if (snap) try { restoreInline(snap) } catch(e){} $("progressWrap").classList.remove("show"); }
 });
 
-/* ────────── Projects ────────── */
-async function refreshProjects() {
-  PROJ.list = await DB.loadProjs();
-  const box = $("projList");
-  if (!PROJ.list.length) { box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:14px;font-size:10px">لا مشاريع.</div>'; return }
-  PROJ.list.sort((a, b) => b.updated - a.updated);
-  box.innerHTML = PROJ.list.map(p => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px;background:#0b1216;border:1px solid var(--line);border-radius:8px;cursor:pointer" data-id="${escA(p.id)}"><div><div style="font-size:11px;font-weight:800">${esc(p.name || "بلا اسم")}</div><div style="font-size:9px;color:var(--muted)">${new Date(p.updated).toLocaleString("ar-EG")}</div></div><div style="display:flex;gap:3px"><button data-act="open" style="width:24px;height:24px;background:#091419;border:1px solid var(--line);border-radius:5px;color:var(--muted);cursor:pointer">📂</button><button data-act="del" style="width:24px;height:24px;background:rgba(223,116,116,.07);border:1px solid rgba(223,116,116,.3);border-radius:5px;color:#f1a0a0;cursor:pointer">✕</button></div></div>`).join("");
-  box.querySelectorAll("[data-id]").forEach(el => {
-    const id = el.dataset.id;
-    el.querySelectorAll("[data-act]").forEach(b => {
-      b.addEventListener("click", async e => {
-        e.stopPropagation();
-        if (b.dataset.act === "open") await openProject(id);
-        if (b.dataset.act === "del") {
-          if (!await confirmDlg("حذف", "حذف المشروع؟")) return;
-          await DB.delProj(id);
-          if (PROJ.current === id) PROJ.current = null;
-          refreshProjects();
-        }
-      });
-    });
-  });
-}
-async function openProject(id) {
-  const p = await DB.getProj(id);
-  if (!p) { toast("لم يُعثر", "warn"); return }
-  PROJ.current = id;
-  try {
-    const f = p.form || {};
-    ["title", "subject", "grade", "student", "teacher", "year", "extra"].forEach(k => { if (f[k] != null) $(k).value = f[k] });
-    if (f.visualStyle) $("visualStyle").value = f.visualStyle;
-    if (f.imageCount != null) $("imageCount").value = f.imageCount;
-    if (p.orientation) {
-      APP.orientation = p.orientation;
-      document.querySelectorAll("[data-orientation]").forEach(el => el.classList.toggle("active", el.dataset.orientation === p.orientation));
-    }
-    if (Array.isArray(p.scenes)) {
-      SCENES = p.scenes.map((s, i) => ({ index: i + 1, title: s.title || "", duration: Math.max(2, Math.min(60, Number(s.duration) || 6)) }));
-      $("scenesCount").value = String(SCENES.length);
-      renderScenes();
-    }
-    if (p.code) $("code").value = p.code;
-    if (p.quality) $("quality").value = p.quality;
-    if (p.fps) $("fps").value = p.fps;
-    if (Array.isArray(p.captions)) CAPTIONS.items = p.captions;
-    CAPTIONS.burn = !!p.burnCaptions;
-    $("burnCaps").checked = CAPTIONS.burn;
-    renderCaps();
-    closeModal("projectsModal");
-    toast("تم الفتح: " + (p.name || ""), "success");
-    scheduleSave();
-  } catch(e) { Errors.push("error", "open project", e); toast("خطأ", "error") }
-}
-async function saveCurrentAs(name) {
-  const id = PROJ.current || ("proj_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6));
-  const payload = {
-    id,
-    name: name || $("title").value || "مشروع بلا عنوان",
-    updated: Date.now(),
-    form: getForm(),
-    scenes: SCENES.map(s => ({ title: s.title, duration: s.duration })),
-    orientation: APP.orientation,
-    code: $("code").value,
-    quality: $("quality").value,
-    fps: $("fps").value,
-    captions: CAPTIONS.items,
-    burnCaptions: CAPTIONS.burn
-  };
-  await DB.saveProj(payload);
-  PROJ.current = id;
-  toast("تم الحفظ: " + payload.name, "success");
-}
-$("openProjects").addEventListener("click", () => { refreshProjects(); $("projectsModal").classList.add("visible") });
-$("saveProject").addEventListener("click", async () => { await saveCurrentAs(); refreshProjects() });
-
 $("exportJson").addEventListener("click", async () => {
   const imgs = [];
   for (const [k, v] of IMG_MGR.replaces) imgs.push({ key: k, dataUrl: v.dataUrl, fileName: v.fileName, mimeType: v.mimeType, meta: v });
@@ -3451,7 +3262,7 @@ $("exportJson").addEventListener("click", async () => {
     if (r) audios.push({ id: t.id, name: r.name, dataUrl: r.dataUrl });
   }
   const payload = {
-    version: "v4.1",
+    version: "v4.3",
     form: getForm(),
     scenes: SCENES.map(s => ({ title: s.title, duration: s.duration })),
     orientation: APP.orientation,
@@ -3459,7 +3270,6 @@ $("exportJson").addEventListener("click", async () => {
     quality: $("quality").value,
     fps: $("fps").value,
     captions: CAPTIONS.items,
-    burnCaptions: CAPTIONS.burn,
     images: imgs,
     audios
   };
@@ -3514,46 +3324,6 @@ $("importJson").addEventListener("click", () => {
   });
   inp.click();
 });
-
-/* ────────── Icons library ────────── */
-const ICONS = {
-  book: '<svg viewBox="0 0 24 24"><path d="M18 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>',
-  graduation: '<svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>',
-  pencil: '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg>',
-  flask: '<svg viewBox="0 0 24 24"><path d="M9 2v6L3 20a2 2 0 001.83 2.83h14.34A2 2 0 0021 20L15 8V2h-6z"/></svg>',
-  atom: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 8a2 2 0 110 4 2 2 0 010-4z"/></svg>',
-  earth: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>',
-  palette: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 000 20c1.1 0 2-.9 2-2 0-.51-.2-.97-.51-1.32A2 2 0 0115 15h2c1.66 0 3-1.34 3-3v-.5A9.5 9.5 0 0012 2z"/></svg>',
-  calculator: '<svg viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/></svg>',
-  clock: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5h-2v6l5.25 3.15L17.25 15 13 12.35V7z"/></svg>',
-  star: '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
-  heart: '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
-  chart: '<svg viewBox="0 0 24 24"><path d="M3 3v18h18v-2H5V3H3z"/></svg>',
-  bulb: '<svg viewBox="0 0 24 24"><path d="M9 21h6v-1H9v1zm3-19a7 7 0 00-4 12.74V17h8v-2.26A7 7 0 0012 2z"/></svg>',
-  trophy: '<svg viewBox="0 0 24 24"><path d="M20 6h-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v2a5 5 0 004 4.9V17H5v2h14v-2h-1v-2.1A5 5 0 0022 10V8a2 2 0 00-2-2z"/></svg>',
-  rocket: '<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 6 4 8h6c2-2 4-5 4-8 0-4-3-7-7-7zm0 8a2 2 0 110 4 2 2 0 010-4z"/></svg>',
-  gear: '<svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.5 7.5 0 000-1.88l2.03-1.58-.5-.86-2.39.96c-.5-.38-1.04-.7-1.63-.94l-.36-2.54H12l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96-.5.86 2.03 1.58a7.5 7.5 0 000 1.88l-2.03 1.58.5.86 2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54h4.36l.36-2.54c.59-.24 1.13-.56 1.63-.94l2.39.96.5-.86-2.03-1.58zM14 12a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
-  code: '<svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4z"/></svg>',
-  camera: '<svg viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2z"/></svg>',
-  mic: '<svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z"/></svg>',
-  music: '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>',
-  image: '<svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
-  flag: '<svg viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>',
-  eye: '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5z"/></svg>',
-  target: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a4 4 0 110 8 4 4 0 010-8z"/></svg>',
-  check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
-  refresh: '<svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4a8 8 0 100 16 8 8 0 007.73-6h-2.08A6 6 0 1112 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>',
-  warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
-  info: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>'
-};
-function renderIconGrid() {
-  const g = $("iconGrid");
-  g.innerHTML = Object.entries(ICONS).map(([k, v]) => `<div class="icon-cell" title="${esc(k)}" data-ic="${esc(k)}">${v}</div>`).join("");
-  g.querySelectorAll("[data-ic]").forEach(c => c.addEventListener("click", () => {
-    navigator.clipboard.writeText(ICONS[c.dataset.ic]).then(() => toast("نُسخ SVG", "success", 1500)).catch(() => toast("تعذر النسخ", "warn"));
-  }));
-}
-$("openIcons").addEventListener("click", () => { renderIconGrid(); $("iconsModal").classList.add("visible") });
 
 /* ────────── Stock Search ────────── */
 async function stockSearch() {
@@ -3619,37 +3389,12 @@ async function pickStockImage(it) {
 $("openStock").addEventListener("click", () => $("stockModal").classList.add("visible"));
 $("stockSearchBtn").addEventListener("click", stockSearch);
 
-/* ────────── TTS ────────── */
-$("openTTS").addEventListener("click", () => {
-  const v = $("ttsVoice");
-  if (v.options.length === 0 && window.speechSynthesis) {
-    speechSynthesis.getVoices().forEach(vo => {
-      const o = document.createElement("option");
-      o.value = vo.name;
-      o.textContent = vo.name + " (" + vo.lang + ")";
-      v.appendChild(o);
-    });
-  }
-  $("ttsModal").classList.add("visible");
-});
-$("ttsSpeak").addEventListener("click", () => {
-  const t = $("ttsText").value.trim();
-  if (!t) { toast("اكتب نصًا", "warn"); return }
-  if (!window.speechSynthesis) { toast("TTS غير مدعوم", "error"); return }
-  const u = new SpeechSynthesisUtterance(t);
-  const vn = $("ttsVoice").value;
-  if (vn) { const vo = speechSynthesis.getVoices().find(x => x.name === vn); if (vo) u.voice = vo }
-  u.lang = "ar-SA";
-  speechSynthesis.speak(u);
-});
-
 /* ────────── Keyboard ────────── */
 function anyModalOpen() { return document.querySelector(".modal-bg.visible") !== null }
 function isEditable(el) { if (!el) return false; const t = el.tagName; return t === "INPUT" || t === "TEXTAREA" || t === "SELECT" || el.isContentEditable }
 document.addEventListener("keydown", e => {
   if (e.code === "Escape") {
     if (anyModalOpen()) {
-      /* v4.2: إغلاق نظيف يصفّر overflow والحالة المعلّقة */
       try { if ($("cropModal").classList.contains("visible")) window.closeCrop() } catch(_){}
       try { if ($("bgModal").classList.contains("visible")) window.closeBg() } catch(_){}
       document.querySelectorAll(".modal-bg.visible").forEach(m => m.classList.remove("visible"));
@@ -3816,13 +3561,7 @@ $("genRegen").addEventListener("click", () => {
   $("regenText").value = t;
   $("regenModal").classList.add("visible");
 });
-$("regenCopy").addEventListener("click", async () => {
-  const idx = Number($("regenSel").value) || 0;
-  const t = buildRegenPrompt(idx);
-  if (!t) { toast("تعذر", "warn"); return }
-  try { await navigator.clipboard.writeText(t); toast("نُسخ", "success") } catch(e) { toast("تعذر", "error") }
-});
-$("regenCopy2").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("regenText").value); toast("نُسخ", "success") } catch(e) { toast("تعذر", "error") } });
+$("regenCopy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("regenText").value); toast("نُسخ", "success") } catch(e) { toast("تعذر", "error") } });
 $("refreshImgs").addEventListener("click", () => { analyzeImgs(); applyReplaces() });
 $("logToggle").addEventListener("click", () => $("logBody").classList.toggle("show"));
 $("logCopy").addEventListener("click", async () => {
@@ -3865,12 +3604,12 @@ function buildRegenSelect() {
   renderAudio();
   renderCaps();
   History.updateBtns();
-  /* v4.1: حالة أولية للتاريخ حتى يعمل Undo/Redo قبل التحميل */
   History.push("init", true);
-  Errors.push("info", "التطبيق v4.2 جاهز");
+  Errors.push("info", "التطبيق v4.3 جاهز");
   if (!isSecure()) Errors.push("warn", "سياق غير آمن — استخدم https:// أو localhost.");
-  console.log("[v4.2] ready");
+  console.log("[v4.3] ready");
 })();
 </script>
+
 </body>
 </html>
