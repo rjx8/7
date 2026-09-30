@@ -20,6 +20,7 @@
   --r:16px;
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);font-family:"Tajawal","Noto Sans Arabic","Cairo",Arial,sans-serif;font-size:14px;line-height:1.6}
 body{overflow-x:hidden;background:radial-gradient(900px 420px at 88% -8%,rgba(139,124,255,.16),transparent 62%),radial-gradient(700px 380px at 6% 0%,rgba(61,219,192,.07),transparent 60%),var(--bg);background-attachment:fixed}
 button,input,textarea,select{font:inherit;color:inherit}
@@ -128,6 +129,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
 /* ── الاستوديو ── */
 .workspace{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+.workspace>div,.preview{min-width:0}
 .preview{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px}
 .preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -280,7 +282,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 /* النوافذ */
 .modal-bg{position:fixed;inset:0;z-index:10000;background:rgba(3,6,16,.86);display:none;align-items:center;justify-content:center;padding:12px}
 .modal-bg.visible{display:flex}
-.modal{width:min(780px,100%);max-height:calc(100vh - 24px);overflow-y:auto;background:var(--panel);border:1px solid var(--line2);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.65);padding:16px}
+.modal{width:min(780px,100%);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);-webkit-overflow-scrolling:touch;overscroll-behavior:contain;overflow-y:auto;background:var(--panel);border:1px solid var(--line2);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.65);padding:16px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .modal-head h3{margin:0;font-size:17px;font-weight:900}
 .modal-close{width:34px;height:34px;border:none;border-radius:9px;background:var(--raise);color:var(--text);font-size:20px}
@@ -342,6 +344,34 @@ button:disabled{opacity:.45;cursor:not-allowed}
   .mobile-nav{display:grid;grid-template-columns:1fr 1fr;position:fixed;left:0;right:0;bottom:0;z-index:100;height:62px;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(11,17,32,.96);border-top:1px solid var(--line);backdrop-filter:blur(16px)}
   .mobile-nav button{border:0;background:transparent;color:var(--muted);border-radius:12px;font-weight:700}
   .mobile-nav button.active{color:var(--ink);background:var(--primary)}
+}
+
+/* ── تحسينات الثبات والجوال ── */
+#ratioInfo,#formatInfo{direction:ltr;unicode-bidi:isolate}
+.fs-exit{display:none;position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:10px;z-index:12;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(4,7,15,.72);color:#fff;font-size:18px;place-items:center}
+.stage.pseudo-fs{position:fixed;inset:0;z-index:9000;width:100vw;height:100vh;height:100dvh;min-height:0;padding:0;border-radius:0;background:#000}
+.stage.pseudo-fs .fs-exit{display:grid}
+.stage.pseudo-fs .frame-wrap{box-shadow:none}
+@media(pointer:coarse){
+  .tl-handle{opacity:.55;width:18px;left:-9px}
+  .player-btn{min-width:40px}
+}
+@media(max-width:650px){
+  body{background-attachment:scroll}
+  input,select,textarea,.field input,.field textarea,.field select,.export-settings select,.export-settings input,.mini-sel{font-size:16px!important}
+  .stage{min-height:0}
+  .player-bar{gap:6px}
+  .player-btn{width:38px;height:38px;border-radius:10px}
+  .player-btn.primary{width:44px}
+  .player-time{min-width:0;padding:8px;font-size:12px}
+  .scene-now{order:20;flex:1 0 100%;max-width:none;text-align:center}
+  .pb-spacer{display:none}
+  .preview{padding:8px}
+  .mobile-nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgb(11,17,32)}
+  .toasts{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  .side-pane{padding:12px}
+  .modal{padding:12px}
+  .img-list{max-height:380px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -463,6 +493,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
           </div>
           <div class="stage-empty" id="stageEmpty"><div><b>لا يوجد مشروع بعد</b>الصق كود HTML من الذكاء الاصطناعي في تبويب «الكود» ثم اضغط تشغيل.</div></div>
           <button class="stage-play" id="stagePlay" aria-label="تشغيل"><span>▶</span></button>
+          <button class="fs-exit" id="fsExit" type="button" aria-label="خروج من ملء الشاشة">✕</button>
         </div>
         <div class="player">
           <div class="timeline" id="timeline" role="slider" tabindex="0" aria-label="شريط الزمن">
@@ -2089,11 +2120,12 @@ const renderScale = () => {
   if (q === "x1.5") return 1.5;
   return 1;
 };
-function exportSize() {
+const even = n => Math.max(2, Math.round(n / 2) * 2);
+function sizeForScale(s) {
   const b = baseSize();
-  const s = renderScale();
-  return { width: Math.max(2, Math.round(b.width * s)), height: Math.max(2, Math.round(b.height * s)) };
+  return { width: even(b.width * s), height: even(b.height * s) };
 }
+function exportSize() { return sizeForScale(renderScale()); }
 function bitrate(w, h, fps) {
   const r = (w * h) / (1920 * 1080);
   let b = 12_000_000 * r;
@@ -2103,9 +2135,13 @@ function bitrate(w, h, fps) {
 }
 
 /* ────────── Snapshot/restore ────────── */
+function captureScope(doc) {
+  const r = doc.getElementById("project-root") || doc.body;
+  return r ? [r].concat(Array.from(r.querySelectorAll("*"))) : [];
+}
 function snapshotInline(doc) {
   const map = new Map();
-  doc.querySelectorAll("#project-root *").forEach(el => map.set(el, el.getAttribute("style") || ""));
+  captureScope(doc).forEach(el => map.set(el, el.getAttribute("style") || ""));
   return map;
 }
 function restoreInline(map) {
@@ -2149,11 +2185,13 @@ function enforceImgContainers(doc) {
     if (!p || p === doc.body || p.id === "project-root") return;
     try {
       const ps = win.getComputedStyle(p);
-      if (ps.overflow !== "hidden") p.style.setProperty("overflow", "hidden", "important");
+      if (!p.hasAttribute("data-allow-overflow") && ps.overflow !== "hidden") p.style.setProperty("overflow", "hidden", "important");
       if (ps.position === "static") p.style.setProperty("position", "relative", "important");
       img.style.setProperty("max-width", "100%", "important");
       img.style.setProperty("max-height", "100%", "important");
-      if (!img.style.objectFit) img.style.setProperty("object-fit", "cover", "important");
+      /* لا نفرض cover إلا إذا لم يحدّد كود المشروع object-fit بنفسه (contain/scale-down/none تُحترم) */
+      const of = win.getComputedStyle(img).objectFit;
+      if (!img.style.objectFit && (!of || of === "fill")) img.style.setProperty("object-fit", "cover", "important");
     } catch(e){}
   });
 }
@@ -2209,7 +2247,7 @@ async function waitRes(doc) {
 
 function preprocess(doc, win) {
   const stats = { total: 0, clipText: 0, heavy: 0 };
-  Array.from(doc.querySelectorAll("*")).slice(0, 3000).forEach(el => {
+  captureScope(doc).slice(0, 3000).forEach(el => {
     let cs; try { cs = win.getComputedStyle(el) } catch(e){ return }
     const clip = (cs.webkitBackgroundClip || cs.backgroundClip || "").toLowerCase();
     if (clip === "text") {
@@ -2318,19 +2356,24 @@ function waitMB(timeout = 25000) {
 }
 async function pickCodec(lib, w, h, fps) {
   const cands = ["avc", "vp9", "vp8", "av1"];
+  const br = bitrate(w, h, fps);
   if (typeof lib.canEncodeVideo === "function") {
     for (const c of cands) {
-      try { const ok = await lib.canEncodeVideo(c, { width: w, height: h, frameRate: fps }); if (ok === true) return c } catch(e){}
+      try { const ok = await lib.canEncodeVideo(c, { width: w, height: h, bitrate: br }); if (ok === true) return c } catch(e){}
     }
   }
   if (typeof lib.getFirstEncodableVideoCodec === "function") {
-    try { const c = await lib.getFirstEncodableVideoCodec(cands, { width: w, height: h, frameRate: fps }); if (c) return c } catch(e){}
+    try { const c = await lib.getFirstEncodableVideoCodec(cands, { width: w, height: h, bitrate: br }); if (c) return c } catch(e){}
   }
-  if (typeof VideoEncoder !== "undefined" && VideoEncoder.isConfigSupported) {
-    const map = { avc: "avc1.42001f", vp9: "vp09.00.10.08", vp8: "vp8", av1: "av01.0.04M.08" };
+  /* الرجوع لفحص VideoEncoder الخام فقط إذا لم توفّر المكتبة أي دالة فحص؛ وإلا نثق بنتيجتها (وتنزل الدقة تلقائيًا) */
+  const libCanCheck = typeof lib.canEncodeVideo === "function" || typeof lib.getFirstEncodableVideoCodec === "function";
+  if (!libCanCheck && typeof VideoEncoder !== "undefined" && VideoEncoder.isConfigSupported) {
+    /* مستوى الكودك يُختار حسب الدقة (المستوى 3.1 القديم يرفض 1080p فما فوق) */
+    const big = w * h > 2228224;
+    const map = { avc: big ? "avc1.640033" : "avc1.64002a", vp9: big ? "vp09.00.50.08" : "vp09.00.40.08", vp8: "vp8", av1: big ? "av01.0.12M.08" : "av01.0.08M.08" };
     for (const c of cands) {
       try {
-        const r = await VideoEncoder.isConfigSupported({ codec: map[c], width: w, height: h, framerate: fps, bitrate: bitrate(w, h, fps) });
+        const r = await VideoEncoder.isConfigSupported({ codec: map[c], width: w, height: h, framerate: fps, bitrate: br });
         if (r && r.supported) return c;
       } catch(e){}
     }
@@ -2356,6 +2399,73 @@ function makeCanvasSource(lib, canvas, codec, opt) {
   }
 }
 
+
+/* قصّ مقطع صوتي (عند تحديد «من/إلى») كي يبقى الصوت متزامنًا مع الفيديو */
+function sliceAudio(buf, startSec, durSec) {
+  const sr = buf.sampleRate;
+  const s0 = Math.max(0, Math.min(buf.length - 1, Math.floor(startSec * sr)));
+  const len = Math.max(1, Math.min(buf.length - s0, Math.ceil(durSec * sr)));
+  if (s0 === 0 && len >= buf.length) return buf;
+  const out = new AudioBuffer({ numberOfChannels: buf.numberOfChannels, length: len, sampleRate: sr });
+  for (let c = 0; c < buf.numberOfChannels; c++) out.copyToChannel(buf.getChannelData(c).subarray(s0, s0 + len), c);
+  return out;
+}
+/* إضافة مسار الصوت: الكودك يُختار حسب الصيغة (AAC لـ MP4، Opus لـ WebM) وفق ما يدعمه المتصفح.
+   أي فشل هنا لا يُسقط التصدير — يُكمل الفيديو بدون صوت مع تنبيه. */
+async function prepareAudioTrack(lib, output, fmt, isMp4, startSec, durSec) {
+  let mix = null;
+  try { mix = await mixAudio(); } catch(e) { Errors.push("warn", "audio mix", e); }
+  if (!mix) return null;
+  if (typeof lib.AudioBufferSource !== "function" || typeof output.addAudioTrack !== "function") {
+    Errors.push("warn", "الصوت غير مدعوم في مكتبة الترميز");
+    toast("الصوت غير مدعوم في هذا المتصفح — سيُصدَّر الفيديو بدون صوت", "warn", 6000);
+    return null;
+  }
+  let list = [];
+  try { if (fmt && typeof fmt.getSupportedAudioCodecs === "function") list = fmt.getSupportedAudioCodecs() || []; } catch(e){}
+  const pref = isMp4 ? ["aac", "opus", "mp3", "flac"] : ["opus", "vorbis"];
+  const ordered = list.length ? pref.filter(c => list.indexOf(c) >= 0) : pref;
+  let codec = null;
+  for (const c of ordered) {
+    try {
+      if (typeof lib.canEncodeAudio === "function") {
+        const ok = await lib.canEncodeAudio(c, { numberOfChannels: mix.numberOfChannels, sampleRate: mix.sampleRate, bitrate: 128000 });
+        if (ok) { codec = c; break; }
+      } else { codec = c; break; }
+    } catch(e){}
+  }
+  if (!codec) {
+    Errors.push("warn", "لا كودك صوت مدعوم لهذه الصيغة");
+    toast("ترميز الصوت غير مدعوم في هذا المتصفح — سيُصدَّر الفيديو بدون صوت", "warn", 7000);
+    return null;
+  }
+  try {
+    const src = new lib.AudioBufferSource({ codec, bitrate: 128000 });
+    output.addAudioTrack(src);
+    Errors.push("info", "الصوت مضاف: " + codec);
+    return { src, buffer: sliceAudio(mix, startSec, durSec), codec };
+  } catch(e) {
+    Errors.push("warn", "تعذّر إضافة مسار الصوت", e);
+    toast("تعذّر إضافة الصوت — سيُصدَّر الفيديو بدون صوت", "warn", 6000);
+    return null;
+  }
+}
+
+/* إبقاء الشاشة مضاءة أثناء التصدير الطويل (الجوال يوقف المعالجة عند إطفاء الشاشة) */
+let WAKE = null;
+async function keepAwake(on) {
+  try {
+    if (on) {
+      if (navigator.wakeLock && !WAKE) {
+        WAKE = await navigator.wakeLock.request("screen");
+        WAKE.addEventListener("release", () => { WAKE = null });
+      }
+    } else if (WAKE) { const w = WAKE; WAKE = null; await w.release(); }
+  } catch(e){}
+}
+document.addEventListener("visibilitychange", () => {
+  if (APP.exporting && document.visibilityState === "visible") keepAwake(true);
+});
 
 /* ────────── الجسر مع الإطار + محرك احتياطي ────────── */
 const Bridge = {
@@ -2445,6 +2555,7 @@ async function waitProject(win) {
 function computeScenesMeta() {
   const doc = $("projectFrame").contentDocument;
   APP.scenesMeta = [];
+  APP._sceneIdx = -2;
   if (!doc) return;
   const secs = Array.from(doc.querySelectorAll("section[data-scene]"));
   APP.scenesMeta = secs.map((s, i) => {
@@ -2461,6 +2572,8 @@ function sceneIndexAt(ms) {
 }
 function updateSceneLabel(ms) {
   const i = sceneIndexAt(ms);
+  if (i === APP._sceneIdx) return;
+  APP._sceneIdx = i;
   const el = $("sceneNow");
   if (!el) return;
   el.textContent = i >= 0 && APP.scenesMeta[i] ? (i + 1) + " / " + APP.scenesMeta.length + " — " + APP.scenesMeta[i].name : "—";
@@ -2544,25 +2657,53 @@ async function loadProject() {
 }
 
 /* ────────── المعاينة والمشغّل ────────── */
+function isFs() { const st = $("stage"); return !!st && (document.fullscreenElement === st || document.webkitFullscreenElement === st || st.classList.contains("pseudo-fs")); }
 function resizePreview() {
   const w = $("frameWrap"), f = $("projectFrame"), st = $("stage");
   if (!w || !f || !st) return;
   const b = baseSize();
-  const fs = document.fullscreenElement === st;
-  const mob = window.innerWidth <= 650;
-  let mw = fs ? window.innerWidth : (st.clientWidth || 640) - (mob ? 12 : 24);
-  let mh = fs ? window.innerHeight : (mob ? window.innerHeight * 0.5 : Math.min(window.innerHeight * 0.68, 760));
-  mw = Math.max(160, mw);
+  const fs = isFs();
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const mob = vw <= 650;
+  let mw, mh;
+  if (fs) { mw = vw; mh = vh; }
+  else {
+    /* عرض المحتوى الفعلي = عرض المسرح − الحشوة (كان يُخصم رقم ثابت فيتخرّب المقاس على بعض الشاشات) */
+    let padX = 0;
+    try { const cs = getComputedStyle(st); padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0); } catch(e){}
+    const cw = st.clientWidth;
+    if (!cw) return;   /* الصفحة مخفية: سيُعاد الحساب تلقائيًا عند ظهورها (ResizeObserver) */
+    mw = cw - padX;
+    mh = mob ? Math.max(220, vh * 0.6) : Math.min(vh * 0.68, 760);
+  }
+  mw = Math.max(120, mw);
   const ar = b.width / b.height;
   let dw = mw, dh = dw / ar;
   if (dh > mh) { dh = mh; dw = dh * ar; }
-  dw = Math.max(1, Math.round(dw)); dh = Math.max(1, Math.round(dh));
+  dw = Math.max(1, Math.floor(dw)); dh = Math.max(1, Math.floor(dh));
   w.style.width = dw + "px";
   w.style.height = dh + "px";
   f.style.transform = "scale(" + (dw / b.width) + ")";
 }
-window.addEventListener("resize", resizePreview);
-document.addEventListener("fullscreenchange", () => setTimeout(resizePreview, 60));
+(function setupPreviewObservers() {
+  let lastVW = window.innerWidth, lastVH = window.innerHeight, raf = 0;
+  const schedule = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { raf = 0; resizePreview(); }); };
+  window.addEventListener("resize", () => {
+    /* شريط العنوان في متصفح الجوال يغيّر الارتفاع أثناء التمرير: نتجاهل التغيّرات الصغيرة حتى لا تهتزّ المعاينة */
+    const dw = Math.abs(window.innerWidth - lastVW), dh = Math.abs(window.innerHeight - lastVH);
+    if (dw < 1 && dh < 100 && !isFs()) return;
+    lastVW = window.innerWidth; lastVH = window.innerHeight;
+    schedule();
+  });
+  window.addEventListener("orientationchange", () => setTimeout(() => { lastVW = window.innerWidth; lastVH = window.innerHeight; resizePreview(); }, 250));
+  document.addEventListener("fullscreenchange", () => setTimeout(resizePreview, 60));
+  document.addEventListener("webkitfullscreenchange", () => setTimeout(resizePreview, 60));
+  if (window.ResizeObserver) {
+    let lastW = -1;
+    const ro = new ResizeObserver(() => { const cw = $("stage").clientWidth; if (cw === lastW) return; lastW = cw; schedule(); });
+    ro.observe($("stage"));
+  }
+})();
 function updateTime(ms) { $("playerTime").textContent = fmtTC(ms) + " / " + fmtTC(APP.durationMs || 0); }
 function setPlayhead(ms) { if (!APP.durationMs || APP.exporting) return; $("playhead").style.left = Math.max(0, Math.min(100, (ms / APP.durationMs) * 100)) + "%"; }
 function seekTo(ms) {
@@ -2588,27 +2729,33 @@ function play() {
   $("playBtn").textContent = "⏸";
   $("playState").textContent = "يشغّل";
   $("stagePlay").classList.remove("show");
+  let errT = 0;
   const step = () => {
     if (!APP.playing) { APP.rafId = 0; return; }
-    const t = APP.clock.from + (performance.now() - APP.clock.base) * (APP.speed || 1);
-    if (t >= APP.durationMs) {
-      if (APP.loop) {
-        seekTo(0);
-        APP.clock = { base: performance.now(), from: 0 };
-        pauseAudio(); playAudio(0);
-      } else {
-        seekTo(APP.durationMs);
-        stopPreview();
+    /* نجدول الإطار التالي أولًا: أي خطأ داخل الإطار الحالي لا يوقف المشغّل نهائيًا */
+    APP.rafId = requestAnimationFrame(step);
+    try {
+      const t = APP.clock.from + (performance.now() - APP.clock.base) * (APP.speed || 1);
+      if (t >= APP.durationMs) {
+        if (APP.loop) {
+          seekTo(0);
+          APP.clock = { base: performance.now(), from: 0 };
+          pauseAudio(); playAudio(0);
+        } else {
+          seekTo(APP.durationMs);
+          stopPreview();
+        }
         return;
       }
-    } else {
       APP.currentTime = t;
       setTime(t);
       setPlayhead(t);
-      updateTime(t);
+      const sec = (t / 1000) | 0;
+      if (sec !== APP._sec) { APP._sec = sec; updateTime(t); }
       updateSceneLabel(t);
+    } catch(e) {
+      if (Date.now() - errT > 3000) { errT = Date.now(); Errors.push("warn", "خطأ أثناء التشغيل", e); }
     }
-    APP.rafId = requestAnimationFrame(step);
   };
   APP.rafId = requestAnimationFrame(step);
   playAudio(APP.currentTime);
@@ -2632,12 +2779,31 @@ function jumpScene(dir) {
   if (wasPlaying) { pauseAudio(); playAudio(APP.currentTime); }
   updateOverlay();
 }
+function enterPseudoFs() {
+  $("stage").classList.add("pseudo-fs");
+  document.body.style.overflow = "hidden";
+  resizePreview();
+}
+function exitPseudoFs() {
+  $("stage").classList.remove("pseudo-fs");
+  document.body.style.overflow = "";
+  resizePreview();
+}
 function toggleFullscreen() {
   const st = $("stage");
-  if (document.fullscreenElement) { document.exitFullscreen(); return; }
-  if (st.requestFullscreen) st.requestFullscreen().catch(() => toast("المتصفح منع ملء الشاشة", "warn"));
-  else toast("ملء الشاشة غير مدعوم في هذا المتصفح", "warn");
+  if (st.classList.contains("pseudo-fs")) { exitPseudoFs(); return; }
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch(e){}
+    return;
+  }
+  const req = st.requestFullscreen || st.webkitRequestFullscreen;
+  if (!req) { enterPseudoFs(); return; }
+  try {
+    const p = req.call(st);
+    if (p && typeof p.catch === "function") p.catch(() => enterPseudoFs());
+  } catch(e) { enterPseudoFs(); }
 }
+$("fsExit").addEventListener("click", e => { e.stopPropagation(); exitPseudoFs(); });
 
 /* ────────── Timeline ────────── */
 async function buildTimeline() {
@@ -2701,6 +2867,7 @@ function startSceneDrag(ev, idx) {
   function up(e) {
     document.removeEventListener("pointermove", move);
     document.removeEventListener("pointerup", up);
+    document.removeEventListener("pointercancel", up);
     if (!SCENES[idx - 1] || !SCENES[idx]) return;
     const dx = e.clientX - startX;
     const dSec = dx / pxPerMs / 1000;
@@ -2716,6 +2883,7 @@ function startSceneDrag(ev, idx) {
   }
   document.addEventListener("pointermove", move);
   document.addEventListener("pointerup", up);
+  document.addEventListener("pointercancel", up);
 }
 function applyDurationsToDoc() {
   try {
@@ -3638,21 +3806,54 @@ function updateProgress(p, t) {
   $("progressBar").style.width = Math.max(0, Math.min(100, Number(p) || 0)) + "%";
   $("progressText").textContent = t;
 }
-function finalizeExport(blob, ext, label) {
+function showDownload(blob, filename, label) {
   if (APP.exportUrl) try { URL.revokeObjectURL(APP.exportUrl) } catch(e){}
   APP.exportUrl = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.className = "btn primary";
   a.href = APP.exportUrl;
-  a.download = safeName(APP.title || "motion") + "." + ext;
-  a.textContent = "حفظ " + ext.toUpperCase() + " (" + (blob.size / 1024 / 1024).toFixed(1) + " MB)";
+  a.download = filename;
+  a.rel = "noopener";
+  a.textContent = label + " (" + (blob.size / 1024 / 1024).toFixed(blob.size < 1048576 ? 2 : 1) + " MB)";
   const dl = $("download");
   dl.innerHTML = "";
   dl.appendChild(a);
   dl.classList.add("show");
+  try { dl.scrollIntoView({ block: "nearest", behavior: "smooth" }) } catch(e){}
+  return a;
+}
+function finalizeExport(blob, ext, label) {
+  showDownload(blob, safeName(APP.title || "motion") + "." + ext, "حفظ " + ext.toUpperCase());
   if (label) $("formatInfo").textContent = label;
 }
-function yieldToBrowser() { return new Promise(r => requestAnimationFrame(() => setTimeout(r, 0))); }
+/* requestAnimationFrame يتوقف كليًا عند إخفاء التبويب → يعلّق التصدير؛ المؤقّت الاحتياطي يمنع ذلك */
+function yieldToBrowser() {
+  return new Promise(r => {
+    let d = false;
+    const f = () => { if (d) return; d = true; r(); };
+    try { requestAnimationFrame(() => setTimeout(f, 0)); } catch(e){}
+    setTimeout(f, 100);
+  });
+}
+/* html2canvas يفصل الحروف عند وجود letter-spacing فينكسر اتصال الحروف العربية: نلغيه للنصوص العربية فقط */
+function fixArabicSpacing(cd) {
+  try {
+    const win = cd.defaultView;
+    const root = cd.getElementById("project-root") || cd.body;
+    if (!win || !root) return;
+    const walker = cd.createTreeWalker(root, 4);
+    const seen = new Set();
+    let n;
+    while ((n = walker.nextNode())) {
+      const p = n.parentElement;
+      if (!p || seen.has(p) || !hasAr(n.nodeValue)) continue;
+      seen.add(p);
+      let ls = "";
+      try { ls = win.getComputedStyle(p).letterSpacing } catch(e){}
+      if (ls && ls !== "normal" && parseFloat(ls) !== 0) p.style.setProperty("letter-spacing", "normal", "important");
+    }
+  } catch(e){}
+}
 async function inlineExternalImgs(doc) {
   const failed = [];
   await Promise.all(Array.from(doc.querySelectorAll("img")).slice(0, 200).map(async img => {
@@ -3704,6 +3905,7 @@ async function renderFrame(ms, opt) {
     ignoreElements: safe ? (el => el.tagName === "IMG" || el.tagName === "VIDEO" || el.tagName === "CANVAS") : undefined,
     onclone: cd => {
       try { sanitizeForCapture(cd); enforceRoot(cd); } catch(e){}
+      fixArabicSpacing(cd);
       if (safe) try {
         const st = cd.getElementById("__bg_replaces__"); if (st) st.remove();
         cd.querySelectorAll("[data-bg-rid]").forEach(el => el.style.setProperty("background-image", "none", "important"));
@@ -3752,11 +3954,44 @@ function endCapture(ctx) {
   try { restoreDocImages(ctx.imgRestore); } catch(e){}
 }
 
+function buildPdf(pages) {
+  const enc = new TextEncoder();
+  const chunks = [], offsets = [];
+  let pos = 0;
+  const put = d => { const u = typeof d === "string" ? enc.encode(d) : d; chunks.push(u); pos += u.length; };
+  const begin = id => { offsets[id] = pos; put(id + " 0 obj\n"); };
+  const n = pages.length, total = 2 + n * 3;
+  put("%PDF-1.4\n%\u00e2\u00e3\u00cf\u00d3\n");
+  begin(1); put("<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  begin(2); put("<< /Type /Pages /Count " + n + " /Kids [" + pages.map((_, i) => (3 + i * 3) + " 0 R").join(" ") + "] >>\nendobj\n");
+  pages.forEach((p, i) => {
+    const pid = 3 + i * 3, cid = pid + 1, iid = pid + 2;
+    const W = Math.round(p.w * 75) / 100, H = Math.round(p.h * 75) / 100;
+    begin(pid);
+    put("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /XObject << /Im0 " + iid + " 0 R >> >> /Contents " + cid + " 0 R >>\nendobj\n");
+    const content = "q " + W + " 0 0 " + H + " 0 0 cm /Im0 Do Q";
+    begin(cid);
+    put("<< /Length " + content.length + " >>\nstream\n" + content + "\nendstream\nendobj\n");
+    begin(iid);
+    put("<< /Type /XObject /Subtype /Image /Width " + p.w + " /Height " + p.h + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + p.bytes.length + " >>\nstream\n");
+    put(p.bytes);
+    put("\nendstream\nendobj\n");
+  });
+  const xrefPos = pos;
+  let x = "xref\n0 " + (total + 1) + "\n0000000000 65535 f \n";
+  for (let i = 1; i <= total; i++) x += String(offsets[i]).padStart(10, "0") + " 00000 n \n";
+  put(x + "trailer\n<< /Size " + (total + 1) + " /Root 1 0 R >>\nstartxref\n" + xrefPos + "\n%%EOF");
+  return new Blob(chunks, { type: "application/pdf" });
+}
+const canvasBlob = (cv, type, q) => new Promise(res => cv.toBlob(b => res(b), type, q));
+function autoDownload(a) { if (!isMobile()) { try { a.click() } catch(e){} } }
+
 $("export").addEventListener("click", async () => {
   if (APP.exporting) return;
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
   if (typeof html2canvas !== "function") { toast("html2canvas غير محمّل — تحقق من الاتصال", "error"); return; }
   const wasPlaying = APP.playing;
+  const at = APP.currentTime || 0;
   stopPreview();
   APP.exporting = true;
   APP.stop = false;
@@ -3767,7 +4002,8 @@ $("export").addEventListener("click", async () => {
   $("progressWrap").classList.add("show");
   $("download").classList.remove("show");
   updateProgress(0, "تجهيز…");
-  let output = null, source = null, cap = null;
+  await keepAwake(true);
+  let output = null, source = null, audio = null, audioTask = null, cap = null, finished = false;
   try {
     const doc = $("projectFrame").contentDocument;
     const win = $("projectFrame").contentWindow;
@@ -3777,16 +4013,28 @@ $("export").addEventListener("click", async () => {
     updateProgress(3, "تحميل مكتبة الترميز…");
     const lib = await waitMB(30000);
     const fps = Math.max(1, Number($("fps").value) || 30);
-    const es = exportSize();
-    const sc = renderScale();
 
+    /* اختيار الدقة والكودك: إن لم تُدعم الدقة المختارة ننزل تلقائيًا بدل الفشل */
     updateProgress(5, "فحص الكودك…");
-    const codec = await pickCodec(lib, es.width, es.height, fps);
+    const chosen = renderScale();
+    const steps = [];
+    [chosen, 1, APP.orientation === "portrait" ? 720 / 1080 : 1280 / 1920, 0.5].forEach(v => {
+      if (v <= chosen + 1e-6 && !steps.some(x => Math.abs(x - v) < 0.001)) steps.push(v);
+    });
+    steps.sort((a, b) => b - a);
+    let sc = 0, es = null, codec = null;
+    for (const v of steps) {
+      const size = sizeForScale(v);
+      const c = await pickCodec(lib, size.width, size.height, fps);
+      if (c) { sc = v; es = size; codec = c; break; }
+    }
     if (!codec) {
-      toast("لا كودك مدعوم. جرّب دقة أقل أو متصفحًا آخر.", "error", 10000);
+      toast("لا كودك فيديو مدعوم في هذا المتصفح. جرّب Chrome أو Edge أو Safari حديث.", "error", 10000);
       throw new Error("لا كودك مدعوم");
     }
-    Errors.push("info", "codec: " + codec);
+    if (sc < chosen - 1e-6) toast("الدقة المختارة غير مدعومة هنا — استُخدمت \u2066" + es.width + "×" + es.height + "\u2069", "warn", 7000);
+    Errors.push("info", "codec: " + codec + " @ " + es.width + "×" + es.height);
+
     const { fmt, isMp4 } = makeFormat(lib, codec);
     const target = new lib.BufferTarget();
     output = new lib.Output({ format: fmt, target });
@@ -3798,19 +4046,20 @@ $("export").addEventListener("click", async () => {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const br = bitrate(es.width, es.height, fps);
-    source = makeCanvasSource(lib, canvas, codec, { bitrate: br, keyFrameInterval: 2 });
+    source = makeCanvasSource(lib, canvas, codec, { bitrate: bitrate(es.width, es.height, fps), keyFrameInterval: 2 });
     output.addVideoTrack(source, { frameRate: fps });
 
-    let audioSrc = null;
-    try {
-      const mixBuf = await mixAudio();
-      if (mixBuf && lib.AudioBufferSource) {
-        audioSrc = new lib.AudioBufferSource(mixBuf);
-        if (typeof output.addAudioTrack === "function") { output.addAudioTrack(audioSrc); Errors.push("info", "الصوت مضاف"); }
-        else Errors.push("warn", "addAudioTrack غير متاح — الصوت لن يُدمج");
-      }
-    } catch(e) { Errors.push("warn", "audio mix", e); }
+    /* حدود المقطع (قبل إضافة الصوت كي يُقصّ بنفس الحدود) */
+    let trimStart = Math.max(0, Number($("trimStart").value) || 0) * 1000;
+    if (trimStart >= APP.durationMs - 100) trimStart = 0;
+    const trimEndRaw = Number($("trimEnd").value);
+    let trimEnd = trimEndRaw > 0 ? Math.min(APP.durationMs, trimEndRaw * 1000) : APP.durationMs;
+    if (trimEnd <= trimStart + 100) trimEnd = APP.durationMs;
+    const clipDur = Math.max(100, trimEnd - trimStart);
+    const totalFrames = Math.max(1, Math.ceil((clipDur / 1000) * fps));
+    const frameDur = 1 / fps;
+
+    audio = await prepareAudioTrack(lib, output, fmt, isMp4, trimStart / 1000, clipDur / 1000);
 
     const label = isMp4
       ? "MP4 / H.264 • " + es.width + "×" + es.height + " @ " + fps
@@ -3819,19 +4068,13 @@ $("export").addEventListener("click", async () => {
 
     /* إطار تجريبي أول: يكشف مشاكل الصور مبكرًا ويفعّل الوضع الآمن قبل البدء */
     updateProgress(6, "إطار تجريبي…");
-    await renderFrame(Math.min(APP.durationMs - 1, 200), { scale: Math.min(0.4, sc) });
+    await renderFrame(Math.min(APP.durationMs - 1, trimStart + 200), { scale: Math.min(0.4, sc) });
 
     updateProgress(7, "تهيئة…");
     await output.start();
+    if (audio) audioTask = audio.src.add(audio.buffer).catch(e => { Errors.push("warn", "فشل إضافة عيّنات الصوت", e); });
 
-    const trimStart = Math.max(0, Number($("trimStart").value) || 0) * 1000;
-    const trimEndRaw = Number($("trimEnd").value);
-    const trimEnd = trimEndRaw > 0 ? Math.min(APP.durationMs, trimEndRaw * 1000) : APP.durationMs;
-    const clipDur = Math.max(100, trimEnd - trimStart);
-    const totalFrames = Math.max(1, Math.ceil((clipDur / 1000) * fps));
-    const frameDur = 1 / fps;
     const YIELD = isMobile() ? 2 : 8;
-    let prevHash = null, skip = 0;
     const startWall = performance.now();
 
     for (let i = 0; i < totalFrames; i++) {
@@ -3841,13 +4084,10 @@ $("export").addEventListener("click", async () => {
       const rs = performance.now();
       const rendered = await renderFrame(ms, { scale: sc });
       APP.stats.renderMs += performance.now() - rs;
-      const h = frameHash(rendered);
-      if (prevHash !== null && h === prevHash) { skip++; APP.stats.skipped++; }
-      else {
-        if (rendered.width === es.width && rendered.height === es.height) ctx.drawImage(rendered, 0, 0);
-        else ctx.drawImage(rendered, 0, 0, es.width, es.height);
-      }
-      prevHash = h;
+      /* كل إطار يُرسم دائمًا: المقارنة المصغّرة القديمة كانت تعدّ الحركات الصغيرة (عدّادات/نصوص تُكتب) إطارات مكرّرة فتتجمّد */
+      if (rendered.width === es.width && rendered.height === es.height) ctx.drawImage(rendered, 0, 0);
+      else ctx.drawImage(rendered, 0, 0, es.width, es.height);
+      try { rendered.width = rendered.height = 0; } catch(e){}
       const encStart = performance.now();
       await source.add(ts, frameDur);
       APP.stats.encodeMs += performance.now() - encStart;
@@ -3856,40 +4096,47 @@ $("export").addEventListener("click", async () => {
       const speed = (i + 1) / Math.max(0.1, elapsed);
       const eta = (totalFrames - i - 1) / Math.max(0.1, speed);
       updateProgress(7 + ((i + 1) / totalFrames) * 88,
-        "تصدير " + (i + 1) + " / " + totalFrames + " • " + speed.toFixed(1) + " إطار/ث • ~" + Math.round(eta) + "ث" + (skip ? " • تجاهل " + skip : "") + (APP.safeImages ? " • بدون صور" : ""));
+        "تصدير " + (i + 1) + " / " + totalFrames + " • " + speed.toFixed(1) + " إطار/ث • ~" + Math.round(eta) + "ث" + (APP.safeImages ? " • بدون صور" : ""));
       if ((i + 1) % YIELD === 0) await yieldToBrowser();
     }
 
-    if (source && typeof source.close === "function") try { await source.close() } catch(e){}
-    if (audioSrc && typeof audioSrc.close === "function") try { await audioSrc.close() } catch(e){}
     updateProgress(96, "إنهاء…");
+    await source.close();
+    if (audioTask) await audioTask;
+    if (audio) { try { await audio.src.close(); } catch(e) { Errors.push("warn", "audio close", e); } }
     await output.finalize();
+    finished = true;
     const buffer = target.buffer;
-    if (!buffer) throw new Error("لم يُنتج ملف");
+    if (!buffer || !buffer.byteLength) throw new Error("لم يُنتج ملف");
     const blob = new Blob([buffer], { type: isMp4 ? "video/mp4" : "video/webm" });
     finalizeExport(blob, isMp4 ? "mp4" : "webm", label);
     const totalTime = (performance.now() - startWall) / 1000;
-    const summary = "✅ " + APP.stats.frames + " إطار • تجاهل " + APP.stats.skipped + " • " + totalTime.toFixed(1) + "ث" + (APP.safeImages ? " • بدون صور" : "");
+    const summary = "✅ " + APP.stats.frames + " إطار • " + totalTime.toFixed(1) + "ث" + (audio ? " • مع صوت" : "") + (APP.safeImages ? " • بدون صور" : "");
     updateProgress(100, summary);
     Errors.push("info", summary);
-    toast(APP.safeImages ? "تم التصدير (بدون الصور)" : "تم التصدير", APP.safeImages ? "warn" : "success", 5000);
+    toast(APP.safeImages ? "تم التصدير (بدون الصور)" : "تم التصدير — اضغط زر الحفظ", APP.safeImages ? "warn" : "success", 5000);
   } catch(err) {
     if (err && err.message === "تم الإيقاف") {
       updateProgress(0, "تم الإيقاف");
       toast("تم الإيقاف", "info");
     } else {
       Errors.push("error", "فشل التصدير", err);
-      toast("فشل: " + ((err && err.message) || err), "error", 8000);
+      const m = String((err && err.message) || err);
+      toast("فشل: " + m + (/memory|alloc|quota/i.test(m) ? " — جرّب جودة أقل أو مدة أقصر" : ""), "error", 8000);
       updateProgress(0, "فشل");
     }
-    try { if (output && typeof output.cancel === "function") await output.cancel(); } catch(e){}
-    try { if (source && typeof source.close === "function") await source.close(); } catch(e){}
+    if (!finished) {
+      try { if (source && typeof source.close === "function") await source.close(); } catch(e){}
+      try { if (audio && audio.src && typeof audio.src.close === "function") await audio.src.close(); } catch(e){}
+      try { if (output && typeof output.cancel === "function") await output.cancel(); } catch(e){}
+    }
   } finally {
     endCapture(cap);
     APP.exporting = false;
+    await keepAwake(false);
     $("export").style.display = "block";
     $("stopExport").style.display = "none";
-    seekTo(APP.currentTime || 0);
+    seekTo(at);
     if (wasPlaying) play();
   }
 });
@@ -3901,6 +4148,7 @@ $("stopExport").addEventListener("click", () => {
 $("testFrames").addEventListener("click", async () => {
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
   if (APP.exporting) return;
+  const at = APP.currentTime || 0;
   stopPreview();
   const btn = $("testFrames"), orig = btn.textContent;
   btn.disabled = true;
@@ -3912,14 +4160,17 @@ $("testFrames").addEventListener("click", async () => {
     const doc = $("projectFrame").contentDocument;
     const win = $("projectFrame").contentWindow;
     cap = await prepareCapture(doc, win, true);
-    const t0 = Math.min(1000, Math.round(APP.durationMs * 0.05));
-    const t1 = Math.round(APP.durationMs * 0.5);
-    const t2 = Math.max(1000, Math.round(APP.durationMs) - 1000);
+    const last = Math.max(0, Math.round(APP.durationMs) - 1);
+    const clampT = v => Math.max(0, Math.min(last, v));
+    const t0 = clampT(Math.min(1000, Math.round(APP.durationMs * 0.05)));
+    const t1 = clampT(Math.round(APP.durationMs * 0.5));
+    const t2 = clampT(Math.max(1000, Math.round(APP.durationMs) - 1000));
     const items = [{ t: t0, l: "البداية" }, { t: t1, l: "المنتصف" }, { t: t2, l: "النهاية" }];
     const frames = [];
     for (const it of items) {
       const c = await renderFrame(it.t, { scale: Math.min(0.5, renderScale()) });
       frames.push({ url: c.toDataURL("image/png"), label: it.l });
+      await yieldToBrowser();
     }
     $("framesGrid").innerHTML = frames.map(f => `<figure style="margin:0"><img src="${f.url}" style="width:100%;display:block;border-radius:8px"><figcaption style="padding:6px;font-size:12px;color:var(--primary2);text-align:center">${esc(f.label)}</figcaption></figure>`).join("");
     $("framesInfo").textContent = APP.safeImages ? "⚠️ الصور لم تُرسم (وضع آمن). صغّر الصور أو أعد قصّها." : "3 إطارات من 5% و50% و95% من المدة.";
@@ -3933,7 +4184,7 @@ $("testFrames").addEventListener("click", async () => {
     APP.exporting = false;
     btn.disabled = false;
     btn.textContent = orig;
-    seekTo(APP.currentTime || 0);
+    seekTo(at);
   }
 });
 $("exportPNG").addEventListener("click", async () => {
@@ -3949,28 +4200,26 @@ $("exportPNG").addEventListener("click", async () => {
     const win = $("projectFrame").contentWindow;
     cap = await prepareCapture(doc, win, true);
     const c = await renderFrame(at, { scale: renderScale() });
-    c.toBlob(b => {
-      if (!b) { toast("فشل", "error"); return; }
-      const url = URL.createObjectURL(b);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = safeName(APP.title || "frame") + ".png";
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 5000);
-      toast("تم حفظ الإطار", "success");
-    }, "image/png");
+    const blob = await canvasBlob(c, "image/png");
+    try { c.width = c.height = 0; } catch(e){}
+    if (!blob) throw new Error("تعذّر إنشاء الصورة (الدقة كبيرة على هذا الجهاز؟ جرّب 720p)");
+    const a = showDownload(blob, safeName(APP.title || "frame") + ".png", "حفظ PNG");
+    autoDownload(a);
+    toast(isMobile() ? "جاهز — اضغط زر الحفظ" : "تم حفظ الإطار", "success");
   } catch(e) { Errors.push("error", "png", e); toast("فشل: " + e.message, "error"); }
   finally { endCapture(cap); APP.exporting = false; seekTo(at); }
 });
 $("exportPDF").addEventListener("click", async () => {
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
   if (APP.exporting) { toast("تصدير جارٍ", "warn"); return; }
+  const at = APP.currentTime || 0;
   stopPreview();
   APP.exporting = true;
   APP.safeImages = false;
-  toast("يجمّع صور الشرائح…", "info", 3000);
   $("progressWrap").classList.add("show");
-  const at = APP.currentTime || 0;
+  $("download").classList.remove("show");
+  updateProgress(0, "PDF: تجهيز…");
+  await keepAwake(true);
   let cap = null;
   try {
     const doc = $("projectFrame").contentDocument;
@@ -3978,36 +4227,36 @@ $("exportPDF").addEventListener("click", async () => {
     cap = await prepareCapture(doc, win, true);
     const secs = Array.from(doc.querySelectorAll("section[data-scene]"));
     if (!secs.length) { toast("لا توجد شرائح", "warn"); return; }
-    const imgs = [];
+    const pages = [];
+    const pdfScale = Math.min(1, renderScale()) * (isMobile() ? 0.75 : 1);
     for (let i = 0; i < secs.length; i++) {
-      const t = (Number(secs[i].dataset.sceneStart) + Number(secs[i].dataset.sceneEnd)) / 2;
-      const c = await renderFrame(t, { scale: 0.6 });
-      imgs.push(c.toDataURL("image/jpeg", 0.88));
-      updateProgress((i + 1) / secs.length * 100, "PDF: " + (i + 1) + " / " + secs.length);
+      const st = Number(secs[i].dataset.sceneStart), en = Number(secs[i].dataset.sceneEnd);
+      const dur = Math.max(1, en - st);
+      /* لقطة بعد اكتمال دخول العناصر وقبل بدء الخروج (منتصف المشهد كان يلتقط أحيانًا حالة ناقصة) */
+      const t = st + Math.min(dur * 0.75, Math.max(dur * 0.5, dur - 700));
+      const c = await renderFrame(t, { scale: pdfScale });
+      const w = c.width, h = c.height;
+      const blob = await canvasBlob(c, "image/jpeg", 0.9);
+      try { c.width = c.height = 0; } catch(e){}
+      if (!blob) throw new Error("تعذّر إنشاء صفحة " + (i + 1));
+      pages.push({ bytes: new Uint8Array(await blob.arrayBuffer()), w, h });
+      updateProgress((i + 1) / secs.length * 95, "PDF: " + (i + 1) + " / " + secs.length);
       await yieldToBrowser();
     }
-    const port = APP.orientation === "portrait";
-    const html = '<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>' + escA(APP.title || "شرائح") + '</title><style>@page{margin:0;size:' + (port ? "1080px 1920px" : "1920px 1080px") + '}body{margin:0;background:#000}img{width:100%;display:block;page-break-after:always;break-after:page}</style></head><body>' + imgs.map(u => '<img src="' + u + '">').join("") + '</body></html>';
-    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.target = "_blank";
-    a.textContent = "فتح الشرائح (اطبع كـ PDF)";
-    a.className = "btn primary";
-    $("download").innerHTML = "";
-    $("download").appendChild(a);
-    $("download").classList.add("show");
-    toast("افتح الرابط ثم اختر: طباعة ← حفظ كـ PDF", "info", 6000);
-    updateProgress(0, "جاهز");
-  } catch(e) { Errors.push("error", "pdf", e); toast("فشل: " + e.message, "error"); }
-  finally { endCapture(cap); APP.exporting = false; $("progressWrap").classList.remove("show"); seekTo(at); }
+    const pdf = buildPdf(pages);
+    const a = showDownload(pdf, safeName(APP.title || "slides") + ".pdf", "حفظ PDF");
+    autoDownload(a);
+    updateProgress(100, "✅ PDF جاهز • " + pages.length + " صفحة");
+    toast(isMobile() ? "جاهز — اضغط زر الحفظ" : "تم إنشاء PDF", "success", 4000);
+  } catch(e) { Errors.push("error", "pdf", e); toast("فشل: " + e.message, "error"); updateProgress(0, "فشل"); }
+  finally { endCapture(cap); APP.exporting = false; await keepAwake(false); seekTo(at); }
 });
 
 /* ────────── لوحة المفاتيح ────────── */
 function anyModalOpen() { return document.querySelector(".modal-bg.visible") !== null; }
 function isEditable(el) { if (!el) return false; const t = el.tagName; return t === "INPUT" || t === "TEXTAREA" || t === "SELECT" || el.isContentEditable; }
 document.addEventListener("keydown", e => {
+  if (e.code === "Escape" && $("stage").classList.contains("pseudo-fs")) { exitPseudoFs(); e.preventDefault(); return; }
   if (e.code === "Escape" && anyModalOpen()) {
     try { if ($("cropModal").classList.contains("visible")) window.closeCrop(); } catch(_){}
     try { if ($("bgModal").classList.contains("visible")) window.closeBg(); } catch(_){}
