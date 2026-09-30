@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover">
 <title>استوديو المشاريع المرئية</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,8 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);font-family:"Tajawal","Noto Sans Arabic","Cairo",Arial,sans-serif;font-size:14px;line-height:1.6}
-body{overflow-x:hidden;background:radial-gradient(900px 420px at 88% -8%,rgba(139,124,255,.16),transparent 62%),radial-gradient(700px 380px at 6% 0%,rgba(61,219,192,.07),transparent 60%),var(--bg);background-attachment:fixed}
+html{overflow-x:hidden;overflow-x:clip;max-width:100%}
+body{overflow-x:hidden;overflow-x:clip;max-width:100%;background:radial-gradient(900px 420px at 88% -8%,rgba(139,124,255,.16),transparent 62%),radial-gradient(700px 380px at 6% 0%,rgba(61,219,192,.07),transparent 60%),var(--bg);background-attachment:fixed}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
@@ -37,7 +38,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .tabs button{border:0;background:transparent;color:var(--muted);padding:9px 26px;border-radius:10px;font-weight:700;font-size:14px;transition:background .15s,color .15s}
 .tabs button:hover{color:var(--text)}
 .tabs button.active{background:var(--primary);color:var(--ink)}
-.page{display:none;max-width:1320px;margin:0 auto;padding:22px 16px 80px}
+.page{display:none;max-width:1320px;margin:0 auto;padding:22px 16px 80px;width:100%;min-width:0;overflow-x:clip}
+.gen>*,.workspace>*,.side,.side-pane,.card,.preview,.player{min-width:0;max-width:100%}
+.lint-item,.lint-item>div,.img-mgr,.img-list>*,.scene-card,.info-row span{min-width:0;overflow-wrap:anywhere}
 .page.active{display:block}
 
 /* ── الصفحة الأولى ── */
@@ -150,8 +153,6 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .tl-scene{position:relative;min-width:3px;border-radius:7px;background:rgba(139,124,255,.14);border:1px solid rgba(139,124,255,.3)}
 .tl-scene.now{background:rgba(139,124,255,.32);border-color:var(--primary)}
 .tl-scene span{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;color:#d5d0ff;direction:rtl;white-space:nowrap;pointer-events:none;overflow:hidden;max-width:calc(100% - 12px);text-overflow:ellipsis}
-.tl-handle{position:absolute;left:-4px;top:0;bottom:0;width:8px;cursor:ew-resize;background:var(--amber);opacity:0;z-index:10;border-radius:4px}
-.tl-scene:hover .tl-handle{opacity:.8}
 .playhead{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--amber);box-shadow:0 0 12px var(--amber);pointer-events:none;z-index:5}
 .playhead::before{content:'';position:absolute;top:-1px;left:-5px;width:12px;height:12px;border-radius:50%;background:var(--amber)}
 .player-bar{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
@@ -226,11 +227,26 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .cat .bar i{display:block;height:100%;border-radius:9px;background:var(--teal)}
 .cat .bar i.mid{background:var(--amber)}.cat .bar i.weak{background:var(--red)}
 .cat b{text-align:left;font-variant-numeric:tabular-nums}
+button.cat{border:0;background:transparent;width:100%;text-align:right;padding:5px 6px;border-radius:9px;color:inherit}
+button.cat:hover{background:rgba(139,124,255,.08)}
+button.cat.sel{background:rgba(139,124,255,.16)}
+.lint-why{background:var(--sunk);border:1px solid var(--line2);border-radius:11px;padding:10px;margin-bottom:12px;font-size:12.5px;line-height:1.7}
+.why-h{font-weight:900;margin-bottom:6px;font-size:13px}
+.why-r{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06)}
+.why-r b{font-family:ui-monospace,monospace;font-size:13px;color:var(--amber);text-align:center}
+.why-r.error b{color:var(--red)}.why-r.info b{color:var(--blue)}
+.why-r strong{color:var(--text)}.why-r span{color:var(--dim);font-size:11.5px}
+.why-fix{color:var(--muted)}
+.why-note{color:var(--dim);font-size:11.5px;margin-top:6px}
+.dl-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dl-row:has(> :only-child){grid-template-columns:1fr}
+.dl-prev{display:block;width:100%;border-radius:10px;margin-top:8px;border:1px solid var(--line)}
+.dl-hint{font-size:12px;color:var(--muted);margin-top:6px;text-align:center;line-height:1.6}
 .lint-filter{display:flex;gap:6px;margin:10px 0}
 .lint-filter button{flex:1;border:1px solid var(--line);background:var(--sunk);color:var(--muted);border-radius:9px;padding:6px 4px;font-size:12px}
 .lint-filter button.active{color:var(--text);border-color:var(--primary);background:rgba(139,124,255,.12)}
-.lint-list{display:grid;gap:6px;max-height:340px;overflow-y:auto}
-.lint-item{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);font-size:12.5px;line-height:1.6;cursor:pointer;text-align:right;width:100%}
+.lint-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;max-height:340px;overflow-y:auto}
+.lint-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);font-size:12.5px;line-height:1.6;cursor:pointer;text-align:right;width:100%}
 .lint-item:hover{border-color:var(--line2)}
 .lint-item.error{border-color:rgba(255,111,125,.4)}.lint-item.warn{border-color:rgba(255,184,77,.35)}
 .lint-badge{font-weight:900;font-size:11px;padding:2px 8px;border-radius:6px;flex:none}
@@ -323,9 +339,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .mobile-nav{display:none}
 
 @media(max-width:1100px){
-  .gen{grid-template-columns:1fr}
+  .gen{grid-template-columns:minmax(0,1fr)}
   .gen-aside{position:static}
-  .workspace{grid-template-columns:1fr}
+  .workspace{grid-template-columns:minmax(0,1fr)}
   .style-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:650px){
@@ -353,7 +369,6 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .stage.pseudo-fs .fs-exit{display:grid}
 .stage.pseudo-fs .frame-wrap{box-shadow:none}
 @media(pointer:coarse){
-  .tl-handle{opacity:.55;width:18px;left:-9px}
   .player-btn{min-width:40px}
 }
 @media(max-width:650px){
@@ -504,16 +519,10 @@ button:disabled{opacity:.45;cursor:not-allowed}
             <button class="player-btn" id="prevScene" title="الشريحة السابقة">⏮</button>
             <button class="player-btn primary" id="playBtn" title="تشغيل / إيقاف (مسافة)">▶</button>
             <button class="player-btn" id="nextScene" title="الشريحة التالية">⏭</button>
-            <button class="player-btn" id="rewindBtn" title="من البداية (Home)">↺</button>
             <div class="player-time" id="playerTime">00:00 / 00:00</div>
             <span class="scene-now" id="sceneNow">—</span>
             <span class="pb-spacer"></span>
-            <span class="chip muted" id="playState">متوقف</span>
-            <select class="mini-sel" id="speedSel" title="السرعة"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
-            <label class="mini-chk"><input type="checkbox" id="loopChk"> تكرار</label>
             <button class="player-btn" id="fsBtn" title="ملء الشاشة (F)">⛶</button>
-            <button class="player-btn" id="undoBtn" title="تراجع">↶</button>
-            <button class="player-btn" id="redoBtn" title="إعادة">↷</button>
           </div>
         </div>
       </div>
@@ -577,6 +586,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
           <div><div class="grade" id="lintGrade">لم يُفحص بعد</div><div class="lint-summary" id="lintSummary">شغّل الفاحص لتقييم التقني والتكوين والحركة والهوية.</div></div>
         </div>
         <div class="cats" id="lintCats"></div>
+        <div class="lint-why" id="lintWhy" style="display:none"></div>
         <button class="btn green" id="runLint">🔍 تشغيل الفاحص</button>
         <div class="lint-filter" id="lintFilter">
           <button class="active" data-f="all">الكل</button>
@@ -698,6 +708,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 (async () => {
   const sources = [
     "https://cdn.jsdelivr.net/npm/mediabunny@1/+esm",
+    "https://cdn.jsdelivr.net/npm/mediabunny@1/dist/bundles/mediabunny.min.mjs",
+    "https://unpkg.com/mediabunny@1/dist/bundles/mediabunny.min.mjs",
     "https://esm.sh/mediabunny@1"
   ];
   for (const url of sources) {
@@ -1606,6 +1618,7 @@ const Linter = {
       const cl = el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".") : "";
       return (t + id + cl).slice(0, 50);
     };
+    const snip = el => { const t = ((el && el.textContent) || "").trim().replace(/\s+/g, " "); return t ? " — «" + t.slice(0, 28) + (t.length > 28 ? "…" : "") + "»" : ""; };
     const visible = el => {
       let c = el;
       while (c && c !== doc.documentElement) {
@@ -1744,7 +1757,7 @@ const Linter = {
       const sizes = rr.map(o => parseFloat(o.c.fontSize)).filter(Boolean);
       const maxF = sizes.length ? Math.max.apply(null, sizes) : 0, minF = sizes.length ? Math.min.apply(null, sizes) : 0;
       const small = rr.filter(o => parseFloat(o.c.fontSize) < minFS);
-      if (small.length) add("warn", "type", "small", T.n, desc(small[0].el), small.length + " نص بحجم أقل من " + minFS + "px (أصغرها " + Math.round(minF) + "px).", "ارفعها إلى " + minFS + "px+.", tm);
+      if (small.length) add("warn", "type", "small", T.n, desc(small[0].el), small.length + " نص بحجم أقل من " + minFS + "px (أصغرها " + Math.round(minF) + "px)." + snip(small[0].el), "ارفعها إلى " + minFS + "px+.", tm);
       if (sizes.length && maxF < 60 && !(i === secs.length - 1)) add("warn", "type", "noTitle", T.n, desc(s), "أكبر خط " + Math.round(maxF) + "px فقط — لا عنوان بارز.", "عنوان 72px+.", tm);
       if (sizes.length > 2 && maxF / Math.max(1, minF) < 2.2) add("warn", "type", "flat", T.n, desc(s), "هرمية ضعيفة: نسبة الأكبر للأصغر " + (maxF / Math.max(1, minF)).toFixed(1) + ":1.", "وسّع الفرق (3:1 أو أكثر).", tm);
       let lsBad = 0, lhBad = 0, tcBad = 0, lowC = 0, lowEl = null;
@@ -1762,7 +1775,9 @@ const Linter = {
       if (lsBad) add("error", "type", "letterSpacing", T.n, desc(s), "letter-spacing على نص عربي (" + lsBad + ").", "أزله.", tm);
       if (tcBad) add("warn", "type", "textTransform", T.n, desc(s), "text-transform على نص عربي.", "أزله.", tm);
       if (lhBad) add("warn", "type", "lineHeight", T.n, desc(s), "ارتفاع السطر أقل من 1.25 في نص عربي متعدد الأسطر.", "استخدم 1.4+ للجسم.", tm);
-      if (lowC) add("warn", "type", "contrast", T.n, desc(lowEl), "تباين منخفض (" + lowC + " نص).", "ارفع التباين إلى 4.5:1.", tm);
+      const fams = new Set(rr.map(o => String(o.c.fontFamily || "").split(",")[0].replace(/["']/g, "").trim()).filter(Boolean));
+      if (fams.size > 2) add("warn", "type", "fonts", T.n, desc(s), "أكثر من خطين في الشريحة (" + fams.size + "): " + Array.from(fams).slice(0, 4).join("، ") + ".", "اكتفِ بخط للعناوين وخط للجسم.", tm);
+      if (lowC) add("warn", "type", "contrast", T.n, desc(lowEl), "تباين منخفض (" + lowC + " نص)." + snip(lowEl), "ارفع التباين إلى 4.5:1.", tm);
 
       /* تكوين */
       const overflow = rr.filter(o => o.r.right > W + 2 || o.r.left < -2 || o.r.bottom > H + 2 || o.r.top < -2);
@@ -1873,14 +1888,18 @@ const Linter = {
     seek(saved);
     /* ═══ الدرجة ═══ */
     const cats = {};
-    Object.keys(LINT_CATS).forEach(k => { cats[k] = { name: LINT_CATS[k].name, w: LINT_CATS[k].w, errors: 0, warns: 0, infos: 0, score: 100 }; });
+    Object.keys(LINT_CATS).forEach(k => { cats[k] = { name: LINT_CATS[k].name, w: LINT_CATS[k].w, errors: 0, warns: 0, infos: 0, score: 100, reasons: {} }; });
     const perRule = {};
     out.forEach(x => {
       const c = cats[x.cat] || cats.tech;
       const key = x.rule + "|" + x.cat;
       perRule[key] = (perRule[key] || 0) + 1;
       if (x.sev === "error") c.errors++; else if (x.sev === "warn") c.warns++; else c.infos++;
-      if (perRule[key] <= 3) c.score -= x.sev === "error" ? 18 : x.sev === "warn" ? 11 : 0;
+      const pts = x.sev === "error" ? 18 : x.sev === "warn" ? 11 : 0;
+      const rs = c.reasons[x.rule] || (c.reasons[x.rule] = { rule: x.rule, sev: x.sev, count: 0, pts: 0, scenes: [], msg: x.msg, fix: x.fix });
+      rs.count++;
+      if (x.scene != null && x.scene !== "—" && rs.scenes.indexOf(x.scene) < 0) rs.scenes.push(x.scene);
+      if (perRule[key] <= 3) { c.score -= pts; rs.pts += pts; }
     });
     let total = 0, wsum = 0;
     Object.keys(cats).forEach(k => { cats[k].score = Math.max(0, Math.min(100, Math.round(cats[k].score))); total += cats[k].score * cats[k].w; wsum += cats[k].w; });
@@ -1895,11 +1914,25 @@ const Linter = {
 };
 
 let LINT_FILTER = "all";
+let LINT_CAT = null;
+const RULE_NAMES = {
+  small: "نص صغير", noTitle: "لا عنوان بارز", flat: "هرمية ضعيفة", letterSpacing: "تباعد حروف في العربية", textTransform: "text-transform على العربية",
+  lineHeight: "ارتفاع سطر ضيق", contrast: "تباين منخفض", fonts: "كثرة الخطوط",
+  outside: "نص خارج الإطار", clipped: "نص مقصوص", overlap: "تداخل نصوص", crowded: "ازدحام",
+  static: "شريحة شبه ثابتة", fadeOnly: "تلاشٍ فقط", noIdle: "بلا حركة مستمرة", poorVocab: "مفردات حركة محدودة", stateful: "حالة غير حتمية",
+  wordsMany: "كلمات كثيرة", wordsFew: "كلمات قليلة", coverTitle: "عنوان الغلاف", closeNames: "اسم الطالب في الختام"
+};
 const GRADE_TXT = { strong: "قوي", mid: "وسط", weak: "ضعيف" };
 function renderLint(list) {
   const rep = Linter.report;
   const sum = $("lintSummary"), box = $("lintList"), cats = $("lintCats"), g = $("lintGauge"), gr = $("lintGrade");
   if (!rep) return;
+  let selCat = LINT_CAT;
+  if (selCat == null || (selCat !== "all" && !rep.cats[selCat])) {
+    let low = null;
+    Object.keys(rep.cats).forEach(k => { if (rep.cats[k].score < 100 && (!low || rep.cats[k].score < rep.cats[low].score)) low = k; });
+    selCat = LINT_CAT = low || "all";
+  }
   const er = list.filter(x => x.sev === "error").length, wa = list.filter(x => x.sev === "warn").length, inf = list.filter(x => x.sev === "info").length;
   $("lintScore").textContent = rep.score;
   g.style.setProperty("--gp", rep.score);
@@ -1909,9 +1942,21 @@ function renderLint(list) {
   sum.textContent = list.length ? (er + " أخطاء • " + wa + " تحذيرات • " + inf + " ملاحظات") : "لا مشاكل. عمل قوي.";
   cats.innerHTML = Object.keys(rep.cats).map(k => {
     const c = rep.cats[k], cl = c.score >= 80 ? "" : c.score >= 60 ? "mid" : "weak";
-    return `<div class="cat"><span>${esc(c.name)}</span><div class="bar"><i class="${cl}" style="width:${c.score}%"></i></div><b>${c.score}</b></div>`;
+    return `<button type="button" class="cat ${k === selCat ? "sel" : ""}" data-cat="${k}"><span>${esc(c.name)}${c.score < 100 ? " ▾" : ""}</span><div class="bar"><i class="${cl}" style="width:${c.score}%"></i></div><b>${c.score}</b></button>`;
   }).join("");
-  const shown = list.filter(x => LINT_FILTER === "all" || x.sev === LINT_FILTER);
+  cats.querySelectorAll(".cat").forEach(b => b.addEventListener("click", () => { LINT_CAT = (LINT_CAT === b.dataset.cat) ? "all" : b.dataset.cat; renderLint(Linter.last); }));
+  const why = $("lintWhy");
+  if (selCat !== "all" && rep.cats[selCat]) {
+    const c = rep.cats[selCat];
+    const rs = Object.keys(c.reasons).map(k => c.reasons[k]).sort((a, b) => b.pts - a.pts || b.count - a.count);
+    why.innerHTML = !rs.length
+      ? `<div class="why-h">«${esc(c.name)}» ${c.score}/100 — لا مشاكل في هذه الفئة</div>`
+      : `<div class="why-h">لماذا «${esc(c.name)}» ${c.score}/100؟</div>` + rs.map(r =>
+          `<div class="why-r ${r.sev}"><b>${r.pts ? "−" + r.pts : "ℹ"}</b><div><strong>${esc(RULE_NAMES[r.rule] || r.rule)}</strong> <span>× ${r.count}${r.scenes.length ? " • الشرائح: " + esc(r.scenes.slice(0, 8).join("، ")) : ""}</span><div>${esc(r.msg)}</div>${r.fix ? '<div class="why-fix">💡 ' + esc(r.fix) + '</div>' : ''}</div></div>`).join("")
+        + '<div class="why-note">الخصم يُحتسب لأول 3 مرات فقط من كل نوع. اضغط على الفئة مرة أخرى لعرض كل المشاكل.</div>';
+    why.style.display = "block";
+  } else { why.style.display = "none"; why.innerHTML = ""; }
+  const shown = list.filter(x => (LINT_FILTER === "all" || x.sev === LINT_FILTER) && (selCat === "all" || x.cat === selCat));
   if (!shown.length) { box.innerHTML = '<div class="img-empty">لا عناصر في هذا التصنيف.</div>'; return; }
   box.innerHTML = shown.map((x, i) =>
     `<button type="button" class="lint-item ${x.sev}" data-t="${x.t == null ? "" : x.t}"><span class="lint-badge">${x.sev === "error" ? "خطأ" : x.sev === "warn" ? "تحذير" : "ملاحظة"}</span><div><div>${esc(x.msg)}</div><div class="lint-meta">${esc(LINT_CATS[x.cat] ? LINT_CATS[x.cat].name : "")} • شريحة ${esc(x.scene)} • ${esc(x.el)}${x.t != null ? " • ⏱ انقر للانتقال" : ""}</div>${x.fix ? '<div class="lint-fix">💡 ' + esc(x.fix) + '</div>' : ''}</div></button>`
@@ -2704,6 +2749,40 @@ function resizePreview() {
     ro.observe($("stage"));
   }
 })();
+
+/* ────────── حارس الميلان الأفقي (يمنع الانزياح لليمين وظهور فراغ باليسار على الجوال) ────────── */
+(function guardHorizontalDrift() {
+  let warned = false;
+  const reset = () => {
+    try {
+      const se = document.scrollingElement || document.documentElement;
+      if (se && se.scrollLeft !== 0) se.scrollLeft = 0;
+      if (document.body && document.body.scrollLeft) document.body.scrollLeft = 0;
+      if (window.scrollX) window.scrollTo(0, window.scrollY);
+    } catch(e){}
+  };
+  const probe = () => {
+    reset();
+    if (warned) return;
+    try {
+      const vw = document.documentElement.clientWidth;
+      if (document.documentElement.scrollWidth <= vw + 1) return;
+      const bad = Array.from(document.querySelectorAll(".page.active *")).find(el => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && (r.right > vw + 2 || r.left < -2) && !el.closest("#frameWrap,.tl-track,.modal-bg,.toasts");
+      });
+      warned = true;
+      Errors.push("warn", "عنصر يتجاوز عرض الشاشة: " + (bad ? (bad.id ? "#" + bad.id : bad.tagName.toLowerCase() + "." + String(bad.className).slice(0, 40)) : "غير معروف"));
+    } catch(e){}
+  };
+  window.addEventListener("scroll", reset, { passive: true });
+  window.addEventListener("resize", () => setTimeout(probe, 60));
+  window.addEventListener("orientationchange", () => setTimeout(probe, 300));
+  window.addEventListener("pageshow", probe);
+  document.addEventListener("focusout", () => setTimeout(reset, 60));
+  document.addEventListener("click", () => setTimeout(probe, 250), true);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", () => setTimeout(reset, 60));
+})();
 function updateTime(ms) { $("playerTime").textContent = fmtTC(ms) + " / " + fmtTC(APP.durationMs || 0); }
 function setPlayhead(ms) { if (!APP.durationMs || APP.exporting) return; $("playhead").style.left = Math.max(0, Math.min(100, (ms / APP.durationMs) * 100)) + "%"; }
 function seekTo(ms) {
@@ -2727,7 +2806,6 @@ function play() {
   APP.playing = true;
   APP.clock = { base: performance.now(), from: APP.currentTime };
   $("playBtn").textContent = "⏸";
-  $("playState").textContent = "يشغّل";
   $("stagePlay").classList.remove("show");
   let errT = 0;
   const step = () => {
@@ -2764,7 +2842,6 @@ function stopPreview() {
   APP.playing = false;
   if (APP.rafId) { cancelAnimationFrame(APP.rafId); APP.rafId = 0; }
   $("playBtn").textContent = "▶";
-  $("playState").textContent = "متوقف";
   pauseAudio();
   updateOverlay();
 }
@@ -2831,59 +2908,8 @@ async function buildTimeline() {
     const lbl = document.createElement("span");
     lbl.textContent = src.dataset.sceneName || ("مشهد " + (idx + 1));
     el.appendChild(lbl);
-    if (idx > 0) {
-      const h = document.createElement("div");
-      h.className = "tl-handle";
-      h.addEventListener("pointerdown", ev => startSceneDrag(ev, idx));
-      el.appendChild(h);
-    }
     track.appendChild(el);
   });
-}
-function startSceneDrag(ev, idx) {
-  ev.stopPropagation();
-  ev.preventDefault();
-  if (!SCENES[idx - 1] || !SCENES[idx]) return;
-  const track = $("tlTrack");
-  const rect = track.getBoundingClientRect();
-  const pxPerMs = rect.width / APP.durationMs;
-  const startX = ev.clientX;
-  const s1 = SCENES[idx - 1].duration;
-  const s2 = SCENES[idx].duration;
-  const totalSec = s1 + s2;
-  const sceneEls = track.querySelectorAll(".tl-scene");
-  const el1 = sceneEls[idx - 1], el2 = sceneEls[idx];
-  const startW1 = el1.getBoundingClientRect().width;
-  const startW2 = el2.getBoundingClientRect().width;
-  const totalPx = startW1 + startW2;
-  function move(e) {
-    const dx = e.clientX - startX;
-    const dSec = Math.max(-s1 + 2, Math.min(s2 - 2, dx / pxPerMs / 1000));
-    const new1 = s1 + dSec, new2 = s2 - dSec;
-    if (new1 < 2 || new2 < 2) return;
-    el1.style.width = ((new1 / totalSec) * (totalPx / rect.width) * 100) + "%";
-    el2.style.width = ((new2 / totalSec) * (totalPx / rect.width) * 100) + "%";
-  }
-  function up(e) {
-    document.removeEventListener("pointermove", move);
-    document.removeEventListener("pointerup", up);
-    document.removeEventListener("pointercancel", up);
-    if (!SCENES[idx - 1] || !SCENES[idx]) return;
-    const dx = e.clientX - startX;
-    const dSec = dx / pxPerMs / 1000;
-    const new1 = Math.max(2, s1 + dSec), new2 = Math.max(2, s2 - dSec);
-    if (new1 >= 2 && new2 >= 2) {
-      SCENES[idx - 1].duration = Math.round(new1 * 10) / 10;
-      SCENES[idx].duration = Math.round(new2 * 10) / 10;
-      renderScenes();
-      if (APP.loaded) applyDurationsToDoc();
-      History.mark();
-    }
-    buildTimeline();
-  }
-  document.addEventListener("pointermove", move);
-  document.addEventListener("pointerup", up);
-  document.addEventListener("pointercancel", up);
 }
 function applyDurationsToDoc() {
   try {
@@ -3714,12 +3740,9 @@ const History = {
     this.updateBtns();
   },
   updateBtns() {
-    $("undoBtn").disabled = this.idx <= 0;
-    $("redoBtn").disabled = this.idx >= this.stack.length - 1;
+    /* أزرار التراجع/الإعادة أُزيلت من المشغّل؛ الاختصار Ctrl+Z ما زال يعمل */
   }
 };
-$("undoBtn").addEventListener("click", () => History.undo());
-$("redoBtn").addEventListener("click", () => History.redo());
 
 
 /* ────────── الجلسة ────────── */
@@ -3808,20 +3831,76 @@ function updateProgress(p, t) {
 }
 function showDownload(blob, filename, label) {
   if (APP.exportUrl) try { URL.revokeObjectURL(APP.exportUrl) } catch(e){}
-  APP.exportUrl = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.className = "btn primary";
-  a.href = APP.exportUrl;
-  a.download = filename;
-  a.rel = "noopener";
-  a.textContent = label + " (" + (blob.size / 1024 / 1024).toFixed(blob.size < 1048576 ? 2 : 1) + " MB)";
+  const url = APP.exportUrl = URL.createObjectURL(blob);
+  const size = (blob.size / 1024 / 1024).toFixed(blob.size < 1048576 ? 2 : 1) + " MB";
   const dl = $("download");
   dl.innerHTML = "";
+  const a = document.createElement("a");
+  a.className = "btn primary";
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  a.textContent = "⬇ " + label + " (" + size + ")";
   dl.appendChild(a);
+  const row = document.createElement("div");
+  row.className = "dl-row";
+  /* مشاركة/حفظ عبر قائمة النظام: الأنسب للجوال (يعمل حيث يُحجب التنزيل المباشر) */
+  try {
+    const file = new File([blob], filename, { type: blob.type || "application/octet-stream" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      const sh = document.createElement("button");
+      sh.type = "button"; sh.className = "btn"; sh.textContent = "📤 مشاركة / حفظ في الجهاز";
+      sh.addEventListener("click", async () => {
+        try { await navigator.share({ files: [file], title: filename }); }
+        catch (e) { if (e && e.name !== "AbortError") { Errors.push("warn", "share", e); toast("تعذّرت المشاركة — استخدم زر الحفظ", "warn"); } }
+      });
+      row.appendChild(sh);
+    }
+  } catch(e){}
+  const op = document.createElement("a");
+  op.className = "btn"; op.href = url; op.target = "_blank"; op.rel = "noopener"; op.textContent = "↗ فتح في تبويب";
+  row.appendChild(op);
+  dl.appendChild(row);
+  if (/^image\//.test(blob.type || "")) {
+    const im = new Image();
+    im.className = "dl-prev"; im.alt = filename; im.src = url;
+    dl.appendChild(im);
+    const h = document.createElement("div");
+    h.className = "dl-hint"; h.textContent = "إن لم يبدأ التنزيل: اضغط مطولًا على الصورة واختر «حفظ».";
+    dl.appendChild(h);
+  } else {
+    const h = document.createElement("div");
+    h.className = "dl-hint"; h.textContent = "إن لم يبدأ التنزيل: جرّب «فتح في تبويب» ثم احفظ الملف من هناك.";
+    dl.appendChild(h);
+  }
   dl.classList.add("show");
   try { dl.scrollIntoView({ block: "nearest", behavior: "smooth" }) } catch(e){}
   return a;
 }
+function loadScriptTag(src) {
+  return new Promise((res, rej) => {
+    const el = document.createElement("script");
+    el.src = src; el.async = true;
+    el.onload = () => res();
+    el.onerror = () => { try { el.remove() } catch(e){} rej(new Error("load " + src)); };
+    document.head.appendChild(el);
+  });
+}
+/* مكتبة الرسم: إن فشل المصدر الأول (حجب/انقطاع) نجرّب مصادر بديلة بدل أن تفشل كل أنواع التصدير */
+async function ensureH2C() {
+  if (typeof html2canvas === "function") return true;
+  const srcs = [
+    "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js",
+    "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+  ];
+  for (const u of srcs) {
+    try { await loadScriptTag(u); if (typeof html2canvas === "function") return true; }
+    catch(e) { Errors.push("warn", "تعذّر تحميل مكتبة الرسم من " + u); }
+  }
+  return false;
+}
+const H2C_FAIL = "تعذّر تحميل مكتبة الرسم (html2canvas) — تحقق من الاتصال بالإنترنت أو من حاجب الإعلانات ثم أعد المحاولة.";
 function finalizeExport(blob, ext, label) {
   showDownload(blob, safeName(APP.title || "motion") + "." + ext, "حفظ " + ext.toUpperCase());
   if (label) $("formatInfo").textContent = label;
@@ -3989,7 +4068,7 @@ function autoDownload(a) { if (!isMobile()) { try { a.click() } catch(e){} } }
 $("export").addEventListener("click", async () => {
   if (APP.exporting) return;
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
-  if (typeof html2canvas !== "function") { toast("html2canvas غير محمّل — تحقق من الاتصال", "error"); return; }
+  if (!(await ensureH2C())) { toast(H2C_FAIL, "error", 9000); return; }
   const wasPlaying = APP.playing;
   const at = APP.currentTime || 0;
   stopPreview();
@@ -4029,7 +4108,9 @@ $("export").addEventListener("click", async () => {
       if (c) { sc = v; es = size; codec = c; break; }
     }
     if (!codec) {
-      toast("لا كودك فيديو مدعوم في هذا المتصفح. جرّب Chrome أو Edge أو Safari حديث.", "error", 10000);
+      toast((typeof VideoEncoder === "undefined"
+        ? (isSecure() ? "هذا المتصفح لا يدعم ترميز الفيديو (WebCodecs). جرّب Chrome أو Edge أو Safari حديث." : "ترميز الفيديو يتطلب فتح الموقع عبر رابط https:// (أو localhost).")
+        : "لا يوجد ترميز فيديو يدعم هذه الدقة هنا — اختر جودة 720p.") + " يمكنك تصدير PNG أو PDF بدلًا منه.", "error", 11000);
       throw new Error("لا كودك مدعوم");
     }
     if (sc < chosen - 1e-6) toast("الدقة المختارة غير مدعومة هنا — استُخدمت \u2066" + es.width + "×" + es.height + "\u2069", "warn", 7000);
@@ -4190,6 +4271,7 @@ $("testFrames").addEventListener("click", async () => {
 $("exportPNG").addEventListener("click", async () => {
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
   if (APP.exporting) return;
+  if (!(await ensureH2C())) { toast(H2C_FAIL, "error", 9000); return; }
   stopPreview();
   APP.exporting = true;
   APP.safeImages = false;
@@ -4212,6 +4294,7 @@ $("exportPNG").addEventListener("click", async () => {
 $("exportPDF").addEventListener("click", async () => {
   if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
   if (APP.exporting) { toast("تصدير جارٍ", "warn"); return; }
+  if (!(await ensureH2C())) { toast(H2C_FAIL, "error", 9000); return; }
   const at = APP.currentTime || 0;
   stopPreview();
   APP.exporting = true;
@@ -4365,15 +4448,9 @@ $("copyPrompt").addEventListener("click", async () => {
 $("load").addEventListener("click", loadProject);
 $("playBtn").addEventListener("click", () => APP.playing ? stopPreview() : play());
 $("stage").addEventListener("click", () => { if (!APP.loaded) return; APP.playing ? stopPreview() : play(); });
-$("rewindBtn").addEventListener("click", () => { if (!APP.loaded) return; stopPreview(); seekTo(0); updateOverlay(); });
 $("prevScene").addEventListener("click", () => jumpScene(-1));
 $("nextScene").addEventListener("click", () => jumpScene(1));
 $("fsBtn").addEventListener("click", toggleFullscreen);
-$("speedSel").addEventListener("change", e => {
-  APP.speed = Number(e.target.value) || 1;
-  if (APP.playing) { APP.clock = { base: performance.now(), from: APP.currentTime }; pauseAudio(); playAudio(APP.currentTime); }
-});
-$("loopChk").addEventListener("change", e => { APP.loop = e.target.checked; });
 $("clear").addEventListener("click", async () => {
   if (!await confirmDlg("مسح المشروع", "مسح الكود والمعاينة والصور المستبدلة؟")) return;
   stopPreview();
@@ -4417,6 +4494,7 @@ $("runLint").addEventListener("click", async () => {
     const doc = $("projectFrame").contentDocument;
     const win = $("projectFrame").contentWindow;
     const r = await Linter.run(doc, win);
+    LINT_CAT = null;
     renderLint(r);
     seekTo(APP.currentTime);
     const rep = Linter.report;
