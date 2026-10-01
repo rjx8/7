@@ -457,6 +457,20 @@ button.cat.sel{background:rgba(139,124,255,.16)}
           <span class="total-duration">المدة الكلية: <strong id="totalDuration">36 ث</strong></span>
         </div>
       </div>
+      <div class="card" id="voiceCard">
+        <div class="card-h"><span class="step-no">4</span><h2>الصوت (اختياري)</h2><small>التفريغ يتم على جهازك — الصوت لا يُرفع لأي خادم</small></div>
+        <div class="fields">
+          <div class="field full">
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="ghost" id="voicePick">📁 ملف صوتي</button><button type="button" class="ghost" id="voiceRec">🎙 تسجيل</button></div>
+            <span class="hint" id="voiceInfo">لم يُختر صوت بعد</span>
+          </div>
+          <div class="field"><label for="voiceModel">دقة التفريغ</label><select id="voiceModel"><option value="tiny">سريع (~40MB)</option><option value="base" selected>متوازن (~80MB)</option><option value="small">دقيق (~250MB — الأفضل للعربي)</option></select></div>
+          <div class="field"><label for="voiceScenes">عدد الشرائح (3–20)</label><input id="voiceScenes" type="number" min="3" max="20" value="6"></div>
+          <div class="field full"><button type="button" class="ghost" id="voiceRun">📝 تفريغ الصوت إلى نص</button><span class="hint" id="voiceStatus">أول مرة يُحمَّل نموذج التفريغ (يُحفظ في المتصفح بعدها).</span></div>
+          <div class="field full"><label for="voiceText">النص المفرَّغ — عدّله إن لزم (كل سطر = مقطع)</label><textarea id="voiceText" rows="6" placeholder="سيظهر النص هنا بعد التفريغ…"></textarea></div>
+          <div class="field full"><button type="button" class="ghost" id="voiceApply">🎬 اضبط الشرائح والتوقيت حسب الصوت وأضفه للاستوديو</button><span class="hint">بعدها اضغط «إنشاء البرومبت»: سيحوي نص كل شريحة وتوقيتها الحقيقي.</span></div>
+        </div>
+      </div>
     </div>
 
     <aside class="gen-aside">
@@ -1393,6 +1407,9 @@ window.__projErr = function (msg, line) {
   Errors.push("error", "خطأ داخل كود المشروع" + (line ? " (سطر " + line + ")" : ""), msg);
   if (!window.__projErrToast || Date.now() - window.__projErrToast > 4000) { window.__projErrToast = Date.now(); toast("خطأ في كود المشروع: " + String(msg).slice(0, 90), "error", 6000); }
 };
+function buildFontsInject() {
+  return '\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;700;800;900&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" crossorigin="anonymous">';
+}
 function injectCSS(html, base) {
   const style = `<style id="__platform_containment">
 #project-root{
@@ -1405,14 +1422,12 @@ function injectCSS(html, base) {
 #project-root > *:not(.img-frame):not(svg):not([data-allow-overflow]){
   max-width:100% !important;box-sizing:border-box !important;
 }
-#project-root img{max-width:100% !important;max-height:100% !important}
 #project-root .img-frame{max-width:none !important;max-height:none !important}
-#project-root svg{max-width:100% !important}
 html,body{overflow:hidden !important;margin:0 !important;padding:0 !important}
 </style>`;
   const errHook = '<script>window.addEventListener("error",function(e){try{parent.__projErr&&parent.__projErr(e.message||"",e.lineno||0)}catch(_){}});window.addEventListener("unhandledrejection",function(e){try{parent.__projErr&&parent.__projErr(String(e.reason&&e.reason.message||e.reason||"promise"),0)}catch(_){}});<\/script>';
   const first = errHook + buildMotionLib();
-  const last = style + buildKatexInject();
+  const last = style + buildFontsInject() + buildKatexInject();
   let out = html;
   if (/<head[^>]*>/i.test(out)) {
     out = out.replace(/<head[^>]*>/i, m => m + "\n" + first);
@@ -1475,14 +1490,15 @@ function createPrompt() {
   const dn = DENSITY[d.textDensity] || DENSITY.medium;
   const dna = getDNA(d);
   const layouts = assignLayouts();
-  const minText = portrait ? 30 : 26;
+  const minText = portrait ? 40 : 34;
 
+  const voiceOn = SCENES.some(sc => sc.vlines && sc.vlines.length);
   const rows = timing.map((t, i) => {
     const sc = SCENES[i] || {};
     const role = getSceneRole(t.n, total);
     const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
     const w = wordRange(t.duration, d.textDensity);
-    return "| " + t.n + " | " + t.title + " | " + KINDS[kind].name + " | " + LAYOUTS[layouts[i]].name + " | " + t.start + " | " + t.end + " | " + t.duration + " | " + w.min + "–" + w.max + " |";
+    return "| " + t.n + " | " + t.title + " | " + (voiceOn ? "نص منطوق" : KINDS[kind].name) + " | " + LAYOUTS[layouts[i]].name + " | " + t.start + " | " + t.end + " | " + t.duration + " | " + (voiceOn ? "حسب الصوت" : w.min + "–" + w.max) + " |";
   }).join("\n");
 
   const details = timing.map((t, i) => {
@@ -1491,6 +1507,10 @@ function createPrompt() {
     const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
     const lay = LAYOUTS[layouts[i]];
     const w = wordRange(t.duration, d.textDensity);
+    if (voiceOn) {
+      const vl = (sc.vlines || []).map(l => "      - [" + l.s + " → " + l.e + "ms] «" + l.text + "»");
+      return ["▪ الشريحة " + t.n + "  [" + t.start + "ms → " + t.end + "ms]", "   • التكوين: " + lay.name + " — " + (portrait ? lay.p : lay.l), "   • الأسطر المنطوقة بتوقيتها المطلق (النص حرفي):"].concat(vl.length ? vl : ["      (شريحة بلا كلام: عناصر بصرية فقط بلا أي نص)"]).join("\n");
+    }
     const lines = [
       "▪ الشريحة " + t.n + " — «" + t.title + "» (" + KINDS[kind].name + ")  [" + t.start + "ms → " + t.end + "ms]",
       "   • المحتوى: " + kindGuide(kind, d),
@@ -1498,6 +1518,7 @@ function createPrompt() {
       "   • الكلمات: " + w.min + "–" + w.max
     ];
     if (sc.note && sc.note.trim()) lines.push("   • فكرة يحددها المستخدم (التزم بها): " + sc.note.trim());
+    if (sc.voice && sc.voice.trim()) lines.push("   • الكلام المنطوق في هذه الشريحة (يُسمع بالتزامن): «" + sc.voice.trim() + "»");
     return lines.join("\n");
   }).join("\n\n");
 
@@ -1558,6 +1579,7 @@ function createPrompt() {
   P.push("");
   P.push("قواعد الهوية:\n1. عرّف 6 متغيرات في :root: --bg و --surface و --ink و --muted و --primary و --accent، واستخدمها في كل الألوان (لا ألوان عشوائية خارجها إلا التدرجات المشتقة منها).\n2. اللوحة مشتقة من الموضوع (انظر المجال أعلاه) لا من الذوق العام. الأخطاء الشائعة الممنوعة ما لم يفرضها الموضوع: خلفية سوداء + ذهبي، تدرج بنفسجي/سماوي، بطاقات متطابقة الحجم والزوايا، وظلال رمادية موحدة.\n3. خط عربي واحد أو اثنان فقط (Tajawal أو Cairo أو Noto Sans Arabic)، والعناوين بوزن 800–900.\n4. الخلفية لكل شريحة تنتمي إلى عائلة واحدة لكنها تتغير من شريحة لأخرى (نمط أو تدرج أو كتل مختلفة)، ولا تكون لونًا مسطحًا إلا في شريحة واحدة على الأكثر.\n5. العناصر الزخرفية تُبنى بـ SVG وCSS gradients وclip-path فقط، وتتحرك ببطء طوال الشريحة.");
   P.push("");
+  const vb = voicePromptBlock(); if (vb) { P.push(vb); P.push(""); }
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⏱️ جدول التوقيت والشرائح (استخدمه حرفيًا)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   P.push("| # | الاسم | النوع | التكوين | start (ms) | end (ms) | المدة (ث) | الكلمات |\n|---|---|---|---|---|---|---|---|\n" + rows);
   P.push("");
@@ -1565,10 +1587,10 @@ function createPrompt() {
   P.push("");
   P.push("تفاصيل كل شريحة:\n\n" + details);
   P.push("");
-  P.push("كثافة النص: " + dn.name + " — " + dn.text + " الأسماء (الطالب والمعلم) في الشريحة الأخيرة فقط.");
+  if (!voiceOn) P.push("كثافة النص: " + dn.name + " — " + dn.text + " الأسماء (الطالب والمعلم) في الشريحة الأخيرة فقط.");
   P.push("");
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🧩 قواعد التكوين (لا مركزية شاملة)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. طبّق التكوين المحدد لكل شريحة أعلاه بدقة. ممنوع تكرار التكوين نفسه في شريحتين متتاليتين.\n2. لا يُسمح بتوسيط النص إلا في الغلاف والختام على الأكثر. النص العربي يبدأ من اليمين: اجعل محاذاته لليمين (text-align:right) داخل عمود محدد العرض، ولا تمدّد النص على كامل عرض الشريحة.\n3. اعتمد شبكة من 12 عمودًا وهوامش ≥ 96px (أفقي) أو ≥ 72px (عمودي)، وحاذِ العناصر لخطوط الشبكة.\n4. عرض عمود النص لا يتجاوز 55% من الشريحة، ويترك جزء من الشريحة فارغًا عمدًا (مساحة سلبية ≥ 25%).\n5. هرمية النص: عنوان (72–180px)، عنوان فرعي (40–56px)، جسم (" + minText + "–36px)، تسمية صغيرة (≥ 22px). ممنوع أي نص أصغر من 22px.\n6. اجعل العنصر البصري أو الرقم أو الرمز هو البطل الأكبر في كل شريحة، لا النص وحده.\n7. ارتفاع السطر للعربية ≥ 1.4 للجسم و≥ 1.15 للعناوين، وتباين اللون مع الخلفية ≥ 4.5:1.");
+  P.push("1. طبّق التكوين المحدد لكل شريحة أعلاه بدقة. ممنوع تكرار التكوين نفسه في شريحتين متتاليتين.\n2. لا يُسمح بتوسيط النص إلا في الغلاف والختام على الأكثر. النص العربي يبدأ من اليمين: اجعل محاذاته لليمين (text-align:right) داخل عمود محدد العرض، ولا تمدّد النص على كامل عرض الشريحة.\n3. اعتمد شبكة من 12 عمودًا وهوامش ≥ 96px (أفقي) أو ≥ 72px (عمودي)، وحاذِ العناصر لخطوط الشبكة.\n4. عرض عمود النص لا يتجاوز 55% من الشريحة، ويترك جزء من الشريحة فارغًا عمدًا (مساحة سلبية ≥ 25%).\n5. هرمية النص: عنوان (72–180px)، عنوان فرعي (40–56px)، جسم (" + minText + "–52px)، تسمية صغيرة (≥ " + (portrait ? 30 : 28) + "px). ممنوع أي نص أصغر من " + (portrait ? 30 : 28) + "px لأن الفيديو يُشاهَد على شاشة جوال صغيرة.\n6. اجعل العنصر البصري أو الرقم أو الرمز هو البطل الأكبر في كل شريحة، لا النص وحده.\n7. ارتفاع السطر للعربية ≥ 1.4 للجسم و≥ 1.15 للعناوين، وتباين اللون مع الخلفية ≥ 4.5:1.");
   P.push("");
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎬 الحركة المفصلة\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   P.push("مستوى الحركة: " + ml.name + " — " + ml.text + "\n\nكل شريحة تتكون من ثلاث طبقات زمنية:\n• طبقة الخلفية: عنصر أو اثنان يتحركان طوال الشريحة ببطء (Motion.float أو دوران بطيء أو انزلاق نمط).\n• طبقة المحتوى: العنوان ثم الفرعي ثم النقاط ثم العنصر البصري بتتابع، ولا يدخل عنصران بالحركة نفسها متتاليين: نوّع بين reveal وwords وslideIn وscaleIn وdraw.\n• طبقة التفاصيل: إبراز بنبضة (Motion.pulse) أو عدّ (countUp) أو رسم خط (draw) أو تلوين كلمة مفتاحية.\n\nتوزيع الزمن داخل الشريحة (نسب من مدتها):\n• 0–8%: انتقال دخول (crossfade 300ms) والخلفية تستقر.\n• 5–25%: دخول العنوان.\n• 20–55%: دخول باقي العناصر بتتابع.\n• 40–80%: الإبراز والتفاصيل.\n• 85–100%: خروج ناعم (انزلاق 12–20px مع تلاشي) قبل الانتقال.\n\nقواعد الحركة:\n1. الحالة دالة في الزمن فقط: كل استدعاء لـ setTime يضبط كل الخصائص من الصفر (لا تراكم ولا اعتماد على الاستدعاء السابق) لكي يعمل التمرير والرجوع والتصدير.\n2. ممنوع Math.random و Date.now و performance.now داخل الحركة (استخدم قيمًا ثابتة أو دوال من ms).\n3. للنص العربي: حرّك كلمة كلمة (Motion.words) أو السطر كاملًا، وممنوع تقطيعه إلى حروف لأن ذلك يفكك اتصال الحروف.\n4. الأرقام تعدّ صعودًا (countUp)، والخطوط والمنحنيات تُرسم (draw)، والمخططات تنمو.");
@@ -1583,6 +1605,7 @@ function createPrompt() {
   P.push("");
   P.push("🖼️ الصور\n" + imgBlock);
   P.push("");
+  if (voiceOn) { P.push("⚠️ تذكير أخير: هذا مشروع «نص الصوت فقط». كل قاعدة في هذا البرومبت تخالف قسم 🎙 (عناوين الشرائح، الأسماء، المادة، الصف، الغلاف والختام، التسميات، نطاق الكلمات) تُلغى. لا نص على الشاشة إلا الأسطر المنطوقة حرفيًا ومتزامنة مع توقيتها."); P.push(""); }
   P.push(buildQualityBlock());
   P.push("");
   P.push("📤 المخرجات: ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>. بدون أي شرح قبله أو بعده وبدون سياج markdown.");
@@ -2005,7 +2028,7 @@ ${rows}
 
 
 /* ────────── الشرائح / النموذج ────────── */
-function makeScene(i, t, d) { return { index: i + 1, title: t || "", duration: Math.max(2, Math.min(60, Number(d) || 6)), kind: "auto", layout: "auto", note: "" }; }
+function makeScene(i, t, d) { return { index: i + 1, title: t || "", duration: Math.max(2, Math.min(60, Number(d) || 6)), kind: "auto", layout: "auto", note: "", voice: "", vlines: [] }; }
 function normScene(s, i) {
   return {
     index: i + 1,
@@ -2013,10 +2036,12 @@ function normScene(s, i) {
     duration: Math.max(2, Math.min(60, Number(s.duration) || 6)),
     kind: KINDS[s.kind] ? s.kind : "auto",
     layout: LAYOUTS[s.layout] ? s.layout : "auto",
-    note: String(s.note || "")
+    note: String(s.note || ""),
+    voice: String(s.voice || ""),
+    vlines: Array.isArray(s.vlines) ? s.vlines : []
   };
 }
-const sceneData = () => SCENES.map(s => ({ title: s.title, duration: s.duration, kind: s.kind, layout: s.layout, note: s.note }));
+const sceneData = () => SCENES.map(s => ({ title: s.title, duration: s.duration, kind: s.kind, layout: s.layout, note: s.note, voice: s.voice || "", vlines: s.vlines || [] }));
 
 function renderScenes() {
   const w = $("scenesList");
@@ -2478,6 +2503,17 @@ async function prepareAudioTrack(lib, output, fmt, isMp4, startSec, durSec) {
         if (ok) { codec = c; break; }
       } else { codec = c; break; }
     } catch(e){}
+  }
+  /* متصفحات بلا AudioEncoder (آيفون القديم): نحمّل مرمّز AAC ثم MP3 بـ WASM */
+  if (!codec && isMp4) {
+    for (const [u, g, fn, c] of [["https://cdn.jsdelivr.net/npm/@mediabunny/aac-encoder@1/dist/bundles/mediabunny-aac-encoder.min.js", "MediabunnyAacEncoder", "registerAacEncoder", "aac"], ["https://cdn.jsdelivr.net/npm/@mediabunny/mp3-encoder@1/dist/bundles/mediabunny-mp3-encoder.min.js", "MediabunnyMp3Encoder", "registerMp3Encoder", "mp3"]]) {
+      try {
+        toast("تحميل مرمّز الصوت (" + c.toUpperCase() + ")…", "info", 3000);
+        if (!window[g]) await loadScriptTag(u);
+        window[g][fn]();
+        if (typeof lib.canEncodeAudio !== "function" || await lib.canEncodeAudio(c, { numberOfChannels: mix.numberOfChannels, sampleRate: mix.sampleRate, bitrate: 128000 })) { codec = c; break; }
+      } catch(e) { Errors.push("warn", "مرمّز الصوت " + c, e); }
+    }
   }
   if (!codec) {
     Errors.push("warn", "لا كودك صوت مدعوم لهذه الصيغة");
@@ -3555,14 +3591,14 @@ function renderAudio() {
 window.setAudioVol = (i, v) => {
   if (!AUDIO.tracks[i]) return;
   AUDIO.tracks[i].volume = Number(v) / 100;
-  if (AUDIO.tracks[i].audioEl) AUDIO.tracks[i].audioEl.volume = AUDIO.tracks[i].volume;
+  if (AUDIO.tracks[i].gain) AUDIO.tracks[i].gain.gain.value = AUDIO.tracks[i].volume;
   renderAudio();
   scheduleSave();
 };
 window.delAudio = async i => {
   const t = AUDIO.tracks[i];
   if (!t) return;
-  if (t.audioEl) try { t.audioEl.pause() } catch(e){}
+  try { if (t.node) t.node.stop() } catch(e){}
   if (t.id) await DB.delAudio(t.id);
   AUDIO.tracks.splice(i, 1);
   renderAudio();
@@ -3587,29 +3623,50 @@ async function restoreAudioFromIDB() {
   }
   if (merged.length) AUDIO.tracks = merged;
 }
-function pauseAudio() { AUDIO.tracks.forEach(t => { if (t.audioEl) try { t.audioEl.pause() } catch(e){} }) }
+/* iOS لا يسمح بالتشغيل/القفز في عناصر Audio الضخمة (data: URL) ولا يفكّ قفل الصوت إلا بلمسة: نستعمل WebAudio ونفكّ القفل عند أول لمس */
+function _actx() { if (!AUDIO.ctx) { const C = window.AudioContext || window.webkitAudioContext; AUDIO.ctx = new C(); } return AUDIO.ctx; }
+function unlockAudio() {
+  try {
+    if (navigator.audioSession) navigator.audioSession.type = "playback";
+    const c = _actx();
+    if (c.state === "running" && AUDIO.unlocked) return;
+    if (c.state !== "running") c.resume();
+    const b = c.createBuffer(1, 1, 22050), n = c.createBufferSource();
+    n.buffer = b; n.connect(c.destination); n.start(0);
+    AUDIO.unlocked = true;
+  } catch(e){}
+}
+["touchstart", "touchend", "pointerdown", "click", "keydown"].forEach(ev => document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
+function decodeBuf(ab) { return new Promise((res, rej) => { const p = _actx().decodeAudioData(ab, res, rej); if (p && p.catch) p.catch(rej); }); }
+async function ensureBuf(t) {
+  if (t.buf) return t.buf;
+  if (!t._p) t._p = (async () => { const ab = await (await fetch(t.dataUrl)).arrayBuffer(); t.buf = await decodeBuf(ab); return t.buf; })();
+  try { return await t._p; } finally { t._p = null; }
+}
+function pauseAudio() {
+  AUDIO.gen = (AUDIO.gen || 0) + 1;
+  AUDIO.tracks.forEach(t => { if (t.node) { try { t.node.stop() } catch(e){} t.node = null; } });
+}
 function playAudio(ms) {
+  pauseAudio();
+  const gen = AUDIO.gen;
   AUDIO.tracks.forEach(t => {
-    if (!t.audioEl || t.muted) return;
-    const startMs = t.start || 0;
-    const relMs = ms - startMs;
-    if (relMs < 0) {
-      try { t.audioEl.pause() } catch(e){}
-      return;
-    }
-    try {
-      const endSec = startMs / 1000 + (t.audioEl.duration || 0);
-      if (endSec > 0 && ms / 1000 > endSec) {
-        try { t.audioEl.pause() } catch(e){}
-        return;
-      }
-      t.audioEl.currentTime = relMs / 1000;
-      t.audioEl.volume = t.volume != null ? t.volume : 1;
-      t.audioEl.playbackRate = APP.speed || 1;
-      t.audioEl.play().catch(() => {});
-    } catch(e){}
+    if (t.muted || !t.dataUrl) return;
+    ensureBuf(t).then(buf => {
+      if (gen !== AUDIO.gen || !APP.playing) return;
+      const c = _actx(), sp = APP.speed || 1;
+      const rel = ((APP.currentTime != null ? APP.currentTime : ms) - (t.start || 0)) / 1000;
+      if (rel >= buf.duration) return;
+      const src = c.createBufferSource(), g = c.createGain();
+      src.buffer = buf; src.playbackRate.value = sp;
+      g.gain.value = t.volume != null ? t.volume : 1;
+      src.connect(g); g.connect(c.destination);
+      if (rel < 0) src.start(c.currentTime + (-rel) / sp, 0); else src.start(0, rel);
+      t.node = src; t.gain = g;
+    }).catch(e => Errors.push("warn", "تعذّر تشغيل الصوت", e));
   });
 }
+
 async function mixAudio() {
   if (!AUDIO.tracks.length || !$("mixAudio").checked) return null;
   const sr = 44100;
@@ -3962,6 +4019,58 @@ function guardBrokenImgs(doc) {
   });
   if (n) { Errors.push("warn", n + " صورة معطوبة استُبدلت بلون مؤقت للتصدير"); toast(n + " صورة معطوبة استُبدلت مؤقتًا", "warn", 5000); }
 }
+
+/* ────────── تضمين الخطوط كـ data: لتظهر في التصدير (html2canvas ينسخ المستند في إطار جديد فلا تُحمَّل الخطوط الخارجية في الوقت المناسب) ────────── */
+const FONT_CACHE = { css: new Map(), file: new Map() };
+const blobToDataURL = b => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); });
+async function embedFonts(doc, win) {
+  const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"]'));
+  try {
+    const blocks = new Set();
+    for (const l of links) {
+      const href = l.href;
+      if (!FONT_CACHE.css.has(href)) {
+        const txt = await (await fetch(href)).text();
+        const keep = (txt.match(/@font-face\s*{[^}]*}/g) || []).filter(b => { const m = b.match(/unicode-range:\s*([^;]+)/i); return !m || /U\+0600|U\+0000/i.test(m[1]); });
+        const out = [];
+        for (let b of keep) {
+          const urls = Array.from(new Set((b.match(/url\((https:[^)]+)\)/g) || []).map(u => u.slice(4, -1))));
+          for (const u of urls) {
+            if (!FONT_CACHE.file.has(u)) FONT_CACHE.file.set(u, await blobToDataURL(await (await fetch(u)).blob()));
+            b = b.split(u).join(FONT_CACHE.file.get(u));
+          }
+          out.push(b);
+        }
+        FONT_CACHE.css.set(href, out);
+      }
+      FONT_CACHE.css.get(href).forEach(b => blocks.add(b));
+    }
+    let undo = () => {};
+    if (blocks.size) {
+      const st = doc.createElement("style");
+      st.id = "__fonts_embedded__";
+      st.textContent = Array.from(blocks).join("\n");
+      doc.head.appendChild(st);
+      links.forEach(l => { l.disabled = true; });
+      undo = () => { try { st.remove(); } catch(e){} links.forEach(l => { l.disabled = false; }); };
+    }
+    /* قائمة الخطوط المستعملة فعليًا: تُحمَّل داخل النسخة المستنسخة قبل الرسم */
+    const specs = new Set();
+    captureScope(doc).slice(0, 1500).forEach(el => {
+      let has = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.nodeValue.trim()) { has = true; break; }
+      if (!has) return;
+      try { const cs = win.getComputedStyle(el); specs.add(cs.fontStyle + " " + cs.fontWeight + " 40px " + cs.fontFamily); } catch(e){}
+    });
+    APP.fontSpecs = Array.from(specs);
+    try { await Promise.all(APP.fontSpecs.map(f => doc.fonts.load(f, "أبجد abc 123").catch(() => {}))); await doc.fonts.ready; } catch(e){}
+    return undo;
+  } catch(e) {
+    Errors.push("warn", "تعذّر تضمين الخطوط — سيُستخدم خط النظام", e);
+    toast("تعذّر تحميل الخطوط للتصدير — تأكد من الاتصال", "warn", 5000);
+    return () => {};
+  }
+}
 async function renderFrame(ms, opt) {
   opt = opt || {};
   const doc = $("projectFrame").contentDocument;
@@ -3982,9 +4091,12 @@ async function renderFrame(ms, opt) {
     removeContainer: true,
     scrollX: 0, scrollY: 0,
     ignoreElements: safe ? (el => el.tagName === "IMG" || el.tagName === "VIDEO" || el.tagName === "CANVAS") : undefined,
-    onclone: cd => {
+    onclone: async cd => {
       try { sanitizeForCapture(cd); enforceRoot(cd); } catch(e){}
       fixArabicSpacing(cd);
+      /* الشرائح البعيدة عن الزمن الحالي تُحذف من النسخة: الرسم أسرع بكثير ويقل الحمل والحرارة */
+      try { cd.querySelectorAll('section[data-scene]').forEach(sc => { const st = Number(sc.dataset.sceneStart), en = Number(sc.dataset.sceneEnd); if (isFinite(st) && isFinite(en) && (ms < st - 1500 || ms > en + 1500)) sc.remove(); }); } catch(e){}
+      try { if (cd.fonts && APP.fontSpecs) await Promise.race([Promise.all(APP.fontSpecs.map(f => cd.fonts.load(f, 'أبجد abc 123').catch(() => {}))), sleep(1500)]); } catch(e){}
       if (safe) try {
         const st = cd.getElementById("__bg_replaces__"); if (st) st.remove();
         cd.querySelectorAll("[data-bg-rid]").forEach(el => el.style.setProperty("background-image", "none", "important"));
@@ -4018,6 +4130,7 @@ async function prepareCapture(doc, win, withOptimize) {
   enforceRoot(doc);
   enforceImgContainers(doc);
   await waitRes(doc);
+  const fontUndo = await embedFonts(doc, win);
   const failed = await inlineExternalImgs(doc);
   if (failed.length) toast(failed.length + " صورة لم تُحمَّل — سيُستبدل مؤقت", "warn", 6000);
   await waitImgs(doc);
@@ -4025,12 +4138,13 @@ async function prepareCapture(doc, win, withOptimize) {
   const imgRestore = withOptimize ? await optimizeDocImages(doc) : [];
   const snap = snapshotInline(doc);
   const stats = preprocess(doc, win);
-  return { snap, imgRestore, stats };
+  return { snap, imgRestore, stats, fontUndo };
 }
 function endCapture(ctx) {
   if (!ctx) return;
   try { if (ctx.snap) restoreInline(ctx.snap); } catch(e){}
   try { restoreDocImages(ctx.imgRestore); } catch(e){}
+  try { if (ctx.fontUndo) ctx.fontUndo(); } catch(e){}
 }
 
 function buildPdf(pages) {
@@ -4095,7 +4209,7 @@ $("export").addEventListener("click", async () => {
 
     /* اختيار الدقة والكودك: إن لم تُدعم الدقة المختارة ننزل تلقائيًا بدل الفشل */
     updateProgress(5, "فحص الكودك…");
-    const chosen = renderScale();
+    const chosen = isMobile() ? Math.min(renderScale(), 1) : renderScale();
     const steps = [];
     [chosen, 1, APP.orientation === "portrait" ? 720 / 1080 : 1280 / 1920, 0.5].forEach(v => {
       if (v <= chosen + 1e-6 && !steps.some(x => Math.abs(x - v) < 0.001)) steps.push(v);
@@ -4179,6 +4293,8 @@ $("export").addEventListener("click", async () => {
       updateProgress(7 + ((i + 1) / totalFrames) * 88,
         "تصدير " + (i + 1) + " / " + totalFrames + " • " + speed.toFixed(1) + " إطار/ث • ~" + Math.round(eta) + "ث" + (APP.safeImages ? " • بدون صور" : ""));
       if ((i + 1) % YIELD === 0) await yieldToBrowser();
+      /* استراحة قصيرة على الجوال كل 45 إطارًا: تمنع ارتفاع الحرارة وتباطؤ المعالج التدريجي */
+      if (isMobile() && (i + 1) % 45 === 0 && i + 1 < totalFrames) { await sleep(450); }
     }
 
     updateProgress(96, "إنهاء…");
@@ -4559,6 +4675,180 @@ document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", 
   Errors.push("info", "الاستوديو v5 جاهز");
   if (!isSecure()) Errors.push("warn", "سياق غير آمن — استخدم https:// أو localhost.");
 })();
+
+/* ────────── الصوت → نص → شرائح → برومبت ────────── */
+const VOICE = { blob: null, name: "", dur: 0, pcm: null, segs: [], worker: null, busy: false, rec: null };
+const VOICE_MODELS = { tiny: "onnx-community/whisper-tiny", base: "onnx-community/whisper-base", small: "onnx-community/whisper-small" };
+const VOICE_WORKER = `
+import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm";
+let asr = null, key = "", word = false;
+self.onmessage = async e => {
+  const { model, audio, mobile } = e.data;
+  const mk = (id, device) => pipeline("automatic-speech-recognition", id, {
+    device, dtype: device === "webgpu" ? { encoder_model: "fp32", decoder_model_merged: "q4" } : "q8",
+    progress_callback: p => self.postMessage({ type: "progress", p })
+  });
+  const load = async id => {
+    const want = (!mobile && self.navigator && self.navigator.gpu) ? "webgpu" : "wasm";
+    try { return await mk(id, want); } catch (err) { if (want === "webgpu") return await mk(id, "wasm"); throw err; }
+  };
+  const opts = ts => ({ language: "arabic", task: "transcribe", return_timestamps: ts, chunk_length_s: 30, stride_length_s: 5 });
+  try {
+    if (!asr || key !== model) {
+      try { asr = await load(model + "_timestamped"); word = true; } catch (err) { asr = await load(model); word = false; }
+      key = model;
+    }
+    self.postMessage({ type: "progress", p: { status: "run" } });
+    let out;
+    try { out = await asr(audio, opts(word ? "word" : true)); }
+    catch (err) { if (!word) throw err; asr = await load(model); word = false; out = await asr(audio, opts(true)); }
+    self.postMessage({ type: "done", out, word });
+  } catch (err) { self.postMessage({ type: "error", message: String((err && err.message) || err) }); }
+};`;
+const vStatus = t => { $("voiceStatus").textContent = t; };
+async function voiceDecode(blob) {
+  const buf = await decodeBuf(await blob.arrayBuffer());
+  const len = Math.max(1, Math.ceil(buf.duration * 16000));
+  const OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const oc = new OC(1, len, 16000), src = oc.createBufferSource();
+  src.buffer = buf; src.connect(oc.destination); src.start();
+  const r = await oc.startRendering();
+  return { pcm: r.getChannelData(0), dur: buf.duration };
+}
+async function voiceSet(blob, name) {
+  vStatus("جارٍ قراءة الصوت…");
+  try {
+    const a = await voiceDecode(blob);
+    Object.assign(VOICE, { blob, name, pcm: a.pcm, dur: a.dur, segs: [] });
+    $("voiceInfo").textContent = name + " • " + fmtDur(a.dur * 1000);
+    vStatus("جاهز للتفريغ.");
+  } catch(e) { Errors.push("error", "voice decode", e); vStatus("تعذّر قراءة الملف الصوتي (صيغة غير مدعومة؟)"); toast("تعذّر قراءة الصوت", "error"); }
+}
+$("voicePick").addEventListener("click", () => {
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = "audio/*,video/*";
+  inp.addEventListener("change", () => { const f = inp.files && inp.files[0]; if (f) voiceSet(f, f.name); });
+  inp.click();
+});
+$("voiceRec").addEventListener("click", async () => {
+  if (VOICE.rec && VOICE.rec.state === "recording") { VOICE.rec.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [], mr = new MediaRecorder(stream);
+    VOICE.rec = mr;
+    mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); $("voiceRec").textContent = "🎙 تسجيل"; voiceSet(new Blob(chunks, { type: mr.mimeType || "audio/mp4" }), "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false })); };
+    mr.start(); $("voiceRec").textContent = "⏹ إيقاف"; vStatus("يسجّل… اضغط مرة أخرى للإيقاف");
+  } catch(e) { Errors.push("error", "voice mic", e); toast("تعذر الوصول للميكروفون", "error"); }
+});
+function voiceWorker() {
+  if (!VOICE.worker) VOICE.worker = new Worker(URL.createObjectURL(new Blob([VOICE_WORKER], { type: "text/javascript" })), { type: "module" });
+  return VOICE.worker;
+}
+$("voiceRun").addEventListener("click", () => {
+  if (VOICE.busy) return;
+  if (!VOICE.pcm) { toast("اختر ملفًا صوتيًا أو سجّل أولًا", "warn"); return; }
+  VOICE.busy = true; $("voiceRun").disabled = true;
+  let w;
+  try { w = voiceWorker(); } catch(e) { VOICE.busy = false; $("voiceRun").disabled = false; vStatus("المتصفح لا يدعم التفريغ هنا — اكتب النص يدويًا في الحقل أدناه."); return; }
+  const done = () => { VOICE.busy = false; $("voiceRun").disabled = false; };
+  w.onerror = e => { done(); Errors.push("error", "whisper worker", e.message); vStatus("تعذّر تحميل نموذج التفريغ (تحقق من الاتصال) — يمكنك كتابة النص يدويًا."); };
+  w.onmessage = ev => {
+    const m = ev.data;
+    if (m.type === "progress") {
+      const p = m.p || {};
+      if (p.status === "run") vStatus("جارٍ تفريغ الكلام… قد يستغرق دقائق على الجوال");
+      else if (p.status === "progress" && p.progress != null) vStatus("تحميل النموذج " + Math.round(p.progress) + "%");
+    } else if (m.type === "done") {
+      done();
+      const ch = (m.out && m.out.chunks) || [];
+      const items = ch.map(c => ({ s: (c.timestamp && c.timestamp[0]) || 0, e: (c.timestamp && c.timestamp[1] != null) ? c.timestamp[1] : null, text: String(c.text || "").trim() })).filter(x => x.text);
+      VOICE.segs = m.word ? groupWords(items) : items.map(x => ({ s: x.s, e: x.e != null ? x.e : VOICE.dur, text: x.text }));
+      if (!VOICE.segs.length && m.out && m.out.text) VOICE.segs = [{ s: 0, e: VOICE.dur, text: String(m.out.text).trim() }];
+      $("voiceText").value = VOICE.segs.map(x => x.text).join("\n");
+      vStatus("تم التفريغ — راجع النص وصحّح الأخطاء ثم اضغط «اضبط الشرائح».");
+    } else if (m.type === "error") { done(); Errors.push("error", "whisper", m.message); vStatus("فشل التفريغ: " + m.message.slice(0, 120)); }
+  };
+  vStatus("تحضير النموذج…");
+  w.postMessage({ model: VOICE_MODELS[$("voiceModel").value] || VOICE_MODELS.base, audio: VOICE.pcm, mobile: isMobile() });
+});
+function groupWords(ws) {
+  const lines = []; let cur = [];
+  const flush = () => { if (cur.length) { lines.push({ s: cur[0].s, e: cur[cur.length - 1].e, text: cur.map(x => x.text).join(" ") }); cur = []; } };
+  ws.forEach((w, i) => {
+    const nx = ws[i + 1];
+    w.e = w.e != null ? w.e : (nx ? nx.s : Math.min(VOICE.dur, w.s + 0.4));
+    const prev = cur[cur.length - 1];
+    if (prev && (cur.length >= 7 || w.s - prev.e > 0.7 || /[.؟?!،,؛]$/.test(prev.text))) flush();
+    cur.push(w);
+  });
+  flush();
+  return lines;
+}
+/* أسطر النص بعد تعديل المستخدم: إن بقي العدد كما هو نحافظ على التوقيت، وإلا نوزّع المدة بنسبة عدد الحروف */
+function voiceLines() {
+  const lines = $("voiceText").value.split(/\n+/).map(x => x.trim()).filter(Boolean);
+  if (!lines.length || !VOICE.dur) return [];
+  if (lines.length === VOICE.segs.length) return VOICE.segs.map((sg, i) => ({ s: sg.s, e: sg.e, text: lines[i] }));
+  const tot = lines.reduce((a, l) => a + l.length, 0) || 1;
+  let c = 0;
+  return lines.map(l => { const s = c / tot * VOICE.dur; c += l.length; return { s, e: c / tot * VOICE.dur, text: l }; });
+}
+async function voiceAddTrack() {
+  for (let i = AUDIO.tracks.length - 1; i >= 0; i--) if (AUDIO.tracks[i].voice) { try { if (AUDIO.tracks[i].id) await DB.delAudio(AUDIO.tracks[i].id); } catch(e){} AUDIO.tracks.splice(i, 1); }
+  const du = await readFile(VOICE.blob, false), id = "aud_" + Date.now();
+  await DB.saveAudio(id, du, VOICE.name);
+  AUDIO.tracks.push({ id, name: VOICE.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.1, fadeOut: 0.3, muted: false, audioEl: null, voice: true });
+  renderAudio(); scheduleSave();
+}
+$("voiceApply").addEventListener("click", async () => {
+  const segs = voiceLines();
+  if (!segs.length) { toast("فرّغ الصوت أو اكتب النص أولًا", "warn"); return; }
+  const dur = VOICE.dur;
+  let n = Math.max(3, Math.min(20, Number($("voiceScenes").value) || 6));
+  let cuts = [0];
+  for (let k = 1; k < n; k++) {
+    const target = k * dur / n; let best = null;
+    for (const sg of segs) {
+      if (sg.e <= cuts[cuts.length - 1] + 2.1 || sg.e >= dur - 2.1) continue;
+      if (best === null || Math.abs(sg.e - target) < Math.abs(best - target)) best = sg.e;
+    }
+    if (best === null) break;
+    cuts.push(best);
+  }
+  cuts.push(dur);
+  if (cuts.length - 1 < 3) { cuts = []; for (let k = 0; k <= n; k++) cuts.push(k * dur / n); }
+  const cnt = cuts.length - 1, old = SCENES.slice();
+  const cut10 = cuts.map((c, i) => i === cnt ? Math.ceil(c * 10) : Math.round(c * 10));
+  SCENES = [];
+  for (let i = 0; i < cnt; i++) {
+    const a = cuts[i], b = cuts[i + 1];
+    const sc = Object.assign(makeScene(i, "", 6), old[i] ? { title: old[i].title, kind: old[i].kind, layout: old[i].layout, note: old[i].note } : {});
+    sc.duration = (cut10[i + 1] - cut10[i]) / 10;
+    const mine = segs.filter(sg => { const m = (sg.s + sg.e) / 2; return m >= a && (m < b || i === cnt - 1); });
+    sc.vlines = mine.map(sg => ({ s: Math.round(sg.s * 1000), e: Math.round(sg.e * 1000), text: sg.text }));
+    sc.voice = mine.map(sg => sg.text).join(" ");
+    SCENES.push(sc);
+  }
+  const tooLong = SCENES.filter(sc => sc.duration > 60).length;
+  SCENES.forEach((sc, i) => { sc.index = i + 1; sc.duration = Math.max(2, Math.min(60, sc.duration)); });
+  $("scenesCount").value = String(cnt); $("voiceScenes").value = String(cnt);
+  renderScenes(); scheduleSave(); History.mark();
+  try { await voiceAddTrack(); } catch(e) { Errors.push("error", "voice track", e); toast("تعذّر إضافة الصوت للاستوديو", "warn"); }
+  toast(tooLong ? "تم، لكن شريحة تجاوزت 60ث (حدّ الأداة) — زد عدد الشرائح" : "تم ضبط " + cnt + " شرائح على الصوت وإضافته للاستوديو", tooLong ? "warn" : "success", 5000);
+});
+function voicePromptBlock() {
+  if (!SCENES.some(sc => sc.vlines && sc.vlines.length)) return "";
+  return "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎙 وضع «نص الصوت فقط» — له الأولوية على أي قاعدة أخرى\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+    "الفيديو يُركَّب على تسجيل صوتي جاهز يُضاف من الاستوديو. المطلوب موشن جرافيك يعرض كلام التسجيل نفسه، متزامنًا معه.\n\n" +
+    "1. النص الوحيد على الشاشة هو الأسطر المنطوقة في قسم «تفاصيل كل شريحة»، بحروفها دون أي تغيير أو اختصار أو إضافة أو إعادة صياغة.\n" +
+    "2. ممنوع أي نص آخر: لا عنوان للشريحة، لا اسم المشروع أو المادة أو الصف أو الطالب أو المعلم، لا أرقام شرائح، لا تسميات توضيحية، لا شعار. العناصر الأخرى رسوم وأشكال SVG وخلفيات فقط.\n" +
+    "3. التزامن: السطر لا يظهر قبل زمن بدايته [s]، ويكتمل ظهوره (كلمة كلمة عبر Motion.words) قبل زمن نهايته [e]؛ وزّع كلماته على مدة السطر نفسها لتتبع إيقاع الكلام. يبقى السطر ظاهرًا حتى بداية السطر التالي ثم يخرج بنعومة.\n" +
+    "4. الأزمنة في الأسطر مطلقة (من بداية الفيديو)؛ حوّلها داخل الشريحة بـ ms − start. كل استدعاء لـ setTime يعيد الحالة كاملة من الصفر.\n" +
+    "5. عند ظهور أكثر من سطر في الشريحة أظهر السطر الحالي فقط أو الحالي مع السابق بشفافية أقل؛ لا تكدّس أسطرًا لم تُنطق بعد.\n" +
+    "6. أبرز الكلمة المفتاحية داخل السطر بلون أو حجم أو حركة دون تغيير نصها.\n" +
+    "7. النص كبير ومقروء على جوال (≥ 56px للأفقي و≥ 64px للعمودي)، وبلا حشو بصري يزاحمه.\n" +
+    "8. لا تضف <audio> ولا أي صوت داخل الكود.\n";
+}
 </script>
 
 </body>
