@@ -461,7 +461,7 @@ button.cat.sel{background:rgba(139,124,255,.16)}
         <div class="card-h"><span class="step-no">4</span><h2>الصوت (اختياري)</h2><small>التفريغ يتم على جهازك — الصوت لا يُرفع لأي خادم</small></div>
         <div class="fields">
           <div class="field full">
-            <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="ghost" id="voicePick">📁 ملف صوتي</button><button type="button" class="ghost" id="voiceRec">🎙 تسجيل</button></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="ghost" id="voicePick" for="voiceFile" style="display:block;width:auto;margin:0;padding:9px 14px;text-align:center;cursor:pointer">📁 ملف صوتي</label><input type="file" id="voiceFile" accept="audio/*,video/*,.m4a,.mp3,.wav,.aac,.ogg,.opus,.webm,.mp4,.caf,.amr" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" tabindex="-1"><button type="button" class="ghost" id="voiceRec">🎙 تسجيل</button></div>
             <span class="hint" id="voiceInfo">لم يُختر صوت بعد</span>
           </div>
           <div class="field"><label for="voiceModel">دقة التفريغ</label><select id="voiceModel"><option value="tiny">سريع (~40MB)</option><option value="base" selected>متوازن (~80MB)</option><option value="small">دقيق (~250MB — الأفضل للعربي)</option></select></div>
@@ -3699,27 +3699,27 @@ async function mixAudio() {
     return await ctx.startRendering();
   } catch(e) { Errors.push("error", "mix", e); return null }
 }
-$("addAudio").addEventListener("click", () => {
-  const inp = document.createElement("input");
-  inp.type = "file";
-  inp.accept = "audio/*";
-  inp.addEventListener("change", async () => {
-    const f = inp.files && inp.files[0];
-    if (!f) return;
-    try {
-      const du = await readFile(f, false);
-      const id = "aud_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
-      await DB.saveAudio(id, du, f.name);
-      const a = new Audio(du);
-      a.preload = "auto";
-      AUDIO.tracks.push({ id, name: f.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: a });
-      renderAudio();
-      scheduleSave();
-      toast("تمت الإضافة", "success");
-    } catch(e) { Errors.push("error", "add audio", e); toast("خطأ", "error") }
-  });
-  inp.click();
+const _audIn = document.createElement("input");
+_audIn.type = "file"; _audIn.accept = "audio/*,video/*,.m4a,.mp3,.wav,.aac,.ogg,.opus,.webm,.mp4,.caf";
+_audIn.setAttribute("style", "position:fixed;left:-9999px;width:1px;height:1px;opacity:0");
+_audIn.tabIndex = -1;
+document.body.appendChild(_audIn);
+_audIn.addEventListener("change", async () => {
+  const f = _audIn.files && _audIn.files[0];
+  if (!f) return;
+  try {
+    toast("جارٍ قراءة الصوت…", "info", 1500);
+    const du = await readFile(f, false);
+    const id = "aud_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
+    try { await DB.saveAudio(id, du, f.name); } catch(e) { Errors.push("warn", "تعذّر حفظ الصوت محليًا", e); }
+    AUDIO.tracks.push({ id, name: f.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: null });
+    renderAudio();
+    scheduleSave();
+    toast("تمت الإضافة", "success");
+  } catch(e) { Errors.push("error", "add audio", e); toast("تعذّرت إضافة الصوت", "error"); }
+  try { _audIn.value = ""; } catch(_) {}
 });
+$("addAudio").addEventListener("click", () => { try { _audIn.click(); } catch(e) { toast("تعذّر فتح المحدد", "error"); } });
 $("recAudio").addEventListener("click", async () => {
   if (AUDIO.recorder && AUDIO.recorder.state === "recording") {
     AUDIO.recorder.stop();
@@ -4724,10 +4724,12 @@ async function voiceSet(blob, name) {
     vStatus("جاهز للتفريغ.");
   } catch(e) { Errors.push("error", "voice decode", e); vStatus("تعذّر قراءة الملف الصوتي (صيغة غير مدعومة؟)"); toast("تعذّر قراءة الصوت", "error"); }
 }
-$("voicePick").addEventListener("click", () => {
-  const inp = document.createElement("input"); inp.type = "file"; inp.accept = "audio/*,video/*";
-  inp.addEventListener("change", () => { const f = inp.files && inp.files[0]; if (f) voiceSet(f, f.name); });
-  inp.click();
+$("voiceFile").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  vStatus("تم اختيار: " + f.name + " — جارٍ القراءة…");
+  toast("تم اختيار الملف", "info", 1500);
+  voiceSet(f, f.name).finally(() => { try { e.target.value = ""; } catch(_) {} });
 });
 $("voiceRec").addEventListener("click", async () => {
   if (VOICE.rec && VOICE.rec.state === "recording") { VOICE.rec.stop(); return; }
