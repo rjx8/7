@@ -447,6 +447,17 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 .v-prevbox .pw{opacity:.22;transition:opacity .1s linear}
 .v-prevbox .pw.on{opacity:1}
 .vl-h .warn{color:var(--amber);margin-inline-start:8px}
+
+.vmsg{margin-top:6px;font-size:13px;min-height:18px;color:var(--muted)}
+.vmsg.ok{color:var(--teal)}.vmsg.bad{color:var(--red)}.vmsg.wait{color:var(--amber)}
+@keyframes vshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shake{animation:vshake .3s}
+input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!important}
+.vt-wrap{position:relative;height:96px;background:var(--sunk);border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none;margin:8px 0 12px;cursor:ew-resize;direction:ltr;user-select:none;-webkit-user-select:none}
+.vt-wrap canvas{display:block;width:100%;height:100%}
+.vt-sel{position:absolute;top:0;bottom:0;background:rgba(139,124,255,.22);border-left:3px solid var(--primary2);border-right:3px solid var(--primary2);pointer-events:none}
+.vt-dim{position:absolute;top:0;bottom:0;background:rgba(5,8,18,.62);pointer-events:none}
+.vt-play{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);pointer-events:none;display:none}
 </style>
 </head>
 
@@ -573,7 +584,15 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
             <select id="vModel"><option value="tiny">سريع (~40MB)</option><option value="base">متوازن (~80MB)</option><option value="small" selected>دقيق (~250MB)</option></select></div>
           <div class="field full" id="vKeyRow"><label for="vKey">مفتاح Groq (يُحفظ في متصفحك فقط)</label>
             <input id="vKey" type="password" placeholder="الصق مفتاحك هنا" autocomplete="off" dir="ltr">
-            <div id="vUnlockRow" style="display:none;gap:6px;margin-top:8px;flex-wrap:wrap"><input id="vPass" type="password" placeholder="عبارة فك تشفير المفتاح المضمّن" autocomplete="off" dir="ltr" style="flex:1;min-width:180px"><button type="button" class="ghost" id="vUnlock" style="width:auto;margin:0">فتح المفتاح</button></div>
+            <div id="vUnlockRow" style="display:none;margin-top:8px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <input id="vPass" type="password" placeholder="الرمز السري لفتح المفتاح المضمّن" autocomplete="off" dir="ltr" style="flex:1;min-width:180px">
+                <button type="button" class="ghost" id="vPassEye" title="إظهار / إخفاء الرمز" aria-label="إظهار أو إخفاء الرمز" style="width:auto;margin:0;min-width:44px">👁</button>
+                <button type="button" class="ghost" id="vUnlock" style="width:auto;margin:0">✔ تأكيد الرمز</button>
+              </div>
+            </div>
+            <div id="vPassMsg" class="vmsg" role="status" aria-live="polite"></div>
+            <button type="button" class="ghost" id="vForget" style="display:none;width:auto;margin:6px 0 0">نسيان المفتاح من هذا الجهاز</button>
             <details style="margin-top:8px"><summary class="hint" style="cursor:pointer">أداة: تشفير مفتاح جديد لتضمينه في الكود</summary>
             <div style="display:grid;gap:6px;margin-top:6px"><input id="vNewKey" type="password" placeholder="المفتاح الجديد" autocomplete="off" dir="ltr"><input id="vNewPass" type="text" placeholder="العبارة السرية التي تختارها" autocomplete="off" dir="ltr"><button type="button" class="ghost" id="vEncBtn" style="margin:0">تشفير</button><textarea id="vEncOut" readonly rows="3" dir="ltr" placeholder="الناتج: استبدل به قيمة KEY_ENC في الكود"></textarea></div></details>
             <details style="margin-top:8px"><summary class="hint" style="cursor:pointer">متقدم: وسيط خاص (لنشر الموقع علنًا دون كشف المفتاح)</summary>
@@ -581,6 +600,21 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
           <div class="field full"><label for="vHint">كلمات وأسماء متوقعة في الكلام (اختياري — يحسّن الدقة)</label><input id="vHint" placeholder="مثال: الثورة الصناعية، جيمس واط، المحرك البخاري"></div>
           <div class="field full"><button type="button" class="ghost" id="voiceRun" style="margin:0"><svg class="ic" aria-hidden="true"><use href="#i-lines"/></svg>تفريغ الصوت إلى نص</button><span class="hint" id="voiceStatus">التفريغ عبر Groq يرفع الصوت إلى خوادمهم ويحتاج مفتاحك؛ اختر «على جهازك» إن كان الصوت خاصًا.</span></div>
         </div>
+      </div>
+
+      <div class="card" id="vTrimCard" style="display:none">
+        <div class="card-h"><span class="step-no">✂</span><h2>قصّ الصوت (تحديد النطاق)</h2></div>
+        <div class="v-hint">اسحب طرفَي المنطقة المظلّلة أو اكتب الثواني، استمع للنطاق، ثم اضغط «تطبيق القص». الصوت المقصوص هو الذي يُفرَّغ ويُضاف للاستوديو.</div>
+        <div class="vt-wrap" id="vtWrap"><canvas id="vtCanvas"></canvas><i class="vt-dim" id="vtDimA"></i><i class="vt-dim" id="vtDimB"></i><i class="vt-sel" id="vtSel"></i><i class="vt-play" id="vtPlay"></i></div>
+        <div class="v-acts">
+          <div class="field" style="width:130px"><label for="vtA">من (ثانية)</label><input id="vtA" type="number" step="0.1" min="0" value="0" dir="ltr"></div>
+          <div class="field" style="width:130px"><label for="vtB">إلى (ثانية)</label><input id="vtB" type="number" step="0.1" min="0" value="0" dir="ltr"></div>
+          <button type="button" class="ghost" id="vtListen">▶ استمع للنطاق</button>
+          <button type="button" class="ghost" id="vtApply">✂ تطبيق القص</button>
+          <button type="button" class="ghost" id="vtReset">↩ استعادة الأصل</button>
+          <button type="button" class="ghost" id="vtDl">⬇ تنزيل WAV</button>
+        </div>
+        <span class="hint" id="vtInfo">—</span>
       </div>
 
       <div class="card">
@@ -1106,6 +1140,7 @@ const SESSION_KEY = "motion-platform-session-v5";
 const LEGACY = ["motion-platform-session-v4", "motion-platform-session-v3", "motion-platform-session-v2", "motion-platform-session-v1"];
 const IMG_MGR = { items: [], replaces: new Map(), selected: new Set(), pending: null, restored: false };
 const AUDIO = { tracks: [], recorder: null, chunks: [], restored: false };
+const MIC = { active: false };
 const CROP = { item: null, src: "", name: "", mime: "image/png", origSrc: "", img: null, nw: 0, nh: 0, ratio: 1, frame: { left:0,top:0,width:0,height:0 }, left: 0, top: 0, baseScale: 1, zoom: 1, dragging: false, pointerId: null, startX: 0, startY: 0, startL: 0, startT: 0 };
 const BG = { item: null, src: "", name: "", origSrc: "", img: null, color: null, tol: 30, fea: 2, result: null, batch: null };
 
@@ -1585,7 +1620,7 @@ window.__projErr = function (msg, line) {
   if (!window.__projErrToast || Date.now() - window.__projErrToast > 4000) { window.__projErrToast = Date.now(); toast("خطأ في كود المشروع: " + String(msg).slice(0, 90), "error", 6000); }
 };
 function buildFontsInject() {
-  return '\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;700;800;900&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" crossorigin="anonymous">';
+  return '\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Almarai:wght@400;700;800&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Reem+Kufi:wght@500;700&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;700&family=Changa:wght@500;700;800&family=Lalezar&family=Rubik:wght@400;500;700;800&display=swap" crossorigin="anonymous">';
 }
 function injectCSS(html, base) {
   const style = `<style id="__platform_containment">
@@ -1636,6 +1671,39 @@ function buildCraftBlock() {
     "• الظلال بإزاحة وتمويه (مثل box-shadow: 0 18px 40px rgba(r,g,b,.35)) مصبوغة بلون الخلفية؛ لا هالات بلا إزاحة.",
     "• لا بطاقات متطابقة متجاورة كهيكل للشريحة، ولا بطاقة داخل بطاقة، ولا إيموجي كأيقونات (SVG مرسوم بسمك خط واحد موحّد).",
     "• المسافات: العناصر المترابطة متقاربة والمجموعات المنفصلة متباعدة؛ هوامش خارجية ثابتة ومحاذاة على شبكة واضحة."
+  ].join("\n") + "\n\n" + buildTypographyBlock() + "\n\n" + buildRealismBlock();
+}
+function buildTypographyBlock() {
+  return [
+    "🔤 نظام الخطوط والطباعة (إلزامي)",
+    "الخطوط التالية محمّلة تلقائيًا ولا يُسمح باستيراد غيرها: Tajawal • Cairo • Noto Sans Arabic • IBM Plex Sans Arabic • Readex Pro • Almarai • Noto Kufi Arabic • Reem Kufi • Amiri • Noto Naskh Arabic • Changa • Lalezar • Rubik.",
+    "اختر زوجًا واحدًا فقط (خط عناوين + خط جسم) يناسب شخصية الموضوع، ولا تتجاوز خطين في المشروع كله:",
+    "• علمي / تقني / اقتصادي: عناوين Cairo أو Tajawal وزن 800 + جسم IBM Plex Sans Arabic أو Readex Pro وزن 500.",
+    "• تاريخي / أدبي / ديني / تراثي: عناوين Reem Kufi أو Noto Kufi Arabic وزن 700 + جسم Amiri أو Noto Naskh Arabic وزن 400–700.",
+    "• شبابي / ترفيهي / أطفال: عناوين Lalezar أو Changa وزن 800 + جسم Almarai أو Tajawal وزن 500.",
+    "• أخبار / أعمال / رسمي: عناوين Noto Kufi Arabic وزن 900 أو Cairo 800 + جسم Noto Sans Arabic وزن 500.",
+    "قواعد التنفيذ:",
+    "1. عرّف المتغيرين --font-head و--font-body في :root، واكتب كل font-family مع بدائل مثل: 'Cairo','Tajawal','Noto Sans Arabic',sans-serif. لا تعتمد على خط النظام وحده.",
+    "2. أوزان العناوين 700–900، والجسم 500–700. ممنوع الوزن 300 وما دونه (يتلاشى عند ضغط الفيديو). Lalezar وزنه واحد فلا تحدد له font-weight.",
+    "3. ارتفاع السطر: الجسم 1.55–1.75 والعناوين 1.15–1.3 (الحروف العربية ذات الأعمدة تحتاج مساحة). لا letter-spacing ولا text-transform على العربية.",
+    "4. اكسر أسطر العناوين يدويًا بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر؛ لا تعتمد على text-wrap لأن التصدير لا يدعمه.",
+    "5. الأرقام: استعمل نمطًا واحدًا (الهندية ٠–٩ أو اللاتينية 0–9) في المشروع كله، وغلّف أي نص لاتيني أو رقم داخل جملة عربية بـ <bdi> أو <span dir=\"ltr\"> حتى لا تنقلب علامات الترقيم.",
+    "6. اضبط على body: font-kerning:normal; text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased. كل النصوص نصوص HTML حية، وممنوع تحويل نص إلى صورة.",
+    "7. نسبة الأكبر للأصغر بين العنوان والجسم ≥ 2.5:1 على الأقل، وحجم أي نص لا يقل عن الحد المذكور في قواعد المشروع."
+  ].join("\n");
+}
+function buildRealismBlock() {
+  return [
+    "🎥 معايير الواقعية الحركية — اجعله يبدو كمقطع مصوّر محترف لا كشرائح متحركة",
+    "1. الفيزياء: لكل عنصر كتلة. الخفيف يدخل بـ Motion.spring بتجاوز 3–6% ثم يستقر، والثقيل يدخل بتباطؤ expo/quart بلا ارتداد. لا تستعمل مدة واحدة لكل العناصر.",
+    "2. التوقّع والمتابعة: قبل الحركة الكبيرة حركة عكسية صغيرة (4–8% لمدة 80–120ms)، وبعد توقف العنصر الرئيسي تتوقف العناصر المرتبطة به متأخرة 40–80ms (حركة متداخلة) لا معًا.",
+    "3. العمق: ثلاث طبقات على الأقل (خلفية / وسط / أمامية) تتحرك بسرعات متناسبة تقريبًا 0.3 : 1 : 1.6، مع تكبير بطيء للمشهد كله (1 → 1.05) كأن كاميرا حقيقية تقترب، وانجراف دقيق ±0.4% ودوران ≤ 0.3° بدالة sin(ms) خالصة.",
+    "4. الإضاءة والمواد: مصدر ضوء واحد باتجاه ثابت في كل المشروع. الظل يتبع ارتفاع العنصر (الأعلى = أبعد وأنعم وأخف)، والأسطح الكبيرة بتدرج خطي دقيق (3–6% بين درجتين من اللون نفسه) وحافة علوية أفتح بسمك 1px، فلا أجسام مسطحة بلا حجم. بلا filter ولا blend.",
+    "5. الرسم: الأشياء المألوفة (كتاب، ساعة، مصباح، خريطة، جهاز…) تُرسم بنسب واقعية وتفاصيل صغيرة (لمعة، ظل، حافة) لا كأشكال هندسية مجردة؛ الخطوط بسمك موحّد وتُرسم تدريجيًا بـ Motion.draw.",
+    "6. الإيقاع: اجعل المدد مضاعفات لـ 1000÷fps ms، ونوّع بين ثلاث سرعات (سريع 200–350 / متوسط 400–700 / بطيء 800–1400ms)، وبعد كل حركة كبيرة لحظة سكون قصيرة كي يرتاح النظر.",
+    "7. التركيز: عنصر بطل واحد في كل لحظة هو الأسرع والأكبر تباينًا، والبقية شبه ساكنة (حركة ≤ 20% من الشاشة). لا يمر أي عنصر متحرك فوق النص ولا يقلّل تباينه.",
+    "8. الاستمرارية: كل ما تراه العين في لحظة موجود في اللحظة التي قبلها بشكل ما (يتحول أو يبتعد أو يتلاشى تدريجيًا)، فلا شيء يظهر أو يختفي فجأة.",
+    "9. الحتمية: كل هذه الحركات دوال خالصة من ms وحده، لأن setTime قد تُستدعى لأي زمن وبأي ترتيب."
   ].join("\n");
 }
 function buildQualityBlock() {
@@ -1775,7 +1843,7 @@ function createPrompt() {
   P.push("");
   P.push("بصمة هذا المشروع (التزم بها في كل الشرائح لتتميز عن غيرها):\n• لغة الأشكال: " + dna.shape + "\n• الزخرفة المميزة: " + dna.motif + "\n• تقنية الخلفيات: " + dna.bg + "\n• العناوين: " + dna.title + "\n• استخدام اللون المميز: " + dna.accent + "\n• الإيقاع: " + dna.pace);
   P.push("");
-  P.push("قواعد الهوية:\n1. عرّف 6 متغيرات في :root: --bg و --surface و --ink و --muted و --primary و --accent، واستخدمها في كل الألوان (لا ألوان عشوائية خارجها إلا التدرجات المشتقة منها).\n2. اللوحة مشتقة من الموضوع (انظر المجال أعلاه) لا من الذوق العام. الأخطاء الشائعة الممنوعة ما لم يفرضها الموضوع: خلفية سوداء + ذهبي، تدرج بنفسجي/سماوي، بطاقات متطابقة الحجم والزوايا، وظلال رمادية موحدة.\n3. خط عربي واحد أو اثنان فقط (Tajawal أو Cairo أو Noto Sans Arabic)، والعناوين بوزن 800–900.\n4. الخلفية لكل شريحة تنتمي إلى عائلة واحدة لكنها تتغير من شريحة لأخرى (نمط أو تدرج أو كتل مختلفة)، ولا تكون لونًا مسطحًا إلا في شريحة واحدة على الأكثر.\n5. العناصر الزخرفية تُبنى بـ SVG وCSS gradients وclip-path فقط، وتتحرك ببطء طوال الشريحة.");
+  P.push("قواعد الهوية:\n1. عرّف 6 متغيرات في :root: --bg و --surface و --ink و --muted و --primary و --accent، واستخدمها في كل الألوان (لا ألوان عشوائية خارجها إلا التدرجات المشتقة منها).\n2. اللوحة مشتقة من الموضوع (انظر المجال أعلاه) لا من الذوق العام. الأخطاء الشائعة الممنوعة ما لم يفرضها الموضوع: خلفية سوداء + ذهبي، تدرج بنفسجي/سماوي، بطاقات متطابقة الحجم والزوايا، وظلال رمادية موحدة.\n3. زوج خطوط واحد (عنوان + جسم) يُختار من «نظام الخطوط والطباعة» أدناه، والعناوين بوزن 800–900.\n4. الخلفية لكل شريحة تنتمي إلى عائلة واحدة لكنها تتغير من شريحة لأخرى (نمط أو تدرج أو كتل مختلفة)، ولا تكون لونًا مسطحًا إلا في شريحة واحدة على الأكثر.\n5. العناصر الزخرفية تُبنى بـ SVG وCSS gradients وclip-path فقط، وتتحرك ببطء طوال الشريحة.");
   P.push("");
   const vb = voicePromptBlock(); if (vb) { P.push(vb); P.push(""); }
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⏱️ جدول التوقيت والشرائح (استخدمه حرفيًا)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -4038,6 +4106,7 @@ async function restoreAudioFromIDB() {
 function _actx() { if (!AUDIO.ctx) { const C = window.AudioContext || window.webkitAudioContext; AUDIO.ctx = new C(); } return AUDIO.ctx; }
 function unlockAudio() {
   try {
+    if (MIC.active) return;   /* أثناء التسجيل لا نُجبر iOS على وضع «تشغيل فقط» وإلا يصمت الميكروفون */
     if (navigator.audioSession) navigator.audioSession.type = "playback";
     const c = _actx();
     if (c.state === "running" && AUDIO.unlocked) return;
@@ -4048,6 +4117,97 @@ function unlockAudio() {
   } catch(e){}
 }
 ["touchstart", "touchend", "pointerdown", "click", "keydown"].forEach(ev => document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
+/* ────────── ميكروفون: يعمل على iOS وأندرويد والحاسوب مع رسائل خطأ واضحة ────────── */
+function micError(e) {
+  const n = e && e.name;
+  if (!isSecure()) return "الميكروفون يتطلب فتح الصفحة عبر https:// أو localhost (لا يعمل من file://).";
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) return "هذا المتصفح لا يدعم التسجيل الصوتي.";
+  if (n === "NotAllowedError" || n === "SecurityError") return "تم رفض إذن الميكروفون — اسمح به من إعدادات الموقع ثم أعد المحاولة.";
+  if (n === "NotFoundError" || n === "OverconstrainedError") return "لا يوجد ميكروفون متصل بالجهاز.";
+  if (n === "NotReadableError" || n === "AbortError") return "الميكروفون مشغول بتطبيق آخر — أغلقه وأعد المحاولة.";
+  return "تعذّر التسجيل: " + (n || e);
+}
+function _audioSession(t) { try { if (navigator.audioSession) navigator.audioSession.type = t; } catch(e){} }
+async function micStart(onTick) {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) throw Object.assign(new Error("unsupported"), { name: "NotSupported" });
+  MIC.active = true; _audioSession("play-and-record");
+  let stream;
+  try {
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); }
+    catch (e) { if (e && (e.name === "OverconstrainedError" || e.name === "TypeError")) stream = await navigator.mediaDevices.getUserMedia({ audio: true }); else throw e; }
+  } catch (e) { MIC.active = false; _audioSession("playback"); throw e; }
+  const cand = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"];
+  const mime = cand.find(m => { try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; } }) || "";
+  let mr; try { mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); } catch(e) { mr = new MediaRecorder(stream); }
+  const chunks = [], t0 = Date.now();
+  mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+  const tick = onTick ? setInterval(() => onTick((Date.now() - t0) / 1000), 500) : 0;
+  const stopped = new Promise(res => {
+    const fin = () => { clearInterval(tick); stream.getTracks().forEach(t => t.stop()); MIC.active = false; _audioSession("playback"); res(new Blob(chunks, { type: mr.mimeType || mime || "audio/mp4" })); };
+    mr.onstop = fin; mr.onerror = e => { Errors.push("error", "MediaRecorder", e.error || e); try { if (mr.state !== "inactive") mr.stop(); else fin(); } catch(_) { fin(); } };
+  });
+  mr.start(1000);
+  return { stop() { if (mr.state !== "inactive") mr.stop(); return stopped; } };
+}
+
+/* ────────── فك الصوت من ملف صوتي أو فيديو (مع بديل بالتشغيل الصامت للفيديوهات الضخمة أو النادرة) ────────── */
+const isVideoFile = f => /^video\//.test(f.type || "") || (!f.type && /\.(mp4|mov|m4v|mkv|avi|3gp)$/i.test(f.name || ""));
+async function decodeMedia(file, say, maxRate) {
+  say = say || (() => {});
+  if (file.size <= 400 * 1024 * 1024) {
+    try { say("جارٍ فك الصوت…"); return await decodeBuf(await file.arrayBuffer()); }
+    catch (e) { Errors.push("warn", "decodeAudioData فشل — نجرّب الاستخراج بالتشغيل الصامت", e); }
+  }
+  return await captureMediaAudio(file, say, maxRate || 44100);
+}
+function captureMediaAudio(file, say, maxRate) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), v = document.createElement("video");
+    v.preload = "auto"; v.playsInline = true; v.setAttribute("playsinline", ""); v.src = url;
+    v.style.cssText = "position:fixed;left:-9999px;top:0;width:2px;height:2px;opacity:0;pointer-events:none";
+    document.body.appendChild(v);
+    const ctx = _actx(), f = Math.max(1, Math.floor(ctx.sampleRate / maxRate)), rate = ctx.sampleRate / f;
+    let proc, srcN, mute, parts = [], len = 0, done = false, guard = 0;
+    const cleanup = () => { done = true; clearTimeout(guard); try { proc && proc.disconnect(); srcN && srcN.disconnect(); mute && mute.disconnect(); } catch(e){} try { v.pause(); } catch(e){} v.remove(); URL.revokeObjectURL(url); };
+    const fail = m => { if (done) return; cleanup(); reject(new Error(m)); };
+    v.onerror = () => fail("صيغة الملف غير مدعومة في هذا المتصفح — جرّب تحويله إلى mp4 (H.264) أو mp3.");
+    v.onloadedmetadata = async () => {
+      const dur = v.duration;
+      if (!isFinite(dur) || dur <= 0) return fail("تعذّرت قراءة مدة الملف.");
+      try {
+        if (ctx.state !== "running") await ctx.resume();
+        srcN = ctx.createMediaElementSource(v);
+        proc = ctx.createScriptProcessor(4096, 2, 1);
+        mute = ctx.createGain(); mute.gain.value = 0;
+        srcN.connect(proc); proc.connect(mute); mute.connect(ctx.destination);
+        proc.onaudioprocess = e => {
+          const ib = e.inputBuffer, a = ib.getChannelData(0), b = ib.numberOfChannels > 1 ? ib.getChannelData(1) : a, n = Math.floor(a.length / f), o = new Float32Array(n);
+          for (let i = 0; i < n; i++) { let acc = 0; for (let k = 0; k < f; k++) acc += a[i * f + k] + b[i * f + k]; o[i] = acc / (2 * f); }
+          parts.push(o); len += n;
+          say("جارٍ استخراج الصوت من الفيديو… " + Math.round(Math.min(99, v.currentTime / dur * 100)) + "% — أبقِ هذه الصفحة مفتوحة (يستغرق بقدر مدة الفيديو)");
+        };
+        v.onended = () => {
+          if (done) return;
+          const pcm = new Float32Array(len); let p = 0; parts.forEach(x => { pcm.set(x, p); p += x.length; });
+          cleanup();
+          if (!len) return reject(new Error("لا يوجد مسار صوتي في هذا الفيديو."));
+          const buf = ctx.createBuffer(1, len, Math.round(rate)); buf.copyToChannel(pcm, 0); resolve(buf);
+        };
+        guard = setTimeout(() => fail("انتهت المهلة أثناء استخراج الصوت."), (dur * 1.5 + 30) * 1000);
+        await v.play();
+      } catch (e) { fail("منع المتصفح تشغيل الفيديو للاستخراج: " + (e && e.message || e)); }
+    };
+  });
+}
+function wavFromBuffer(buf, a, b) {
+  const sr = buf.sampleRate, i0 = Math.max(0, Math.floor((a || 0) * sr)), i1 = Math.min(buf.length, Math.ceil((b == null ? buf.duration : b) * sr)), n = Math.max(0, i1 - i0), ch = Math.min(2, buf.numberOfChannels);
+  const ab = new ArrayBuffer(44 + n * ch * 2), v = new DataView(ab), ws = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  ws(0, "RIFF"); v.setUint32(4, 36 + n * ch * 2, true); ws(8, "WAVE"); ws(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, ch, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * ch * 2, true); v.setUint16(32, ch * 2, true); v.setUint16(34, 16, true); ws(36, "data"); v.setUint32(40, n * ch * 2, true);
+  const d = []; for (let c = 0; c < ch; c++) d.push(buf.getChannelData(c)); let o = 44;
+  for (let i = 0; i < n; i++) for (let c = 0; c < ch; c++) { const x = Math.max(-1, Math.min(1, d[c][i0 + i])); v.setInt16(o, x < 0 ? x * 0x8000 : x * 0x7fff, true); o += 2; }
+  return new Blob([ab], { type: "audio/wav" });
+}
 function decodeBuf(ab) { return new Promise((res, rej) => { const p = _actx().decodeAudioData(ab, res, rej); if (p && p.catch) p.catch(rej); }); }
 async function ensureBuf(t) {
   if (t.buf) return t.buf;
@@ -4121,49 +4281,38 @@ _audIn.addEventListener("change", async () => {
   if (!f) return;
   try {
     toast("جارٍ قراءة الصوت…", "info", 1500);
-    const du = await readFile(f, false);
+    let src = f;
+    if (isVideoFile(f)) { toast("جارٍ استخراج الصوت من الفيديو…", "info", 4000); const ab = await decodeMedia(f, null, 44100); src = wavFromBuffer(ab); }
+    const du = await readFile(src, false);
     const id = "aud_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
     try { await DB.saveAudio(id, du, f.name); } catch(e) { Errors.push("warn", "تعذّر حفظ الصوت محليًا", e); }
     AUDIO.tracks.push({ id, name: f.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: null });
     renderAudio();
     scheduleSave();
     toast("تمت الإضافة", "success");
-  } catch(e) { Errors.push("error", "add audio", e); toast("تعذّرت إضافة الصوت", "error"); }
+  } catch(e) { Errors.push("error", "add audio", e); toast("تعذّرت إضافة الصوت: " + String(e && e.message || e).slice(0, 120), "error", 6000); }
   try { _audIn.value = ""; } catch(_) {}
 });
 $("addAudio").addEventListener("click", () => { try { _audIn.click(); } catch(e) { toast("تعذّر فتح المحدد", "error"); } });
 $("recAudio").addEventListener("click", async () => {
-  if (AUDIO.recorder && AUDIO.recorder.state === "recording") {
-    AUDIO.recorder.stop();
+  if (AUDIO.recorder) {
+    const r = AUDIO.recorder; AUDIO.recorder = null; $("recAudio").textContent = "🎙 تسجيل";
+    try {
+      const blob = await r.stop();
+      if (!blob.size) { toast("التسجيل فارغ — تأكد من الميكروفون", "warn", 5000); return; }
+      const du = await readFile(blob, false), id = "aud_" + Date.now();
+      const name = "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false });
+      await DB.saveAudio(id, du, name);
+      AUDIO.tracks.push({ id, name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: null });
+      renderAudio(); scheduleSave(); toast("تم التسجيل", "success");
+    } catch(e) { Errors.push("error", "record stop", e); toast("تعذّر حفظ التسجيل", "error"); }
     return;
   }
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    AUDIO.chunks = [];
-    const mr = new MediaRecorder(stream);
-    AUDIO.recorder = mr;
-    mr.ondataavailable = e => { if (e.data && e.data.size > 0) AUDIO.chunks.push(e.data) };
-    mr.onstop = async () => {
-      try {
-        stream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(AUDIO.chunks, { type: mr.mimeType || "audio/webm" });
-        const du = await readFile(blob, false);
-        const id = "aud_" + Date.now();
-        const name = "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false });
-        await DB.saveAudio(id, du, name);
-        const a = new Audio(du);
-        a.preload = "auto";
-        AUDIO.tracks.push({ id, name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: a });
-        renderAudio();
-        scheduleSave();
-        toast("تم التسجيل", "success");
-      } catch(e) { Errors.push("error", "record stop", e) }
-      $("recAudio").textContent = "🎙 تسجيل";
-    };
-    mr.start();
+    AUDIO.recorder = await micStart(s => { $("recAudio").textContent = "⏹ إيقاف " + fmtTC(s * 1000); });
     $("recAudio").textContent = "⏹ إيقاف";
-    toast("يسجّل... اضغط مرة أخرى للإيقاف", "info", 4000);
-  } catch(e) { Errors.push("error", "mic", e); toast("تعذر الوصول للميكروفون", "error") }
+    toast("يسجّل… اضغط مرة أخرى للإيقاف", "info", 3000);
+  } catch(e) { AUDIO.recorder = null; Errors.push("error", "mic", e); toast(micError(e), "error", 6500); }
 });
 
 /* ────────── Undo/Redo ────────── */
@@ -5248,20 +5397,42 @@ async function encKey(key, pass) {
   const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, k, new TextEncoder().encode(key)));
   return JSON.stringify({ s: b64e(salt), i: b64e(iv), c: b64e(ct) });
 }
+function passMsg(kind, text) {
+  const m = $("vPassMsg"), p = $("vPass"); m.className = "vmsg " + kind; m.textContent = text;
+  p.classList.remove("ok", "bad"); if (kind === "ok" || kind === "bad") p.classList.add(kind);
+  if (kind === "bad") { p.classList.remove("shake"); void p.offsetWidth; p.classList.add("shake"); }
+}
+function renderKeyState() {
+  const has = !!$("vKey").value.trim();
+  $("vUnlockRow").style.display = has ? "none" : "block";
+  $("vForget").style.display = has ? "inline-flex" : "none";
+  if (has && !$("vPassMsg").classList.contains("ok")) { $("vPassMsg").className = "vmsg ok"; $("vPassMsg").textContent = "✅ المفتاح جاهز على هذا الجهاز."; }
+  if (!has && !$("vPassMsg").textContent) passMsg("", "اكتب الرمز السري ثم اضغط «تأكيد الرمز».");
+}
+let _unlocking = false;
 async function unlockKey() {
+  if (_unlocking) return false;
   const pass = $("vPass").value.trim();
-  if (!pass) { vStatus("أدخل عبارة فك التشفير."); return false; }
+  if (!pass) { passMsg("bad", "❌ اكتب الرمز السري أولًا."); $("vPass").focus(); return false; }
+  if (!(window.crypto && crypto.subtle)) { passMsg("bad", "❌ التشفير يتطلب فتح الصفحة عبر https:// أو localhost."); return false; }
+  _unlocking = true; $("vUnlock").disabled = true; passMsg("wait", "⏳ جارٍ التحقق من الرمز…");
   try {
-    vStatus("جارٍ فتح المفتاح…");
     const key = await decKey(pass);
     $("vKey").value = key; $("vPass").value = "";
     try { localStorage.setItem("voiceKey_groq", key); } catch(e){}
-    $("vUnlockRow").style.display = "none"; vStatus("تم فتح المفتاح وحُفظ على هذا الجهاز.");
+    passMsg("ok", "✅ الرمز صحيح — تم فتح المفتاح وحفظه على هذا الجهاز.");
+    $("vUnlockRow").style.display = "none"; $("vForget").style.display = "inline-flex"; vStatus("تم فتح المفتاح.");
+    toast("الرمز صحيح ✅", "success");
     return true;
-  } catch(e) { vStatus("العبارة غير صحيحة."); toast("عبارة فك التشفير خاطئة", "error"); return false; }
+  } catch(e) { passMsg("bad", "❌ الرمز خاطئ — تأكد منه وأعد المحاولة."); toast("الرمز السري خاطئ", "error"); return false; }
+  finally { _unlocking = false; $("vUnlock").disabled = false; }
 }
 $("vUnlock").addEventListener("click", unlockKey);
-$("vPass").addEventListener("keydown", e => { if (e.key === "Enter") unlockKey(); });
+$("vPass").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); unlockKey(); } });
+$("vPass").addEventListener("input", () => { if ($("vPassMsg").classList.contains("bad")) passMsg("", ""); });
+$("vPassEye").addEventListener("click", () => { const p = $("vPass"); p.type = p.type === "password" ? "text" : "password"; });
+$("vForget").addEventListener("click", () => { $("vKey").value = ""; try { localStorage.removeItem("voiceKey_groq"); } catch(e){} $("vPassMsg").className = "vmsg"; $("vPassMsg").textContent = ""; renderKeyState(); toast("حُذف المفتاح من هذا الجهاز", "info"); });
+$("vKey").addEventListener("input", renderKeyState);
 $("vEncBtn").addEventListener("click", async () => {
   const k = $("vNewKey").value.trim(), p = $("vNewPass").value.trim();
   if (!k || p.length < 3) { toast("أدخل المفتاح وعبارة", "warn"); return; }
@@ -5301,24 +5472,26 @@ const vStatus = t => { $("voiceStatus").textContent = t; };
 const wcOf = t => String(t || "").split(/\s+/).filter(Boolean).length;
 
 /* ── قراءة الصوت ── */
-async function voiceDecode(blob) {
-  const buf = await decodeBuf(await blob.arrayBuffer());
+async function voiceDecode(blob, name) {
+  const buf = await decodeMedia(blob, vStatus, 16000);
   const len = Math.max(1, Math.ceil(buf.duration * 16000));
   const OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
   const oc = new OC(1, len, 16000), src = oc.createBufferSource();
   src.buffer = buf; src.connect(oc.destination); src.start();
   const r = await oc.startRendering();
-  return { pcm: r.getChannelData(0), dur: buf.duration };
+  return { pcm: r.getChannelData(0), dur: buf.duration, buf };
 }
 async function voiceSet(blob, name) {
   vStatus("جارٍ قراءة الصوت…");
   try {
-    const a = await voiceDecode(blob);
+    const a = await voiceDecode(blob, name);
     const pb = _actx().createBuffer(1, a.pcm.length, 16000); pb.copyToChannel(a.pcm, 0);
-    Object.assign(VOICE, { blob, name, pcm: a.pcm, buf: pb, dur: a.dur, lines: [] });
-    $("voiceInfo").textContent = name + " • " + fmtDur(a.dur * 1000);
-    vStatus("جاهز للتفريغ."); renderVLines();
-  } catch(e) { Errors.push("error", "voice decode", e); vStatus("تعذّر قراءة الملف الصوتي (صيغة غير مدعومة؟) جرّب m4a أو mp3."); toast("تعذّر قراءة الصوت", "error"); }
+    const video = isVideoFile(blob);
+    const useBlob = video ? wavFromBuffer(a.buf) : blob;   /* من الفيديو نحتفظ بالصوت فقط (WAV) لا بالفيديو كله */
+    Object.assign(VOICE, { blob: useBlob, name: video ? String(name).replace(/\.[^.]+$/, "") + " (صوت)" : name, pcm: a.pcm, buf: pb, dur: a.dur, lines: [], full: { pcm: a.pcm, buf: pb, orig: a.buf, dur: a.dur, blob: useBlob } });
+    $("voiceInfo").textContent = VOICE.name + " • " + fmtDur(a.dur * 1000) + (video ? " • استُخرج الصوت من الفيديو" : "");
+    vStatus("جاهز للتفريغ."); renderVLines(); vtInit();
+  } catch(e) { Errors.push("error", "voice decode", e); const m = String(e && e.message || ""); vStatus("تعذّر قراءة الملف: " + (/[\u0600-\u06FF]/.test(m) ? m : "صيغة غير مدعومة؟ جرّب m4a أو mp3 أو mp4.")); toast("تعذّر قراءة الصوت", "error"); }
 }
 $("voiceFile").addEventListener("change", e => {
   const f = e.target.files && e.target.files[0];
@@ -5327,16 +5500,97 @@ $("voiceFile").addEventListener("change", e => {
   voiceSet(f, f.name).finally(() => { try { e.target.value = ""; } catch(_) {} });
 });
 $("voiceRec").addEventListener("click", async () => {
-  if (VOICE.rec && VOICE.rec.state === "recording") { VOICE.rec.stop(); return; }
+  if (VOICE.rec) {
+    const r = VOICE.rec; VOICE.rec = null; vStatus("جارٍ معالجة التسجيل…");
+    $("voiceRec").innerHTML = IC("mic") + "تسجيل";
+    try {
+      const blob = await r.stop();
+      if (!blob.size) { vStatus("التسجيل فارغ — تأكد من عمل الميكروفون وأذونات الموقع."); toast("التسجيل فارغ", "warn"); return; }
+      voiceSet(blob, "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false }));
+    } catch(e) { Errors.push("error", "voice rec stop", e); vStatus("تعذّر إنهاء التسجيل."); }
+    return;
+  }
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const chunks = [], mr = new MediaRecorder(stream);
-    VOICE.rec = mr;
-    mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-    mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); $("voiceRec").innerHTML = IC("mic") + "تسجيل"; voiceSet(new Blob(chunks, { type: mr.mimeType || "audio/mp4" }), "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false })); };
-    mr.start(); $("voiceRec").innerHTML = IC("stop") + "إيقاف"; vStatus("يسجّل… اضغط مرة أخرى للإيقاف");
-  } catch(e) { Errors.push("error", "voice mic", e); toast("تعذر الوصول للميكروفون", "error"); }
+    vStatus("اسمح بالميكروفون إذا ظهر طلب الإذن…");
+    VOICE.rec = await micStart(s => vStatus("يسجّل… " + fmtTC(s * 1000) + " — اضغط «إيقاف» لإنهاء التسجيل"));
+    $("voiceRec").innerHTML = IC("stop") + "إيقاف"; vStatus("يسجّل…");
+  } catch(e) { VOICE.rec = null; Errors.push("error", "voice mic", e); vStatus(micError(e)); toast(micError(e), "error", 6500); }
 });
+
+/* ── قصّ الصوت: تحديد نطاق ── */
+const VT = { a: 0, b: 0, node: null, raf: 0, peaks: null, drag: null };
+function vtDur() { return VOICE.full ? VOICE.full.dur : 0; }
+function vtDraw() {
+  const cv = $("vtCanvas"), F = VOICE.full; if (!cv || !F) return;
+  const dpr = window.devicePixelRatio || 1, W = Math.max(50, Math.round(cv.clientWidth * dpr)), H = Math.max(30, Math.round(cv.clientHeight * dpr));
+  cv.width = W; cv.height = H;
+  const g = cv.getContext("2d"), pcm = F.pcm, step = pcm.length / W;
+  g.clearRect(0, 0, W, H); g.fillStyle = "#8b7cff";
+  for (let x = 0; x < W; x++) {
+    let mx = 0; const i0 = Math.floor(x * step), i1 = Math.min(pcm.length, Math.floor((x + 1) * step) + 1), sk = Math.max(1, Math.floor((i1 - i0) / 24));
+    for (let i = i0; i < i1; i += sk) { const v = Math.abs(pcm[i]); if (v > mx) mx = v; }
+    const h = Math.max(1, Math.min(1, mx * 1.4) * (H - 6)); g.fillRect(x, (H - h) / 2, 1, h);
+  }
+}
+function vtPaint() {
+  const D = vtDur(); if (!D) return;
+  const pa = VT.a / D * 100, pb = VT.b / D * 100;
+  const sel = $("vtSel"); sel.style.left = pa + "%"; sel.style.width = Math.max(0.2, pb - pa) + "%";
+  $("vtDimA").style.left = "0"; $("vtDimA").style.width = pa + "%";
+  $("vtDimB").style.left = pb + "%"; $("vtDimB").style.width = (100 - pb) + "%";
+  $("vtA").value = VT.a.toFixed(1); $("vtB").value = VT.b.toFixed(1);
+  const applied = VOICE.dur, full = D;
+  $("vtInfo").textContent = "النطاق المحدد: " + (VT.b - VT.a).toFixed(1) + " ث من " + full.toFixed(1) + " ث" + (Math.abs(applied - full) > 0.05 ? " • المطبَّق حاليًا: " + applied.toFixed(1) + " ث" : "");
+}
+function vtSet(a, b) {
+  const D = vtDur(), gap = 0.3;
+  a = Math.max(0, Math.min(isNaN(a) ? VT.a : a, D - gap)); b = Math.min(D, Math.max(isNaN(b) ? VT.b : b, a + gap));
+  VT.a = a; VT.b = b; vtPaint();
+}
+function vtInit() {
+  const D = vtDur(); if (!D) { $("vTrimCard").style.display = "none"; return; }
+  vtStop(); $("vTrimCard").style.display = "";
+  VT.a = 0; VT.b = D; vtDraw(); vtPaint();
+}
+function vtStop() { if (VT.node) { try { VT.node.stop(); } catch(e){} VT.node = null; } cancelAnimationFrame(VT.raf); $("vtPlay").style.display = "none"; $("vtListen").textContent = "▶ استمع للنطاق"; }
+$("vtListen").addEventListener("click", () => {
+  if (VT.node) { vtStop(); return; }
+  const F = VOICE.full; if (!F) return;
+  unlockAudio(); stopV(); try { prevStop(); } catch(e){}
+  const c = _actx(), src = c.createBufferSource(), dur = VT.b - VT.a, t0 = c.currentTime;
+  src.buffer = F.buf; src.connect(c.destination); src.start(0, VT.a, dur); VT.node = src;
+  src.onended = () => { if (VT.node === src) vtStop(); };
+  $("vtListen").textContent = "⏹ إيقاف"; $("vtPlay").style.display = "block";
+  const D = F.dur, tick = () => { if (VT.node !== src) return; const t = VT.a + (c.currentTime - t0); $("vtPlay").style.left = Math.min(100, t / D * 100) + "%"; VT.raf = requestAnimationFrame(tick); };
+  tick();
+});
+$("vtApply").addEventListener("click", () => {
+  const F = VOICE.full; if (!F) return;
+  if (VOICE.lines.length && !confirm("القص يغيّر التوقيت، وسيُمسح التفريغ الحالي لتعيد تفريغه. متابعة؟")) return;
+  vtStop();
+  const a = VT.a, b = VT.b, sr = 16000, i0 = Math.floor(a * sr), i1 = Math.min(F.pcm.length, Math.ceil(b * sr));
+  const pcm = F.pcm.slice(i0, i1), pb = _actx().createBuffer(1, pcm.length, sr); pb.copyToChannel(pcm, 0);
+  const whole = a <= 0.01 && b >= F.dur - 0.01;
+  Object.assign(VOICE, { pcm, buf: pb, dur: pcm.length / sr, lines: [], blob: whole ? F.blob : wavFromBuffer(F.orig, a, b) });
+  $("voiceInfo").textContent = VOICE.name + " • " + fmtDur(VOICE.dur * 1000) + (whole ? "" : " • مقصوص");
+  renderVLines(); vtPaint(); vStatus(whole ? "تمت استعادة الصوت كاملًا." : "تم القص — فرّغ الصوت المقصوص الآن."); toast(whole ? "الصوت كاملًا" : "تم تطبيق القص", "success");
+});
+$("vtReset").addEventListener("click", () => { vtSet(0, vtDur()); $("vtApply").click(); });
+$("vtDl").addEventListener("click", () => {
+  const F = VOICE.full; if (!F) return;
+  const u = URL.createObjectURL(wavFromBuffer(F.orig, VT.a, VT.b)), a = document.createElement("a");
+  a.href = u; a.download = "audio-trimmed.wav"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+});
+$("vtA").addEventListener("change", () => vtSet(parseFloat($("vtA").value), VT.b));
+$("vtB").addEventListener("change", () => vtSet(VT.a, parseFloat($("vtB").value)));
+(function () {
+  const w = $("vtWrap"), tAt = e => { const r = w.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * vtDur(); };
+  w.addEventListener("pointerdown", e => { if (!vtDur()) return; const t = tAt(e); VT.drag = Math.abs(t - VT.a) <= Math.abs(t - VT.b) ? "a" : "b"; try { w.setPointerCapture(e.pointerId); } catch(_) {} e.preventDefault(); VT.drag === "a" ? vtSet(t, VT.b) : vtSet(VT.a, t); });
+  w.addEventListener("pointermove", e => { if (!VT.drag) return; const t = tAt(e); VT.drag === "a" ? vtSet(t, VT.b) : vtSet(VT.a, t); });
+  const up = () => { VT.drag = null; };
+  w.addEventListener("pointerup", up); w.addEventListener("pointercancel", up);
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (VOICE.full && $("vTrimCard").style.display !== "none") vtDraw(); }, 150); });
+})();
 
 /* ── من الكلمات إلى جمل (وحدات) ── */
 function splitLong(c, max) {
@@ -5453,7 +5707,7 @@ async function runGroq() {
   let key = $("vKey").value.trim();
   const proxy = $("vProxy").value.trim(), hint = $("vHint").value.trim();
   if (!key && !proxy && $("vPass").value.trim()) { if (await unlockKey()) key = $("vKey").value.trim(); }
-  if (!key && !proxy) { done(); $("vUnlockRow").style.display = "flex"; vStatus("افتح المفتاح المضمّن بعبارة التشفير (مرة واحدة على هذا الجهاز)، أو الصق مفتاحك، أو اختر «على جهازك»."); toast("المفتاح مطلوب للتفريغ عبر Groq", "warn", 5000); $("vPass").focus(); return; }
+  if (!key && !proxy) { done(); $("vUnlockRow").style.display = "block"; passMsg("bad", "❌ لم يُفتح المفتاح بعد — اكتب الرمز السري واضغط تأكيد."); vStatus("افتح المفتاح المضمّن بعبارة التشفير (مرة واحدة على هذا الجهاز)، أو الصق مفتاحك، أو اختر «على جهازك»."); toast("المفتاح مطلوب للتفريغ عبر Groq", "warn", 5000); $("vPass").focus(); return; }
   try { localStorage.setItem("voiceKey_groq", key); localStorage.setItem("voiceProxy", proxy); } catch(e){}
   try {
     const SR = 16000, CH = 600 * SR, pcm = VOICE.pcm, cuts = [0];
@@ -5481,7 +5735,7 @@ $("voiceRun").addEventListener("click", () => {
 });
 $("vEngine").addEventListener("change", () => { const l = $("vEngine").value === "local"; $("vModelRow").style.display = l ? "" : "none"; $("vKeyRow").style.display = l ? "none" : ""; });
 try { $("vKey").value = localStorage.getItem("voiceKey_groq") || ""; $("vProxy").value = localStorage.getItem("voiceProxy") || ""; } catch(e){}
-if (!$("vKey").value) $("vUnlockRow").style.display = "flex";
+renderKeyState();
 
 /* ── حجم النص والسعة ── */
 const V_SIZES = { s: [[48, 60], [56, 70]], m: [[64, 80], [72, 90]], l: [[84, 108], [92, 116]], xl: [[110, 140], [118, 150]] };
@@ -5723,7 +5977,7 @@ function buildVoicePrompt() {
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎨 التوجه الفني\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   P.push("الأسلوب: " + style.name + " — " + style.text + (o.vTopic ? "\nاشتق الألوان والرموز من موضوع الكلام: " + o.vTopic : "\nاشتق الألوان والرموز من معنى الكلام نفسه.") +
     "\n\n• حجم النص: يُضبط لكل فقرة بحيث تتسع كاملة داخل كتلة لا تتجاوز " + Math.round(G.bw) + "×" + Math.round(G.bh) + "px: الحجم المقترح مذكور في كل لحظة، ومجال الحجم العام " + sz[0] + "–" + sz[1] + "px (لا أقل من " + (portrait ? 40 : 36) + "px مهما طالت الفقرة)، ارتفاع السطر ≥ 1.55، تباين ≥ 4.5:1.\n• عرض الفقرة: " + MODE + "\n• موضع النص: " + POS + "\n• إبراز الكلمات: " + HI + "\n• الحركة: " + ml.name + " — " + ml.text + "\n• العالم والخلفية: " + BG + "\n• التحوّل: " + TR + "\n• الرموز: " + IC2 + (o.vProg === "yes" ? "\n• شريط تقدم رفيع يتقدم بحسب الزمن الكلي (بلا أي نص)." : "") +
-    "\n• عرّف 6 متغيرات في :root: --bg --surface --ink --muted --primary --accent واستعملها في كل الألوان. خط عربي واحد أو اثنان (Tajawal / Cairo / Noto Sans Arabic محمّلة تلقائيًا؛ لا تستورد غيرها)، بوزن 700–900 للكلام.\n• النص العربي محاذاته لليمين، وعرض الكتلة ≤ " + Math.round(G.bw) + "px، وهوامش الشاشة ≥ " + (portrait ? 72 : 96) + "px.");
+    "\n• عرّف 6 متغيرات في :root: --bg --surface --ink --muted --primary --accent واستعملها في كل الألوان. زوج خطوط واحد (عنوان + جسم) من «نظام الخطوط والطباعة» أدناه (محمّلة تلقائيًا؛ لا تستورد غيرها)، بوزن 600–800 للكلام المنطوق.\n• النص العربي محاذاته لليمين، وعرض الكتلة ≤ " + Math.round(G.bw) + "px، وهوامش الشاشة ≥ " + (portrait ? 72 : 96) + "px.");
   P.push("");
   P.push("🖼️ الصور\n" + img);
   P.push("");
