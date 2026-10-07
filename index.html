@@ -434,9 +434,6 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 .sr-only{position:fixed;top:0;left:0;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;opacity:0}
 
-#page-voice .ghost{font:inherit;font-size:14px;font-weight:700;color:var(--text);background:var(--sunk);padding:10px 16px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
-#page-voice .ghost:hover{border-color:var(--primary2)}
-#page-voice .field .ghost{width:100%}
 .vl-r textarea.vl-t{flex:1 1 100%;order:-1;min-width:0;resize:vertical;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:9px;padding:9px 11px;font:inherit;font-size:15px;line-height:1.6}
 .vl-r{flex-wrap:wrap}
 .vl-r .sp{flex:1}
@@ -448,16 +445,6 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 .v-prevbox .pw.on{opacity:1}
 .vl-h .warn{color:var(--amber);margin-inline-start:8px}
 
-.vmsg{margin-top:6px;font-size:13px;min-height:18px;color:var(--muted)}
-.vmsg.ok{color:var(--teal)}.vmsg.bad{color:var(--red)}.vmsg.wait{color:var(--amber)}
-@keyframes vshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.shake{animation:vshake .3s}
-input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!important}
-.vt-wrap{position:relative;height:96px;background:var(--sunk);border:1px solid var(--line);border-radius:12px;overflow:hidden;touch-action:none;margin:8px 0 12px;cursor:ew-resize;direction:ltr;user-select:none;-webkit-user-select:none}
-.vt-wrap canvas{display:block;width:100%;height:100%}
-.vt-sel{position:absolute;top:0;bottom:0;background:rgba(139,124,255,.22);border-left:3px solid var(--primary2);border-right:3px solid var(--primary2);pointer-events:none}
-.vt-dim{position:absolute;top:0;bottom:0;background:rgba(5,8,18,.62);pointer-events:none}
-.vt-play{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);pointer-events:none;display:none}
 </style>
 </head>
 
@@ -466,7 +453,6 @@ input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!im
 <nav class="tabs" aria-label="التنقل">
   <div class="tabs-in">
     <button class="active" data-page="generator">إنشاء المشروع</button>
-    <button data-page="voice">برومبت الصوت</button>
     <button data-page="workspace">الاستوديو</button>
   </div>
 </nav>
@@ -494,6 +480,12 @@ input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!im
           <div class="field"><label for="year">العام</label><input id="year"></div>
           <div class="field"><label for="imageCount">عدد الصور (0–20)</label><input id="imageCount" type="number" min="0" max="20" value="3"></div>
           <div class="field full"><label for="extra">متطلبات إضافية</label><textarea id="extra" placeholder="أي توجيه خاص: نقاط لازم تُذكر، مصادر، نبرة العرض…"></textarea></div>
+          <div class="field full">
+            <label class="mini-chk"><input type="checkbox" id="hasAudio"> سأرفق ملفًا صوتيًا مع البرومبت (يُبنى الفيديو على كلام الصوت)</label>
+            <div id="audioOpt" style="display:none;margin-top:8px">
+              <span class="hint" id="audioProbeInfo">سيتغير البرومبت ليبني الفيديو على كلام الصوت. أرفق ملفك الصوتي مع البرومبت عند إرساله للذكاء الاصطناعي؛ الموقع لا يرفعه ولا يقرؤه.</span>
+            </div>
+          </div>
           <div class="field full"><label>اتجاه الفيديو</label>
             <div class="seg">
               <button type="button" class="active" data-orientation="landscape"><span class="shape" style="width:30px;height:18px"></span><div><strong>أفقي 16:9</strong><span class="s">شاشات وعروض</span></div></button>
@@ -559,132 +551,6 @@ input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!im
   </div>
 </section>
 
-<section class="page" id="page-voice">
-  <div class="intro"><div>
-    <h1>موشن جرافيك من الصوت</h1>
-    <p>ارفع تسجيلًا صوتيًا، فرّغه بدقة عالية، وقسّمه إلى فقرات كاملة المعنى (كل فقرة تظهر كاملة وتتبدّل عند تغيّر الفقرة)، راجع المزامنة بالمعاينة، ثم انسخ برومبت موشن جرافيك متصل مضبوط بالزمن.</p>
-  </div></div>
-  <div class="gen">
-    <div class="gen-main">
-
-      <div class="card">
-        <div class="card-h"><span class="step-no">1</span><h2>الصوت والتفريغ</h2></div>
-        <div class="fields">
-          <div class="field full">
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <label class="ghost" id="voicePick" for="voiceFile" style="display:inline-flex;width:auto;margin:0;cursor:pointer"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>ملف صوتي</label>
-              <input type="file" id="voiceFile" accept="audio/*,video/*,.m4a,.mp3,.wav,.aac,.ogg,.opus,.webm,.mp4,.caf,.amr" class="sr-only" tabindex="-1">
-              <button type="button" class="ghost" id="voiceRec" style="width:auto;margin:0"><svg class="ic" aria-hidden="true"><use href="#i-mic"/></svg>تسجيل</button>
-            </div>
-            <span class="hint" id="voiceInfo">لم يُختر صوت بعد</span>
-          </div>
-          <div class="field"><label for="vEngine">طريقة التفريغ</label>
-            <select id="vEngine"><option value="groq" selected>Groq Whisper large-v3 — دقة عالية وتوقيت كل كلمة (موصى به)</option><option value="local">على جهازك — مجاني وخاص (دقة متوسطة)</option></select></div>
-          <div class="field" id="vModelRow" style="display:none"><label for="vModel">حجم النموذج (على الجهاز)</label>
-            <select id="vModel"><option value="tiny">سريع (~40MB)</option><option value="base">متوازن (~80MB)</option><option value="small" selected>دقيق (~250MB)</option></select></div>
-          <div class="field full" id="vKeyRow"><label for="vKey">مفتاح Groq (يُحفظ في متصفحك فقط)</label>
-            <input id="vKey" type="password" placeholder="الصق مفتاحك هنا" autocomplete="off" dir="ltr">
-            <div id="vUnlockRow" style="display:none;margin-top:8px">
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <input id="vPass" type="password" placeholder="الرمز السري لفتح المفتاح المضمّن" autocomplete="off" dir="ltr" style="flex:1;min-width:180px">
-                <button type="button" class="ghost" id="vPassEye" title="إظهار / إخفاء الرمز" aria-label="إظهار أو إخفاء الرمز" style="width:auto;margin:0;min-width:44px">👁</button>
-                <button type="button" class="ghost" id="vUnlock" style="width:auto;margin:0">✔ تأكيد الرمز</button>
-              </div>
-            </div>
-            <div id="vPassMsg" class="vmsg" role="status" aria-live="polite"></div>
-            <button type="button" class="ghost" id="vForget" style="display:none;width:auto;margin:6px 0 0">نسيان المفتاح من هذا الجهاز</button>
-            <details style="margin-top:8px"><summary class="hint" style="cursor:pointer">أداة: تشفير مفتاح جديد لتضمينه في الكود</summary>
-            <div style="display:grid;gap:6px;margin-top:6px"><input id="vNewKey" type="password" placeholder="المفتاح الجديد" autocomplete="off" dir="ltr"><input id="vNewPass" type="text" placeholder="العبارة السرية التي تختارها" autocomplete="off" dir="ltr"><button type="button" class="ghost" id="vEncBtn" style="margin:0">تشفير</button><textarea id="vEncOut" readonly rows="3" dir="ltr" placeholder="الناتج: استبدل به قيمة KEY_ENC في الكود"></textarea></div></details>
-            <details style="margin-top:8px"><summary class="hint" style="cursor:pointer">متقدم: وسيط خاص (لنشر الموقع علنًا دون كشف المفتاح)</summary>
-            <input id="vProxy" type="url" placeholder="https://اسم-وركر.اسمك.workers.dev" autocomplete="off" dir="ltr" style="margin-top:6px"></details></div>
-          <div class="field full"><label for="vHint">كلمات وأسماء متوقعة في الكلام (اختياري — يحسّن الدقة)</label><input id="vHint" placeholder="مثال: الثورة الصناعية، جيمس واط، المحرك البخاري"></div>
-          <div class="field full"><button type="button" class="ghost" id="voiceRun" style="margin:0"><svg class="ic" aria-hidden="true"><use href="#i-lines"/></svg>تفريغ الصوت إلى نص</button><span class="hint" id="voiceStatus">التفريغ عبر Groq يرفع الصوت إلى خوادمهم ويحتاج مفتاحك؛ اختر «على جهازك» إن كان الصوت خاصًا.</span></div>
-        </div>
-      </div>
-
-      <div class="card" id="vTrimCard" style="display:none">
-        <div class="card-h"><span class="step-no">✂</span><h2>قصّ الصوت (تحديد النطاق)</h2></div>
-        <div class="v-hint">اسحب طرفَي المنطقة المظلّلة أو اكتب الثواني، استمع للنطاق، ثم اضغط «تطبيق القص». الصوت المقصوص هو الذي يُفرَّغ ويُضاف للاستوديو.</div>
-        <div class="vt-wrap" id="vtWrap"><canvas id="vtCanvas"></canvas><i class="vt-dim" id="vtDimA"></i><i class="vt-dim" id="vtDimB"></i><i class="vt-sel" id="vtSel"></i><i class="vt-play" id="vtPlay"></i></div>
-        <div class="v-acts">
-          <div class="field" style="width:130px"><label for="vtA">من (ثانية)</label><input id="vtA" type="number" step="0.1" min="0" value="0" dir="ltr"></div>
-          <div class="field" style="width:130px"><label for="vtB">إلى (ثانية)</label><input id="vtB" type="number" step="0.1" min="0" value="0" dir="ltr"></div>
-          <button type="button" class="ghost" id="vtListen">▶ استمع للنطاق</button>
-          <button type="button" class="ghost" id="vtApply">✂ تطبيق القص</button>
-          <button type="button" class="ghost" id="vtReset">↩ استعادة الأصل</button>
-          <button type="button" class="ghost" id="vtDl">⬇ تنزيل WAV</button>
-        </div>
-        <span class="hint" id="vtInfo">—</span>
-      </div>
-
-      <div class="card">
-        <div class="card-h"><span class="step-no">2</span><h2>الفقرات والتوقيت</h2></div>
-        <div class="v-hint">كل فقرة تظهر كاملة على الشاشة وتتبدّل عند بدء الفقرة التالية. استمع للجملة بزر <svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> وابدأ فقرة جديدة بزر <svg class="ic" aria-hidden="true"><use href="#i-para"/></svg></div>
-        <div class="v-acts">
-          <div class="field" style="width:130px"><label for="vTarget">عدد الفقرات</label><input id="vTarget" type="number" min="3" max="20" placeholder="تلقائي"></div>
-          <div class="field" style="width:150px"><label for="vMargin">هامش الأمان</label><select id="vMargin"><option value="80">80ms (دقيق)</option><option value="150" selected>150ms (موصى به)</option><option value="250">250ms (آمن جدًا)</option><option value="400">400ms</option></select></div>
-          <div class="field" style="width:150px"><label for="vOffset">تعويض التزامن (ms)</label><input id="vOffset" type="number" step="20" min="-600" max="600" value="0"></div>
-          <button type="button" class="ghost" id="vAuto"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg>تقسيم وموازنة تلقائية</button>
-        </div>
-        <div class="v-prev">
-          <button type="button" class="ghost" id="vPrevBtn" style="margin:0"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>معاينة المزامنة</button>
-          <span class="hint" id="vPrevT" style="margin-inline-start:10px">شغّلها وراقب: إن سبقت الكلمات الصوت اجعل التعويض موجبًا، وإن تأخرت اجعله سالبًا.</span>
-          <div class="v-prevbox" id="vPrevBox" dir="rtl"><span class="hint">—</span></div>
-        </div>
-        <div id="vLines"><div class="hint" style="padding:12px 0">لا نص بعد — فرّغ الصوت أو أضف سطرًا يدويًا.</div></div>
-        <button type="button" class="ghost" id="vAddLine"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>جملة يدوية في النهاية</button>
-      </div>
-
-      <div class="card">
-        <div class="card-h"><span class="step-no">3</span><h2>التوجه الفني</h2></div>
-        <input type="hidden" id="vOrient" value="landscape">
-        <div class="fields">
-          <div class="field full"><label>اتجاه الفيديو</label>
-            <div class="seg">
-              <button type="button" class="active" data-vo="landscape"><span class="shape" style="width:30px;height:18px"></span><div><strong>أفقي 16:9</strong></div></button>
-              <button type="button" data-vo="portrait"><span class="shape" style="width:18px;height:30px"></span><div><strong>عمودي 9:16</strong></div></button>
-            </div></div>
-          <div class="field"><label for="vStyle">الأسلوب البصري</label><select id="vStyle"></select></div>
-          <div class="field"><label for="vSize">حجم النص</label><select id="vSize"><option value="s">صغير (فقرات أطول)</option><option value="m">متوسط</option><option value="l" selected>كبير (موصى به للجوال)</option><option value="xl">ضخم (فقرات قصيرة)</option></select></div>
-          <div class="field"><label for="vMode">طريقة عرض الفقرة</label><select id="vMode"><option value="reveal" selected>الفقرة كاملة، وكل كلمة تظهر عند نطقها (صعود ناعم)</option><option value="fade">كل كلمة تظهر عند نطقها (تلاشي فقط)</option><option value="karaoke">الفقرة ظاهرة بخفوت وكل كلمة تُضاء عند نطقها</option></select></div>
-          <div class="field"><label for="vTrans">التحوّل بين الفقرات</label><select id="vTrans"><option value="morph" selected>تحوّل مستمر: عناصر الفقرة تتحول إلى عناصر التالية</option><option value="camera">كاميرا تنزلق عبر عالم واحد متصل</option><option value="mask">انتقال بأقنعة هندسية متحركة</option></select></div>
-          <div class="field"><label for="vPos">موضع كتلة النص</label><select id="vPos"><option value="auto" selected>متنوع بحسب تكوين كل لحظة</option><option value="right">يمين (أنسب للعربية)</option><option value="center">وسط</option><option value="bottom">أسفل مثل الترجمة</option></select></div>
-          <div class="field"><label for="vHi">إبراز الكلمات المفتاحية</label><select id="vHi"><option value="none">بدون</option><option value="color" selected>لون مميز</option><option value="pulse">لون + نبضة</option></select></div>
-          <div class="field"><label for="vMotion">غنى الحركة</label><select id="vMotion"><option value="calm">هادئة</option><option value="balanced" selected>متوازنة</option><option value="rich">غنية</option></select></div>
-          <div class="field"><label for="vBg">العالم والخلفية</label><select id="vBg"><option value="drift" selected>تدرجات بطيئة الحركة</option><option value="shapes">أشكال هندسية متحركة</option><option value="pattern">نمط زخرفي</option><option value="topic">مستوحى من موضوع الكلام</option><option value="flat">هادئ شبه ثابت</option></select></div>
-          <div class="field"><label for="vIcons">الرسوم التوضيحية</label><select id="vIcons"><option value="none">بدون</option><option value="simple" selected>رموز SVG بسيطة تعبّر عن المعنى</option><option value="hero">رمز كبير لكل فقرة</option></select></div>
-          <div class="field"><label for="vImgs">عدد الصور (0–10)</label><input id="vImgs" type="number" min="0" max="10" value="0"></div>
-          <div class="field"><label for="vTitles">نصوص إضافية</label><select id="vTitles"><option value="none" selected>لا شيء — نص الكلام فقط</option><option value="kw">كلمة مفتاحية صغيرة لكل فقرة</option></select></div>
-          <div class="field"><label for="vProg">شريط تقدم (بلا نص)</label><select id="vProg"><option value="no" selected>لا</option><option value="yes">نعم</option></select></div>
-          <div class="field full"><label for="vTopic">موضوع الكلام (اختياري — يساعد في اختيار الرموز والألوان)</label><input id="vTopic" placeholder="مثال: تاريخ الثورة الصناعية"></div>
-          <div class="field full"><label for="vExtra">ملاحظات إضافية</label><textarea id="vExtra" placeholder="أي توجيه خاص بالألوان أو المزاج أو العناصر…"></textarea></div>
-        </div>
-      </div>
-    </div>
-
-    <aside class="gen-aside">
-      <div class="card">
-        <div class="card-h"><h2>ملخص</h2></div>
-        <div class="sum-grid">
-          <div class="sum-cell"><b id="vsScenes">0</b><span>فقرات</span></div>
-          <div class="sum-cell"><b id="vsDur">0</b><span>المدة</span></div>
-          <div class="sum-cell"><b id="vsLines">0</b><span>جمل</span></div>
-          <div class="sum-cell"><b id="vsWords">0</b><span>كلمة</span></div>
-        </div>
-        <div class="gap"></div><div class="gap"></div>
-        <button class="generate" id="vGenerate">إنشاء برومبت الصوت</button>
-        <span class="hint" style="display:block;margin-top:8px">عند الإنشاء يُضاف الصوت تلقائيًا إلى الاستوديو ليُشغَّل ويُصدَّر مع الفيديو.</span>
-      </div>
-    </aside>
-  </div>
-  <div class="prompt-box" id="vPromptBox">
-    <div class="prompt-head"><strong>برومبت الصوت</strong><button class="copy" id="vCopy">نسخ</button></div>
-    <div class="prompt-meta"><span class="chip muted" id="vpScenes">—</span><span class="chip muted" id="vpDur">—</span><span class="chip muted" id="vpChars">—</span></div>
-    <textarea id="vPrompt" readonly></textarea>
-  </div>
-</section>
-
-<!-- ═════════ الاستوديو ═════════ -->
 <section class="page" id="page-workspace">
   <div class="workspace">
     <div>
@@ -862,7 +728,6 @@ input.bad{border-color:var(--red)!important}input.ok{border-color:var(--teal)!im
 
 <nav class="mobile-nav">
   <button class="active" data-page="generator">إنشاء</button>
-  <button data-page="voice">برومبت الصوت</button>
   <button data-page="workspace">الاستوديو</button>
 </nav>
 
@@ -1666,7 +1531,7 @@ function buildCraftBlock() {
     "• ثلاثة مستويات حجم ووزن على الأقل بنسب واضحة، والعنوان متوازن السطور بلا كلمة يتيمة في آخر سطر.",
     "• لون النص لا يقترب أبدًا من لون ما خلفه: تباين فعلي ≥ 4.5:1 فوق كل نقطة من التدرج أو الصورة؛ وإن تعذّر فضع لوحًا معتمًا (مستطيلًا بخلفية صلبة) خلف النص. لا نص فاتح على خلفية فاتحة ولا داكن على داكنة.",
     "• كل نص يجب أن يتّسع داخل حاويته وداخل حدود الشاشة: اجعل ارتفاع البطاقات auto أو أكبر من النص بهامش ≥ 24px، وحدّد max-width لكل كتلة نص، ولا تستعمل white-space:nowrap على جمل طويلة. اختبر في ذهنك أطول نص ممكن في كل بطاقة.",
-    "• شريحة الخلاصة: 3 إلى 4 نقاط قصيرة (≤ 8 كلمات للنقطة) أو جملة واحدة، بحجم خط ≥ 40px، داخل حاوية مرنة بهوامش آمنة، ولا تكدّس فقرة كاملة.",
+    "• شريحة الخلاصة: 3 إلى 4 نقاط قصيرة (≤ 8 كلمات للنقطة) أو جملة واحدة، بحجم خط ≥ 56px، داخل حاوية مرنة بهوامش آمنة، ولا تكدّس فقرة كاملة.",
     "• لون مميز واحد (accent) فوق أساس محايد مصبوغ بدرجة لونية واحدة. ممنوع #000 و#fff الصرفان، وممنوع التدرج البنفسجي/الأزرق الافتراضي ما لم يطلبه الموضوع. النص الثانوي يُلوَّن من درجة الخلفية وليس رماديًا.",
     "• الظلال بإزاحة وتمويه (مثل box-shadow: 0 18px 40px rgba(r,g,b,.35)) مصبوغة بلون الخلفية؛ لا هالات بلا إزاحة.",
     "• لا بطاقات متطابقة متجاورة كهيكل للشريحة، ولا بطاقة داخل بطاقة، ولا إيموجي كأيقونات (SVG مرسوم بسمك خط واحد موحّد).",
@@ -1689,7 +1554,8 @@ function buildTypographyBlock() {
     "4. اكسر أسطر العناوين يدويًا بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر؛ لا تعتمد على text-wrap لأن التصدير لا يدعمه.",
     "5. الأرقام: استعمل نمطًا واحدًا (الهندية ٠–٩ أو اللاتينية 0–9) في المشروع كله، وغلّف أي نص لاتيني أو رقم داخل جملة عربية بـ <bdi> أو <span dir=\"ltr\"> حتى لا تنقلب علامات الترقيم.",
     "6. اضبط على body: font-kerning:normal; text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased. كل النصوص نصوص HTML حية، وممنوع تحويل نص إلى صورة.",
-    "7. نسبة الأكبر للأصغر بين العنوان والجسم ≥ 2.5:1 على الأقل، وحجم أي نص لا يقل عن الحد المذكور في قواعد المشروع."
+    "7. نسبة الأكبر للأصغر بين العنوان والجسم ≥ 2.5:1 على الأقل.",
+    "8. المقاسات المرجعية (لوحة 1920×1080 أو 1080×1920): عنوان 120–240px، فرعي 64–96px، جسم 48–72px، تسمية ≥ 38px. المشاهد يرى الفيديو على جوال، فاجعل النص كبيرًا وجريئًا وقلّل عدد الكلمات بدل تصغير الخط."
   ].join("\n");
 }
 function buildRealismBlock() {
@@ -1717,7 +1583,7 @@ function buildQualityBlock() {
     "| الهوية | ألوان عامة تشبه أي مشروع (داكن + ذهبي، أو بنفسجي + سماوي) | ألوان متناسقة لكن لا علاقة لها بالموضوع | لوحة مشتقة من طبيعة الموضوع + بصمة أشكال ثابتة (زوايا وزخرفة) تظهر في كل الشرائح |",
     "| الخلفيات | لون مسطح واحد لكل الشرائح | تدرج واحد ثابت في كل الشرائح | خلفية من عائلة واحدة تتنوع في كل شريحة (نمط/تدرج/كتل) وتتحرك ببطء وتخدم المادة |",
     "| الحركة | ظهور واختفاء فقط، أو شرائح ثابتة، أو نفس الحركة لكل عنصر | دخول متشابه لكل العناصر دون إبراز أو حركة خلفية | ثلاث طبقات (خلفية، محتوى، تفاصيل) بتتابع مدروس، إبراز (نبضة/عدّ/رسم/كشف)، حركة مستمرة خفيفة، وخروج ناعم |",
-    "| الطباعة | حجم واحد تقريبًا أو نص أصغر من 22px | عنوان وجسم فقط بلا مستوى وسيط | هرمية بثلاثة مستويات، عنوان ≥ 72px، نسبة الأكبر للأصغر ≥ 3:1، ارتفاع سطر ≥ 1.4 للعربية، تباين ≥ 4.5:1 |",
+    "| الطباعة | حجم واحد تقريبًا أو نص أصغر من 38px | عنوان وجسم فقط بلا مستوى وسيط | هرمية بثلاثة مستويات، عنوان ≥ 120px، نسبة الأكبر للأصغر ≥ 3:1، ارتفاع سطر ≥ 1.4 للعربية، تباين ≥ 4.5:1 |",
     "| المحتوى | فقرات طويلة أو شرائح شبه فارغة أو نص عام بلا تفاصيل | كمية كلمات مناسبة لكن بلا فكرة واحدة واضحة | فكرة واحدة لكل شريحة، عنوان يلخّص الفكرة، أرقام وأمثلة وأسماء محددة، وكلمات ضمن النطاق |",
     "| الصور | صور ممتدة أو عشوائية الموضع | صور في أماكنها لكن منفصلة عن التكوين | صور داخل .img-frame مقصوصة بنسبة صحيحة، وجزء من التكوين وتتحرك معه |",
     "| التقني | أخطاء أو مخالفة للقواعد الممنوعة، أو الحالة لا تُعاد عند الرجوع بالزمن | يعمل مع تحذيرات | يعمل بلا أخطاء، setTime حتمية ويمكن استدعاؤها لأي زمن بأي ترتيب |",
@@ -1756,15 +1622,16 @@ function createPrompt() {
   const dn = DENSITY[d.textDensity] || DENSITY.medium;
   const dna = getDNA(d);
   const layouts = assignLayouts();
-  const minText = portrait ? 40 : 34;
+  const minText = portrait ? 52 : 44;
 
-  const voiceOn = SCENES.some(sc => sc.vlines && sc.vlines.length);
+  const audioOn = !!($("hasAudio") && $("hasAudio").checked);
+  const audioInfo = "مدد الشرائح في الجدول مبدئية (موزعة بالتساوي) وليست مدة الصوت الحقيقية: استخرج المدة الفعلية من الملف المرفق، واستبدل بها المدة الكلية وكل start/end وقيمة window.PROJECT.duration وmeta project-duration-ms، وابقِ الشرائح متصلة بلا فجوات.";
   const rows = timing.map((t, i) => {
     const sc = SCENES[i] || {};
     const role = getSceneRole(t.n, total);
     const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
     const w = wordRange(t.duration, d.textDensity);
-    return "| " + t.n + " | " + t.title + " | " + (voiceOn ? "نص منطوق" : KINDS[kind].name) + " | " + LAYOUTS[layouts[i]].name + " | " + t.start + " | " + t.end + " | " + t.duration + " | " + (voiceOn ? "حسب الصوت" : w.min + "–" + w.max) + " |";
+    return "| " + t.n + " | " + t.title + " | " + (audioOn ? "من الصوت" : KINDS[kind].name) + " | " + LAYOUTS[layouts[i]].name + " | " + t.start + " | " + t.end + " | " + t.duration + " | " + (audioOn ? "حسب الصوت" : w.min + "–" + w.max) + " |";
   }).join("\n");
 
   const details = timing.map((t, i) => {
@@ -1773,18 +1640,13 @@ function createPrompt() {
     const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
     const lay = LAYOUTS[layouts[i]];
     const w = wordRange(t.duration, d.textDensity);
-    if (voiceOn) {
-      const vl = (sc.vlines || []).map(l => "      - [" + l.s + " → " + l.e + "ms] «" + l.text + "»");
-      return ["▪ الشريحة " + t.n + "  [" + t.start + "ms → " + t.end + "ms]", "   • التكوين: " + lay.name + " — " + (portrait ? lay.p : lay.l), "   • الأسطر المنطوقة بتوقيتها المطلق (النص حرفي):"].concat(vl.length ? vl : ["      (شريحة بلا كلام: عناصر بصرية فقط بلا أي نص)"]).join("\n");
-    }
     const lines = [
-      "▪ الشريحة " + t.n + " — «" + t.title + "» (" + KINDS[kind].name + ")  [" + t.start + "ms → " + t.end + "ms]",
-      "   • المحتوى: " + kindGuide(kind, d),
-      "   • التكوين: " + lay.name + " — " + (portrait ? lay.p : lay.l),
-      "   • الكلمات: " + w.min + "–" + w.max
+      "▪ الشريحة " + t.n + " — «" + t.title + "»" + (audioOn ? "" : " (" + KINDS[kind].name + ")") + "  [" + t.start + "ms → " + t.end + "ms" + (audioOn ? " — مبدئي" : "") + "]",
+      "   • المحتوى: " + (audioOn ? "المقطع المنطوق الذي يقع في هذا الجزء من الصوت (حدّد حدوده عند أقرب نهاية جملة)" : kindGuide(kind, d)),
+      "   • التكوين: " + lay.name + " — " + (portrait ? lay.p : lay.l)
     ];
+    if (!audioOn) lines.push("   • الكلمات: " + w.min + "–" + w.max);
     if (sc.note && sc.note.trim()) lines.push("   • فكرة يحددها المستخدم (التزم بها): " + sc.note.trim());
-    if (sc.voice && sc.voice.trim()) lines.push("   • الكلام المنطوق في هذه الشريحة (يُسمع بالتزامن): «" + sc.voice.trim() + "»");
     return lines.join("\n");
   }).join("\n\n");
 
@@ -1845,18 +1707,23 @@ function createPrompt() {
   P.push("");
   P.push("قواعد الهوية:\n1. عرّف 6 متغيرات في :root: --bg و --surface و --ink و --muted و --primary و --accent، واستخدمها في كل الألوان (لا ألوان عشوائية خارجها إلا التدرجات المشتقة منها).\n2. اللوحة مشتقة من الموضوع (انظر المجال أعلاه) لا من الذوق العام. الأخطاء الشائعة الممنوعة ما لم يفرضها الموضوع: خلفية سوداء + ذهبي، تدرج بنفسجي/سماوي، بطاقات متطابقة الحجم والزوايا، وظلال رمادية موحدة.\n3. زوج خطوط واحد (عنوان + جسم) يُختار من «نظام الخطوط والطباعة» أدناه، والعناوين بوزن 800–900.\n4. الخلفية لكل شريحة تنتمي إلى عائلة واحدة لكنها تتغير من شريحة لأخرى (نمط أو تدرج أو كتل مختلفة)، ولا تكون لونًا مسطحًا إلا في شريحة واحدة على الأكثر.\n5. العناصر الزخرفية تُبنى بـ SVG وCSS gradients وclip-path فقط، وتتحرك ببطء طوال الشريحة.");
   P.push("");
-  const vb = voicePromptBlock(); if (vb) { P.push(vb); P.push(""); }
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⏱️ جدول التوقيت والشرائح (استخدمه حرفيًا)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   P.push("| # | الاسم | النوع | التكوين | start (ms) | end (ms) | المدة (ث) | الكلمات |\n|---|---|---|---|---|---|---|---|\n" + rows);
   P.push("");
   P.push("Meta إلزامية في <head>:\n<meta name=\"project-duration-ms\" content=\"" + totalMs + "\">\n<meta name=\"project-orientation\" content=\"" + APP.orientation + "\">\n<meta name=\"project-title\" content=\"" + escA(d.title) + "\">");
   P.push("");
+  if (audioOn) {
+    P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎙 مرفق صوتي — ملف صوتي مرفق مع هذه الرسالة\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    P.push(audioInfo);
+    P.push("1. الملف الصوتي المرفق هو الكلام الذي سيُعرض الفيديو معه وهو المصدر الوحيد للمحتوى. استمع إليه كاملًا وفرّغه حرفيًا قبل أي تصميم.\n2. اشتق منه وحده: النص المعروض والأفكار والأرقام والأمثلة والرسوم. لا تضف معلومة أو عنوانًا أو اسمًا غير مذكور فيه (بيانات المشروع أعلاه للسياق فقط وليست نصًا يُعرض).\n3. اجعل عدد الشرائح " + total + " كما هو، وقسّم الكلام عليها عند حدود المعنى والجمل، وعدّل بدايات الشرائح ونهاياتها في الجدول لتطابق لحظات الكلام الفعلية (data-scene-start/end متصلة بلا فجوات)، والمدة الكلية = مدة الصوت الفعلية" + " وقيمة window.PROJECT.duration تساويها" + ". تُهمل خانة الكلمات وكثافة النص.\n4. النص على الشاشة حرفي من المنطوق (لا تصحيح ولا اختصار ولا إعادة صياغة)، وتظهر كل كلمة أو جملة عند نطقها لا قبلها ولا بعدها بأكثر من 100ms، وتبقى حتى تنتهي جملتها.\n5. إن لم تستطع سماع الصوت أو لم تجد مرفقًا، توقّف واكتب جملة واحدة بذلك بدل اختلاق المحتوى.\n6. لا تضف <audio> ولا أي صوت داخل الكود؛ يُضاف الصوت لاحقًا في الاستوديو.");
+    P.push("");
+  }
   P.push("تفاصيل كل شريحة:\n\n" + details);
   P.push("");
-  if (!voiceOn) P.push("كثافة النص: " + dn.name + " — " + dn.text + " الأسماء (الطالب والمعلم) في الشريحة الأخيرة فقط.");
+  if (!audioOn) P.push("كثافة النص: " + dn.name + " — " + dn.text + " الأسماء (الطالب والمعلم) في الشريحة الأخيرة فقط.");
   P.push("");
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🧩 قواعد التكوين (لا مركزية شاملة)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. طبّق التكوين المحدد لكل شريحة أعلاه بدقة. ممنوع تكرار التكوين نفسه في شريحتين متتاليتين.\n2. لا يُسمح بتوسيط النص إلا في الغلاف والختام على الأكثر. النص العربي يبدأ من اليمين: اجعل محاذاته لليمين (text-align:right) داخل عمود محدد العرض، ولا تمدّد النص على كامل عرض الشريحة.\n3. اعتمد شبكة من 12 عمودًا وهوامش ≥ 96px (أفقي) أو ≥ 72px (عمودي)، وحاذِ العناصر لخطوط الشبكة.\n4. عرض عمود النص لا يتجاوز 55% من الشريحة، ويترك جزء من الشريحة فارغًا عمدًا (مساحة سلبية ≥ 25%).\n5. هرمية النص: عنوان (72–180px)، عنوان فرعي (40–56px)، جسم (" + minText + "–52px)، تسمية صغيرة (≥ " + (portrait ? 30 : 28) + "px). ممنوع أي نص أصغر من " + (portrait ? 30 : 28) + "px لأن الفيديو يُشاهَد على شاشة جوال صغيرة.\n6. اجعل العنصر البصري أو الرقم أو الرمز هو البطل الأكبر في كل شريحة، لا النص وحده.\n7. ارتفاع السطر للعربية ≥ 1.4 للجسم و≥ 1.15 للعناوين، وتباين اللون مع الخلفية ≥ 4.5:1.");
+  P.push("1. طبّق التكوين المحدد لكل شريحة أعلاه بدقة. ممنوع تكرار التكوين نفسه في شريحتين متتاليتين.\n2. لا يُسمح بتوسيط النص إلا في الغلاف والختام على الأكثر. النص العربي يبدأ من اليمين: اجعل محاذاته لليمين (text-align:right) داخل عمود محدد العرض، ولا تمدّد النص على كامل عرض الشريحة.\n3. اعتمد شبكة من 12 عمودًا وهوامش ≥ 96px (أفقي) أو ≥ 72px (عمودي)، وحاذِ العناصر لخطوط الشبكة.\n4. عرض عمود النص لا يتجاوز 55% من الشريحة، ويترك جزء من الشريحة فارغًا عمدًا (مساحة سلبية ≥ 25%).\n5. هرمية النص: عنوان (120–240px)، عنوان فرعي (64–96px)، جسم (" + minText + "–72px)، تسمية صغيرة (≥ " + (portrait ? 40 : 38) + "px). ممنوع أي نص أصغر من " + (portrait ? 40 : 38) + "px لأن الفيديو يُشاهَد على شاشة جوال صغيرة.\n6. اجعل العنصر البصري أو الرقم أو الرمز هو البطل الأكبر في كل شريحة، لا النص وحده.\n7. ارتفاع السطر للعربية ≥ 1.4 للجسم و≥ 1.15 للعناوين، وتباين اللون مع الخلفية ≥ 4.5:1.");
   P.push("");
   P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎬 الحركة المفصلة\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   P.push("مستوى الحركة: " + ml.name + " — " + ml.text + "\n\nكل شريحة تتكون من ثلاث طبقات زمنية:\n• طبقة الخلفية: عنصر أو اثنان يتحركان طوال الشريحة ببطء (Motion.float أو دوران بطيء أو انزلاق نمط).\n• طبقة المحتوى: العنوان ثم الفرعي ثم النقاط ثم العنصر البصري بتتابع، ولا يدخل عنصران بالحركة نفسها متتاليين: نوّع بين reveal وwords وslideIn وscaleIn وdraw.\n• طبقة التفاصيل: إبراز بنبضة (Motion.pulse) أو عدّ (countUp) أو رسم خط (draw) أو تلوين كلمة مفتاحية.\n\nتوزيع الزمن داخل الشريحة (نسب من مدتها):\n• 0–8%: انتقال دخول (crossfade 300ms) والخلفية تستقر.\n• 5–25%: دخول العنوان.\n• 20–55%: دخول باقي العناصر بتتابع.\n• 40–80%: الإبراز والتفاصيل.\n• 85–100%: خروج ناعم (انزلاق 12–20px مع تلاشي) قبل الانتقال.\n\nقواعد الحركة:\n1. الحالة دالة في الزمن فقط: كل استدعاء لـ setTime يضبط كل الخصائص من الصفر (لا تراكم ولا اعتماد على الاستدعاء السابق) لكي يعمل التمرير والرجوع والتصدير.\n2. ممنوع Math.random و Date.now و performance.now داخل الحركة (استخدم قيمًا ثابتة أو دوال من ms).\n3. للنص العربي: حرّك كلمة كلمة (Motion.words) أو السطر كاملًا، وممنوع تقطيعه إلى حروف لأن ذلك يفكك اتصال الحروف.\n4. الأرقام تعدّ صعودًا (countUp)، والخطوط والمنحنيات تُرسم (draw)، والمخططات تنمو.");
@@ -1873,7 +1740,7 @@ function createPrompt() {
   P.push("");
   P.push("🖼️ الصور\n" + imgBlock);
   P.push("");
-  if (voiceOn) { P.push("⚠️ تذكير أخير: هذا مشروع «نص الصوت فقط». كل قاعدة في هذا البرومبت تخالف قسم 🎙 (عناوين الشرائح، الأسماء، المادة، الصف، الغلاف والختام، التسميات، نطاق الكلمات) تُلغى. لا نص على الشاشة إلا الأسطر المنطوقة حرفيًا ومتزامنة مع توقيتها."); P.push(""); }
+  if (audioOn) { P.push("⚠️ تذكير أخير: محتوى الشاشة = كلام الملف الصوتي المرفق فقط، حرفيًا ومتزامنًا مع نطقه. كل قاعدة تخالف قسم 🎙 المرفق الصوتي (عدد الكلمات، كثافة النص، عناوين تضيفها من عندك) تُلغى."); P.push(""); }
   P.push(buildQualityBlock());
   P.push("");
   P.push("📤 المخرجات: ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>. بدون أي شرح قبله أو بعده وبدون سياج markdown.");
@@ -1897,7 +1764,7 @@ const LINT_CATS = {
 const AutoFix = {
   rules: new Map(), n: 0, report: null, busy: false,
   enabled() { try { return localStorage.getItem("afAuto") !== "0"; } catch(e) { return true; } },
-  floor() { const v = Number(($("afMin") || {}).value); return v >= 16 && v <= 120 ? v : (APP.orientation === "portrait" ? 36 : 32); },
+  floor() { const v = Number(($("afMin") || {}).value); return v >= 16 && v <= 120 ? v : (APP.orientation === "portrait" ? 44 : 38); },
   reset(doc) {
     try { const o = doc.getElementById("__autofix__"); if (o) o.remove(); } catch(e){}
     doc.querySelectorAll("[data-af]").forEach(e => e.removeAttribute("data-af"));
@@ -4379,6 +4246,7 @@ function saveSession() {
       code: $("code").value,
       quality: $("quality").value,
       fps: $("fps").value,
+      hasAudio: !!$("hasAudio").checked,
       audio: AUDIO.tracks.map(t => ({ id: t.id, name: t.name, start: t.start, volume: t.volume, fadeIn: t.fadeIn, fadeOut: t.fadeOut, muted: t.muted }))
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(data));
@@ -4419,6 +4287,7 @@ function restoreSession() {
     if (d.code) $("code").value = d.code;
     if (d.quality) $("quality").value = d.quality;
     if (d.fps) $("fps").value = d.fps;
+    if (d.hasAudio) { $("hasAudio").checked = true; $("audioOpt").style.display = "block"; }
     return true;
   } catch(e) { Errors.push("warn", "restore", e); return false; }
 }
@@ -5202,6 +5071,7 @@ $("unifyBtn").addEventListener("click", () => {
   renderScenes(); scheduleSave(); History.mark();
   toast("تم توحيد المدة", "success", 1500);
 });
+$("hasAudio").addEventListener("change", () => { $("audioOpt").style.display = $("hasAudio").checked ? "block" : "none"; scheduleSave(); });
 $("addScene").addEventListener("click", () => {
   if (SCENES.length >= 20) { toast("الحد الأقصى 20 شريحة", "warn"); return; }
   setSceneCount(SCENES.length + 1);
@@ -5231,7 +5101,7 @@ $("generate").addEventListener("click", () => {
   const timing = buildTimingTable();
   const totalMs = timing.length ? timing[timing.length - 1].end : 0;
   $("pmScenes").textContent = SCENES.length + " شريحة";
-  $("pmDuration").textContent = (totalMs / 1000).toFixed(1) + " ث";
+  $("pmDuration").textContent = (totalMs / 1000).toFixed(1) + " ث" + ($("hasAudio").checked ? " (مبدئية — تُضبط على الصوت)" : "");
   $("pmOrientation").textContent = APP.orientation === "portrait" ? "عمودي" : "أفقي";
   $("pmDomain").textContent = "المجال: " + detectDomain(d).name;
   $("pmChars").textContent = t.length.toLocaleString("ar-EG") + " حرف";
@@ -5377,659 +5247,6 @@ document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", 
   if (!isSecure()) Errors.push("warn", "سياق غير آمن — استخدم https:// أو localhost.");
 })();
 
-/* ────────── صفحة الصوت: تفريغ ← فقرات كاملة المعنى ← برومبت موشن متصل ────────── */
-function voicePromptBlock() { return ""; }
-
-/* المفتاح مضمَّن مشفّرًا (AES-GCM بمفتاح مشتق PBKDF2-SHA256 × 250000) — لا يظهر نصًا في الكود ولا يمكن فكّه دون العبارة */
-const KEY_ENC = {"s":"Pfm0nvcME83Pv/qU5tdk5A==","i":"/KC3rzl+4PrOqF8b","c":"3K0iwk9KY0UaeHx5Oj2imgvGG36U0YqOSdsa/RAgSZMYPiIxoC8DGP0Y4WVuc7IaGQadkzPFOnkTs/aZxD0Rbqzw2/IPSe/N"};
-const b64d = t => Uint8Array.from(atob(t), c => c.charCodeAt(0)), b64e = u => btoa(String.fromCharCode.apply(null, u));
-async function deriveAes(pass, salt, usage) {
-  const km = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 250000, hash: "SHA-256" }, km, { name: "AES-GCM", length: 256 }, false, [usage]);
-}
-async function decKey(pass) {
-  const k = await deriveAes(pass, b64d(KEY_ENC.s), "decrypt");
-  return new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64d(KEY_ENC.i) }, k, b64d(KEY_ENC.c)));
-}
-async function encKey(key, pass) {
-  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
-  const k = await deriveAes(pass, salt, "encrypt");
-  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, k, new TextEncoder().encode(key)));
-  return JSON.stringify({ s: b64e(salt), i: b64e(iv), c: b64e(ct) });
-}
-function passMsg(kind, text) {
-  const m = $("vPassMsg"), p = $("vPass"); m.className = "vmsg " + kind; m.textContent = text;
-  p.classList.remove("ok", "bad"); if (kind === "ok" || kind === "bad") p.classList.add(kind);
-  if (kind === "bad") { p.classList.remove("shake"); void p.offsetWidth; p.classList.add("shake"); }
-}
-function renderKeyState() {
-  const has = !!$("vKey").value.trim();
-  $("vUnlockRow").style.display = has ? "none" : "block";
-  $("vForget").style.display = has ? "inline-flex" : "none";
-  if (has && !$("vPassMsg").classList.contains("ok")) { $("vPassMsg").className = "vmsg ok"; $("vPassMsg").textContent = "✅ المفتاح جاهز على هذا الجهاز."; }
-  if (!has && !$("vPassMsg").textContent) passMsg("", "اكتب الرمز السري ثم اضغط «تأكيد الرمز».");
-}
-let _unlocking = false;
-async function unlockKey() {
-  if (_unlocking) return false;
-  const pass = $("vPass").value.trim();
-  if (!pass) { passMsg("bad", "❌ اكتب الرمز السري أولًا."); $("vPass").focus(); return false; }
-  if (!(window.crypto && crypto.subtle)) { passMsg("bad", "❌ التشفير يتطلب فتح الصفحة عبر https:// أو localhost."); return false; }
-  _unlocking = true; $("vUnlock").disabled = true; passMsg("wait", "⏳ جارٍ التحقق من الرمز…");
-  try {
-    const key = await decKey(pass);
-    $("vKey").value = key; $("vPass").value = "";
-    try { localStorage.setItem("voiceKey_groq", key); } catch(e){}
-    passMsg("ok", "✅ الرمز صحيح — تم فتح المفتاح وحفظه على هذا الجهاز.");
-    $("vUnlockRow").style.display = "none"; $("vForget").style.display = "inline-flex"; vStatus("تم فتح المفتاح.");
-    toast("الرمز صحيح ✅", "success");
-    return true;
-  } catch(e) { passMsg("bad", "❌ الرمز خاطئ — تأكد منه وأعد المحاولة."); toast("الرمز السري خاطئ", "error"); return false; }
-  finally { _unlocking = false; $("vUnlock").disabled = false; }
-}
-$("vUnlock").addEventListener("click", unlockKey);
-$("vPass").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); unlockKey(); } });
-$("vPass").addEventListener("input", () => { if ($("vPassMsg").classList.contains("bad")) passMsg("", ""); });
-$("vPassEye").addEventListener("click", () => { const p = $("vPass"); p.type = p.type === "password" ? "text" : "password"; });
-$("vForget").addEventListener("click", () => { $("vKey").value = ""; try { localStorage.removeItem("voiceKey_groq"); } catch(e){} $("vPassMsg").className = "vmsg"; $("vPassMsg").textContent = ""; renderKeyState(); toast("حُذف المفتاح من هذا الجهاز", "info"); });
-$("vKey").addEventListener("input", renderKeyState);
-$("vEncBtn").addEventListener("click", async () => {
-  const k = $("vNewKey").value.trim(), p = $("vNewPass").value.trim();
-  if (!k || p.length < 3) { toast("أدخل المفتاح وعبارة", "warn"); return; }
-  if (p.length < 12) toast("العبارة قصيرة — يمكن تخمينها بسهولة", "warn", 4000);
-  $("vEncOut").value = await encKey(k, p);
-});
-const VOICE = { blob: null, name: "", dur: 0, pcm: null, buf: null, lines: [], worker: null, busy: false, rec: null, node: null };
-const VOICE_MODELS = { tiny: "onnx-community/whisper-tiny", base: "onnx-community/whisper-base", small: "onnx-community/whisper-small" };
-const VOICE_WORKER = `
-import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm";
-let asr = null, key = "", word = false;
-self.onmessage = async e => {
-  const { model, audio, mobile } = e.data;
-  const mk = (id, device) => pipeline("automatic-speech-recognition", id, {
-    device, dtype: device === "webgpu" ? { encoder_model: "fp32", decoder_model_merged: "q4" } : "q8",
-    progress_callback: p => self.postMessage({ type: "progress", p })
-  });
-  const load = async id => {
-    const want = (!mobile && self.navigator && self.navigator.gpu) ? "webgpu" : "wasm";
-    try { return await mk(id, want); } catch (err) { if (want === "webgpu") return await mk(id, "wasm"); throw err; }
-  };
-  const opts = ts => ({ language: "arabic", task: "transcribe", return_timestamps: ts, chunk_length_s: 30, stride_length_s: 5 });
-  try {
-    if (!asr || key !== model) {
-      try { asr = await load(model + "_timestamped"); word = true; } catch (err) { asr = await load(model); word = false; }
-      key = model;
-    }
-    self.postMessage({ type: "progress", p: { status: "run" } });
-    let out;
-    try { out = await asr(audio, opts(word ? "word" : true)); }
-    catch (err) { if (!word) throw err; asr = await load(model); word = false; out = await asr(audio, opts(true)); }
-    self.postMessage({ type: "done", out, word });
-  } catch (err) { self.postMessage({ type: "error", message: String((err && err.message) || err) }); }
-};`;
-const IC = n => '<svg class="ic" aria-hidden="true"><use href="#i-' + n + '"/></svg>';
-const vStatus = t => { $("voiceStatus").textContent = t; };
-const wcOf = t => String(t || "").split(/\s+/).filter(Boolean).length;
-
-/* ── قراءة الصوت ── */
-async function voiceDecode(blob, name) {
-  const buf = await decodeMedia(blob, vStatus, 16000);
-  const len = Math.max(1, Math.ceil(buf.duration * 16000));
-  const OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  const oc = new OC(1, len, 16000), src = oc.createBufferSource();
-  src.buffer = buf; src.connect(oc.destination); src.start();
-  const r = await oc.startRendering();
-  return { pcm: r.getChannelData(0), dur: buf.duration, buf };
-}
-async function voiceSet(blob, name) {
-  vStatus("جارٍ قراءة الصوت…");
-  try {
-    const a = await voiceDecode(blob, name);
-    const pb = _actx().createBuffer(1, a.pcm.length, 16000); pb.copyToChannel(a.pcm, 0);
-    const video = isVideoFile(blob);
-    const useBlob = video ? wavFromBuffer(a.buf) : blob;   /* من الفيديو نحتفظ بالصوت فقط (WAV) لا بالفيديو كله */
-    Object.assign(VOICE, { blob: useBlob, name: video ? String(name).replace(/\.[^.]+$/, "") + " (صوت)" : name, pcm: a.pcm, buf: pb, dur: a.dur, lines: [], full: { pcm: a.pcm, buf: pb, orig: a.buf, dur: a.dur, blob: useBlob } });
-    $("voiceInfo").textContent = VOICE.name + " • " + fmtDur(a.dur * 1000) + (video ? " • استُخرج الصوت من الفيديو" : "");
-    vStatus("جاهز للتفريغ."); renderVLines(); vtInit();
-  } catch(e) { Errors.push("error", "voice decode", e); const m = String(e && e.message || ""); vStatus("تعذّر قراءة الملف: " + (/[\u0600-\u06FF]/.test(m) ? m : "صيغة غير مدعومة؟ جرّب m4a أو mp3 أو mp4.")); toast("تعذّر قراءة الصوت", "error"); }
-}
-$("voiceFile").addEventListener("change", e => {
-  const f = e.target.files && e.target.files[0];
-  if (!f) return;
-  vStatus("تم اختيار: " + f.name + " — جارٍ القراءة…");
-  voiceSet(f, f.name).finally(() => { try { e.target.value = ""; } catch(_) {} });
-});
-$("voiceRec").addEventListener("click", async () => {
-  if (VOICE.rec) {
-    const r = VOICE.rec; VOICE.rec = null; vStatus("جارٍ معالجة التسجيل…");
-    $("voiceRec").innerHTML = IC("mic") + "تسجيل";
-    try {
-      const blob = await r.stop();
-      if (!blob.size) { vStatus("التسجيل فارغ — تأكد من عمل الميكروفون وأذونات الموقع."); toast("التسجيل فارغ", "warn"); return; }
-      voiceSet(blob, "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false }));
-    } catch(e) { Errors.push("error", "voice rec stop", e); vStatus("تعذّر إنهاء التسجيل."); }
-    return;
-  }
-  try {
-    vStatus("اسمح بالميكروفون إذا ظهر طلب الإذن…");
-    VOICE.rec = await micStart(s => vStatus("يسجّل… " + fmtTC(s * 1000) + " — اضغط «إيقاف» لإنهاء التسجيل"));
-    $("voiceRec").innerHTML = IC("stop") + "إيقاف"; vStatus("يسجّل…");
-  } catch(e) { VOICE.rec = null; Errors.push("error", "voice mic", e); vStatus(micError(e)); toast(micError(e), "error", 6500); }
-});
-
-/* ── قصّ الصوت: تحديد نطاق ── */
-const VT = { a: 0, b: 0, node: null, raf: 0, peaks: null, drag: null };
-function vtDur() { return VOICE.full ? VOICE.full.dur : 0; }
-function vtDraw() {
-  const cv = $("vtCanvas"), F = VOICE.full; if (!cv || !F) return;
-  const dpr = window.devicePixelRatio || 1, W = Math.max(50, Math.round(cv.clientWidth * dpr)), H = Math.max(30, Math.round(cv.clientHeight * dpr));
-  cv.width = W; cv.height = H;
-  const g = cv.getContext("2d"), pcm = F.pcm, step = pcm.length / W;
-  g.clearRect(0, 0, W, H); g.fillStyle = "#8b7cff";
-  for (let x = 0; x < W; x++) {
-    let mx = 0; const i0 = Math.floor(x * step), i1 = Math.min(pcm.length, Math.floor((x + 1) * step) + 1), sk = Math.max(1, Math.floor((i1 - i0) / 24));
-    for (let i = i0; i < i1; i += sk) { const v = Math.abs(pcm[i]); if (v > mx) mx = v; }
-    const h = Math.max(1, Math.min(1, mx * 1.4) * (H - 6)); g.fillRect(x, (H - h) / 2, 1, h);
-  }
-}
-function vtPaint() {
-  const D = vtDur(); if (!D) return;
-  const pa = VT.a / D * 100, pb = VT.b / D * 100;
-  const sel = $("vtSel"); sel.style.left = pa + "%"; sel.style.width = Math.max(0.2, pb - pa) + "%";
-  $("vtDimA").style.left = "0"; $("vtDimA").style.width = pa + "%";
-  $("vtDimB").style.left = pb + "%"; $("vtDimB").style.width = (100 - pb) + "%";
-  $("vtA").value = VT.a.toFixed(1); $("vtB").value = VT.b.toFixed(1);
-  const applied = VOICE.dur, full = D;
-  $("vtInfo").textContent = "النطاق المحدد: " + (VT.b - VT.a).toFixed(1) + " ث من " + full.toFixed(1) + " ث" + (Math.abs(applied - full) > 0.05 ? " • المطبَّق حاليًا: " + applied.toFixed(1) + " ث" : "");
-}
-function vtSet(a, b) {
-  const D = vtDur(), gap = 0.3;
-  a = Math.max(0, Math.min(isNaN(a) ? VT.a : a, D - gap)); b = Math.min(D, Math.max(isNaN(b) ? VT.b : b, a + gap));
-  VT.a = a; VT.b = b; vtPaint();
-}
-function vtInit() {
-  const D = vtDur(); if (!D) { $("vTrimCard").style.display = "none"; return; }
-  vtStop(); $("vTrimCard").style.display = "";
-  VT.a = 0; VT.b = D; vtDraw(); vtPaint();
-}
-function vtStop() { if (VT.node) { try { VT.node.stop(); } catch(e){} VT.node = null; } cancelAnimationFrame(VT.raf); $("vtPlay").style.display = "none"; $("vtListen").textContent = "▶ استمع للنطاق"; }
-$("vtListen").addEventListener("click", () => {
-  if (VT.node) { vtStop(); return; }
-  const F = VOICE.full; if (!F) return;
-  unlockAudio(); stopV(); try { prevStop(); } catch(e){}
-  const c = _actx(), src = c.createBufferSource(), dur = VT.b - VT.a, t0 = c.currentTime;
-  src.buffer = F.buf; src.connect(c.destination); src.start(0, VT.a, dur); VT.node = src;
-  src.onended = () => { if (VT.node === src) vtStop(); };
-  $("vtListen").textContent = "⏹ إيقاف"; $("vtPlay").style.display = "block";
-  const D = F.dur, tick = () => { if (VT.node !== src) return; const t = VT.a + (c.currentTime - t0); $("vtPlay").style.left = Math.min(100, t / D * 100) + "%"; VT.raf = requestAnimationFrame(tick); };
-  tick();
-});
-$("vtApply").addEventListener("click", () => {
-  const F = VOICE.full; if (!F) return;
-  if (VOICE.lines.length && !confirm("القص يغيّر التوقيت، وسيُمسح التفريغ الحالي لتعيد تفريغه. متابعة؟")) return;
-  vtStop();
-  const a = VT.a, b = VT.b, sr = 16000, i0 = Math.floor(a * sr), i1 = Math.min(F.pcm.length, Math.ceil(b * sr));
-  const pcm = F.pcm.slice(i0, i1), pb = _actx().createBuffer(1, pcm.length, sr); pb.copyToChannel(pcm, 0);
-  const whole = a <= 0.01 && b >= F.dur - 0.01;
-  Object.assign(VOICE, { pcm, buf: pb, dur: pcm.length / sr, lines: [], blob: whole ? F.blob : wavFromBuffer(F.orig, a, b) });
-  $("voiceInfo").textContent = VOICE.name + " • " + fmtDur(VOICE.dur * 1000) + (whole ? "" : " • مقصوص");
-  renderVLines(); vtPaint(); vStatus(whole ? "تمت استعادة الصوت كاملًا." : "تم القص — فرّغ الصوت المقصوص الآن."); toast(whole ? "الصوت كاملًا" : "تم تطبيق القص", "success");
-});
-$("vtReset").addEventListener("click", () => { vtSet(0, vtDur()); $("vtApply").click(); });
-$("vtDl").addEventListener("click", () => {
-  const F = VOICE.full; if (!F) return;
-  const u = URL.createObjectURL(wavFromBuffer(F.orig, VT.a, VT.b)), a = document.createElement("a");
-  a.href = u; a.download = "audio-trimmed.wav"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
-});
-$("vtA").addEventListener("change", () => vtSet(parseFloat($("vtA").value), VT.b));
-$("vtB").addEventListener("change", () => vtSet(VT.a, parseFloat($("vtB").value)));
-(function () {
-  const w = $("vtWrap"), tAt = e => { const r = w.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * vtDur(); };
-  w.addEventListener("pointerdown", e => { if (!vtDur()) return; const t = tAt(e); VT.drag = Math.abs(t - VT.a) <= Math.abs(t - VT.b) ? "a" : "b"; try { w.setPointerCapture(e.pointerId); } catch(_) {} e.preventDefault(); VT.drag === "a" ? vtSet(t, VT.b) : vtSet(VT.a, t); });
-  w.addEventListener("pointermove", e => { if (!VT.drag) return; const t = tAt(e); VT.drag === "a" ? vtSet(t, VT.b) : vtSet(VT.a, t); });
-  const up = () => { VT.drag = null; };
-  w.addEventListener("pointerup", up); w.addEventListener("pointercancel", up);
-  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (VOICE.full && $("vTrimCard").style.display !== "none") vtDraw(); }, 150); });
-})();
-
-/* ── من الكلمات إلى جمل (وحدات) ── */
-function splitLong(c, max) {
-  if (c.length <= max) return [c];
-  const n = c.length; let best = Math.floor(n / 2), bg = -1;
-  for (let j = Math.max(1, Math.floor(n * 0.35)); j <= Math.min(n - 1, Math.ceil(n * 0.65)); j++) { const g = c[j].s - c[j - 1].e; if (g > bg) { bg = g; best = j; } }
-  return splitLong(c.slice(0, best), max).concat(splitLong(c.slice(best), max));
-}
-function buildUnits(words, segEnds) {
-  const units = []; let cur = [], si = 0;
-  const flush = () => { if (cur.length) { splitLong(cur, 18).forEach(c => units.push({ s: c[0].s, e: c[c.length - 1].e, text: c.map(x => x.t).join(" "), w: c.map(x => [x.t, x.s, x.e]) })); cur = []; } };
-  words.forEach((w, i) => {
-    cur.push(w);
-    const nx = words[i + 1]; let brk = !nx;
-    if (nx) {
-      const mid = (w.s + w.e) / 2, nm = (nx.s + nx.e) / 2;
-      if (segEnds && segEnds.length) { while (si < segEnds.length && segEnds[si] < mid - 0.001) si++; if (si < segEnds.length && nm > segEnds[si]) brk = true; }
-      else if (/[.؟?!؛]$/.test(w.t) || nx.s - w.e > 0.5) brk = true;
-      if (nx.s - w.e > 0.9) brk = true;
-    }
-    if (brk) flush();
-  });
-  return units;
-}
-function wordsFromSegs(segs) {
-  const out = [];
-  segs.forEach(sg => {
-    const tk = String(sg.text || "").split(/\s+/).filter(Boolean); if (!tk.length) return;
-    const wt = tk.map(t => Math.max(2, t.length)), tot = wt.reduce((a, b) => a + b, 0), span = Math.max(0.2, sg.e - sg.s);
-    let c = sg.s; tk.forEach((t, i) => { const d = span * wt[i] / tot; out.push({ s: c, e: c + d, t }); c += d; });
-  });
-  return out;
-}
-function cleanLines(ls) {
-  const out = [];
-  ls.forEach(l => {
-    const t = String(l.text || "").replace(/\s+/g, " ").trim();
-    if (t.length < 2) return;
-    const p = out[out.length - 1];
-    if (p && p.text === t) { p.e = Math.max(p.e, l.e); return; }   /* هلوسة مكرَّرة */
-    out.push({ s: l.s, e: Math.max(l.e, l.s + 0.3), text: t, w: l.w || null });
-  });
-  return out;
-}
-function finishTranscribe(words, segEnds) {
-  words = words.filter(x => x.t).sort((a, b) => a.s - b.s);
-  VOICE.lines = cleanLines(buildUnits(words, segEnds));
-  if (!VOICE.lines.length) { vStatus("لم يُستخرج كلام. تحقق من الصوت أو جرّب طريقة أخرى."); return; }
-  autoParas(); renderVLines();
-  vStatus("تم التفريغ (" + VOICE.lines.length + " جملة). شغّل «معاينة المزامنة» وصحّح الأخطاء قبل إنشاء البرومبت.");
-}
-
-/* ── التفريغ على الجهاز ── */
-function voiceWorker() {
-  if (!VOICE.worker) VOICE.worker = new Worker(URL.createObjectURL(new Blob([VOICE_WORKER], { type: "text/javascript" })), { type: "module" });
-  return VOICE.worker;
-}
-function runLocal() {
-  let w;
-  const done = () => { VOICE.busy = false; $("voiceRun").disabled = false; };
-  try { w = voiceWorker(); } catch(e) { done(); vStatus("المتصفح لا يدعم التفريغ على الجهاز — استخدم Groq أو اكتب النص يدويًا."); return; }
-  w.onerror = e => { done(); Errors.push("error", "whisper worker", e.message); vStatus("تعذّر تحميل نموذج التفريغ (تحقق من الاتصال) — جرّب Groq."); };
-  w.onmessage = ev => {
-    const m = ev.data;
-    if (m.type === "progress") {
-      const p = m.p || {};
-      if (p.status === "run") vStatus("جارٍ تفريغ الكلام… قد يستغرق دقائق على الجوال");
-      else if (p.status === "progress" && p.progress != null) vStatus("تحميل النموذج " + Math.round(p.progress) + "%");
-    } else if (m.type === "done") {
-      done();
-      const ch = (m.out && m.out.chunks) || [];
-      const items = ch.map(c => ({ s: (c.timestamp && c.timestamp[0]) || 0, e: (c.timestamp && c.timestamp[1] != null) ? c.timestamp[1] : null, text: String(c.text || "").trim() })).filter(x => x.text);
-      if (m.word && items.length > 1) finishTranscribe(items.map((x, i) => ({ s: x.s, e: x.e != null ? x.e : (items[i + 1] ? items[i + 1].s : Math.min(VOICE.dur, x.s + 0.4)), t: x.text })), null);
-      else { const segs = items.length ? items.map(x => ({ s: x.s, e: x.e != null ? x.e : VOICE.dur, text: x.text })) : [{ s: 0, e: VOICE.dur, text: String((m.out && m.out.text) || "").trim() }]; finishTranscribe(wordsFromSegs(segs), segs.map(x => x.e)); }
-    } else if (m.type === "error") { done(); Errors.push("error", "whisper", m.message); vStatus("فشل التفريغ: " + m.message.slice(0, 120)); }
-  };
-  vStatus("تحضير النموذج…");
-  w.postMessage({ model: VOICE_MODELS[$("vModel").value] || VOICE_MODELS.small, audio: VOICE.pcm, mobile: isMobile() });
-}
-
-/* ── التفريغ عبر Groq (يُقطَّع الطويل عند أهدأ نقطة قرب كل 10 دقائق) ── */
-function pcmToWav(pcm, sr) {
-  const n = pcm.length, ab = new ArrayBuffer(44 + n * 2), v = new DataView(ab);
-  const ws = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
-  ws(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); ws(8, "WAVE"); ws(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
-  v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); ws(36, "data"); v.setUint32(40, n * 2, true);
-  for (let i = 0; i < n; i++) { const x = Math.max(-1, Math.min(1, pcm[i])); v.setInt16(44 + i * 2, x < 0 ? x * 0x8000 : x * 0x7fff, true); }
-  return ab;
-}
-function quietPoint(pcm, center, radius) {
-  const F = 1600; let best = center, be = 1e18;
-  for (let p = Math.max(0, center - radius); p + F < Math.min(pcm.length, center + radius); p += F) { let e = 0; for (let i = p; i < p + F; i += 4) e += pcm[i] * pcm[i]; if (e < be) { be = e; best = p + (F >> 1); } }
-  return best;
-}
-async function groqPart(wav, key, hint, proxy) {
-  const fd = new FormData();
-  fd.append("file", new Blob([wav], { type: "audio/wav" }), "audio.wav");
-  fd.append("model", "whisper-large-v3");
-  fd.append("language", "ar");
-  fd.append("temperature", "0");
-  fd.append("response_format", "verbose_json");
-  fd.append("timestamp_granularities[]", "word");
-  fd.append("timestamp_granularities[]", "segment");
-  if (hint) fd.append("prompt", hint);
-  for (let tr = 0; tr < 3; tr++) {
-    const r = await fetch(proxy || "https://api.groq.com/openai/v1/audio/transcriptions", { method: "POST", headers: key ? { Authorization: "Bearer " + key } : {}, body: fd });
-    if (r.status === 429 && tr < 2) { const wsec = Math.min(30, Number(r.headers.get("retry-after")) || 8); vStatus("حدّ الاستخدام — إعادة المحاولة بعد " + wsec + " ث…"); await sleep(wsec * 1000); continue; }
-    if (!r.ok) { const t = await r.text(); throw new Error(r.status + " " + t.slice(0, 160)); }
-    return await r.json();
-  }
-}
-async function runGroq() {
-  const done = () => { VOICE.busy = false; $("voiceRun").disabled = false; };
-  let key = $("vKey").value.trim();
-  const proxy = $("vProxy").value.trim(), hint = $("vHint").value.trim();
-  if (!key && !proxy && $("vPass").value.trim()) { if (await unlockKey()) key = $("vKey").value.trim(); }
-  if (!key && !proxy) { done(); $("vUnlockRow").style.display = "block"; passMsg("bad", "❌ لم يُفتح المفتاح بعد — اكتب الرمز السري واضغط تأكيد."); vStatus("افتح المفتاح المضمّن بعبارة التشفير (مرة واحدة على هذا الجهاز)، أو الصق مفتاحك، أو اختر «على جهازك»."); toast("المفتاح مطلوب للتفريغ عبر Groq", "warn", 5000); $("vPass").focus(); return; }
-  try { localStorage.setItem("voiceKey_groq", key); localStorage.setItem("voiceProxy", proxy); } catch(e){}
-  try {
-    const SR = 16000, CH = 600 * SR, pcm = VOICE.pcm, cuts = [0];
-    let pos = CH; while (pos < pcm.length - 30 * SR) { const q = quietPoint(pcm, pos, 8 * SR); cuts.push(q); pos = q + CH; }
-    cuts.push(pcm.length);
-    const words = [], segEnds = [];
-    for (let i = 0; i < cuts.length - 1; i++) {
-      const wav = pcmToWav(pcm.subarray(cuts[i], cuts[i + 1]), SR), off = cuts[i] / SR;
-      if (wav.byteLength > 24 * 1024 * 1024) throw new Error("جزء الصوت أكبر من حدّ الرفع");
-      vStatus("جارٍ الرفع والتفريغ" + (cuts.length > 2 ? " (" + (i + 1) + "/" + (cuts.length - 1) + ")" : "") + "…");
-      const j = await groqPart(wav, key, hint, proxy);
-      (j.words || []).forEach(x => { const t = String(x.word || "").trim(); if (t) words.push({ s: x.start + off, e: x.end + off, t }); });
-      (j.segments || []).forEach(x => segEnds.push(x.end + off));
-      if (!(j.words || []).length && (j.segments || []).length) wordsFromSegs(j.segments.map(x => ({ s: x.start + off, e: x.end + off, text: x.text }))).forEach(x => words.push(x));
-    }
-    done();
-    finishTranscribe(words, segEnds);
-  } catch(e) { done(); Errors.push("error", "groq asr", e); vStatus("فشل التفريغ عبر Groq: " + String(e.message || e).slice(0, 160) + " — جرّب «على جهازك»."); }
-}
-$("voiceRun").addEventListener("click", () => {
-  if (VOICE.busy) return;
-  if (!VOICE.pcm) { toast("اختر ملفًا صوتيًا أو سجّل أولًا", "warn"); return; }
-  VOICE.busy = true; $("voiceRun").disabled = true;
-  if ($("vEngine").value === "local") runLocal(); else runGroq();
-});
-$("vEngine").addEventListener("change", () => { const l = $("vEngine").value === "local"; $("vModelRow").style.display = l ? "" : "none"; $("vKeyRow").style.display = l ? "none" : ""; });
-try { $("vKey").value = localStorage.getItem("voiceKey_groq") || ""; $("vProxy").value = localStorage.getItem("voiceProxy") || ""; } catch(e){}
-renderKeyState();
-
-/* ── حجم النص والسعة ── */
-const V_SIZES = { s: [[48, 60], [56, 70]], m: [[64, 80], [72, 90]], l: [[84, 108], [92, 116]], xl: [[110, 140], [118, 150]] };
-function vGeom() { const p = $("vOrient").value === "portrait", W = p ? 1080 : 1920, H = p ? 1920 : 1080; return { p, W, H, bw: W * (p ? 0.82 : 0.70), bh: H * (p ? 0.50 : 0.55) }; }
-function vRange() { const g = vGeom(); return V_SIZES[$("vSize").value || "l"][g.p ? 1 : 0]; }
-function vMaxWords() {
-  const g = vGeom(), fs = vRange()[0] * 0.8, lines = Math.max(1, Math.floor(g.bh / (fs * 1.6))), cpl = g.bw / (fs * 0.52);
-  return Math.max(8, Math.floor(lines * cpl * 0.9 / 6));
-}
-function fitSize(chars) {
-  const g = vGeom(), r = vRange(), floor = g.p ? 40 : 36;
-  for (let fs = r[1]; fs >= floor; fs -= 2) { const cpl = g.bw / (fs * 0.52), lines = Math.ceil(chars / (cpl * 0.9)); if (lines * fs * 1.6 <= g.bh) return { fs, fit: true }; }
-  return { fs: floor, fit: false };
-}
-
-/* ── الفقرات: كل فقرة = لحظة كاملة المعنى ── */
-function groupsOf() { const g = []; VOICE.lines.forEach((l, i) => { if (l.np || !g.length) g.push([i]); else g[g.length - 1].push(i); }); return g; }
-const gdur = g => VOICE.lines[g[g.length - 1]].e - VOICE.lines[g[0]].s;
-const gw = g => g.reduce((a, i) => a + wcOf(VOICE.lines[i].text), 0);
-function setFromGroups(g) { VOICE.lines.forEach(l => { l.np = false; }); g.forEach(x => { VOICE.lines[x[0]].np = true; }); }
-function autoParas() {
-  const L = VOICE.lines, mx = vMaxWords(); let st = 0, words = 0;
-  L.forEach((l, i) => {
-    const w = wcOf(l.text);
-    if (i === 0) { l.np = true; words = w; return; }
-    const gap = l.s - L[i - 1].e;
-    l.np = gap >= 0.9 || words + w > mx * 0.85 || (l.e - L[st].s) > 20;
-    if (l.np) { st = i; words = w; } else words += w;
-  });
-  balanceParas(Number($("vTarget").value) || 0);
-}
-function balanceParas(target) {
-  if (!VOICE.lines.length) return;
-  let g = groupsOf(), guard = 400;
-  const T = target ? Math.max(3, Math.min(20, target)) : 0, mx = vMaxWords();
-  const mergeAt = k => { g.splice(k, 2, g[k].concat(g[k + 1])); };
-  while (guard-- > 0 && g.length > 3) {
-    const order = g.map((x, i) => i).sort((a, b) => gdur(g[a]) - gdur(g[b])); let did = false;
-    for (const k of order) {
-      if (gdur(g[k]) >= 2.5) break;
-      const cand = [k - 1, k].filter(j => j >= 0 && j < g.length - 1 && gw(g[j]) + gw(g[j + 1]) <= mx);
-      if (!cand.length) continue;
-      mergeAt(cand.length === 2 ? (gdur(g[k - 1]) <= gdur(g[k + 1]) ? k - 1 : k) : cand[0]); did = true; break;
-    }
-    if (!did) break;
-  }
-  while (guard-- > 0 && g.length > (T || 20)) {
-    let k = 0, bv = 1e9; for (let i = 0; i < g.length - 1; i++) { const v = gdur(g[i]) + gdur(g[i + 1]) + (gw(g[i]) + gw(g[i + 1]) > mx ? 1000 : 0); if (v < bv) { bv = v; k = i; } }
-    mergeAt(k);
-  }
-  while (guard-- > 0 && g.length < 20) {
-    const cands = g.map((x, i) => i).filter(i => g[i].length > 1);
-    if (!cands.length) break;
-    const long = cands.filter(i => gw(g[i]) > mx);
-    const need = (T && g.length < T) || (!T && g.length < 3) || long.length || cands.some(i => gdur(g[i]) > 45);
-    if (!need) break;
-    const pool = long.length ? long : cands, q = pool.sort((a, b) => gdur(g[b]) - gdur(g[a]))[0], x = g[q];
-    const mid = (VOICE.lines[x[0]].s + VOICE.lines[x[x.length - 1]].e) / 2;
-    let cut = 1, best = -1e9;
-    for (let j = 1; j < x.length; j++) { const gap = VOICE.lines[x[j]].s - VOICE.lines[x[j - 1]].e - Math.abs(VOICE.lines[x[j]].s - mid) * 0.15; if (gap > best) { best = gap; cut = j; } }
-    g.splice(q, 1, x.slice(0, cut), x.slice(cut));
-  }
-  setFromGroups(g);
-}
-
-/* ── المحرر ── */
-function renderVLines() {
-  const c = $("vLines"), L = VOICE.lines;
-  if (!L.length) { c.innerHTML = '<div class="hint" style="padding:12px 0">لا نص بعد — فرّغ الصوت أو أضف سطرًا يدويًا.</div>'; updateVSummary(); return; }
-  L[0].np = true;
-  const gs = groupsOf(), mx = vMaxWords(), head = new Map(); gs.forEach((x, k) => head.set(x[0], { k: k + 1, d: gdur(x), w: gw(x) }));
-  c.innerHTML = L.map((l, i) => {
-    const h = head.get(i);
-    return (h ? `<div class="vl-h">فقرة ${h.k} • ${h.d.toFixed(1)} ث • ${h.w} كلمة${h.w > mx ? '<span class="warn">طويلة — قسّمها بزر الفقرة أو صغّر الحجم</span>' : ""}</div>` : "") +
-      `<div class="vl" data-i="${i}"><div class="vl-r"><textarea class="vl-t" data-a="text" dir="rtl" rows="2" aria-label="نص الجملة">${escA(l.text)}</textarea><button type="button" data-a="play" title="استمع" aria-label="استمع للجملة">${IC("play")}</button><button type="button" data-a="np" class="${l.np ? "on" : ""}" title="ابدأ فقرة جديدة هنا" aria-label="فقرة جديدة هنا" ${i === 0 ? "disabled" : ""}>${IC("para")}</button><button type="button" data-a="merge" title="ادمج مع الجملة السابقة" aria-label="دمج مع السابقة" ${i === 0 ? "disabled" : ""}>${IC("up")}</button><button type="button" data-a="del" title="حذف" aria-label="حذف الجملة">${IC("trash")}</button></div>` +
-      `<div class="vl-time">من <input type="number" step="0.05" min="0" data-a="s" value="${l.s.toFixed(2)}"> إلى <input type="number" step="0.05" min="0" data-a="e" value="${l.e.toFixed(2)}"> ث</div></div>`;
-  }).join("");
-  updateVSummary();
-}
-function stopV() { prevStop(); try { if (VOICE.node) VOICE.node.stop(); } catch(e){} VOICE.node = null; }
-function vPlay(i) {
-  const l = VOICE.lines[i]; if (!l || !VOICE.buf) return;
-  stopV(); unlockAudio();
-  const c = _actx(), src = c.createBufferSource();
-  src.buffer = VOICE.buf; src.connect(c.destination);
-  const st = Math.max(0, l.s - 0.15); src.start(0, st, Math.max(0.3, l.e - st + 0.2));
-  VOICE.node = src;
-}
-$("vLines").addEventListener("input", e => {
-  const a = e.target.dataset.a, row = e.target.closest(".vl"); if (!row) return;
-  const l = VOICE.lines[Number(row.dataset.i)]; if (!l) return;
-  if (a === "text") { l.text = e.target.value; updateVSummary(); }
-});
-$("vLines").addEventListener("change", e => {
-  const a = e.target.dataset.a, row = e.target.closest(".vl"); if (!row || (a !== "s" && a !== "e")) return;
-  const l = VOICE.lines[Number(row.dataset.i)]; if (!l) return;
-  const v = Math.max(0, Number(e.target.value) || 0);
-  if (a === "s") l.s = Math.min(v, l.e - 0.1); else l.e = Math.max(v, l.s + 0.1);
-  l.w = null; renderVLines();
-});
-$("vLines").addEventListener("click", e => {
-  const b = e.target.closest("button[data-a]"); if (!b) return;
-  const i = Number(b.closest(".vl").dataset.i), L = VOICE.lines, a = b.dataset.a;
-  if (a === "play") { vPlay(i); return; }
-  if (a === "np") { if (i > 0) { L[i].np = !L[i].np; renderVLines(); } return; }
-  if (a === "merge" && i > 0) { const p = L[i - 1], q = L[i]; p.w = (p.w && q.w && p.w.length === wcOf(p.text) && q.w.length === wcOf(q.text)) ? p.w.concat(q.w) : null; p.text += " " + q.text; p.e = Math.max(p.e, q.e); L.splice(i, 1); renderVLines(); return; }
-  if (a === "del") { const was = L[i].np; L.splice(i, 1); if (was && L[i]) L[i].np = true; renderVLines(); }
-});
-$("vAuto").addEventListener("click", () => { if (!VOICE.lines.length) { toast("لا نص بعد", "warn"); return; } autoParas(); renderVLines(); toast("تمت الموازنة", "success", 1500); });
-["vTarget", "vSize", "vOrient"].forEach(id => $(id).addEventListener("change", () => { if (VOICE.lines.length) { autoParas(); renderVLines(); } }));
-$("vAddLine").addEventListener("click", () => {
-  const last = VOICE.lines[VOICE.lines.length - 1], s0 = last ? last.e : 0;
-  VOICE.lines.push({ s: s0, e: Math.max(s0 + 2, Math.min(VOICE.dur || s0 + 2, s0 + 4)), text: "جملة جديدة", np: !last, w: null });
-  renderVLines();
-});
-document.querySelectorAll("[data-vo]").forEach(b => b.addEventListener("click", () => {
-  $("vOrient").value = b.dataset.vo;
-  document.querySelectorAll("[data-vo]").forEach(x => x.classList.toggle("active", x === b));
-  $("vOrient").dispatchEvent(new Event("change"));
-}));
-Object.keys(STYLES).forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = STYLES[k].name; $("vStyle").appendChild(o); });
-
-/* ── التوقيت الدقيق: كلمات • نافذة عرض لكل فقرة • هوامش أمان ── */
-function vTokens(l) {
-  const tk = String(l.text || "").split(/\s+/).filter(Boolean);
-  if (l.w && l.w.length === tk.length) return tk.map((t, i) => [t, l.w[i][1], l.w[i][2]]);
-  const wt = tk.map(t => Math.max(2, t.length)), tot = wt.reduce((a, b) => a + b, 0) || 1, span = Math.max(0.2, l.e - l.s);
-  let c = l.s; return tk.map((t, i) => { const d = span * wt[i] / tot, r = [t, c, c + d * 0.92]; c += d; return r; });
-}
-function vBeats() {
-  const L = VOICE.lines, g = groupsOf(), off = Number($("vOffset").value) || 0, m = Number($("vMargin").value) || 150;
-  const beats = g.map((idx, k) => {
-    const words = [];
-    idx.forEach(li => vTokens(L[li]).forEach(w => words.push([w[0], Math.max(0, Math.round(w[1] * 1000 + off)), Math.round(w[2] * 1000 + off)])));
-    for (let i = 0; i < words.length; i++) { if (i && words[i][1] < words[i - 1][1]) words[i][1] = words[i - 1][1]; if (words[i][2] <= words[i][1]) words[i][2] = words[i][1] + 120; }
-    const s = words[0][1], e = words.reduce((a, w) => Math.max(a, w[2]), 0);
-    return { n: k + 1, words, s, e, text: words.map(w => w[0]).join(" ") };
-  });
-  const lastE = beats.length ? beats[beats.length - 1].e : 0;
-  const total = Math.ceil(Math.max(VOICE.dur * 1000, lastE + 400) / 100) * 100;
-  const EXIT = 320, LEAD = 300, linger = m + 250;
-  beats.forEach((b, k) => {
-    const prev = beats[k - 1], next = beats[k + 1];
-    b.h = next ? Math.min(Math.max(b.e + linger, b.e + 60), Math.max(b.e + 60, next.s - 80)) : Math.min(total - EXIT - 30, b.e + linger + 400);
-    b.a = k === 0 ? Math.max(0, b.s - LEAD) : Math.max(0, Math.min(b.s - 40, Math.max(prev.h + 70, b.s - LEAD)));
-    b.x = b.h + EXIT;
-    const f = fitSize(b.text.length); b.fs = f.fs; b.fit = f.fit;
-  });
-  const secs = beats.map((b, k) => ({ n: b.n, s: 0, e: 0 }));
-  secs.forEach((x, k) => { x.s = k === 0 ? 0 : Math.max(secs[k - 1].s + 300, Math.min(beats[k].s - 100, Math.round((beats[k - 1].x + beats[k].a) / 2))); });
-  secs.forEach((x, k) => { x.e = k === secs.length - 1 ? total : secs[k + 1].s; });
-  return { beats, secs, total, m, off };
-}
-function updateVSummary() {
-  const L = VOICE.lines, g = L.length ? groupsOf() : [];
-  $("vsScenes").textContent = g.length;
-  $("vsDur").textContent = L.length ? fmtDur(Math.max(VOICE.dur, L[L.length - 1].e) * 1000) : "0";
-  $("vsLines").textContent = L.length;
-  $("vsWords").textContent = L.reduce((a, l) => a + wcOf(l.text), 0);
-}
-
-/* ── معاينة المزامنة: نفس التوقيت الذي سيستلمه الذكاء الاصطناعي ── */
-const PREV = { raf: 0, node: null, t0: 0, idx: -2, spans: [] };
-function prevStop() {
-  cancelAnimationFrame(PREV.raf); PREV.raf = 0;
-  try { if (PREV.node) { PREV.node.onended = null; PREV.node.stop(); } } catch(e){}
-  PREV.node = null; const b = $("vPrevBtn"); if (b) b.innerHTML = IC("play") + "معاينة المزامنة";
-}
-$("vPrevBtn").addEventListener("click", () => {
-  if (PREV.node) { prevStop(); return; }
-  if (!VOICE.buf || !VOICE.lines.length) { toast("فرّغ الصوت أولًا", "warn"); return; }
-  stopV(); unlockAudio();
-  const c = _actx(), B = vBeats(), src = c.createBufferSource(), box = $("vPrevBox");
-  src.buffer = VOICE.buf; src.connect(c.destination); src.onended = () => { if (PREV.node === src) prevStop(); };
-  PREV.node = src; PREV.idx = -2; $("vPrevBtn").innerHTML = IC("stop") + "إيقاف";
-  src.start(); PREV.t0 = c.currentTime;
-  const tick = () => {
-    const t = (c.currentTime - PREV.t0) * 1000; let k = -1;
-    B.beats.forEach((b, i) => { if (t >= b.a && t < b.x) k = i; });
-    if (k !== PREV.idx) {
-      PREV.idx = k;
-      if (k < 0) { box.innerHTML = '<span class="hint">—</span>'; PREV.spans = []; }
-      else { box.innerHTML = B.beats[k].words.map(w => '<span class="pw">' + escA(w[0]) + "</span>").join(" "); PREV.spans = Array.from(box.querySelectorAll(".pw")); }
-    }
-    if (k >= 0) { const w = B.beats[k].words; PREV.spans.forEach((sp, i) => sp.classList.toggle("on", t >= w[i][1])); }
-    $("vPrevT").textContent = (t / 1000).toFixed(2) + " ث" + (k >= 0 ? " • فقرة " + (k + 1) : "");
-    PREV.raf = requestAnimationFrame(tick);
-  };
-  tick();
-});
-
-/* ── البرومبت المتخصص ── */
-function vOpts() {
-  const o = {}; ["vStyle", "vSize", "vMode", "vPos", "vHi", "vMotion", "vBg", "vTrans", "vIcons", "vTitles", "vProg", "vOrient", "vTopic", "vExtra"].forEach(k => { o[k] = $(k).value.trim(); });
-  o.imgs = Math.max(0, Math.min(10, Number($("vImgs").value) || 0));
-  return o;
-}
-function buildVoicePrompt() {
-  const o = vOpts(), G = vGeom(), portrait = G.p, W = G.W, H = G.H;
-  const fps = Number($("fps").value) || 30;
-  const B = vBeats(), beats = B.beats, secs = B.secs, total = B.total, m = B.m;
-  const style = STYLES[o.vStyle] || STYLES.auto, ml = MOTION_LEVELS[o.vMotion] || MOTION_LEVELS.balanced;
-  const sz = vRange();
-  const MODE = { reveal: "الفقرة كاملة ككتلة نصية واحدة؛ كل كلمة تظهر عند بدء نطقها تمامًا (لا قبل) بتلاشٍ مع صعود 12–16px خلال 160–220ms.", fade: "كل كلمة تظهر عند بدء نطقها تمامًا (لا قبل) بتلاشٍ فقط خلال 160–200ms دون أي إزاحة.", karaoke: "الفقرة كاملة ظاهرة بخفوت 25–30% من لحظة دخولها، وكل كلمة تُضاء إلى 100% عند بدء نطقها تمامًا، وتبقى مضاءة حتى نهاية الفقرة." }[o.vMode];
-  const TR = { morph: "تحوّل مستمر: كل عنصر رسومي في اللحظة يتحول (حجمًا وموضعًا ولونًا أو بتحويل مسار SVG) إلى العنصر الذي يمثل اللحظة التالية، فلا يختفي شيء فجأة ولا يظهر شيء من العدم.", camera: "كاميرا تنزلق عبر عالم واحد متصل (تحريك/تكبير/دوران طفيف لطبقة #world بدلالة الزمن)، وكل لحظة تقع في منطقة مختلفة من العالم تصل إليها الكاميرا بحركة سلسة.", mask: "انتقالات بأقنعة هندسية متحركة (clip-path: دوائر ومستطيلات ومضلعات) تكشف اللحظة التالية من داخل شكل يتمدد من عنصر موجود أصلًا." }[o.vTrans];
-  const POS = { auto: "غيّر موضع كتلة النص بين اللحظات (يمين، يسار، أعلى، أسفل) بحسب تكوين الرسوم، ولا تكرر الموضع نفسه في لحظتين متتاليتين.", right: "كتلة النص محاذاة لليمين في عمود لا يتجاوز " + (portrait ? 84 : 62) + "% من العرض.", center: "كتلة النص في وسط الشاشة وسط المحاذاة.", bottom: "كتلة النص في الثلث الأسفل بأسلوب الترجمة، على لوح معتم خلفها لضمان التباين." }[o.vPos];
-  const HI = { none: "بلا إبراز خاص.", color: "اختر من كل فقرة 1–3 كلمات مفتاحية وأظهرها بلون مميز (دون تغيير النص).", pulse: "اختر من كل فقرة 1–3 كلمات مفتاحية: لون مميز ونبضة Motion.pulse عند نطقها." }[o.vHi];
-  const BG = { drift: "عالم من تدرجات لونية تنزاح ببطء وباستمرار طوال الفيديو.", shapes: "أشكال هندسية كبيرة تطفو وتدور ببطء داخل العالم المتصل.", pattern: "نمط زخرفي ينزلق ببطء بتباين منخفض كي لا يشوّش القراءة.", topic: "عناصر مستوحاة من موضوع الكلام نفسه تشكّل العالم بتباين منخفض.", flat: "عالم هادئ شبه ثابت بحركة طفيفة جدًا ليكون النص هو البطل." }[o.vBg];
-  const IC2 = { none: "بلا رسوم رمزية؛ العالم والنص فقط.", simple: "لكل لحظة 1–3 رموز SVG بسيطة تعبّر عن معنى الفقرة (بلا أي نص داخلها).", hero: "لكل لحظة رمز SVG كبير واحد يجسّد فكرة الفقرة ويتحرك ببطء، بلا نص." }[o.vIcons];
-
-  const detail = beats.map(b => "▪ لحظة " + b.n + "  | نافذة العرض [" + b.a + " → " + b.x + "]ms | النطق [" + b.s + " → " + b.e + "]ms | " + b.words.length + " كلمة | الخط المقترح " + b.fs + "px" + (b.fit ? "" : " (فقرة طويلة: وسّع الكتلة وحافظ على ≤ 6 أسطر)") + "\n   «" + b.text + "»").join("\n\n");
-  const parasLit = "[" + beats.map(b => "{n:" + b.n + ",a:" + b.a + ",s:" + b.s + ",e:" + b.e + ",h:" + b.h + ",x:" + b.x + ",fs:" + b.fs + ",w:[" + b.words.map(w => "[" + JSON.stringify(w[0]) + "," + w[1] + "," + w[2] + "]").join(",") + "]}").join(",\n ") + "]";
-  const secLit = "[" + secs.map(x => "{n:" + x.n + ",s:" + x.s + ",e:" + x.e + "}").join(",") + "]";
-  const secTable = secs.map((x, i) => "| " + x.n + " | " + x.s + " | " + x.e + " | " + beats[i].words.length + " |").join("\n");
-  const title = (o.vTopic || "موشن من الصوت").replace(/"/g, "&quot;");
-
-  let img = "بدون صور: اعتمد على الرسوم والأشكال SVG.";
-  if (o.imgs > 0) {
-    const iw = portrait ? 800 : 1000, ih = portrait ? 1000 : 700, r = [];
-    for (let k = 0; k < o.imgs; k++) { const x = beats[Math.min(beats.length - 1, Math.floor(k * beats.length / o.imgs))]; r.push("| img-" + (k + 1) + " | لحظة " + x.n + " | " + iw + "×" + ih + " px |"); }
-    img = "أضف " + o.imgs + " صورة بحسب الجدول (تتناسب مع معنى الفقرة ولا تحجب النص):\n| # | اللحظة | أبعاد الحاوية |\n|---|---|---|\n" + r.join("\n") + "\nقواعد الصور: كل صورة داخل class=\"img-frame\" بأبعاد px فقط؛ .img-frame: position:relative;overflow:hidden. img: width:100%;height:100%;object-fit:cover;display:block. ممنوع %, vw, vh, auto في أبعاد .img-frame. الصورة البديلة data:image/svg+xml بلون من لوحة المشروع، مع alt واضح و data-image-name=\"img-N\".";
-  }
-
-  const P = [];
-  P.push("أنت مخرج موشن جرافيك محترف للمحتوى العربي. مهمتك: فيديو موشن جرافيك متصل في ملف HTML واحد، يعرض كلام تسجيل صوتي جاهز متزامنًا معه بدقة المللي ثانية. التسجيل يُضاف لاحقًا من الاستوديو، ومهمتك الصورة فقط.");
-  P.push("");
-  P.push("📋 بيانات المشروع\nالموضوع: " + (o.vTopic || "غير محدد") + "\nالأبعاد: " + W + " × " + H + " (" + (portrait ? "عمودي 9:16" : "أفقي 16:9") + ")\nالإطارات: " + fps + "\nعدد فقرات الكلام (لحظات): " + beats.length + "\nالمدة الكلية: " + total + "ms\nملاحظات المستخدم: " + (o.vExtra || "لا توجد"));
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎬 هذا موشن جرافيك متصل وليس عرض شرائح\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. ممنوع أسلوب الشرائح: لا قطع مفاجئ، لا تبديل خلفية كاملة بتلاشٍ، لا بطاقات متعاقبة بالقالب نفسه، ولا يبدأ شيء من الصفر مع كل فقرة.\n2. ابنِ عالمًا بصريًا واحدًا #world داخل #project-root وخارج كل <section>: خلفية وطبقات وعناصر رمزية تبقى طوال الفيديو وتتحرك باستمرار (كاميرا بطيئة: انسحاب/تكبير/دوران طفيف بدلالة ms ÷ المدة الكلية).\n3. كل فقرة (لحظة) تُحدِث تحوّلًا في هذا العالم بدل أن تبدأ مشهدًا جديدًا. " + TR + "\n4. خطّط داخليًا قبل الكتابة (لا تعرض الخطة): لكل لحظة استعارة بصرية واحدة مأخوذة من معنى كلامها، وكيف تتحول منها إلى استعارة اللحظة التالية.\n5. الحركة هي التي تقود الانتقال بين اللحظات (انتقال الكاميرا وتحوّل العناصر)، والنص يتبدّل ضمن هذه الحركة لا ضدها.\n6. الأقسام <section data-scene> موجودة لهيكلة الزمن فقط وتحمل كتلة نص اللحظة ورسومها الخاصة؛ أما العالم المستمر فخارجها.");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎙 قواعد النص والتوقيت (لها الأولوية)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. النص على الشاشة = الكلام المنطوق فقط، حرفيًا: ممنوع تغيير كلمة أو اختصارها أو تصحيحها أو إعادة صياغتها. انسخه من المصفوفة PARAS ولا تكتبه من عندك.\n2. " + (o.vTitles === "kw" ? "يُسمح بكلمة مفتاحية واحدة صغيرة لكل لحظة من كلام فقرتها نفسها؛ ما عداها لا نص." : "ممنوع أي نص آخر: لا عناوين، لا أرقام، لا تسميات، لا أسماء، لا شعار. الباقي رسوم وأشكال فقط.") + "\n3. وحدة العرض هي الفقرة كاملة المعنى: تظهر الفقرة كلها كتلة واحدة، وتبقى حتى ينتهي كلامها، ثم تتبدل بالفقرة التالية مع تحوّل الحركة. لا تقسّم الفقرة إلى جمل تتناوب في الكتلة نفسها.\n4. طريقة العرض: " + MODE + "\n5. لكل فقرة نافذة عرض [a → x]: يبدأ دخول الكتلة عند a (قبل أول كلمة بنحو 300ms أو أقل)، وتبدأ الكلمة الأولى عند s، وتنتهي آخر كلمة عند e، ويبدأ خروج الكتلة عند h، وتختفي تمامًا عند x.\n6. هوامش الخطأ (مقصودة، لا تغيّرها): هامش الأمان " + m + "ms + 250ms بقاء بعد آخر كلمة. لذلك لا يخرج النص قبل اكتمال نطقه، ولا يدخل أي حرف من الفقرة التالية قبل a، ولا تظهر أي كلمة قبل زمن نطقها s.\n7. التقديم ممنوع: لا تقدّم أي حدث أو كلمة عن زمنها، والتأخير المسموح لا يزيد عن 60ms. عند الشك اختر التأخير لا التبكير.\n8. في الكلام المتصل (فجوة صغيرة بين فقرتين) يتداخل خروج الأولى مع دخول الثانية بما لا يزيد عن 300ms، وكلمات الثانية تبقى مخفية حتى زمنها.\n9. كل استدعاء setTime يعيد حساب الحالة كاملة من ms وحده (لا اعتماد على الاستدعاء السابق).");
-  P.push("");
-  P.push("⏱️ الأقسام الزمنية (data-scene-start/end متصلة بلا فجوات)\n| # | start (ms) | end (ms) | كلمات |\n|---|---|---|---|\n" + secTable);
-  P.push("");
-  P.push("📝 اللحظات (النص حرفي، الأزمنة مطلقة بالملّي ثانية)\n\n" + detail);
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎨 التوجه الفني\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("الأسلوب: " + style.name + " — " + style.text + (o.vTopic ? "\nاشتق الألوان والرموز من موضوع الكلام: " + o.vTopic : "\nاشتق الألوان والرموز من معنى الكلام نفسه.") +
-    "\n\n• حجم النص: يُضبط لكل فقرة بحيث تتسع كاملة داخل كتلة لا تتجاوز " + Math.round(G.bw) + "×" + Math.round(G.bh) + "px: الحجم المقترح مذكور في كل لحظة، ومجال الحجم العام " + sz[0] + "–" + sz[1] + "px (لا أقل من " + (portrait ? 40 : 36) + "px مهما طالت الفقرة)، ارتفاع السطر ≥ 1.55، تباين ≥ 4.5:1.\n• عرض الفقرة: " + MODE + "\n• موضع النص: " + POS + "\n• إبراز الكلمات: " + HI + "\n• الحركة: " + ml.name + " — " + ml.text + "\n• العالم والخلفية: " + BG + "\n• التحوّل: " + TR + "\n• الرموز: " + IC2 + (o.vProg === "yes" ? "\n• شريط تقدم رفيع يتقدم بحسب الزمن الكلي (بلا أي نص)." : "") +
-    "\n• عرّف 6 متغيرات في :root: --bg --surface --ink --muted --primary --accent واستعملها في كل الألوان. زوج خطوط واحد (عنوان + جسم) من «نظام الخطوط والطباعة» أدناه (محمّلة تلقائيًا؛ لا تستورد غيرها)، بوزن 600–800 للكلام المنطوق.\n• النص العربي محاذاته لليمين، وعرض الكتلة ≤ " + Math.round(G.bw) + "px، وهوامش الشاشة ≥ " + (portrait ? 72 : 96) + "px.");
-  P.push("");
-  P.push("🖼️ الصور\n" + img);
-  P.push("");
-  P.push("Meta إلزامية في <head>:\n<meta name=\"project-duration-ms\" content=\"" + total + "\">\n<meta name=\"project-orientation\" content=\"" + o.vOrient + "\">\n<meta name=\"project-title\" content=\"" + title + "\">");
-  P.push("");
-  P.push("🧰 مكتبة Motion (تُحقن تلقائيًا ولا تكتبها): Motion.scene(ms,start,end,{in,out,last}) ← {local,progress,alpha,visible} • Motion.p(ms,delay,dur,ease) تقدّم 0..1 • tween / fadeIn(ms,delay,dur) / fadeOut / slideIn / scaleIn / spring • Motion.reveal(ms,delay,dur,dir) ← clip-path جاهز • Motion.draw(path,ms,delay,dur) • Motion.float(ms,amp,period,phase) • Motion.pulse(ms,delay,dur,amt) • Motion.stagger(i,gap) • Motion.ease.* (expo/quart/cubic/easeOut…).");
-  P.push("");
-  P.push("هيكل الكود (اتبعه):\n\n<div id=\"project-root\">\n  <div id=\"world\"> … خلفية وطبقات وعناصر رمزية مستمرة (خارج أي section) … </div>\n  <section data-scene=\"1\" data-scene-name=\"فقرة 1\" data-scene-start=\"" + (secs[0] ? secs[0].s : 0) + "\" data-scene-end=\"" + (secs[0] ? secs[0].e : total) + "\" style=\"position:absolute;inset:0\">\n    <div class=\"para\" data-para=\"0\"></div>   <!-- كتلة نص اللحظة، رقمها = موضعها في PARAS -->\n    … رسوم هذه اللحظة فقط …\n  </section>\n  …\n</div>\n\n<script>\nvar TOTAL=" + total + ", MODE=\"" + o.vMode + "\";\nvar SECS=" + secLit + ";\nvar PARAS=" + parasLit + ";   // انسخها كما هي\n\nfunction build(el,P){ if(el.__b) return; el.__b=1; el.textContent=''; P.w.forEach(function(w,i){ var sp=document.createElement('span'); sp.textContent=w[0]; sp.style.display='inline-block'; el.appendChild(sp); if(i<P.w.length-1) el.appendChild(document.createTextNode(' ')); }); el.__sp=el.querySelectorAll('span'); }\nfunction paraFx(P, el, ms){\n  build(el,P); var sp=el.__sp;\n  P.w.forEach(function(w,i){\n    var p=Motion.p(ms, w[1], 190, 'easeOut');          // لا يبدأ قبل w[1] أبدًا\n    sp[i].style.opacity = MODE==='karaoke' ? 0.28+0.72*p : p;\n    sp[i].style.transform = MODE==='reveal' ? 'translateY('+((1-p)*14)+'px)' : 'none';\n  });\n  var inP=Motion.p(ms,P.a,380,'expo'), outP=Motion.p(ms,P.h,P.x-P.h,'easeIn');\n  el.style.opacity = inP*(1-outP);\n  el.style.visibility = (ms>=P.a && ms<=P.x) ? 'visible' : 'hidden';\n}\nwindow.PROJECT={duration:TOTAL,orientation:\"" + o.vOrient + "\",setTime:function(ms){\n  /* 1) العالم المستمر والكاميرا: دوال خالصة من ms */\n  worldFx(ms);\n  /* 2) الأقسام: نافذة ظهور القسم [a-120 , x+120] مع تداخل بسيط */\n  SECS.forEach(function(sc,i){\n    var P=PARAS[i], el=document.querySelector('[data-scene=\"'+sc.n+'\"]');\n    var on=(ms>=P.a-120 && ms<=P.x+120);\n    el.style.visibility=on?'visible':'hidden';\n    if(on){ paraFx(P, el.querySelector('[data-para]'), ms); /* + حرّك رسوم اللحظة وتحولاتها */ }\n  });\n}};\n<\/script>");
-  P.push("");
-  P.push(buildCraftBlock());
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚙️ قواعد تقنية\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. #project-root بحجم " + W + "px × " + H + "px مباشرة بلا transform:scale، وكل شيء بداخله بوضع absolute.\n2. body يحتوي #project-root فقط، و<html lang=\"ar\" dir=\"rtl\">.\n3. كل قسم: <section data-scene=\"N\" data-scene-name data-scene-start data-scene-end> بالأزمنة أعلاه حرفيًا.\n4. window.PROJECT = { duration: " + total + ", orientation: \"" + o.vOrient + "\", setTime(ms) } حتمي وبأي ترتيب.\n5. ممنوع: CSS animation وtransition، requestAnimationFrame، setTimeout وsetInterval، Math.random وDate.now.\n6. ممنوع (لأن التصدير لا يدعمها): filter، drop-shadow، backdrop-filter، mask-image، mix-blend-mode، background-clip:text. المسموح: gradients، clip-path، box-shadow، SVG، opacity، transform.\n7. ممنوع letter-spacing وtext-transform على العربية.\n8. لا تضف <audio> ولا أي صوت داخل الكود.");
-  P.push("");
-  P.push("✋ فحص ذاتي قبل الإخراج (لا تعرضه): (1) لا كلمة تظهر قبل زمن نطقها s، ولا تتأخر عنه أكثر من 60ms. (2) لا حرف من الفقرة التالية قبل a، ولا بقاء للفقرة بعد x. (3) النص حرفي ولا نص خارج PARAS. (4) الفقرة تتسع كاملة داخل كتلتها بحجم ≥ " + (portrait ? 40 : 36) + "px دون تداخل. (5) عالم واحد متصل بتحوّلات: لا قطع ولا تبديل خلفية كاملة. (6) لا ميزة ممنوعة.");
-  P.push("");
-  P.push("📤 المخرجات: ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بدون شرح وبدون سياج markdown.");
-  return P.join("\n");
-}
-async function voiceAddTrack() {
-  for (let i = AUDIO.tracks.length - 1; i >= 0; i--) if (AUDIO.tracks[i].voice) { try { if (AUDIO.tracks[i].id) await DB.delAudio(AUDIO.tracks[i].id); } catch(e){} AUDIO.tracks.splice(i, 1); }
-  const du = await readFile(VOICE.blob, false), id = "aud_" + Date.now();
-  try { await DB.saveAudio(id, du, VOICE.name); } catch(e) { Errors.push("warn", "تعذّر حفظ الصوت محليًا", e); }
-  AUDIO.tracks.push({ id, name: VOICE.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.1, fadeOut: 0.3, muted: false, audioEl: null, voice: true });
-  renderAudio(); scheduleSave();
-}
-$("vGenerate").addEventListener("click", async () => {
-  if (!VOICE.lines.length) { toast("فرّغ الصوت أو أضف جملًا أولًا", "warn"); return; }
-  if (VOICE.lines.some(l => !String(l.text).trim())) { toast("توجد جملة فارغة — احذفها أو اكتب نصها", "warn"); return; }
-  prevStop();
-  const t = buildVoicePrompt(), B = vBeats();
-  $("vPrompt").value = t;
-  $("vpScenes").textContent = B.beats.length + " فقرة";
-  $("vpDur").textContent = (B.total / 1000).toFixed(1) + " ث";
-  $("vpChars").textContent = t.length.toLocaleString("ar-EG") + " حرف";
-  $("vPromptBox").classList.add("show");
-  $("vPromptBox").scrollIntoView({ behavior: "smooth", block: "start" });
-  const o = $("vOrient").value;
-  if (o !== APP.orientation) {
-    APP.orientation = o;
-    document.querySelectorAll("[data-orientation]").forEach(el => el.classList.toggle("active", el.dataset.orientation === o));
-    try { applySize(o); } catch(e){}
-  }
-  if (VOICE.blob) { try { await voiceAddTrack(); toast("تم إنشاء البرومبت وإضافة الصوت للاستوديو", "success", 3500); } catch(e) { Errors.push("error", "voice track", e); toast("تم البرومبت، لكن تعذّرت إضافة الصوت للاستوديو — أضفه يدويًا من الاستوديو", "warn", 6000); } }
-  else toast("تم إنشاء البرومبت (لا يوجد ملف صوتي لإضافته)", "success");
-});
-$("vCopy").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText($("vPrompt").value);
-    $("vCopy").textContent = "✓ نُسخ"; setTimeout(() => { $("vCopy").textContent = "نسخ"; }, 1500);
-  } catch(e) { $("vPrompt").select(); document.execCommand("copy"); }
-});
 </script>
 
 </body>
