@@ -551,6 +551,21 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   .sc-tags{padding-right:0}
   .scenes-acts .total-duration{flex:1 0 100%;margin:0 0 4px}
 }
+/* ── واجهة الإصلاح التلقائي ── */
+.af-hero{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:stretch}
+.af-hero .btn{margin:0;font-weight:800}.af-hero .ghost{width:auto;margin:0;padding:9px 16px}
+.af-hero .btn.busy{opacity:.7;pointer-events:none}
+.af-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin-top:10px}
+.af-tile{background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;transition:border-color .2s,background .2s}
+.af-tile b{display:block;font-family:"Cairo",sans-serif;font-size:22px;font-weight:900;line-height:1.2;color:var(--muted)}
+.af-tile span{display:block;font-size:11.5px;color:var(--dim);margin-top:2px}
+.af-tile.on{border-color:rgba(61,219,192,.45);background:rgba(61,219,192,.07)}.af-tile.on b{color:var(--teal)}
+.af-tile.bad{border-color:rgba(255,111,125,.5);background:rgba(255,111,125,.08)}.af-tile.bad b{color:var(--red)}
+.af-more{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--sunk)}
+.af-more summary{cursor:pointer;font-weight:700;color:var(--muted);font-size:13px}
+.af-rules{display:grid;gap:8px;margin-top:10px}
+.af-rules label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);cursor:pointer}
+.af-rules input{width:auto;accent-color:var(--primary)}
 </style>
 </head>
 
@@ -752,15 +767,32 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 
       <div class="side-pane" data-pane="fix">
         <h3>إصلاح تلقائي</h3>
-        <div class="fix-note" style="display:block;margin-bottom:10px">يرفع النصوص الصغيرة، ويعدّل لون النص حين يشبه خلفيته، ويصحّح النص الخارج عن حدود بطاقته أو الشريحة. يعمل على المعاينة والتصدير دون تغيير الكود الأصلي.</div>
-        <div class="export-settings"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div><label for="afMin">أصغر حجم نص (px)</label><input type="number" id="afMin" min="16" max="120" placeholder="تلقائي (32 / 36)"></div>
-          <div><label for="afAutoSel">عند تشغيل الكود</label><select id="afAutoSel"><option value="1">إصلاح تلقائي</option><option value="0">يدوي فقط</option></select></div>
-        </div></div>
-        <div class="gap"></div>
-        <button class="btn green" id="afRun"><svg class="ic" aria-hidden="true"><use href="#i-wand"/></svg>إصلاح تلقائي الآن</button>
-        <button class="ghost" id="afUndo">تراجع عن الإصلاح</button>
-        <div class="hint" id="afReport" style="white-space:pre-line;margin-top:8px">لم يُطبَّق إصلاح.</div>
+        <div class="af-hero">
+          <button class="btn green" id="afRun"><svg class="ic" aria-hidden="true"><use href="#i-wand"/></svg>إصلاح الآن</button>
+          <button class="ghost" id="afUndo">تراجع</button>
+        </div>
+        <div class="af-stats" id="afStats">
+          <div class="af-tile" data-k="size"><b>–</b><span>نص مُكبَّر</span></div>
+          <div class="af-tile" data-k="spacing"><b>–</b><span>تباعد أسطر</span></div>
+          <div class="af-tile" data-k="overflow"><b>–</b><span>خروج مُصحَّح</span></div>
+          <div class="af-tile" data-k="contrast"><b>–</b><span>تباين مُحسَّن</span></div>
+          <div class="af-tile" data-k="overlap"><b>–</b><span>تداخل مرصود</span></div>
+        </div>
+        <div class="hint" id="afReport" style="white-space:pre-line;margin:10px 0">لم يُطبَّق إصلاح بعد. شغّل المشروع ثم اضغط «إصلاح الآن».</div>
+        <details class="af-more">
+          <summary>الإعدادات</summary>
+          <div class="af-rules">
+            <label><input type="checkbox" data-afrule="size"> رفع النصوص الصغيرة</label>
+            <label><input type="checkbox" data-afrule="spacing"> تباعد الأسطر</label>
+            <label><input type="checkbox" data-afrule="bounds"> خروج النص عن الحدود</label>
+            <label><input type="checkbox" data-afrule="contrast"> تباين النص مع الخلفية</label>
+            <label><input type="checkbox" data-afrule="overlap"> كشف تداخل النصوص</label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+            <div><label for="afMin">أصغر حجم نص (px)</label><input type="number" id="afMin" min="16" max="120" placeholder="تلقائي (32 / 36)"></div>
+            <div><label for="afAutoSel">عند تشغيل الكود</label><select id="afAutoSel"><option value="1">إصلاح تلقائي</option><option value="0">يدوي فقط</option></select></div>
+          </div>
+        </details>
         <div class="gap"></div>
 
         <h3>سجل الأخطاء</h3>
@@ -1367,11 +1399,52 @@ const DNA_BG = ["تدرج شعاعي واسع (radial-gradient) يتحرك مو�
 const DNA_TITLE = ["عناوين ضخمة جدًا (140–200px) بوزن 900 في سطر أو سطرين", "عناوين متوسطة الحجم (96–130px) مع سطر فرعي كبير بوزن خفيف", "عنوان من سطرين بحجمين مختلفين جدًا (الأول ضعف الثاني)"];
 const DNA_ACCENT = ["لون مميز واحد يُستعمل فقط لأهم كلمة أو رقم في الشريحة", "لون مميز على هيئة شريط أو كتلة كبيرة بدل تلوين النص", "لونان مميزان بالتناوب بحسب نوع الشريحة"];
 const DNA_PACE = ["إيقاع متسارع: مداخل العناصر 250–400ms وتتابع 80–110ms", "إيقاع هادئ: مداخل 500–800ms وتتابع 140–200ms", "إيقاع متغير: شرائح هادئة تليها شريحة نشطة"];
+const FONT_PAIRS = [
+  ["Cairo", "Tajawal", "عصري نظيف"], ["Lalezar", "Almarai", "جريء مرح"], ["Reem Kufi", "IBM Plex Sans Arabic", "هندسي تقني"],
+  ["Amiri", "Noto Naskh Arabic", "كلاسيكي أدبي"], ["El Messiri", "Mada", "أنيق رسمي"], ["Alexandria", "Readex Pro", "حديث ودود"],
+  ["Kufam", "Vazirmatn", "كوفي عصري"], ["Rakkas", "Almarai", "عناوين مزخرفة"], ["Markazi Text", "Harmattan", "تحريري هادئ"],
+  ["Changa", "Noto Kufi Arabic", "قوي رياضي"], ["Zain", "Cairo Play", "خفيف حيوي"], ["Baloo Bhaijaan 2", "Lemonada", "ودود ومرح"],
+  ["Aref Ruqaa", "Scheherazade New", "رقعة يدوية"], ["Noto Kufi Arabic", "Noto Sans Arabic", "محايد واضح"], ["Jomhuria", "Mada", "عناوين مضغوطة"]
+];
+const DNA_PALETTES = [
+  { n: "ورق دافئ", bg: "#F4EBDD", ink: "#2B2118", a1: "#C4572B", a2: "#2F6F6B" },
+  { n: "ليل كوني", bg: "#0B1026", ink: "#E8ECFF", a1: "#7C8CFF", a2: "#FFB454" },
+  { n: "نعناع مخبري", bg: "#E6F5EF", ink: "#0F2D2A", a1: "#0FA37F", a2: "#F2B134" },
+  { n: "كحلي وذهب", bg: "#0E1F3D", ink: "#F3ECD8", a1: "#E3B04B", a2: "#5BC0BE" },
+  { n: "مرجان وسماء", bg: "#FFF4EE", ink: "#2A1B2E", a1: "#FF5E5B", a2: "#2B7A9B" },
+  { n: "غابة عميقة", bg: "#0F2A22", ink: "#EAF3E4", a1: "#9BD770", a2: "#F2C14E" },
+  { n: "بنفسجي وليموني", bg: "#2A1458", ink: "#F6F2FF", a1: "#D7F25A", a2: "#FF8AD8" },
+  { n: "رمادي حبري", bg: "#ECEEF2", ink: "#14171F", a1: "#2A5BFF", a2: "#FF7A1A" },
+  { n: "عنابي ورملي", bg: "#F1E4D0", ink: "#3A0F1F", a1: "#9B1D3F", a2: "#2E7D6B" },
+  { n: "فحم وفيروزي", bg: "#16191F", ink: "#EFF3F6", a1: "#1DD3B0", a2: "#FF6B6B" }
+];
+const BG_GENERIC = [
+  "شبكة نقاط (dot grid) بأحجام متدرجة تنزلق ببطء", "خطوط قطرية متوازية بزاوية واحدة تتحرك باتجاه واحد", "حلقات ودوائر متحدة المركز تتسع من نقطة في الشريحة",
+  "كتل لونية كبيرة مقصوصة بـ clip-path تتبدّل مواضعها", "تدرج شعاعي واسع يتحرك مركزه مع الزمن", "أقواس ومنحنيات ضخمة تقطع الشريحة وتُرسم تدريجيًا",
+  "شبكة رفيعة بعلامات تقاطع (+) تتموج بدالة sin", "مثلثات متكررة (tessellation) بشفافيات مختلفة", "موجات SVG متراكبة بأطوار مختلفة في أسفل الشريحة",
+  "ورق بخطوط أفقية دقيقة وهامش جانبي ملوّن", "نمط سداسيات (خلية عسلية) خافت يظهر بالتتابع", "شرائط رأسية بدرجات لون متدرجة تتغير عروضها",
+  "حرف أو رمز أو رقم عملاق باهت (≥ 700px) خلف المحتوى", "تدرج خطي مائل مع شريط لون جانبي يتغير عرضه"
+];
+const BG_DOMAIN = {
+  physics: ["خطوط مجال مغناطيسي منحنية بين قطبين تُرسم ببطء", "شبكة أسهم متجهات صغيرة تتمايل في اتجاه واحد", "مدارات إهليلجية متداخلة وكوكب يدور", "موجات جيبية متراكبة بأطوار مختلفة تنزلق", "لوحة دائرة كهربائية خافتة بمسارات زاوية وعُقد تومض", "أقواس بندول وكرة تتأرجح بدالة الزمن", "حزم طيف ألوان رأسية متدرجة", "جسيمات نقطية تتحرك بمسارات مستقيمة وتتصادم", "ورق ميليمتري بمحاور x وy", "أمواج دائرية تتسع من نقطة وتتداخل"],
+  math: ["ورق رسم بياني بمربعات رفيعة", "محاور إحداثية مع منحنى دالة باهت يُرسم", "دوائر هندسية متحدة المركز وخطوط إنشاء بالفرجار", "رموز ∑ π ∞ √ ∫ عملاقة باهتة", "مثلثات متكررة بزوايا مرسومة", "حلزون أو منحنى ليساجو يُرسم ببطء"],
+  chemistry: ["خلية سداسية جزيئية مع روابط", "فقاعات تصعد بأحجام مختلفة", "بلورات هندسية متعددة الأوجه", "مربعات الجدول الدوري بأرقام باهتة", "أنابيب اختبار مرسومة بخطوط رفيعة"],
+  biology: ["خلايا بشفافية منخفضة تنبض", "أوراق نبات بمنحنيات عضوية", "شبكة عصبية عقد وخطوط تومض", "حلزون DNA مبسط يلتف", "عروق ورقة تتفرع تدريجيًا"]
+};
+const BG_MOVES = ["انزلاق أفقي بطيء", "دوران بطيء جدًا", "تنفّس (تكبير وتصغير خفيف)", "رسم الخطوط تدريجيًا مع الشريحة", "صعود عمودي هادئ", "تموّج بدالة sin"];
+function assignBackgrounds(domain, total, dna) {
+  const r = mulberry32(hashStr("bg|" + dna.off + "|" + APP.seedSalt));
+  const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  const pool = shuf(BG_DOMAIN[domain.k] || []).concat(shuf(BG_GENERIC));
+  const out = [];
+  for (let i = 0; i < total; i++) out.push({ bg: pool[i % pool.length], mv: BG_MOVES[(i + dna.off) % BG_MOVES.length] });
+  return out;
+}
 function getDNA(form) {
   const d = form || getForm();
   const r = mulberry32(hashStr([d.title, d.subject, d.grade, APP.seedSalt].join("|")));
   const pick = a => a[Math.floor(r() * a.length)];
-  return { shape: pick(DNA_SHAPES), motif: pick(DNA_MOTIFS), bg: pick(DNA_BG), title: pick(DNA_TITLE), accent: pick(DNA_ACCENT), pace: pick(DNA_PACE), off: Math.floor(r() * 997) };
+  return { shape: pick(DNA_SHAPES), motif: pick(DNA_MOTIFS), bg: pick(DNA_BG), title: pick(DNA_TITLE), accent: pick(DNA_ACCENT), pace: pick(DNA_PACE), off: Math.floor(r() * 997), font: pick(FONT_PAIRS), pal: pick(DNA_PALETTES) };
 }
 
 /* توزيع التكوينات: لا يتكرر تكوين في شريحتين متتاليتين، وتُحترم اختيارات المستخدم */
@@ -1578,6 +1651,29 @@ const NS="http://www.w3.org/2000/svg";
     if (!window.katex) { el.textContent = tex; return; }
     try { katex.render(tex, el, opts || { throwOnError: false, displayMode: false }); } catch (e) { el.textContent = tex; }
   };
+
+  var P = function (t, d, dur) { return ease.easeInOut(clamp(((t || 0) - (d || 0)) / (dur || 900), 0, 1)); };
+  var path = function (d, o, p) { var e = sv("path", { d: d, fill: o.fill || "none", stroke: o.color || "#888", "stroke-width": o.sw || 4, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: o.opacity == null ? 1 : o.opacity }); e.__p = p; return e; };
+  var mount = function (c, w, h, kids) { var s = sv("svg", { viewBox: "0 0 " + w + " " + h, width: "100%", height: "100%" }); kids.forEach(function (k) { if (k) s.appendChild(k); }); c.innerHTML = ""; c.appendChild(s); kids.forEach(function (k) { if (k && k.__p != null && k.getTotalLength) { try { var L = k.getTotalLength(); k.setAttribute("stroke-dasharray", L); k.setAttribute("stroke-dashoffset", L * (1 - k.__p)); } catch (x) {} } }); return s; };
+  /* أشكال: كل دالة تعيد بناء SVG داخل الحاوية من الصفر (t = الزمن المحلي بالمللي ثانية، d = تأخير، dur = مدة) */
+  Motion.shapes = {
+    grid: function (c, o) { o = o || {}; var w = o.w || 600, h = o.h || 400, st = o.step || 40, d = "", x, y; for (x = 0; x <= w; x += st) d += "M" + x + " 0V" + h; for (y = 0; y <= h; y += st) d += "M0 " + y + "H" + w; mount(c, w, h, [path(d, { color: o.color || "#8aa", sw: 1.5, opacity: o.opacity == null ? 0.35 : o.opacity }, 1)]); },
+    axes: function (c, o) { o = o || {}; var w = o.w || 600, h = o.h || 400, p = P(o.t, o.d, o.dur || 700), col = o.color || "#667"; mount(c, w, h, [path("M30 " + h / 2 + "H" + (w - 30) + "M" + (w - 46) + " " + (h / 2 - 10) + "L" + (w - 30) + " " + h / 2 + "L" + (w - 46) + " " + (h / 2 + 10), { color: col, sw: 3 }, p), path("M" + w / 2 + " " + (h - 30) + "V30M" + (w / 2 - 10) + " 46L" + w / 2 + " 30L" + (w / 2 + 10) + " 46", { color: col, sw: 3 }, p)]); },
+    plot: function (c, o) { o = o || {}; var w = o.w || 600, h = o.h || 400, f = o.fn || Math.sin, x0 = o.xmin == null ? -6.28 : o.xmin, x1 = o.xmax == null ? 6.28 : o.xmax, y0 = o.ymin == null ? -1.5 : o.ymin, y1 = o.ymax == null ? 1.5 : o.ymax, d = "", i, N = 120; for (i = 0; i <= N; i++) { var x = x0 + (x1 - x0) * i / N, y = f(x); if (!isFinite(y)) continue; y = clamp(y, y0, y1); d += (d ? "L" : "M") + (30 + (w - 60) * (x - x0) / (x1 - x0)).toFixed(1) + " " + (h - 30 - (h - 60) * (y - y0) / (y1 - y0)).toFixed(1); } mount(c, w, h, [path(d, { color: o.color || "#e0a030", sw: o.sw || 5 }, P(o.t, o.d, o.dur || 1400))]); },
+    poly: function (c, o) { o = o || {}; var n = o.n || 3, r = o.r || 150, w = r * 2 + 40, rot = (o.rot == null ? -90 : o.rot) * Math.PI / 180, pts = [], i; for (i = 0; i < n; i++) pts.push((w / 2 + r * Math.cos(rot + 2 * Math.PI * i / n)).toFixed(1) + " " + (w / 2 + r * Math.sin(rot + 2 * Math.PI * i / n)).toFixed(1)); mount(c, w, w, [path("M" + pts.join("L") + "Z", { color: o.color || "#37a", sw: o.sw || 6, fill: o.fill }, P(o.t, o.d, o.dur || 1000))]); },
+    circle: function (c, o) { o = o || {}; var r = o.r || 120, w = r * 2 + 40, p = P(o.t, o.d, o.dur || 900), a = [path("M" + (w / 2 + r) + " " + w / 2 + "A" + r + " " + r + " 0 1 1 " + (w / 2 - r) + " " + w / 2 + "A" + r + " " + r + " 0 1 1 " + (w / 2 + r) + " " + w / 2, { color: o.color || "#37a", sw: o.sw || 6, fill: o.fill }, p)]; if (o.radius) a.push(path("M" + w / 2 + " " + w / 2 + "H" + (w / 2 + r * p), { color: o.color2 || "#d54", sw: 4 }, 1)); mount(c, w, w, a); },
+    angle: function (c, o) { o = o || {}; var deg = o.deg == null ? 60 : o.deg, r = o.r || 160, W = r + 80, p = P(o.t, o.d, o.dur || 900), a = deg * Math.PI / 180 * p, vx = 40, vy = W - 40, ex = vx + r * Math.cos(a), ey = vy - r * Math.sin(a), ar = r * 0.35, col = o.color || "#667"; mount(c, W, W, [path("M" + vx + " " + vy + "H" + (vx + r), { color: col, sw: 5 }, 1), path("M" + vx + " " + vy + "L" + ex.toFixed(1) + " " + ey.toFixed(1), { color: col, sw: 5 }, 1), path("M" + (vx + ar) + " " + vy + "A" + ar + " " + ar + " 0 " + (a > Math.PI ? 1 : 0) + " 0 " + (vx + ar * Math.cos(a)).toFixed(1) + " " + (vy - ar * Math.sin(a)).toFixed(1), { color: o.color2 || "#d54", sw: 5 }, 1)]); },
+    arrow: function (c, o) { o = o || {}; var x1 = o.x1 || 0, y1 = o.y1 || 0, x2 = o.x2 == null ? 300 : o.x2, y2 = o.y2 || 0, p = P(o.t, o.d, o.dur || 700), x = x1 + (x2 - x1) * p, y = y1 + (y2 - y1) * p, an = Math.atan2(y2 - y1, x2 - x1), hs = o.head || 22, col = o.color || "#d54"; mount(c, Math.max(x1, x2) + 60, Math.max(y1, y2) + 60, [path("M" + x1 + " " + y1 + "L" + x + " " + y, { color: col, sw: o.sw || 7 }, 1), p > 0.15 ? path("M" + (x - hs * Math.cos(an - 0.5)) + " " + (y - hs * Math.sin(an - 0.5)) + "L" + x + " " + y + "L" + (x - hs * Math.cos(an + 0.5)) + " " + (y - hs * Math.sin(an + 0.5)), { color: col, sw: o.sw || 7 }, 1) : null]); },
+    wave: function (c, o) { o = o || {}; var w = o.w || 800, h = o.h || 240, amp = o.amp || 70, cyc = o.cycles || 3, ph = (o.t || 0) / (o.period || 1800) * Math.PI * 2 * (o.dir || 1), d = "", i; for (i = 0; i <= 160; i++) d += (i ? "L" : "M") + (w * i / 160).toFixed(1) + " " + (h / 2 + amp * Math.sin(cyc * 2 * Math.PI * i / 160 - ph)).toFixed(1); mount(c, w, h, [path(d, { color: o.color || "#37a", sw: o.sw || 6 }, 1)]); },
+    orbit: function (c, o) { o = o || {}; var w = o.w || 500, rx = o.rx || 200, ry = o.ry || 110, a = (o.t || 0) / (o.period || 4000) * Math.PI * 2, cx = w / 2; mount(c, w, w, [path("M" + (cx + rx) + " " + cx + "A" + rx + " " + ry + " 0 1 1 " + (cx - rx) + " " + cx + "A" + rx + " " + ry + " 0 1 1 " + (cx + rx) + " " + cx, { color: o.color || "#889", sw: 3, opacity: 0.6 }, 1), sv("circle", { cx: cx, cy: cx, r: o.sun || 22, fill: o.color2 || "#e9a" }), sv("circle", { cx: cx + rx * Math.cos(a), cy: cx + ry * Math.sin(a), r: o.r || 12, fill: o.color || "#37a" })]); },
+    hex: function (c, o) { o = o || {}; var w = o.w || 600, h = o.h || 400, s = o.size || 36, d = "", dx = s * Math.sqrt(3), row = 0, x, y, k; for (y = 0; y < h + s; y += s * 1.5, row++) for (x = (row % 2) * dx / 2; x < w + dx; x += dx) { d += "M"; for (k = 0; k < 6; k++) { var an = Math.PI / 180 * (60 * k - 30); d += (k ? "L" : "") + (x + s * Math.cos(an)).toFixed(1) + " " + (y + s * Math.sin(an)).toFixed(1); } d += "Z"; } mount(c, w, h, [path(d, { color: o.color || "#8aa", sw: 2, opacity: o.opacity == null ? 0.3 : o.opacity }, 1)]); }
+  };
+  /* رموز رياضية وعلمية جاهزة: Motion.sym.pi ← π */
+  Motion.sym = { pi: "π", theta: "θ", alpha: "α", beta: "β", gamma: "γ", delta: "Δ", delta_s: "δ", lambda: "λ", mu: "μ", omega: "Ω", omega_s: "ω", sigma: "Σ", phi: "φ", rho: "ρ", tau: "τ", epsilon: "ε", eta: "η", infinity: "∞", sqrt: "√", integral: "∫", sum: "∑", approx: "≈", neq: "≠", leq: "≤", geq: "≥", pm: "±", times: "×", div: "÷", dot: "⋅", degree: "°", arrow: "→", implies: "⇒", iff: "⇔", partial: "∂", nabla: "∇", angle: "∠", perp: "⊥", parallel: "∥", triangle: "△", isin: "∈", subset: "⊂", union: "∪", intersect: "∩", forall: "∀", exists: "∃", prop: "∝", sup2: "²", sup3: "³", half: "½" };
+  /* خطوات حل تظهر تباعًا (كل خطوة معادلة KaTeX) */
+  Motion.steps = function (el, arr, ms, dMs, per, o) { o = o || {}; var key = arr.join("|"); if (el.__sk !== key) { el.__sk = key; el.innerHTML = ""; el.__sd = arr.map(function (t) { var d = document.createElement("div"); d.style.margin = "0 0 " + (o.gap == null ? 28 : o.gap) + "px"; d.style.lineHeight = "1.7"; Motion.katex(d, t, { throwOnError: false, displayMode: true }); el.appendChild(d); return d; }); } el.__sd.forEach(function (d, i) { var p = Motion.p(ms, (dMs || 0) + i * (per || 900), 500, "easeOut"); d.style.opacity = p; d.style.transform = "translateY(" + ((1 - p) * 24) + "px)"; }); };
+  /* ملاءمة نص داخل حاويته (استدعِها مرة واحدة عند التحميل): تصغّر الخط حتى يتسع دون النزول عن min */
+  Motion.fit = function (el, o) { o = o || {}; var min = o.min || 38, fs = parseFloat(getComputedStyle(el).fontSize) || min, g = 40, bad = function () { return el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1; }; while (bad() && fs > min && g-- > 0) { fs = Math.max(min, Math.floor(fs * 0.94)); el.style.fontSize = fs + "px"; } return !bad(); };
   window.Motion = Motion;
 }
 function buildMotionLib() {
@@ -1590,8 +1686,17 @@ window.__projErr = function (msg, line) {
   Errors.push("error", "خطأ داخل كود المشروع" + (line ? " (سطر " + line + ")" : ""), msg);
   if (!window.__projErrToast || Date.now() - window.__projErrToast > 4000) { window.__projErrToast = Date.now(); toast("خطأ في كود المشروع: " + String(msg).slice(0, 90), "error", 6000); }
 };
+const FONT_GROUPS = [
+  "family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700",
+  "family=Readex+Pro:wght@400;500;600;700&family=Almarai:wght@400;700;800&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Reem+Kufi:wght@500;700&family=Amiri:wght@400;700",
+  "family=Noto+Naskh+Arabic:wght@400;500;700&family=Changa:wght@500;700;800&family=Lalezar&family=Rubik:wght@400;500;700;800&family=Alexandria:wght@400;500;700;900",
+  "family=El+Messiri:wght@400;500;700&family=Vazirmatn:wght@400;500;700;900&family=Mada:wght@400;500;700;900&family=Markazi+Text:wght@400;500;700&family=Harmattan:wght@400;500;700",
+  "family=Lemonada:wght@400;500;700&family=Baloo+Bhaijaan+2:wght@400;500;700;800&family=Kufam:wght@400;500;700;900&family=Aref+Ruqaa:wght@400;700&family=Marhey:wght@400;500;700",
+  "family=Scheherazade+New:wght@400;500;700&family=Lateef:wght@400;500;700&family=Mirza:wght@400;500;700&family=Zain:wght@400;700;900&family=Cairo+Play:wght@400;700;900",
+  "family=Katibeh&family=Jomhuria&family=Rakkas&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700"
+];
 function buildFontsInject() {
-  return '\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Almarai:wght@400;700;800&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Reem+Kufi:wght@500;700&family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;700&family=Changa:wght@500;700;800&family=Lalezar&family=Rubik:wght@400;500;700;800&display=swap" crossorigin="anonymous">';
+  return "\n" + FONT_GROUPS.map(g => '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?' + g + '&display=swap" crossorigin="anonymous">').join("\n");
 }
 function injectCSS(html, base) {
   const style = `<style id="__platform_containment">
@@ -1633,8 +1738,38 @@ function buildBoundsBlock(W, H, portrait) {
     "2. كل نص يتّسع داخل حاويته: حدّد max-width لكل كتلة نص، واجعل ارتفاع البطاقات auto (أو أكبر من النص بهامش ≥ 24px)، ولا تستعمل white-space:nowrap على جمل طويلة. تخيّل أطول نص ممكن في كل عنصر وتأكد أنه يتسع.",
     "3. ممنوع تصغير الخط للمبالغة في إدخال النص. إذا ضاق المكان فاختصر الكلمات أو وزّع المحتوى على كتل أو أعمدة أو غيّر التكوين — لا تصغّر الخط. الحد الأدنى: الجسم ≥ " + minBody + "px وأي نص آخر ≥ " + minLabel + "px، لأن الفيديو يُشاهَد على جوال.",
     "4. وبالمقابل لا تكبّر النص حتى يزدحم: العنوان في سطرين أو ثلاثة بحد أقصى، ويبقى حول العناصر مساحة فارغة تتنفس.",
-    "5. اكسر أسطر العناوين بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر."
+    "5. اكسر أسطر العناوين بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر.",
+    "6. ممنوع التداخل: مستطيلات كتل النص (x,y,العرض,الارتفاع) لا تتقاطع في أي لحظة من الشريحة، ولا يغطي نص نصًّا آخر ولا يلامسه. وزّع الكتل في flex/grid بـ gap، ولا تُموضع بـ absolute إلا بعد حساب إحداثيات كل كتلة والتحقق من عدم تقاطعها.",
+    "7. عناصر الدخول والخروج: أثناء الانزلاق والتكبير لا يتجاوز أي نص حدود الشريحة ولا يلامس نصًّا قريبًا منه؛ اجعل مسافات الانزلاق ≤ 60px وابدأ الحركة من داخل الهوامش.",
+    "8. اختبار ذهني قبل الإخراج لكل شريحة: اكتب لكل كتلة نصية موضعها وأبعادها، وقارن كل زوج كتل (لا تقاطع، وبينهما ≥ 32px)، وتأكد أن أطول صياغة ممكنة للنص تتسع، ثم عدّل إن لزم.",
+    "9. لا تعتمد على أن المنصة ستصلح الأخطاء لاحقًا؛ أخرج الشريحة سليمة من أول مرة."
   ].join("\n"));
+}
+
+
+function buildReminder(tag) {
+  return "⚠️ " + tag + " — ثلاثة أمور لا تنازل عنها: (1) لا نص يخرج عن حدود الشريحة أو بطاقته في أي لحظة. (2) لا نصّان ولا عنصران يتداخلان: ≥ 32px بين أي كتلتين، وبين الأسطر مسافة مريحة (line-height ≥ 1.6 للجسم). (3) كل مؤثر بصري يشرح النص المجاور له ويبدأ في اللحظة نفسها التي يظهر فيها ذلك النص.";
+}
+function buildIdentityBlock(d, dna, domain, total) {
+  const L = [];
+  L.push("• الخطوط المقترحة لهذا المشروع: عناوين «" + dna.font[0] + "» + جسم «" + dna.font[1] + "» (" + dna.font[2] + "). التزم بها ما لم يفرض الموضوع خطًا أنسب من القائمة؛ ولا تعد إلى Tajawal وCairo افتراضيًا.");
+  if (d.visualStyle === "auto") L.push("• لوحة الألوان المقترحة («" + dna.pal.n + "»): خلفية " + dna.pal.bg + " • نص " + dna.pal.ink + " • مميز " + dna.pal.a1 + " • ثانوي " + dna.pal.a2 + ". عدّلها بحرية إن خدم الموضوع، لكن لا تكتفِ بدرجة واحدة: اشتق منها 3–4 خلفيات متفاوتة (فاتحة ومتوسطة وداكنة) لتتنوع بين الشرائح.");
+  if (domain.k !== "generic" && domain.bg) L.push("• طابع خلفيات المجال: " + domain.bg);
+  const bgs = assignBackgrounds(domain, total, dna);
+  const rows = bgs.map((b, i) => "| " + (i + 1) + " | " + b.bg + " | " + b.mv + " |").join("\n");
+  return pSec("هوية المشروع والخلفيات (إلزامي: لا تكرار)", L.join("\n") + "\n\nالخلفية قرار تصميمي لكل شريحة، وممنوع استعمال خلفية واحدة لكل الشرائح أو تكرار النمط نفسه بلون مختلف. نفّذ لكل شريحة النمط المحدد لها (ابتكر تفاصيله وألوانه بنفسك، وغيّر الشكل لا اللون فقط):\n\n| الشريحة | نمط الخلفية | حركة الخلفية |\n|---|---|---|\n" + rows + "\n\nقواعد الخلفيات: لا تتشابه خلفيتان متتاليتان في الشكل أو في اللون الأساسي • الخلفية تبقى أخفت من المحتوى ولا تنافس النص • كل خلفية تُبنى بـ SVG أو gradient أو clip-path (بلا filter أو blur) • تحرّك الخلفية بدالة الزمن ms.");
+}
+function buildSyncBlock(audioOn) {
+  const L = [
+    "1. المؤثر يشرح النص ولا يزيّنه: قبل أي حركة اسأل «ما معنى هذه الجملة؟» ثم اختر المؤثر الذي يجسّده: رقم أو نسبة ← Motion.countUp • زيادة أو نقصان ← سهم أو عمود ينمو أو ينكمش • حركة أو سرعة ← جسم يتحرك على مسار • قانون أو معادلة ← Motion.steps أو Motion.katex خطوة بخطوة • مقارنة ← كتلتان تنفصلان • تعريف ← خط إبراز يُرسم تحت الكلمة المفتاح • خطوات ← عقد تُرسم تباعًا • موجة أو دوران أو مدار ← Motion.shapes. ممنوع أي مؤثر لا علاقة له بالجملة (فقاعات أو دوائر عشوائية).",
+    "2. اربط التوقيت بمصدر واحد: في أول دالة كل شريحة عرّف كائن توقيتات محلية مثل var C={title:150,def:900,arrow:900,val:1700}، واستعمل القيم نفسها لتأخير النص ولتأخير المؤثر الذي يشرحه (المؤثر والنص يبدآن في اللحظة نفسها). ممنوع تبعثر أرقام التأخير.",
+    "3. ترتيب الظهور يتبع ترتيب الكلام: الفكرة الأولى ثم مؤثرها ثم الثانية. لا يظهر مؤثر فكرة قبل أن تُقرأ ولا بعد أن تنتهي بأكثر من 400ms.",
+    "4. يبقى كل نص ظاهرًا مدة قراءته: عدد كلماته × 320ms على الأقل بعد اكتمال ظهوره، ويبقى مؤثره حيًا طوال هذه المدة (حركة مستمرة خفيفة أو تثبيت) ولا يختفي قبل نصه.",
+    "5. لحظة التأكيد: عند نطق أو قراءة الكلمة المفتاح تُنفَّذ نبضة (Motion.pulse) أو تلوين أو رسم خط تحتها، وليس قبلها.",
+    "6. تنوّع المؤثرات بين الشرائح: لا تستعمل مؤثر الدخول نفسه (مثل fade+slide) في كل العناصر؛ بدّل بين reveal وwords وdraw وscale وspring وcountUp بحسب نوع المعنى."
+  ];
+  if (audioOn) L.push("7. مع الصوت: التوقيت مصدره لحظات النطق الفعلية لا التقدير، وفارق التزامن ≤ 100ms.");
+  return pSec("تزامن المؤثرات مع النص (إلزامي)", L.join("\n"));
 }
 
 function buildDesignBlock() {
@@ -1649,11 +1784,12 @@ function buildDesignBlock() {
 }
 
 function buildTypographyBlock() {
-  return pSec("الخطوط", [
-    "المحمّل تلقائيًا فقط (لا تستورد غيره): Tajawal • Cairo • Noto Sans Arabic • IBM Plex Sans Arabic • Readex Pro • Almarai • Noto Kufi Arabic • Reem Kufi • Amiri • Noto Naskh Arabic • Changa • Lalezar • Rubik.",
-    "• خطان فقط (عناوين + جسم) يناسبان شخصية الموضوع، مع بدائل في font-family، معرّفان كـ --font-head و--font-body.",
+  return pSec("الخطوط والتباعد", [
+    "الخطوط المحمّلة تلقائيًا فقط (لا تستورد غيرها): Tajawal • Cairo • Cairo Play • Noto Sans Arabic • IBM Plex Sans Arabic • Readex Pro • Almarai • Alexandria • Mada • Vazirmatn • Rubik • Zain (حديثة نظيفة) — Noto Kufi Arabic • Reem Kufi • Kufam • Changa • Lalezar • Baloo Bhaijaan 2 • Marhey • Lemonada (كوفية وجريئة ومرحة) — Amiri • Noto Naskh Arabic • Scheherazade New • Lateef • Markazi Text • Harmattan • El Messiri • Mirza (نسخية وأدبية وأنيقة) — Aref Ruqaa (رقعة) • Katibeh • Jomhuria • Rakkas (عناوين زخرفية بوزن 400 فقط، لا تضف لها bold) — Space Grotesk • JetBrains Mono (أرقام ورموز لاتينية وأكواد).",
+    "• خطان فقط (عناوين + جسم) معرّفان كـ --font-head و--font-body مع بدائل في font-family. اختر الزوج بحسب شخصية الموضوع، ولا تكرر الزوج الأكثر شيوعًا (Tajawal/Cairo) إلا إن لزم.",
     "• العناوين بوزن 700–900 والجسم 500–700 (لا وزن 300 فما دون). حجم العنوان 100–220px وهرمية واضحة بثلاثة مستويات.",
-    "• ارتفاع السطر: الجسم 1.55–1.75 والعناوين 1.15–1.3. لا letter-spacing ولا text-transform على العربية.",
+    "• تباعد الأسطر: الجسم line-height 1.6–1.8، والعناوين 1.2–1.35 (ولا تقل عن 1.2 أبدًا)، والنص المشكّل ≥ 1.8. لا letter-spacing ولا text-transform على العربية.",
+    "• المسافات بين الكتل: اجعل أي مجموعة نصوص متجاورة داخل حاوية display:flex;flex-direction:column;gap:24–40px بدل مواضع absolute متفرقة؛ وبين العنوان وما تحته ≥ 0.4em، وبين عناصر القائمة ≥ 20px، وبين البطاقات ≥ 32px. ممنوع أن يلتصق سطر بسطر أو كتلة بكتلة.",
     "• نمط أرقام واحد في المشروع كله، وغلّف أي نص لاتيني داخل جملة عربية بـ <bdi>. كل النصوص نصوص HTML حية لا صور."
   ].join("\n"));
 }
@@ -1678,6 +1814,7 @@ function createPrompt() {
   /* 1) المهمة */
   S.push("أنت مخرج فني ومصمم Motion Graphics. أنشئ فيديو موشن عربي كامل في ملف HTML واحد، بهوية بصرية خاصة بموضوع المشروع.");
 
+  S.push(buildReminder("تذكير مبكر"));
   S.push("الأولوية عند التعارض: (1) البقاء داخل حدود الصفحة وسهولة القراءة، ثم (2) متطلبات صاحب المشروع وطبيعة الموضوع" + (audioOn ? " ومحتوى الصوت" : "") + "، ثم (3) إرشادات التصميم العامة.");
 
   /* 2) بيانات المشروع: لا يظهر إلا ما عُبّئ */
@@ -1703,6 +1840,9 @@ function createPrompt() {
   dir.push("الحركة: " + ml.name + " — " + ml.text);
   if (!audioOn) dir.push("كثافة النص: " + dn.name + " — " + dn.text);
   S.push(pSec("الاتجاه العام", dir.join("\n")));
+  const dna = getDNA(d);
+  S.push(buildIdentityBlock(d, dna, domain, total));
+  S.push(buildSyncBlock(audioOn));
 
   /* 4) الشرائح: المدة فقط، والباقي للذكاء */
   const rows = timing.map(t => "| " + t.n + " | " + t.start + " | " + t.end + " | " + t.duration + " |").join("\n");
@@ -1773,6 +1913,7 @@ function createPrompt() {
     "  });",
     "}};"
   ].join("\n");
+  S.push(buildReminder("تذكير قبل الكود"));
   S.push(pSec("القواعد التقنية", [
     "1. <html lang=\"ar\" dir=\"rtl\">، والـ body فيه #project-root فقط بحجم " + W + "px × " + H + "px مباشرة (بلا transform:scale)، وكل الشرائح بداخله بوضع absolute متراكبة.",
     "2. كل شريحة: <section data-scene=\"N\" data-scene-name=\"اسم قصير من اختيارك\" data-scene-start=\"MS\" data-scene-end=\"MS\">، متصلة بلا فجوات.",
@@ -1784,13 +1925,15 @@ function createPrompt() {
     "",
     "مكتبة Motion داخلية تضيفها المنصة قبل التشغيل (لا تكتبها ولا تستوردها)، وكل توابعها تستقبل ms:",
     "Motion.scene(ms,start,end,{in,out,last}) ← {local,progress,alpha,visible} • Motion.p / tween / fadeIn / fadeOut / slideIn / scaleIn / spring • Motion.reveal(ms,delay,dur,dir) ← clip-path جاهز • Motion.words(el,text,ms,delay,{per}) • Motion.draw(pathEl,ms,delay,dur) • Motion.float / pulse • Motion.countUp(ms,delay,dur,from,to,{arabic:true}) • Motion.stagger(i,gap) • Motion.lerpColor • Motion.ease.{linear|easeOut|cubic|quart|expo|back|elastic|spring} • Motion.charts.{bar|line|pie|area}(el,{data:[{label,value}],t}) • Motion.katex(el,\"x^2+1\")",
+    "مكتبات متخصصة: Motion.shapes.{grid|axes|plot|poly|circle|angle|arrow|wave|orbit|hex}(el,{t:المللي ثانية المحلية،d:تأخير،dur:مدة،...}) تبني SVG هندسيًا وفيزيائيًا في حاوية (plot يرسم دالة fn، angle زاوية deg، poly مضلعًا n، arrow متجهًا x1,y1,x2,y2، wave موجة، orbit مدارًا) • Motion.sym.pi / theta / delta / infinity / sqrt / integral / sum / approx / pm / degree … (رموز رياضية وعلمية جاهزة) • Motion.steps(el,[\"tex1\",\"tex2\"],ms,delay,perMs) خطوات حل تظهر تباعًا • Motion.fit(el,{min}) تلاؤم نص مع حاويته (مرة واحدة عند التحميل)",
     "",
     "هيكل الكود (اتبعه):",
     skeleton
   ].join("\n")));
 
   /* 9) المخرجات */
-  S.push(pSec("المخرجات", "ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بلا أي شرح قبله أو بعده وبلا سياج markdown. قبل الإخراج راجع كل شريحة: لا نص خارج الحدود، ولا خط أصغر من الحد، ولا عنصر مقصوص." + (sfxOn ? " وراجع PROJECT.sfx: مرتبة بالزمن، وكل t ضمن مدة المشروع ويطابق حركة مرئية فعلًا." : "")));
+  S.push(buildReminder("تذكير أخير قبل الإخراج"));
+  S.push(pSec("المخرجات", "ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بلا أي شرح قبله أو بعده وبلا سياج markdown. قبل الإخراج راجع كل شريحة: لا نص خارج الحدود، ولا خط أصغر من الحد، ولا عنصر مقصوص، ولا نصّين متداخلين أو أسطر ملتصقة، وكل مؤثر يبدأ مع النص الذي يشرحه." + (sfxOn ? " وراجع PROJECT.sfx: مرتبة بالزمن، وكل t ضمن مدة المشروع ويطابق حركة مرئية فعلًا." : "")));
   return S.join("\n\n");
 }
 
@@ -1801,6 +1944,8 @@ function createPrompt() {
 const AutoFix = {
   rules: new Map(), n: 0, report: null, busy: false,
   enabled() { try { return localStorage.getItem("afAuto") !== "0"; } catch(e) { return true; } },
+  KEYS: ["size", "spacing", "bounds", "contrast", "overlap"],
+  rulesOn() { let o = {}; try { o = JSON.parse(localStorage.getItem("afRules") || "{}") || {}; } catch(e) {} const r = {}; this.KEYS.forEach(k => { r[k] = o[k] !== false; }); return r; },
   floor() { const v = Number(($("afMin") || {}).value); return v >= 16 && v <= 120 ? v : (APP.orientation === "portrait" ? 44 : 38); },
   reset(doc) {
     try { const o = doc.getElementById("__autofix__"); if (o) o.remove(); } catch(e){}
@@ -1830,23 +1975,26 @@ const AutoFix = {
     this.show(null);
   },
   show(r) {
-    const el = $("afReport"); if (!el) return;
-    if (!r) { el.textContent = "لم يُطبَّق إصلاح."; return; }
-    const parts = [];
-    if (r.size) parts.push(r.size + " نص صُغير رُفع حجمه");
-    if (r.contrast) parts.push(r.contrast + " نص عُدِّل لونه لوضوح أعلى");
-    if (r.overflow) parts.push(r.overflow + " نص خارج حدوده صُحِّح");
-    let t = parts.length ? "تم: " + parts.join(" • ") + "." : "لا مشاكل ظاهرة في الحجم والتباين والحدود ✓";
-    if (r.unresolved.length) t += "\nتعذّر إصلاح " + r.unresolved.length + " (عدّل الكود/اطلب إصلاحًا): " + r.unresolved.slice(0, 4).join("، ");
-    if (r.unknownBg) t += "\n" + r.unknownBg + " نص فوق صورة لا يمكن قياس تباينه.";
-    el.textContent = t;
+    const el = $("afReport"), st = $("afStats");
+    const set = (k, n, bad) => { const t = st && st.querySelector('[data-k="' + k + '"]'); if (!t) return; t.querySelector("b").textContent = n == null ? "–" : n; t.classList.toggle("bad", !!bad); t.classList.toggle("on", n > 0 && !bad); };
+    ["size", "spacing", "overflow", "contrast"].forEach(k => set(k, r ? r[k] : null));
+    set("overlap", r ? r.overlap : null, r && r.overlap > 0);
+    if (!el) return;
+    if (!r) { el.textContent = "لم يُطبَّق إصلاح بعد. شغّل المشروع ثم اضغط «إصلاح الآن»."; return; }
+    const lines = [];
+    const ov = r.unresolved.filter(x => x.indexOf("تداخل") === 0), un = r.unresolved.filter(x => x.indexOf("تداخل") !== 0);
+    if (un.length) lines.push("تعذّر إصلاح " + un.length + ": " + un.slice(0, 4).join("، "));
+    if (ov.length) lines.push("نصوص متداخلة: " + ov.slice(0, 3).map(x => x.slice(5)).join(" • ") + " — عدّل الكود أو أعد توليد الشريحة.");
+    if (r.unknownBg) lines.push(r.unknownBg + " نص فوق صورة لا يمكن قياس تباينه.");
+    el.textContent = lines.length ? lines.join("\n") : "لا مشاكل ظاهرة بعد الإصلاح ✓";
   },
   async run(silent) {
     if (this.busy || !APP.loaded) return null;
     this.busy = true;
     const f = $("projectFrame"), doc = f.contentDocument, win = f.contentWindow;
     const at = APP.currentTime || 0;
-    const rep = { size: 0, contrast: 0, overflow: 0, unresolved: [], unknownBg: 0 };
+    const rep = { size: 0, contrast: 0, overflow: 0, spacing: 0, overlap: 0, ov: new Set(), unresolved: [], unknownBg: 0 };
+    const on = this.rulesOn();
     try {
       this.reset(doc);
       const b0 = baseSize(), W = b0.width, H = b0.height, floor = this.floor();
@@ -1876,7 +2024,7 @@ const AutoFix = {
       };
 
       /* ── 1) حجم النص ── */
-      for (const sc of scopes) await sample(sc, async oc => {
+      if (on.size) for (const sc of scopes) await sample(sc, async oc => {
         textEls(sc.el).forEach(el => {
           if (isSvg(el) || el.getAttribute("data-af-s")) return;
           const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2 || !shown(el, oc)) return;
@@ -1884,6 +2032,19 @@ const AutoFix = {
           if (fs > 0 && fs < floor) { el.setAttribute("data-af-s", String(Math.round(fs))); this.set(doc, el, { "font-size": floor + "px" }); rep.size++;
             const pe = el.parentElement;
             if (pe && pe !== root && pe.localName !== "section" && pe !== doc.body && parseFloat(cs(pe).fontSize) === fs) this.set(doc, pe, { "font-size": floor + "px" }); }
+        });
+        this.flush(doc);
+      });
+
+      /* ── 1b) تباعد الأسطر ── */
+      if (on.spacing) for (const sc of scopes) await sample(sc, async oc => {
+        textEls(sc.el).forEach(el => {
+          if (isSvg(el) || el.getAttribute("data-af-l")) return;
+          const r = el.getBoundingClientRect(); if (r.width < 2 || !shown(el, oc)) return;
+          const s = cs(el), fs = parseFloat(s.fontSize) || 0; if (!fs) return;
+          const lh = parseFloat(s.lineHeight), ratio = isFinite(lh) ? lh / fs : 1.2;
+          const need = fs > 90 ? 1.2 : 1.55;
+          if (ratio < need - 0.02 && r.height > fs * (ratio + 0.6)) { el.setAttribute("data-af-l", "1"); this.set(doc, el, { "line-height": String(need) }); rep.spacing++; }
         });
         this.flush(doc);
       });
@@ -1903,7 +2064,7 @@ const AutoFix = {
         const gl = Math.max(0, -t.left, t.right - W), gv = Math.max(0, -t.top, t.bottom - H);
         return { dx: Math.max(rl, gl), dy: Math.max(rv, gv), c, br };
       };
-      for (const sc of scopes) await sample(sc, async oc => {
+      if (on.bounds) for (const sc of scopes) await sample(sc, async oc => {
         const els = textEls(sc.el).filter(el => !isSvg(el) && shown(el, oc) && el.getBoundingClientRect().width > 2);
         for (const el of els) {
           let o = out(el);
@@ -1933,8 +2094,22 @@ const AutoFix = {
         }
       });
 
+      /* ── 2b) تداخل النصوص (كشف وتبليغ) ── */
+      if (on.overlap) for (const sc of scopes) await sample(sc, async oc => {
+        const els = textEls(sc.el).filter(el => shown(el, oc) && el.getBoundingClientRect().width > 2);
+        const rs = els.map(el => textRect(el));
+        for (let i = 0; i < els.length; i++) for (let j = i + 1; j < els.length; j++) {
+          if (els[i].contains(els[j]) || els[j].contains(els[i])) continue;
+          const a = rs[i], b = rs[j], w = Math.min(a.right, b.right) - Math.max(a.left, b.left), hh = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+          if (w > 6 && hh > 6 && (w * hh) / Math.min(a.width * a.height, b.width * b.height) > 0.12) {
+            const key = label(els[i]) + " ⟷ " + label(els[j]);
+            if (!rep.ov.has(key)) { rep.ov.add(key); rep.overlap++; rep.unresolved.push("تداخل " + key); }
+          }
+        }
+      });
+
       /* ── 3) التباين مع ما خلف النص (يشمل التدرجات وطبقات الخلفية الشقيقة) ── */
-      for (const sc of scopes) await sample(sc, async oc => {
+      if (on.contrast) for (const sc of scopes) await sample(sc, async oc => {
         const all = [doc.documentElement, doc.body].concat(root === doc.body ? [] : [root], Array.from(root.querySelectorAll("*")));
         const info = new Map();
         const layerOf = el => {
@@ -1995,11 +2170,12 @@ const AutoFix = {
       this.report = rep;
     } finally {
       this.busy = false;
-      try { doc.querySelectorAll("[data-af-s],[data-af-u],[data-af-o],[data-af-c]").forEach(e => { e.removeAttribute("data-af-s"); e.removeAttribute("data-af-u"); e.removeAttribute("data-af-o"); e.removeAttribute("data-af-c"); }); } catch(e){}
+      try { doc.querySelectorAll("[data-af-s],[data-af-u],[data-af-o],[data-af-c],[data-af-l]").forEach(e => { e.removeAttribute("data-af-s"); e.removeAttribute("data-af-u"); e.removeAttribute("data-af-o"); e.removeAttribute("data-af-c"); e.removeAttribute("data-af-l"); }); } catch(e){}
       try { seekTo(at); } catch(e){}
     }
     this.show(rep);
-    if (!silent || rep.size || rep.contrast || rep.overflow) toast(rep.size || rep.contrast || rep.overflow ? "إصلاح تلقائي: " + (rep.size + rep.contrast + rep.overflow) + " تعديل" : "لا مشاكل تحتاج إصلاحًا ✓", "success", 3500);
+    const tot = rep.size + rep.contrast + rep.overflow + rep.spacing;
+    if (!silent || tot || rep.overlap) toast(tot ? "إصلاح تلقائي: " + tot + " تعديل" + (rep.overlap ? " • " + rep.overlap + " تداخل يحتاج مراجعة" : "") : rep.overlap ? "رُصد " + rep.overlap + " تداخل نصوص يحتاج مراجعة" : "لا مشاكل تحتاج إصلاحًا ✓", rep.overlap ? "warn" : "success", 3500);
     return rep;
   }
 };
@@ -4245,7 +4421,7 @@ async function embedFonts(doc, win) {
     for (const l of links) {
       const href = l.href;
       if (!FONT_CACHE.css.has(href)) {
-        const txt = await (await fetch(href)).text();
+        let txt = ""; try { const rs = await fetch(href); if (rs.ok) txt = await rs.text(); } catch (e) {}
         const keep = (txt.match(/@font-face\s*{[^}]*}/g) || []).filter(b => { const m = b.match(/unicode-range:\s*([^;]+)/i); return !m || /U\+0600|U\+0000|U\+0750|U\+FB50|U\+FE70/i.test(m[1]); });
         const out = [];
         for (let b of keep) {
@@ -5090,14 +5266,19 @@ function analyzeImgsEmpty() {
 
 /* الإصلاح التلقائي */
 (function () {
+  const rulesNow = AutoFix.rulesOn();
+  document.querySelectorAll("[data-afrule]").forEach(cb => {
+    cb.checked = rulesNow[cb.dataset.afrule];
+    cb.addEventListener("change", () => { const o = AutoFix.rulesOn(); o[cb.dataset.afrule] = cb.checked; try { localStorage.setItem("afRules", JSON.stringify(o)); } catch(e){} });
+  });
   try { $("afAutoSel").value = localStorage.getItem("afAuto") === "0" ? "0" : "1"; $("afMin").value = localStorage.getItem("afMin") || ""; } catch(e){}
   $("afAutoSel").addEventListener("change", () => { try { localStorage.setItem("afAuto", $("afAutoSel").value); } catch(e){} });
   $("afMin").addEventListener("change", () => { try { localStorage.setItem("afMin", $("afMin").value); } catch(e){} });
   $("afRun").addEventListener("click", async () => {
     if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
-    const b = $("afRun"); b.disabled = true;
+    const b = $("afRun"); b.disabled = true; b.classList.add("busy");
     try { await AutoFix.run(false); } catch(e) { Errors.push("error", "autofix", e); toast("تعذّر الإصلاح التلقائي", "error"); }
-    b.disabled = false;
+    b.disabled = false; b.classList.remove("busy");
   });
   $("afUndo").addEventListener("click", () => { if (!APP.loaded) return; AutoFix.undo(); toast("أُلغي الإصلاح", "info", 1800); });
 })();
