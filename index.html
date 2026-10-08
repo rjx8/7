@@ -1673,7 +1673,7 @@ function buildDesignBlock() {
     "• تباين النص مع ما خلفه ≥ 4.5:1 فوق كل نقطة من الخلفية؛ إن تعذّر فضع لوحًا معتمًا خلف النص.",
     "• لكل شريحة عنصر بطل واحد (رسم أو رقم أو رمز أو عنوان) والباقي يتبعه بهدوء. نوّع التكوين بين الشرائح ولا تكرر الشكل نفسه في شريحتين متتاليتين.",
     "• ثلاث طبقات في كل شريحة: خلفية بطيئة، محتوى بتتابع، تفاصيل (نبضة أو عدّ أو رسم خط). الدخول بمنحنى Out (expo أو quart أو cubic) من opacity 0 مع إزاحة صغيرة؛ والخروج أسرع من الدخول؛ ولا يظهر شيء أو يختفي فجأة.",
-    "• الأيقونات والرسوم بـ SVG بسمك خط موحّد، لا إيموجي. لا بطاقة داخل بطاقة ولا بطاقات متطابقة متجاورة كهيكل للشريحة."
+    "• الأيقونات والرسوم بـ SVG بسمك خط موحّد، لا إيموجي. تجنّب تكرار صناديق متطابقة متجاورة كهيكل وحيد للشريحة."
   ].join("\n"));
 }
 
@@ -1706,6 +1706,8 @@ function createPrompt() {
   /* 1) المهمة */
   S.push("أنت مخرج فني ومصمم Motion Graphics. أنشئ فيديو موشن عربي كامل في ملف HTML واحد، بهوية بصرية خاصة بموضوع المشروع.");
 
+  S.push("الأولوية عند التعارض: (1) البقاء داخل حدود الصفحة وسهولة القراءة، ثم (2) متطلبات صاحب المشروع وطبيعة الموضوع" + (audioOn ? " ومحتوى الصوت" : "") + "، ثم (3) إرشادات التصميم العامة.");
+
   /* 2) بيانات المشروع: لا يظهر إلا ما عُبّئ */
   const info = [["العنوان", d.title], ["المادة", d.subject], ["الصف", d.grade], ["الطالب", d.student], ["المعلم", d.teacher], ["العام", d.year]]
     .filter(r => r[1]).map(r => r[0] + ": " + r[1]);
@@ -1714,7 +1716,7 @@ function createPrompt() {
   S.push(pSec("المشروع", info.join("\n")));
 
   if (d.extra) S.push(pSec("متطلبات إضافية من صاحب المشروع (التزم بها)", d.extra));
-  if ((d.student || d.teacher) && !audioOn) S.push("اسما الطالب والمعلم" + (d.student && d.teacher ? "" : " (المذكور منهما)") + " يظهران في الشريحة الأخيرة فقط.");
+  if ((d.student || d.teacher) && !audioOn) S.push((d.student && d.teacher ? "اسم الطالب واسم المعلم يظهران" : d.student ? "اسم الطالب يظهر" : "اسم المعلم يظهر") + " في الشريحة الأخيرة فقط، ولا تضف اسمًا غير مذكور في بيانات المشروع.");
 
   /* 3) الاتجاه العام */
   const dir = [];
@@ -1792,7 +1794,7 @@ function createPrompt() {
     "6. ممنوع (التصدير لا يدعمها): filter وdrop-shadow وbackdrop-filter وmask-image وmix-blend-mode وbackground-clip:text. المسموح: gradient وclip-path وbox-shadow وSVG وopacity وtransform.",
     "7. النص العربي يُحرَّك كلمة كلمة أو سطرًا كاملًا، لا حرفًا حرفًا (يفكك اتصال الحروف).",
     "",
-    "مكتبة Motion جاهزة تُحقن تلقائيًا (لا تكتبها)، وكل توابعها تستقبل ms:",
+    "مكتبة Motion داخلية تضيفها المنصة قبل التشغيل (لا تكتبها ولا تستوردها)، وكل توابعها تستقبل ms:",
     "Motion.scene(ms,start,end,{in,out,last}) ← {local,progress,alpha,visible} • Motion.p / tween / fadeIn / fadeOut / slideIn / scaleIn / spring • Motion.reveal(ms,delay,dur,dir) ← clip-path جاهز • Motion.words(el,text,ms,delay,{per}) • Motion.draw(pathEl,ms,delay,dur) • Motion.float / pulse • Motion.countUp(ms,delay,dur,from,to,{arabic:true}) • Motion.stagger(i,gap) • Motion.lerpColor • Motion.ease.{linear|easeOut|cubic|quart|expo|back|elastic|spring} • Motion.charts.{bar|line|pie|area}(el,{data:[{label,value}],t}) • Motion.katex(el,\"x^2+1\")",
     "",
     "هيكل الكود (اتبعه):",
@@ -2737,6 +2739,38 @@ function hasAlphaCanvas(cv) {
   return false;
 }
 /* تصغير الصور الضخمة قبل التصدير: تسرّع الرندر وتمنع انهيار الذاكرة (تُستعاد بعد التصدير) */
+/* html2canvas لا يطبّق object-fit:cover بدقة دائمًا (خصوصًا مع صور SVG وفي سفاري)، فتظهر الصورة منزاحة أو مقصوصة خطأ.
+   نخبز القص مسبقًا: نرسم الجزء المقصوص بنفس مقاس الإطار على canvas ونستبدل الصورة به، ثم نُرجع كل شيء بعد التصدير. */
+function bakeObjectFit(doc) {
+  const restore = [];
+  const win = doc.defaultView || window;
+  const sc = Math.min(2, Math.max(1, renderScale()));
+  Array.from(doc.querySelectorAll("img")).slice(0, 200).forEach(im => {
+    try {
+      const cs = win.getComputedStyle(im);
+      if (cs.objectFit !== "cover") return;
+      const nw = im.naturalWidth, nh = im.naturalHeight;
+      const dw = im.offsetWidth, dh = im.offsetHeight;   /* مقاس التخطيط بلا تأثير transform الحركة */
+      if (!nw || !nh || dw < 2 || dh < 2) return;
+      const k = Math.max(dw / nw, dh / nh), sw = dw / k, sh = dh / k;
+      const pos = String(cs.objectPosition || "50% 50%").split(/\s+/);
+      const pct = (v, d) => { const m = /^(-?[\d.]+)%$/.exec(v || ""); return m ? Math.max(0, Math.min(100, Number(m[1]))) / 100 : d; };
+      const sx = (nw - sw) * pct(pos[0], 0.5), sy = (nh - sh) * pct(pos[1], 0.5);
+      const cw = Math.max(1, Math.min(2400, Math.round(dw * sc))), ch = Math.max(1, Math.min(2400, Math.round(dh * sc)));
+      const cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+      const cx = cv.getContext("2d");
+      cx.imageSmoothingQuality = "high";
+      cx.drawImage(im, sx, sy, sw, sh, 0, 0, cw, ch);
+      const png = hasAlphaCanvas(cv);
+      const url = cv.toDataURL(png ? "image/png" : "image/jpeg", 0.92);
+      restore.push([im, im.getAttribute("src"), im.style.getPropertyValue("object-fit"), im.style.getPropertyPriority("object-fit"), im.getAttribute("srcset")]);
+      im.setAttribute("src", url);
+      im.removeAttribute("srcset");
+      im.style.setProperty("object-fit", "fill", "important");
+    } catch(e) { Errors.push("warn", "تعذّر تثبيت قص صورة قبل التصدير", e); }
+  });
+  return restore;
+}
 async function optimizeDocImages(doc) {
   const restore = [];
   const imgs = Array.from(doc.querySelectorAll("img")).slice(0, 200);
@@ -2768,7 +2802,15 @@ async function optimizeDocImages(doc) {
   return restore;
 }
 function restoreDocImages(list) {
-  (list || []).forEach(([im, src]) => { try { im.setAttribute("src", src); } catch(e){} });
+  (list || []).forEach(([im, src, of, ofp, srcset]) => {
+    try {
+      im.setAttribute("src", src);
+      if (of !== undefined) {
+        if (of) im.style.setProperty("object-fit", of, ofp || ""); else im.style.removeProperty("object-fit");
+        if (srcset) im.setAttribute("srcset", srcset);
+      }
+    } catch(e){}
+  });
 }
 
 /* ────────── Mediabunny ────────── */
@@ -4446,6 +4488,31 @@ function guardBrokenImgs(doc) {
 /* ────────── تضمين الخطوط كـ data: لتظهر في التصدير (html2canvas ينسخ المستند في إطار جديد فلا تُحمَّل الخطوط الخارجية في الوقت المناسب) ────────── */
 const FONT_CACHE = { css: new Map(), file: new Map() };
 const blobToDataURL = b => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); });
+/* يُبقي فقط كتل @font-face للخطوط والأوزان المستعملة فعليًا في المشروع (أول خطين من كل قائمة خطوط):
+   كل إطار يُستنسخ فيه المستند كاملًا، فتضمين كل الخطوط (≈13 عائلة) يُبطئ التصدير ويُسقط بعض الخطوط في سفاري قبل اكتمال فكّها. */
+function pickUsedFontBlocks(blocks, used) {
+  const fam = b => { const m = b.match(/font-family:\s*['"]?([^;'"]+)['"]?\s*;/i); return m ? m[1].trim().toLowerCase() : ""; };
+  const wt = b => { const m = b.match(/font-weight:\s*(\d+)(?:\s+(\d+))?/i); return m ? [Number(m[1]), Number(m[2] || m[1])] : [400, 400]; };
+  const all = Array.from(blocks);
+  if (!used || !used.size) return all;
+  const byFam = new Map();
+  all.forEach(b => { const f = fam(b); if (!byFam.has(f)) byFam.set(f, []); byFam.get(f).push(b); });
+  const keep = new Set();
+  used.forEach((weights, f) => {
+    const list = byFam.get(f); if (!list) return;
+    const avail = Array.from(new Set(list.map(b => wt(b)[0]))).sort((a, b) => a - b);
+    const want = new Set();
+    (weights.size ? Array.from(weights) : [400]).forEach(w => {
+      if (list.some(b => { const r = wt(b); return w >= r[0] && w <= r[1]; })) { want.add(w); return; }
+      const up = avail.filter(x => x > w), down = avail.filter(x => x < w);
+      want.add(w >= 500 ? (up.length ? up[0] : down[down.length - 1]) : (down.length ? down[down.length - 1] : up[0]));
+    });
+    let any = false;
+    list.forEach(b => { const r = wt(b); if (Array.from(want).some(w => w >= r[0] && w <= r[1])) { keep.add(b); any = true; } });
+    if (!any) list.forEach(b => keep.add(b));
+  });
+  return keep.size ? all.filter(b => keep.has(b)) : all;
+}
 async function embedFonts(doc, win) {
   const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"]'));
   try {
@@ -4469,10 +4536,24 @@ async function embedFonts(doc, win) {
       FONT_CACHE.css.get(href).forEach(b => blocks.add(b));
     }
     let undo = () => {};
-    if (blocks.size) {
+    /* الخطوط والأوزان المستعملة فعليًا (أول خطين من كل قائمة font-family) */
+    const used = new Map();
+    captureScope(doc).slice(0, 1500).forEach(el => {
+      let has = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.nodeValue.trim()) { has = true; break; }
+      if (!has) return;
+      try {
+        const cs = win.getComputedStyle(el), w = parseInt(cs.fontWeight) || 400;
+        cs.fontFamily.split(",").slice(0, 2).map(x => x.trim().replace(/^['"]|['"]$/g, "").toLowerCase()).forEach(f => {
+          if (!f) return; if (!used.has(f)) used.set(f, new Set()); used.get(f).add(w);
+        });
+      } catch(e){}
+    });
+    const picked = pickUsedFontBlocks(blocks, used);
+    if (picked.length) {
       const st = doc.createElement("style");
       st.id = "__fonts_embedded__";
-      st.textContent = Array.from(blocks).join("\n");
+      st.textContent = picked.join("\n");
       doc.head.appendChild(st);
       links.forEach(l => { l.disabled = true; });
       undo = () => { try { st.remove(); } catch(e){} links.forEach(l => { l.disabled = false; }); };
@@ -4519,7 +4600,7 @@ async function renderFrame(ms, opt) {
       fixArabicSpacing(cd);
       /* الشرائح البعيدة عن الزمن الحالي تُحذف من النسخة: الرسم أسرع بكثير ويقل الحمل والحرارة */
       try { cd.querySelectorAll('section[data-scene]').forEach(sc => { const st = Number(sc.dataset.sceneStart), en = Number(sc.dataset.sceneEnd); if (isFinite(st) && isFinite(en) && (ms < st - 1500 || ms > en + 1500)) sc.remove(); }); } catch(e){}
-      try { if (cd.fonts && APP.fontSpecs) await Promise.race([Promise.all(APP.fontSpecs.map(f => cd.fonts.load(f, 'أبجد abc 123').catch(() => {}))), sleep(1500)]); } catch(e){}
+      try { if (cd.fonts && APP.fontSpecs) await Promise.race([Promise.all(APP.fontSpecs.map(f => cd.fonts.load(f, 'أبجد abc 123').catch(() => {}))).then(() => cd.fonts.ready), sleep(5000)]); } catch(e){}
       if (safe) try {
         const st = cd.getElementById("__bg_replaces__"); if (st) st.remove();
         cd.querySelectorAll("[data-bg-rid]").forEach(el => el.style.setProperty("background-image", "none", "important"));
@@ -4589,7 +4670,9 @@ async function prepareCapture(doc, win, withOptimize) {
   if (failed.length) toast(failed.length + " صورة لم تُحمَّل — سيُستبدل مؤقت", "warn", 6000);
   await waitImgs(doc);
   guardBrokenImgs(doc);
-  const imgRestore = withOptimize ? await optimizeDocImages(doc) : [];
+  const baked = bakeObjectFit(doc);
+  if (baked.length) await waitImgs(doc);
+  const imgRestore = (withOptimize ? await optimizeDocImages(doc) : []).concat(baked);   /* الاستعادة بالترتيب: التصغير أولًا ثم الأصل */
   const snap = snapshotInline(doc);
   const stats = preprocess(doc, win);
   const lsMarked = markArabicSpacing(doc);
