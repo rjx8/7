@@ -40,7 +40,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .tabs button.active{background:var(--primary);color:var(--ink)}
 .page{display:none;max-width:1320px;margin:0 auto;padding:22px 16px 80px;width:100%;min-width:0;overflow-x:clip}
 .gen>*,.workspace>*,.side,.side-pane,.card,.preview,.player{min-width:0;max-width:100%}
-.lint-item,.lint-item>div,.img-mgr,.img-list>*,.scene-card,.info-row span{min-width:0;overflow-wrap:anywhere}
+.img-mgr,.img-list>*,.scene-card,.info-row span{min-width:0;overflow-wrap:anywhere}
 .page.active{display:block}
 
 /* ── الصفحة الأولى ── */
@@ -213,48 +213,11 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .log-empty{color:var(--dim);text-align:center;padding:8px}
 .log-copy{width:100%;margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:7px;border-radius:9px;font-size:12px}
 
-/* الفاحص */
-.lint-hero{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;margin-bottom:12px}
-.gauge{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gc,var(--dim)) calc(var(--gp,0)*1%),var(--sunk) 0);position:relative}
-.gauge::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--panel)}
-.gauge b{position:relative;font-family:"Cairo",sans-serif;font-size:24px;font-weight:900}
-.grade{font-family:"Cairo",sans-serif;font-weight:900;font-size:18px}
-.grade.weak{color:var(--red)}.grade.mid{color:var(--amber)}.grade.strong{color:var(--teal)}
-.lint-summary{font-size:12.5px;color:var(--muted);line-height:1.6}
-.cats{display:grid;gap:7px;margin-bottom:12px}
-.cat{display:grid;grid-template-columns:74px 1fr 34px;gap:8px;align-items:center;font-size:12.5px}
-.cat .bar{height:7px;border-radius:9px;background:var(--sunk);overflow:hidden}
-.cat .bar i{display:block;height:100%;border-radius:9px;background:var(--teal)}
-.cat .bar i.mid{background:var(--amber)}.cat .bar i.weak{background:var(--red)}
-.cat b{text-align:left;font-variant-numeric:tabular-nums}
-button.cat{border:0;background:transparent;width:100%;text-align:right;padding:5px 6px;border-radius:9px;color:inherit}
-button.cat:hover{background:rgba(139,124,255,.08)}
-button.cat.sel{background:rgba(139,124,255,.16)}
-.lint-why{background:var(--sunk);border:1px solid var(--line2);border-radius:11px;padding:10px;margin-bottom:12px;font-size:12.5px;line-height:1.7}
-.why-h{font-weight:900;margin-bottom:6px;font-size:13px}
-.why-r{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06)}
-.why-r b{font-family:ui-monospace,monospace;font-size:13px;color:var(--amber);text-align:center}
-.why-r.error b{color:var(--red)}.why-r.info b{color:var(--blue)}
-.why-r strong{color:var(--text)}.why-r span{color:var(--dim);font-size:11.5px}
-.why-fix{color:var(--muted)}
-.why-note{color:var(--dim);font-size:11.5px;margin-top:6px}
+.fix-note{background:var(--sunk);border:1px solid var(--line2);border-radius:11px;padding:10px;margin-bottom:12px;font-size:12.5px;line-height:1.7}
 .dl-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .dl-row:has(> :only-child){grid-template-columns:1fr}
 .dl-prev{display:block;width:100%;border-radius:10px;margin-top:8px;border:1px solid var(--line)}
 .dl-hint{font-size:12px;color:var(--muted);margin-top:6px;text-align:center;line-height:1.6}
-.lint-filter{display:flex;gap:6px;margin:10px 0}
-.lint-filter button{flex:1;border:1px solid var(--line);background:var(--sunk);color:var(--muted);border-radius:9px;padding:6px 4px;font-size:12px}
-.lint-filter button.active{color:var(--text);border-color:var(--primary);background:rgba(139,124,255,.12)}
-.lint-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;max-height:340px;overflow-y:auto}
-.lint-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);font-size:12.5px;line-height:1.6;cursor:pointer;text-align:right;width:100%}
-.lint-item:hover{border-color:var(--line2)}
-.lint-item.error{border-color:rgba(255,111,125,.4)}.lint-item.warn{border-color:rgba(255,184,77,.35)}
-.lint-badge{font-weight:900;font-size:11px;padding:2px 8px;border-radius:6px;flex:none}
-.lint-item.error .lint-badge{background:rgba(255,111,125,.16);color:var(--red)}
-.lint-item.warn .lint-badge{background:rgba(255,184,77,.16);color:var(--amber)}
-.lint-item.info .lint-badge{background:rgba(106,183,255,.16);color:var(--blue)}
-.lint-fix{color:var(--muted);margin-top:2px}
-.lint-meta{color:var(--dim);font-size:11.5px}
 
 /* مدير الصور */
 .img-mgr{display:none}
@@ -294,6 +257,22 @@ button.cat.sel{background:rgba(139,124,255,.16)}
 .audio-row input[type="range"]{width:100%;accent-color:var(--primary)}
 .audio-val{font-size:12px;color:var(--primary2);text-align:center}
 .audio-del{width:26px;height:26px;padding:0;border:1px solid rgba(255,111,125,.3);background:rgba(255,111,125,.07);color:var(--red);border-radius:7px;font-size:12px}
+.audio-start{grid-column:1/-1;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.audio-start input{width:84px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 8px;direction:ltr;text-align:center}
+.sfx-box{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.sfx-box h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:8px}
+.sfx-count{font-size:11.5px;color:var(--primary2);font-weight:500}
+.sfx-vol{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:12.5px;color:var(--muted)}
+.sfx-vol input{flex:1;min-width:0;accent-color:var(--primary)}
+.sfx-vol span:last-child{min-width:38px;text-align:center;direction:ltr;color:var(--primary2)}
+.sfx-add{display:flex;gap:6px}
+.sfx-add select{flex:1;min-width:0;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px}
+#sfxList{max-height:280px;overflow:auto}
+.sfx-row{display:grid;grid-template-columns:54px minmax(0,1fr) 30px 30px;gap:6px;align-items:center;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:12.5px}
+.sfx-row .tm{direction:ltr;color:var(--primary2);text-align:center}
+.sfx-row .src{font-size:11px;color:var(--dim);margin-inline-start:4px}
+.sfx-row button{width:28px;height:28px;padding:0;border:1px solid var(--line);background:var(--panel);border-radius:7px;font-size:12px}
+.sfx-row button[data-act="del"]{border-color:rgba(255,111,125,.3);background:rgba(255,111,125,.07);color:var(--red)}
 
 /* النوافذ */
 .modal-bg{position:fixed;inset:0;z-index:10000;background:rgba(3,6,16,.86);display:none;align-items:center;justify-content:center;padding:12px}
@@ -542,6 +521,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
 .audio-toggle .at small{font-size:12px;color:var(--muted)}
 #audioOpt .hint{display:block;padding:10px 12px;border-radius:11px;background:rgba(61,219,192,.07);border:1px dashed rgba(61,219,192,.35);color:var(--muted);line-height:1.8;unicode-bidi:plaintext}
 /* صف الخيارات (الحركة/الكثافة/العدد) */
+.opt-hint{margin-top:12px;padding:10px 12px;border-radius:11px;background:rgba(61,219,192,.07);border:1px dashed rgba(61,219,192,.35);color:var(--muted);font-size:12.5px;line-height:1.9;unicode-bidi:plaintext}
+.opt-hint b{color:var(--text)}
+.opt-hint div+div{margin-top:4px}
 .opt-row{align-items:end;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
 .opt-row .field label{white-space:nowrap}
 .opt-row .field input,.opt-row .field select{height:44px}
@@ -611,6 +593,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
               <span class="hint" id="audioProbeInfo">سيتغير البرومبت ليبني الفيديو على كلام الصوت. أرفق ملفك الصوتي مع البرومبت عند إرساله للذكاء الاصطناعي، وبعد توليد الكود أضف الملف نفسه من تبويب «الصوت» في الاستوديو ليُدمج في الفيديو عند التصدير.</span>
             </div>
           </div>
+          <div class="field full">
+            <label class="audio-toggle"><input type="checkbox" id="hasSfx"><span class="sw"></span><span class="at"><b>أريد مؤثرات صوتية</b><small>يطلب البرومبت قائمة توقيتات للمؤثرات، وتصنع المنصة الأصوات وتدمجها في المعاينة وعند التصدير</small></span></label>
+          </div>
           <div class="field full"><label>اتجاه الفيديو</label>
             <div class="seg">
               <button type="button" class="active" data-orientation="landscape"><span class="shape" style="width:30px;height:18px"></span><div><strong>أفقي 16:9</strong><span class="s">شاشات وعروض</span></div></button>
@@ -626,12 +611,13 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="style-grid" id="styleCards"></div>
         <div class="opt-row">
           <div class="field"><label for="motionLevel">غنى الحركة</label>
-            <select id="motionLevel"><option value="calm">هادئة</option><option value="balanced" selected>متوازنة</option><option value="rich">غنية</option></select></div>
+            <select id="motionLevel"><option value="calm">هادئة</option><option value="rich" selected>غنية</option></select></div>
           <div class="field"><label for="textDensity">كثافة النص</label>
             <select id="textDensity"><option value="light">خفيفة</option><option value="medium" selected>متوسطة</option><option value="heavy">كثيفة</option></select></div>
           <div class="field"><label for="scenesCount">عدد الشرائح (3–20)</label>
             <input id="scenesCount" type="number" min="3" max="20" value="6"></div>
         </div>
+        <div class="opt-hint" id="optHint" aria-live="polite"></div>
       </div>
 
       <div class="card">
@@ -717,7 +703,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
       <div class="side-tabs" id="sideTabs">
         <button class="active" data-side="code"><svg class="ic"><use href="#i-code"/></svg>الكود</button>
         <button data-side="images"><svg class="ic"><use href="#i-img"/></svg>الصور</button>
-        <button data-side="lint"><svg class="ic"><use href="#i-check"/></svg>الفحص</button>
+        <button data-side="fix"><svg class="ic"><use href="#i-wand"/></svg>الإصلاح</button>
         <button data-side="audio"><svg class="ic"><use href="#i-mic"/></svg>الصوت</button>
         <button data-side="export"><svg class="ic"><use href="#i-film"/></svg>التصدير</button>
       </div>
@@ -764,9 +750,9 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div id="imgMgrEmpty" class="img-empty">شغّل المشروع أولًا لتظهر صوره هنا.</div>
       </div>
 
-      <div class="side-pane" data-pane="lint">
+      <div class="side-pane" data-pane="fix">
         <h3>إصلاح تلقائي</h3>
-        <div class="lint-why" style="display:block;margin-bottom:10px">يرفع النصوص الصغيرة، ويعدّل لون النص حين يشبه خلفيته، ويصحّح النص الخارج عن حدود بطاقته أو الشريحة. يعمل على المعاينة والتصدير دون تغيير الكود الأصلي.</div>
+        <div class="fix-note" style="display:block;margin-bottom:10px">يرفع النصوص الصغيرة، ويعدّل لون النص حين يشبه خلفيته، ويصحّح النص الخارج عن حدود بطاقته أو الشريحة. يعمل على المعاينة والتصدير دون تغيير الكود الأصلي.</div>
         <div class="export-settings"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div><label for="afMin">أصغر حجم نص (px)</label><input type="number" id="afMin" min="16" max="120" placeholder="تلقائي (32 / 36)"></div>
           <div><label for="afAutoSel">عند تشغيل الكود</label><select id="afAutoSel"><option value="1">إصلاح تلقائي</option><option value="0">يدوي فقط</option></select></div>
@@ -776,23 +762,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="ghost" id="afUndo">تراجع عن الإصلاح</button>
         <div class="hint" id="afReport" style="white-space:pre-line;margin-top:8px">لم يُطبَّق إصلاح.</div>
         <div class="gap"></div>
-        <h3>فحص الجودة</h3>
-        <div class="lint-hero">
-          <div class="gauge" id="lintGauge"><b id="lintScore">—</b></div>
-          <div><div class="grade" id="lintGrade">لم يُفحص بعد</div><div class="lint-summary" id="lintSummary">شغّل الفاحص لتقييم التقني والتكوين والحركة والهوية.</div></div>
-        </div>
-        <div class="cats" id="lintCats"></div>
-        <div class="lint-why" id="lintWhy" style="display:none"></div>
-        <button class="btn green" id="runLint">🔍 تشغيل الفاحص</button>
-        <div class="lint-filter" id="lintFilter">
-          <button class="active" data-f="all">الكل</button>
-          <button data-f="error">أخطاء</button>
-          <button data-f="warn">تحذيرات</button>
-          <button data-f="info">ملاحظات</button>
-        </div>
-        <div class="lint-list" id="lintList"></div>
-        <div class="gap"></div>
-        <button class="btn blue" id="genFix">✍️ برومبت إصلاح</button>
 
         <h3>سجل الأخطاء</h3>
         <button class="log-toggle" id="logToggle"><span>عرض السجل</span><span class="log-badge zero" id="logBadge">0</span></button>
@@ -805,6 +774,13 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <button class="btn" id="addAudio"><svg class="ic"><use href="#i-upload"/></svg>إضافة ملف صوتي</button>
         <div class="audio-list" id="audioList"></div>
         <label class="mini-chk" style="margin-top:10px"><input type="checkbox" id="mixAudio" checked> دمج الصوت في الفيديو المصدَّر</label>
+        <div class="sfx-box">
+          <h4>المؤثرات الصوتية <span class="sfx-count" id="sfxCount"></span></h4>
+          <label class="mini-chk"><input type="checkbox" id="sfxOn" checked> تفعيل المؤثرات (معاينة وتصدير)</label>
+          <div class="sfx-vol"><span>مستوى المؤثرات</span><input type="range" id="sfxVol" min="0" max="100" value="70"><span id="sfxVolVal">70%</span></div>
+          <div class="sfx-add"><select id="sfxType" aria-label="نوع المؤثر"></select><button class="btn" id="sfxAddBtn">إضافة عند المؤشر</button></div>
+          <div class="audio-list" id="sfxList"></div>
+        </div>
       </div>
 
       <div class="side-pane" data-pane="export">
@@ -916,13 +892,6 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
   <div class="modal-info" id="framesInfo">—</div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px" id="framesGrid"></div>
   <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('framesModal')">إغلاق</button></div>
-</div></div>
-
-<div id="fixModal" class="modal-bg"><div class="modal">
-  <div class="modal-head"><h3>برومبت الإصلاح</h3><button class="modal-close" onclick="closeModal('fixModal')">×</button></div>
-  <div class="modal-info">برومبت مركّز على مخالفات الفاحص. الصقه في الذكاء الاصطناعي مع الكود الحالي.</div>
-  <textarea id="fixText" class="prompt-preview" readonly></textarea>
-  <div class="modal-acts"><button class="modal-act cancel" onclick="closeModal('fixModal')">إغلاق</button><button class="modal-act apply" id="fixCopy2">نسخ</button></div>
 </div></div>
 
 <div id="confirmModal" class="modal-bg"><div class="modal" style="max-width:420px">
@@ -1142,6 +1111,7 @@ const SESSION_KEY = "motion-platform-session-v5";
 const LEGACY = ["motion-platform-session-v4", "motion-platform-session-v3", "motion-platform-session-v2", "motion-platform-session-v1"];
 const IMG_MGR = { items: [], replaces: new Map(), selected: new Set(), pending: null, restored: false };
 const AUDIO = { tracks: [], recorder: null, chunks: [], restored: false };
+const SFX = { auto: [], manual: [], on: true, vol: 0.7, bus: null };
 const MIC = { active: false };
 const CROP = { item: null, src: "", name: "", mime: "image/png", origSrc: "", img: null, nw: 0, nh: 0, ratio: 1, frame: { left:0,top:0,width:0,height:0 }, left: 0, top: 0, baseScale: 1, zoom: 1, dragging: false, pointerId: null, startX: 0, startY: 0, startL: 0, startT: 0 };
 const BG = { item: null, src: "", name: "", origSrc: "", img: null, color: null, tol: 30, fea: 2, result: null, batch: null };
@@ -1427,9 +1397,8 @@ function assignLayouts() {
 }
 
 const MOTION_LEVELS = {
-  calm: { name: "هادئة", n: "3–4", text: "حركة هادئة وراقية: 3–4 عناصر متحركة في كل شريحة، تتابع 140–200ms، مسافات انزلاق 30–60px، وحركة خلفية بطيئة جدًا." },
-  balanced: { name: "متوازنة", n: "5–7", text: "حركة متوازنة: 5–7 عناصر متحركة في كل شريحة بتتابع 90–140ms، طبقة خلفية متحركة، ونبضة إبراز واحدة على الأقل." },
-  rich: { name: "غنية", n: "8–12", text: "حركة غنية ومفصلة: 8–12 عنصرًا متحركًا في كل شريحة، ثلاث طبقات زمنية (خلفية، محتوى، تفاصيل)، ورسم خطوط وكشف وعدّادات وحركة خلفية مستمرة." }
+  calm: { name: "هادئة", n: "3–5", text: "حركة هادئة وراقية: 3–5 عناصر متحركة في كل شريحة، تتابع 140–200ms، مسافات انزلاق 30–60px، وحركة خلفية بطيئة جدًا." },
+  rich: { name: "غنية", n: "6–10", text: "حركة غنية ومفصلة: 6–10 عناصر متحركة في كل شريحة، ثلاث طبقات زمنية (خلفية، محتوى، تفاصيل)، ورسم خطوط وكشف وعدّادات وحركة خلفية مستمرة." }
 };
 const DENSITY = {
   light: { name: "خفيفة", lo: 1.3, hi: 1.9, text: "نص خفيف: جمل قصيرة جدًا وعناوين قوية، والعنصر البصري هو الأساس." },
@@ -1699,9 +1668,10 @@ function createPrompt() {
   const fps = Number($("fps").value) || 30;
   const domain = detectDomain(d);
   const style = STYLES[d.visualStyle];
-  const ml = MOTION_LEVELS[d.motionLevel] || MOTION_LEVELS.balanced;
+  const ml = MOTION_LEVELS[d.motionLevel] || MOTION_LEVELS.rich;
   const dn = DENSITY[d.textDensity] || DENSITY.medium;
   const audioOn = !!($("hasAudio") && $("hasAudio").checked);
+  const sfxOn = !!d.sfx;
   const orient = portrait ? "عمودي 9:16" : "أفقي 16:9";
   const S = [];
 
@@ -1746,8 +1716,24 @@ function createPrompt() {
       "1. استمع إلى الملف كاملًا قبل التصميم، واشتق منه وحده الأفكار والنصوص والأرقام المعروضة؛ لا تضف معلومة غير مذكورة فيه" + (d.title || d.subject ? " (بيانات المشروع أعلاه للسياق فقط)" : "") + ".",
       "2. الأزمنة في الجدول مبدئية موزعة بالتساوي. اضبطها على الصوت الحقيقي: اجعل المدة الكلية = مدة الصوت، وابدأ كل شريحة وأنهها عند حدود المعنى أو الجملة، بلا فجوات بين الشرائح. عدّل data-scene-start/end وwindow.PROJECT.duration وmeta project-duration-ms بما يطابق ذلك.",
       "3. اعرض الكلمات والجمل المهمة من الكلام (لك حرية الاختصار والتنسيق) وزامن ظهورها مع نطقها بفارق لا يزيد عن 100ms.",
-      "4. لا تضف وسم <audio> ولا أي صوت داخل الكود.",
+      "4. لا تضف وسم <audio> ولا أي صوت داخل الكود" + (sfxOn ? " (الاستثناء الوحيد: قائمة PROJECT.sfx الموضحة في قسم المؤثرات الصوتية)" : "") + ".",
       "5. إن لم تستطع سماع الملف أو لم تجد مرفقًا فتوقف واكتب جملة واحدة بذلك بدل اختلاق المحتوى."
+    ].join("\n")));
+  }
+
+  /* 5b) المؤثرات الصوتية: تظهر فقط عند تفعيلها */
+  if (sfxOn) {
+    S.push(pSec("المؤثرات الصوتية (مطلوبة)", [
+      "المنصة تصنع المؤثرات بنفسها وتدمجها في المعاينة وعند التصدير. دورك أن تحدد متى يُسمع كل مؤثر فقط، عبر قائمة توقيتات داخل الكود.",
+      "1. عرّف داخل window.PROJECT خاصية sfx: مصفوفة عناصرها {t:الزمن بالمللي ثانية من بداية المشروع، type:اسم المؤثر، vol:من 0.1 إلى 1}. وvol اختيارية (الافتراضي 0.6).",
+      "2. الأنواع المتاحة فقط: whoosh (انتقال كبير بين شريحتين أو دخول عنصر ضخم) • swipe (انزلاق سريع لعنصر أو سطر) • pop (ظهور بطاقة أو أيقونة أو رقم) • click (اختيار أو تحديد) • tick (عدّاد أو عنصر في قائمة) • ding (نتيجة صحيحة أو إنجاز أو فكرة محورية) • boom (ضربة قوية لعنوان الغلاف أو لحظة درامية) • sparkle (تمييز أو تتويج) • riser (تصاعد قبل كشف مهم، يبلغ ذروته عند لحظة الكشف) • type (نص يظهر كأنه يُكتب). أي اسم آخر يُتجاهل.",
+      "3. زامن t مع لحظة بدء الحركة المرئية نفسها بفارق ≤ 50ms (ويجوز تقديم whoosh وswipe بنحو 40ms). الزمن مطلق لا نسبي للشريحة: t = بداية الشريحة + تأخير العنصر، فاحسبه من القيم نفسها التي تستعملها في الحركة.",
+      "4. اقتصد: مؤثر لكل حدث ذي معنى لا لكل عنصر. من 2 إلى 5 مؤثرات في الشريحة، وبين كل مؤثرين 150ms على الأقل، ولا يتراكب مؤثران بارزان في اللحظة نفسها.",
+      "5. اجعل الانتقال بين الشرائح مؤثرًا خفيفًا (whoosh أو swipe بـ vol بين 0.35 و0.5)، والغلاف boom أو sparkle، والخاتمة ding أو sparkle.",
+      "6. المؤثرات تأكيد لا أساس: اجعل vol بين 0.25 و0.7 في الغالب، ولا يتجاوز 0.9 إلا boom. لا مؤثر في آخر 300ms من المشروع.",
+      "7. القائمة ثابتة ومرتبة تصاعديًا بالزمن، وكل t ضمن [0، المدة الكلية]، وكل مؤثر مرتبط بحركة مرئية موجودة فعلًا.",
+      "8. لا تولّد أصواتًا بنفسك: ممنوع Web Audio وAudioContext وAudio ووسم <audio> وأي ملف صوت أو رابط."
+        + (audioOn ? "\n9. لأن هناك ملفًا صوتيًا ناطقًا: اجعل vol ≤ 0.4 وضع المؤثرات عند الانتقالات والفواصل، لا فوق الجمل الأساسية بحيث تغطي الكلام." : "")
     ].join("\n")));
   }
 
@@ -1778,7 +1764,7 @@ function createPrompt() {
     "  t.style.transform='translateY('+Motion.slideIn(l,150,700,40)+'px)';",
     "}",
     "var FN=[anim1 /* ، anim2 ، … دالة لكل شريحة */];",
-    "window.PROJECT={duration:" + totalMs + ",orientation:\"" + APP.orientation + "\",setTime:function(ms){",
+    "window.PROJECT={duration:" + totalMs + ",orientation:\"" + APP.orientation + "\"," + (sfxOn ? "\n  sfx:[{t:0,type:\"boom\",vol:0.8},{t:" + (timing[1] ? timing[1].start : Math.min(3000, Math.max(0, totalMs - 500))) + ",type:\"whoosh\",vol:0.45} /* … بقية المؤثرات مرتبة بالزمن */],\n  " : "") + "setTime:function(ms){",
     "  SCENES.forEach(function(sc,i){",
     "    var el=document.querySelector('[data-scene=\"'+sc.n+'\"]');",
     "    var f=Motion.scene(ms,sc.s,sc.e,{in:300,out:300,last:i===SCENES.length-1});",
@@ -1804,20 +1790,10 @@ function createPrompt() {
   ].join("\n")));
 
   /* 9) المخرجات */
-  S.push(pSec("المخرجات", "ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بلا أي شرح قبله أو بعده وبلا سياج markdown. قبل الإخراج راجع كل شريحة: لا نص خارج الحدود، ولا خط أصغر من الحد، ولا عنصر مقصوص."));
+  S.push(pSec("المخرجات", "ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بلا أي شرح قبله أو بعده وبلا سياج markdown. قبل الإخراج راجع كل شريحة: لا نص خارج الحدود، ولا خط أصغر من الحد، ولا عنصر مقصوص." + (sfxOn ? " وراجع PROJECT.sfx: مرتبة بالزمن، وكل t ضمن مدة المشروع ويطابق حركة مرئية فعلًا." : "")));
   return S.join("\n\n");
 }
 
-
-/* ────────── الفاحص: تقني + طباعة + تخطيط + حركة + هوية + محتوى ────────── */
-const LINT_CATS = {
-  tech:     { name: "التقني",  w: 30 },
-  type:     { name: "الطباعة", w: 15 },
-  layout:   { name: "التكوين", w: 20 },
-  motion:   { name: "الحركة",  w: 20 },
-  identity: { name: "الهوية",  w: 10 },
-  content:  { name: "المحتوى", w: 5 }
-};
 
 /* ────────── إصلاح تلقائي: حجم النص • التباين مع الخلفية • خروج النص عن الحدود ──────────
    يعمل على نسخة المعاينة نفسها (فتنعكس الإصلاحات على التصدير) عبر ورقة أنماط #__autofix__ وسمة data-af.
@@ -2027,406 +2003,6 @@ const AutoFix = {
     return rep;
   }
 };
-const Linter = {
-  last: [], report: null,
-  async run(doc, win) {
-    const out = [];
-    if (!doc || !win) return out;
-    const b = baseSize();
-    const W = b.width, H = b.height;
-    const form = getForm();
-    const add = (sev, cat, rule, sc, el, msg, fix, t) => out.push({ sev, cat, rule, scene: sc, el, msg, fix, t: t == null ? null : Math.round(t) });
-    const saved = APP.currentTime || 0;
-    const seek = ms => { try { Bridge.setTime(ms, true); void doc.body.offsetHeight; } catch (e) {} };
-    const cs = el => win.getComputedStyle(el);
-    const desc = el => {
-      if (!el || !el.tagName) return "—";
-      const t = el.tagName.toLowerCase();
-      const id = el.id ? "#" + el.id : "";
-      const cl = el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".") : "";
-      return (t + id + cl).slice(0, 50);
-    };
-    const snip = el => { const t = ((el && el.textContent) || "").trim().replace(/\s+/g, " "); return t ? " — «" + t.slice(0, 28) + (t.length > 28 ? "…" : "") + "»" : ""; };
-    const visible = el => {
-      let c = el;
-      while (c && c !== doc.documentElement) {
-        const s = cs(c);
-        if (s.display === "none" || s.visibility === "hidden" || parseFloat(s.opacity) < 0.05) return false;
-        c = c.parentElement;
-      }
-      return true;
-    };
-    const root = doc.getElementById("project-root") || doc.body;
-    let secs = Array.from(doc.querySelectorAll("section[data-scene]"));
-    const times = secs.map((s, i) => {
-      let st = Number(s.dataset.sceneStart), en = Number(s.dataset.sceneEnd);
-      if (!isFinite(st)) st = APP.durationMs * i / Math.max(1, secs.length);
-      if (!isFinite(en)) en = APP.durationMs * (i + 1) / Math.max(1, secs.length);
-      return { st, en, n: s.dataset.scene || String(i + 1), name: s.dataset.sceneName || "" };
-    });
-    const scn = i => times[i] ? times[i].n : "—";
-
-    /* ═══ تقني ═══ */
-    if (!win.PROJECT || typeof win.PROJECT.setTime !== "function")
-      add("error", "tech", "noProject", "—", "window", "لا يوجد window.PROJECT.setTime — الحركة لن تتزامن مع التصدير.", "عرّف PROJECT.setTime(ms).");
-    if (!root || root.id !== "project-root") add("error", "tech", "noRoot", "—", "body", "لا يوجد عنصر #project-root.", "ضع كل الشرائح داخل #project-root.");
-    if (!secs.length) add("error", "tech", "noScenes", "—", "body", "لا توجد شرائح <section data-scene>.", "أضف شرائح بالسمات المطلوبة.");
-    if (secs.length && SCENES.length && secs.length !== SCENES.length) add("warn", "content", "sceneCount", "—", "sections", "عدد الشرائح (" + secs.length + ") لا يطابق المخطط (" + SCENES.length + ").", "طابق عدد الشرائح مع الجدول.");
-    const nodes = Array.from(doc.querySelectorAll("#project-root *")).slice(0, 2500);
-    const seenTech = new Set();
-    nodes.forEach(el => {
-      const c = cs(el);
-      const sc = (() => { let p = el; while (p && p !== doc.body) { if (p.dataset && p.dataset.scene) return p.dataset.scene; p = p.parentElement; } return "—"; })();
-      const once = (k, sev, msg, fix) => { const key = k + sc; if (seenTech.has(key)) return; seenTech.add(key); add(sev, "tech", k, sc, desc(el), msg, fix); };
-      if (c.filter && c.filter !== "none") once("filter", "error", "filter: " + c.filter.slice(0, 30) + " غير مدعوم في التصدير.", "أزله واستخدم تدرجات.");
-      const bf = c.backdropFilter || c.webkitBackdropFilter;
-      if (bf && bf !== "none") once("backdrop", "warn", "backdrop-filter غير مدعوم.", "استخدم خلفية صلبة.");
-      if (c.mixBlendMode && c.mixBlendMode !== "normal") once("blend", "warn", "mix-blend-mode غير مدعوم.", "استخدم طبقات شفافة.");
-      const m = c.maskImage || c.webkitMaskImage;
-      if (m && m !== "none") once("mask", "warn", "mask-image غير مدعوم.", "استخدم clip-path.");
-      if ((c.webkitBackgroundClip === "text" || c.backgroundClip === "text") && hasAr(el.textContent || "")) once("clipText", "error", "background-clip:text على نص عربي.", "لون صلب.");
-      const a = c.animationName && c.animationName !== "none";
-      const tr = c.transitionDuration && parseFloat(c.transitionDuration) > 0;
-      if (a || tr) once("cssAnim", "warn", "animation/transition في CSS يفسد التزامن مع الزمن.", "احذفها وحرّك عبر setTime.");
-    });
-    const scripts = Array.from(doc.querySelectorAll("script:not([id^='__'])")).map(s => s.textContent || "").join("\n");
-    if (/requestAnimationFrame/.test(scripts)) add("error", "tech", "raf", "—", "script", "استخدام requestAnimationFrame للحركة.", "احذفه واعتمد على setTime.");
-    if (/setInterval\s*\(|setTimeout\s*\(/.test(scripts)) add("warn", "tech", "timers", "—", "script", "setInterval/setTimeout في الحركة.", "لا حاجة لها.");
-    if (/Math\.random\s*\(|Date\.now\s*\(|performance\.now\s*\(/.test(scripts)) add("warn", "tech", "nondet", "—", "script", "Math.random/Date.now داخل الكود تجعل الإطارات غير حتمية.", "استخدم قيمًا ثابتة أو دوال من ms.");
-    let maxEnd = 0;
-    secs.forEach((s, i) => {
-      const st = Number(s.dataset.sceneStart), en = Number(s.dataset.sceneEnd);
-      if (!isFinite(st) || !isFinite(en)) { add("error", "tech", "attrs", scn(i), desc(s), "data-scene-start/end ناقصة.", "أضفها."); return; }
-      if (en <= st) add("error", "tech", "range", scn(i), desc(s), "scene-end ≤ scene-start.", "صحّح التوقيت.");
-      maxEnd = Math.max(maxEnd, en);
-    });
-    for (let i = 1; i < secs.length; i++) {
-      const p = Number(secs[i - 1].dataset.sceneEnd), c = Number(secs[i].dataset.sceneStart);
-      if (isFinite(p) && isFinite(c) && c !== p) add("warn", "tech", "gap", scn(i), desc(secs[i]), "فجوة أو تداخل بين الشريحتين " + scn(i - 1) + " و" + scn(i) + ".", "اجعل بداية الشريحة = نهاية السابقة.", c);
-    }
-    const mDur = doc.querySelector('meta[name="project-duration-ms"]');
-    if (mDur) {
-      const declared = Number(mDur.content);
-      if (isFinite(declared) && maxEnd && Math.abs(declared - maxEnd) > 50) add("warn", "tech", "metaDur", "—", "meta", "project-duration-ms لا يساوي نهاية آخر شريحة.", "وحّدهما.");
-    } else add("warn", "tech", "noMeta", "—", "head", "meta project-duration-ms مفقودة.", "أضفها.");
-    if (win.PROJECT && Number(win.PROJECT.duration) && maxEnd && Math.abs(Number(win.PROJECT.duration) - maxEnd) > 50) add("warn", "tech", "projDur", "—", "PROJECT", "PROJECT.duration لا يطابق مدة الشرائح.", "وحّدهما.");
-    if (doc.documentElement.dir !== "rtl") add("warn", "type", "rtl", "—", "html", "الوثيقة بلا dir=\"rtl\".", "أضف dir=\"rtl\" على html.");
-
-    /* ═══ صور ═══ */
-    doc.querySelectorAll(".img-frame").forEach(el => {
-      const w = el.style.width || cs(el).width, h = el.style.height || cs(el).height;
-      if (!/^\d+(\.\d+)?px/.test(String(w)) || !/^\d+(\.\d+)?px/.test(String(h))) add("error", "tech", "imgFrame", "—", desc(el), ".img-frame بلا أبعاد px صريحة.", "حدّد width/height بالبكسل.");
-    });
-    const allImgs = Array.from(doc.querySelectorAll("img")).slice(0, 60);
-    allImgs.forEach(im => {
-      if (!(im.getAttribute("alt") || "").trim()) add("info", "content", "alt", "—", desc(im), "صورة بلا alt.", "أضف وصفًا.");
-      const r = im.getBoundingClientRect();
-      if (im.naturalWidth && r.width && im.naturalWidth < r.width * 0.6 && !String(im.src).startsWith("data:image/svg")) add("warn", "layout", "lowRes", "—", desc(im), "دقة الصورة (" + im.naturalWidth + "px) أقل بكثير من عرضها (" + Math.round(r.width) + "px).", "استخدم صورة أكبر.");
-      if (!im.closest(".img-frame") && r.width > 40) add("info", "tech", "noFrame", "—", desc(im), "صورة خارج .img-frame.", "ضعها داخل .img-frame.");
-    });
-    if (form.imageCount > 0 && allImgs.length < form.imageCount) add("info", "content", "imgCount", "—", "img", "الصور الموجودة (" + allImgs.length + ") أقل من المطلوب (" + form.imageCount + ").", "أضف الصور الناقصة.");
-
-    /* ═══ هوية: متغيرات وخطوط ═══ */
-    let tokens = 0;
-    try {
-      Array.from(doc.styleSheets).forEach(ss => {
-        let rules; try { rules = ss.cssRules; } catch (e) { return; }
-        Array.from(rules || []).forEach(r => { if (r.selectorText && /:root/.test(r.selectorText) && r.style) for (let i = 0; i < r.style.length; i++) if (String(r.style[i]).indexOf("--") === 0) tokens++; });
-      });
-    } catch (e) {}
-    if (tokens < 4) add("warn", "identity", "tokens", "—", ":root", "أقل من 4 متغيرات ألوان في :root (" + tokens + ").", "عرّف نظام ألوان بمتغيرات.");
-    if (!APP.detectedFonts.length) add("warn", "identity", "fonts0", "—", "head", "لا خط عربي مخصص.", "Tajawal أو Cairo.");
-    else if (APP.detectedFonts.length > 3) add("warn", "identity", "fontsMany", "—", "head", "خطوط كثيرة (" + APP.detectedFonts.length + ").", "اكتفِ بخط أو اثنين.");
-    if (APP.missingFonts.length) add("warn", "type", "fontMissing", "—", "head", "خطوط لم تُحمَّل: " + APP.missingFonts.slice(0, 3).join("، "), "تحقق من رابط الخط.");
-
-    /* ═══ فحص كل شريحة عند زمن مناسب ═══ */
-    const isTextLeaf = el => {
-      if (el.children.length > 0 && !Array.from(el.children).every(c => /^(b|i|em|strong|span|br|mark|small|sub|sup)$/i.test(c.tagName))) return false;
-      return !!(el.textContent || "").trim() && !/^(script|style|svg|path|g|defs|title)$/i.test(el.tagName) && !el.closest("svg");
-    };
-    const sceneStats = [];
-    const sigs = [];
-    const hues = new Set();
-    let anySat = false;
-    const bgSigs = [];
-    let flatCount = 0;
-    const colorKey = c => c.r + "," + c.g + "," + c.b;
-    const parseC = s => {
-      if (!s) return null;
-      const m = String(s).match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?/);
-      if (m) { const a = m[4] == null ? 1 : parseFloat(m[4]); if (a < 0.05) return null; return { r: +m[1], g: +m[2], b: +m[3], a }; }
-      return null;
-    };
-    const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b); };
-    const bgOf = el => { let c = el; while (c) { const col = parseC(cs(c).backgroundColor); if (col && col.a > 0.6) return col; c = c.parentElement; } return { r: 0, g: 0, b: 0 }; };
-    const hueOf = c => { const r = c.r / 255, g = c.g / 255, bl = c.b / 255, mx = Math.max(r, g, bl), mn = Math.min(r, g, bl), d = mx - mn; if (d < 0.14 || mx < 0.12) return null; let h; if (mx === r) h = ((g - bl) / d) % 6; else if (mx === g) h = (bl - r) / d + 2; else h = (r - g) / d + 4; h = (h * 60 + 360) % 360; return Math.floor(h / 30); };
-    const isAr = APP.orientation !== "x";
-    const minFS = AutoFix.floor();
-
-    for (let i = 0; i < secs.length; i++) {
-      const s = secs[i], T = times[i];
-      const dur = Math.max(1, T.en - T.st);
-      const tm = T.st + dur * 0.58;
-      seek(tm);
-      const sceneName = T.name;
-      if (!sceneName || /^(مشهد|scene|slide)\s*\d*$/i.test(sceneName)) add("warn", "content", "sceneName", T.n, desc(s), "اسم الشريحة عام أو مفقود (data-scene-name).", "سمِّها باسم يعبّر عن فكرتها.", tm);
-      const others = secs.filter((o, j) => j !== i && visible(o)).length;
-      if (!visible(s)) add("error", "tech", "hidden", T.n, desc(s), "الشريحة غير ظاهرة عند منتصف مدتها.", "تحقق من opacity/visibility في setTime.", tm);
-      else if (others > 0) add("error", "tech", "stack", T.n, desc(s), "شرائح أخرى ظاهرة معها في الوقت نفسه (" + others + ").", "أخفِ الشرائح خارج نطاقها الزمني.", tm);
-
-      const leaves = Array.from(s.querySelectorAll("*")).filter(isTextLeaf).slice(0, 220).filter(visible);
-      const rr = leaves.map(el => ({ el, r: el.getBoundingClientRect(), c: cs(el) })).filter(o => o.r.width > 2 && o.r.height > 2);
-      const words = (s.textContent || "").trim().split(/\s+/).filter(Boolean).length;
-      const wr = wordRange(dur / 1000, form.textDensity);
-      if (words > wr.max * 1.5) add("warn", "content", "wordsMany", T.n, desc(s), "الكلمات (" + words + ") أكثر من النطاق (" + wr.min + "–" + wr.max + ").", "اختصر النص.", tm);
-      if (words < Math.max(3, wr.min * 0.4)) add("warn", "content", "wordsFew", T.n, desc(s), "الكلمات (" + words + ") قليلة جدًا للنطاق (" + wr.min + "–" + wr.max + ").", "أضف محتوى مفيدًا.", tm);
-
-      /* طباعة */
-      const sizes = rr.map(o => parseFloat(o.c.fontSize)).filter(Boolean);
-      const maxF = sizes.length ? Math.max.apply(null, sizes) : 0, minF = sizes.length ? Math.min.apply(null, sizes) : 0;
-      const small = rr.filter(o => parseFloat(o.c.fontSize) < minFS);
-      if (small.length) add("warn", "type", "small", T.n, desc(small[0].el), small.length + " نص بحجم أقل من " + minFS + "px (أصغرها " + Math.round(minF) + "px)." + snip(small[0].el), "ارفعها إلى " + minFS + "px+.", tm);
-      if (sizes.length && maxF < 60 && !(i === secs.length - 1)) add("warn", "type", "noTitle", T.n, desc(s), "أكبر خط " + Math.round(maxF) + "px فقط — لا عنوان بارز.", "عنوان 72px+.", tm);
-      if (sizes.length > 2 && maxF / Math.max(1, minF) < 2.2) add("warn", "type", "flat", T.n, desc(s), "هرمية ضعيفة: نسبة الأكبر للأصغر " + (maxF / Math.max(1, minF)).toFixed(1) + ":1.", "وسّع الفرق (3:1 أو أكثر).", tm);
-      let lsBad = 0, lhBad = 0, tcBad = 0, lowC = 0, lowEl = null;
-      rr.forEach(o => {
-        const ar = hasAr(o.el.textContent);
-        const fs = parseFloat(o.c.fontSize) || 16;
-        if (ar && o.c.letterSpacing !== "normal" && parseFloat(o.c.letterSpacing) !== 0) lsBad++;
-        if (ar && o.c.textTransform !== "none") tcBad++;
-        const lh = parseFloat(o.c.lineHeight);
-        if (ar && isFinite(lh) && fs < 80 && lh / fs < 1.25 && o.r.height > fs * 1.6) lhBad++;
-        const fg = parseC(o.c.color), bg = bgOf(o.el);
-        if (fg) { const la = lum(fg), lb = lum(bg); const ratio = (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05); if (ratio < 3) { lowC++; lowEl = lowEl || o.el; } const h = hueOf(fg); if (h != null) { hues.add(h); anySat = true; } }
-        const bgc = parseC(o.c.backgroundColor); if (bgc) { const h2 = hueOf(bgc); if (h2 != null) { hues.add(h2); anySat = true; } }
-      });
-      if (lsBad) add("error", "type", "letterSpacing", T.n, desc(s), "letter-spacing على نص عربي (" + lsBad + ").", "أزله.", tm);
-      if (tcBad) add("warn", "type", "textTransform", T.n, desc(s), "text-transform على نص عربي.", "أزله.", tm);
-      if (lhBad) add("warn", "type", "lineHeight", T.n, desc(s), "ارتفاع السطر أقل من 1.25 في نص عربي متعدد الأسطر.", "استخدم 1.4+ للجسم.", tm);
-      const fams = new Set(rr.map(o => String(o.c.fontFamily || "").split(",")[0].replace(/["']/g, "").trim()).filter(Boolean));
-      if (fams.size > 2) add("warn", "type", "fonts", T.n, desc(s), "أكثر من خطين في الشريحة (" + fams.size + "): " + Array.from(fams).slice(0, 4).join("، ") + ".", "اكتفِ بخط للعناوين وخط للجسم.", tm);
-      if (lowC) add("warn", "type", "contrast", T.n, desc(lowEl), "تباين منخفض (" + lowC + " نص)." + snip(lowEl), "ارفع التباين إلى 4.5:1.", tm);
-
-      /* تكوين */
-      const overflow = rr.filter(o => o.r.right > W + 2 || o.r.left < -2 || o.r.bottom > H + 2 || o.r.top < -2);
-      if (overflow.length) add("warn", "layout", "outside", T.n, desc(overflow[0].el), overflow.length + " نص يخرج عن إطار الشريحة عند منتصفها.", "قلّص أو أعد التموضع.", tm);
-      const clipped = rr.filter(o => { const cst = o.c; return (cst.overflow === "hidden" || cst.overflowY === "hidden") && o.el.scrollHeight > o.el.clientHeight + 6 && o.el.clientHeight > 0; });
-      if (clipped.length) add("warn", "layout", "clipped", T.n, desc(clipped[0].el), "نص مقصوص داخل حاويته (" + clipped.length + ").", "وسّع الحاوية أو قصّر النص.", tm);
-      let overlaps = 0, ovEl = null;
-      for (let a = 0; a < rr.length && a < 120; a++) for (let c = a + 1; c < rr.length && c < 120; c++) {
-        const A = rr[a], B = rr[c];
-        if (A.el.contains(B.el) || B.el.contains(A.el) || A.el.parentElement === B.el.parentElement && /^span$/i.test(A.el.tagName) && /^span$/i.test(B.el.tagName)) continue;
-        const ix = Math.min(A.r.right, B.r.right) - Math.max(A.r.left, B.r.left), iy = Math.min(A.r.bottom, B.r.bottom) - Math.max(A.r.top, B.r.top);
-        if (ix > 6 && iy > 6) { const ia = ix * iy, sm = Math.min(A.r.width * A.r.height, B.r.width * B.r.height); if (ia / sm > 0.3) { overlaps++; ovEl = ovEl || A.el; } }
-      }
-      if (overlaps) add("warn", "layout", "overlap", T.n, desc(ovEl), "تداخل بين نصوص (" + overlaps + " موضع).", "أبعد العناصر أو غيّر التوقيت.", tm);
-      let area = 0, cx = 0, cy = 0, centerChars = 0, allChars = 0;
-      rr.forEach(o => { const a = o.r.width * o.r.height; area += a; cx += a * (o.r.left + o.r.width / 2); cy += a * (o.r.top + o.r.height / 2); const n = (o.el.textContent || "").length; allChars += n; if (o.c.textAlign === "center") centerChars += n; });
-      const cxn = area ? cx / area / W : 0.5, cyn = area ? cy / area / H : 0.5;
-      const centered = area > 0 && cxn > 0.38 && cxn < 0.62 && allChars > 0 && centerChars / allChars > 0.5;
-      const hz = cxn < 0.4 ? "L" : cxn > 0.6 ? "R" : "C", vt = cyn < 0.38 ? "T" : cyn > 0.62 ? "B" : "M";
-      const alignSig = allChars && centerChars / allChars > 0.5 ? "c" : "s";
-      const sig = hz + vt + alignSig;
-      sigs.push({ sig, centered, n: T.n, tm });
-      if (area / (W * H) > 0.5) add("warn", "layout", "crowded", T.n, desc(s), "ازدحام: النص يغطي " + Math.round(area / (W * H) * 100) + "% من الشريحة.", "قلّل النص أو وسّع المساحات.", tm);
-      sceneStats.push({ n: T.n, name: T.name, centered, words, sig });
-
-      /* هوية: خلفية الشريحة */
-      let bgSig = "", deco = 0, svgBig = 0, hasImgBg = false;
-      const sc = cs(s);
-      const cands = [s].concat(Array.from(s.querySelectorAll("*")).slice(0, 160));
-      cands.forEach(el => {
-        const c = cs(el), r = el.getBoundingClientRect();
-        const big = r.width * r.height > W * H * 0.35;
-        if (big) { if (c.backgroundImage && c.backgroundImage !== "none") { hasImgBg = true; bgSig += c.backgroundImage.slice(0, 70); } const bc = parseC(c.backgroundColor); if (bc) bgSig += colorKey(bc); }
-        if (/^svg$/i.test(el.tagName) && r.width * r.height > W * H * 0.25) svgBig++;
-        if (el !== s && !(el.textContent || "").trim() && r.width * r.height > W * H * 0.01 && !/^(img|path|g|defs|rect|circle|line|polyline|polygon|ellipse|stop|lineargradient|radialgradient|pattern|clippath|text|tspan)$/i.test(el.tagName)) deco++;
-      });
-      bgSigs.push(bgSig || "none");
-      if (!hasImgBg && !svgBig && deco < 2) flatCount++;
-    }
-
-    /* تكرار التكوين والمركزية */
-    const inner = sigs.filter((x, i) => i > 0 && i < sigs.length - 1);
-    const centeredInner = inner.filter(x => x.centered);
-    if (inner.length >= 2 && centeredInner.length / inner.length > 0.34) add("warn", "layout", "centeredAll", centeredInner.map(x => x.n).join("، "), "شرائح", "النص متمركز في المنتصف في " + centeredInner.length + " من " + inner.length + " شرائح المحتوى.", "استخدم تكوينات جانبية غير متماثلة.", centeredInner[0].tm);
-    for (let i = 1; i < sigs.length; i++) if (sigs[i].sig === sigs[i - 1].sig && sigs.length > 3) add("warn", "layout", "sameComp", sigs[i].n, "شرائح", "الشريحتان " + sigs[i - 1].n + " و" + sigs[i].n + " بالتكوين نفسه.", "غيّر مكان كتلة النص أو اتجاهها.", sigs[i].tm);
-
-    /* هوية عامة */
-    if (secs.length > 3) {
-      const distinctBg = new Set(bgSigs).size;
-      if (distinctBg <= 1) add("warn", "identity", "sameBg", "—", "الخلفيات", "الخلفية نفسها في كل الشرائح.", "نوّع الخلفيات ضمن عائلة واحدة.");
-      if (flatCount / secs.length > 0.5) add("warn", "identity", "flatBg", "—", "الخلفيات", "خلفيات مسطحة بلا نمط أو تدرج في " + flatCount + " من " + secs.length + " شرائح.", "أضف أنماطًا/تدرجات/أشكالًا تخدم الموضوع.");
-      if (!anySat) add("info", "identity", "mono", "—", "الألوان", "لا لون مميز ظاهر (رمادي فقط).", "أضف لونًا مميزًا من هوية الموضوع.");
-      if (hues.size >= 8) add("warn", "identity", "rainbow", "—", "الألوان", "ألوان كثيرة متشتتة (" + hues.size + " عائلات لونية).", "حدّد لوحة من 3–4 ألوان.");
-    }
-
-    /* ═══ الحركة: نأخذ عينات زمنية داخل كل شريحة ═══ */
-    const types = { opacity: 0, transform: 0, clip: 0, text: 0, svg: 0 };
-    const motionByScene = [];
-    for (let i = 0; i < secs.length; i++) {
-      const s = secs[i], T = times[i], dur = Math.max(1, T.en - T.st);
-      const els = Array.from(s.querySelectorAll("*")).filter(e => !/^(script|style)$/i.test(e.tagName)).slice(0, 220);
-      const fr = [0.08, 0.22, 0.45, 0.68, 0.9];
-      const snaps = fr.map(f => {
-        seek(T.st + dur * f);
-        return els.map(e => { const c = cs(e); return { o: c.opacity, t: c.transform, cp: c.clipPath, s: c.strokeDashoffset, x: (e.textContent || "").slice(0, 60), r: (() => { const b2 = e.getBoundingClientRect(); return Math.round(b2.left) + "," + Math.round(b2.top) + "," + Math.round(b2.width); })() }; });
-      });
-      const changed = new Set();
-      const kinds = new Set();
-      for (let k = 1; k < snaps.length; k++) els.forEach((e, idx) => {
-        const a = snaps[k - 1][idx], b2 = snaps[k][idx];
-        if (!a || !b2) return;
-        if (a.o !== b2.o) { changed.add(idx); kinds.add("opacity"); }
-        if (a.t !== b2.t || a.r !== b2.r) { changed.add(idx); kinds.add("transform"); }
-        if (a.cp !== b2.cp) { changed.add(idx); kinds.add("clip"); }
-        if (a.s !== b2.s) { changed.add(idx); kinds.add("svg"); }
-        if (a.x !== b2.x && e.children.length < 2) { changed.add(idx); kinds.add("text"); }
-      });
-      kinds.forEach(k => types[k]++);
-      let idle = 0;
-      els.forEach((e, idx) => { const a = snaps[3][idx], b2 = snaps[4][idx]; if (a && b2 && (a.t !== b2.t || a.r !== b2.r)) idle++; });
-      motionByScene.push({ n: T.n, moving: changed.size, kinds: Array.from(kinds), idle });
-      if (changed.size < 3) add("warn", "motion", "static", T.n, desc(s), "شريحة شبه ثابتة: " + changed.size + " عناصر فقط تتحرك.", "أضف دخولًا متتابعًا وحركة خلفية.", T.st + dur * 0.5);
-      else if (kinds.size === 1 && kinds.has("opacity")) add("warn", "motion", "fadeOnly", T.n, desc(s), "الحركة تلاشٍ فقط.", "أضف انزلاقًا/كشفًا/تكبيرًا.", T.st + dur * 0.4);
-      if (idle === 0 && changed.size >= 3) add("info", "motion", "noIdle", T.n, desc(s), "لا حركة مستمرة في آخر الشريحة (تنفس/خلفية).", "أضف Motion.float للخلفية.", T.st + dur * 0.8);
-    }
-    const kindCount = Object.keys(types).filter(k => types[k] > 0).length;
-    if (secs.length > 2 && kindCount < 3) add("warn", "motion", "poorVocab", "—", "الحركة", "مفردات الحركة محدودة (" + kindCount + " أنواع فقط).", "نوّع: كشف، رسم، عدّ، كلمات، نبضة.");
-
-    /* حتمية الحالة: زيارة زمن آخر ثم الرجوع */
-    if (secs.length && win.PROJECT && typeof win.PROJECT.setTime === "function") {
-      const T0 = times[Math.floor(secs.length / 2)];
-      const ta = T0.st + (T0.en - T0.st) * 0.5;
-      const snap = () => Array.from(secs[Math.floor(secs.length / 2)].querySelectorAll("*")).slice(0, 250).map(e => { const c = cs(e); return c.opacity + "|" + c.transform + "|" + c.clipPath; }).join(";");
-      seek(ta); const s1 = snap();
-      seek(Math.max(0, times[secs.length - 1].en - 50)); seek(0); seek(ta);
-      const s2 = snap();
-      if (s1 !== s2) add("error", "tech", "stateful", "—", "setTime", "الحالة تختلف عند الرجوع بالزمن (الكود يعتمد على الاستدعاء السابق).", "اضبط كل الخصائص من الصفر عند كل استدعاء.", ta);
-    }
-
-    /* محتوى: الغلاف والختام */
-    if (secs.length) {
-      const first = (secs[0].textContent || "");
-      if (form.title && normAr(first).indexOf(normAr(form.title).slice(0, 12)) === -1) add("info", "content", "coverTitle", times[0].n, desc(secs[0]), "عنوان البحث لا يظهر في الغلاف.", "ضعه بحجم بارز.");
-      const last = normAr(secs[secs.length - 1].textContent || "");
-      if (form.student && last.indexOf(normAr(form.student).slice(0, 6)) === -1) add("info", "content", "closeNames", times[secs.length - 1].n, "الختام", "اسم الطالب لا يظهر في الشريحة الأخيرة.", "أضفه.");
-    }
-
-    seek(saved);
-    /* ═══ الدرجة ═══ */
-    const cats = {};
-    Object.keys(LINT_CATS).forEach(k => { cats[k] = { name: LINT_CATS[k].name, w: LINT_CATS[k].w, errors: 0, warns: 0, infos: 0, score: 100, reasons: {} }; });
-    const perRule = {};
-    out.forEach(x => {
-      const c = cats[x.cat] || cats.tech;
-      const key = x.rule + "|" + x.cat;
-      perRule[key] = (perRule[key] || 0) + 1;
-      if (x.sev === "error") c.errors++; else if (x.sev === "warn") c.warns++; else c.infos++;
-      const pts = x.sev === "error" ? 18 : x.sev === "warn" ? 11 : 0;
-      const rs = c.reasons[x.rule] || (c.reasons[x.rule] = { rule: x.rule, sev: x.sev, count: 0, pts: 0, scenes: [], msg: x.msg, fix: x.fix });
-      rs.count++;
-      if (x.scene != null && x.scene !== "—" && rs.scenes.indexOf(x.scene) < 0) rs.scenes.push(x.scene);
-      if (perRule[key] <= 3) { c.score -= pts; rs.pts += pts; }
-    });
-    let total = 0, wsum = 0;
-    Object.keys(cats).forEach(k => { cats[k].score = Math.max(0, Math.min(100, Math.round(cats[k].score))); total += cats[k].score * cats[k].w; wsum += cats[k].w; });
-    let score = Math.round(total / wsum);
-    if (!secs.length || !win.PROJECT) score = Math.min(score, 30);
-    const grade = score >= 80 ? "strong" : score >= 60 ? "mid" : "weak";
-    this.report = { score, grade, cats, scenes: sceneStats, motion: motionByScene };
-    out.sort((a, b) => ({ error: 0, warn: 1, info: 2 }[a.sev] - { error: 0, warn: 1, info: 2 }[b.sev]));
-    this.last = out;
-    return out;
-  }
-};
-
-let LINT_FILTER = "all";
-let LINT_CAT = null;
-const RULE_NAMES = {
-  small: "نص صغير", noTitle: "لا عنوان بارز", flat: "هرمية ضعيفة", letterSpacing: "تباعد حروف في العربية", textTransform: "text-transform على العربية",
-  lineHeight: "ارتفاع سطر ضيق", contrast: "تباين منخفض", fonts: "كثرة الخطوط",
-  outside: "نص خارج الإطار", clipped: "نص مقصوص", overlap: "تداخل نصوص", crowded: "ازدحام",
-  static: "شريحة شبه ثابتة", fadeOnly: "تلاشٍ فقط", noIdle: "بلا حركة مستمرة", poorVocab: "مفردات حركة محدودة", stateful: "حالة غير حتمية",
-  wordsMany: "كلمات كثيرة", wordsFew: "كلمات قليلة", coverTitle: "عنوان الغلاف", closeNames: "اسم الطالب في الختام"
-};
-const GRADE_TXT = { strong: "قوي", mid: "وسط", weak: "ضعيف" };
-function renderLint(list) {
-  const rep = Linter.report;
-  const sum = $("lintSummary"), box = $("lintList"), cats = $("lintCats"), g = $("lintGauge"), gr = $("lintGrade");
-  if (!rep) return;
-  let selCat = LINT_CAT;
-  if (selCat == null || (selCat !== "all" && !rep.cats[selCat])) {
-    let low = null;
-    Object.keys(rep.cats).forEach(k => { if (rep.cats[k].score < 100 && (!low || rep.cats[k].score < rep.cats[low].score)) low = k; });
-    selCat = LINT_CAT = low || "all";
-  }
-  const er = list.filter(x => x.sev === "error").length, wa = list.filter(x => x.sev === "warn").length, inf = list.filter(x => x.sev === "info").length;
-  $("lintScore").textContent = rep.score;
-  g.style.setProperty("--gp", rep.score);
-  g.style.setProperty("--gc", rep.grade === "strong" ? "var(--teal)" : rep.grade === "mid" ? "var(--amber)" : "var(--red)");
-  gr.textContent = "المستوى: " + GRADE_TXT[rep.grade];
-  gr.className = "grade " + rep.grade;
-  sum.textContent = list.length ? (er + " أخطاء • " + wa + " تحذيرات • " + inf + " ملاحظات") : "لا مشاكل. عمل قوي.";
-  cats.innerHTML = Object.keys(rep.cats).map(k => {
-    const c = rep.cats[k], cl = c.score >= 80 ? "" : c.score >= 60 ? "mid" : "weak";
-    return `<button type="button" class="cat ${k === selCat ? "sel" : ""}" data-cat="${k}"><span>${esc(c.name)}${c.score < 100 ? " ▾" : ""}</span><div class="bar"><i class="${cl}" style="width:${c.score}%"></i></div><b>${c.score}</b></button>`;
-  }).join("");
-  cats.querySelectorAll(".cat").forEach(b => b.addEventListener("click", () => { LINT_CAT = (LINT_CAT === b.dataset.cat) ? "all" : b.dataset.cat; renderLint(Linter.last); }));
-  const why = $("lintWhy");
-  if (selCat !== "all" && rep.cats[selCat]) {
-    const c = rep.cats[selCat];
-    const rs = Object.keys(c.reasons).map(k => c.reasons[k]).sort((a, b) => b.pts - a.pts || b.count - a.count);
-    why.innerHTML = !rs.length
-      ? `<div class="why-h">«${esc(c.name)}» ${c.score}/100 — لا مشاكل في هذه الفئة</div>`
-      : `<div class="why-h">لماذا «${esc(c.name)}» ${c.score}/100؟</div>` + rs.map(r =>
-          `<div class="why-r ${r.sev}"><b>${r.pts ? "−" + r.pts : "ℹ"}</b><div><strong>${esc(RULE_NAMES[r.rule] || r.rule)}</strong> <span>× ${r.count}${r.scenes.length ? " • الشرائح: " + esc(r.scenes.slice(0, 8).join("، ")) : ""}</span><div>${esc(r.msg)}</div>${r.fix ? '<div class="why-fix">💡 ' + esc(r.fix) + '</div>' : ''}</div></div>`).join("")
-        + '<div class="why-note">الخصم يُحتسب لأول 3 مرات فقط من كل نوع. اضغط على الفئة مرة أخرى لعرض كل المشاكل.</div>';
-    why.style.display = "block";
-  } else { why.style.display = "none"; why.innerHTML = ""; }
-  const shown = list.filter(x => (LINT_FILTER === "all" || x.sev === LINT_FILTER) && (selCat === "all" || x.cat === selCat));
-  if (!shown.length) { box.innerHTML = '<div class="img-empty">لا عناصر في هذا التصنيف.</div>'; return; }
-  box.innerHTML = shown.map((x, i) =>
-    `<button type="button" class="lint-item ${x.sev}" data-t="${x.t == null ? "" : x.t}"><span class="lint-badge">${x.sev === "error" ? "خطأ" : x.sev === "warn" ? "تحذير" : "ملاحظة"}</span><div><div>${esc(x.msg)}</div><div class="lint-meta">${esc(LINT_CATS[x.cat] ? LINT_CATS[x.cat].name : "")} • شريحة ${esc(x.scene)} • ${esc(x.el)}${x.t != null ? " • ⏱ انقر للانتقال" : ""}</div>${x.fix ? '<div class="lint-fix">💡 ' + esc(x.fix) + '</div>' : ''}</div></button>`
-  ).join("");
-  box.querySelectorAll(".lint-item").forEach(b => b.addEventListener("click", () => {
-    const t = b.dataset.t;
-    if (t === "" || !APP.loaded) return;
-    stopPreview();
-    seekTo(Number(t));
-    toast("انتقلت إلى موضع المشكلة", "info", 1500);
-  }));
-}
-
-function buildFixPrompt(list) {
-  const rep = Linter.report;
-  const all = list.filter(x => x.sev !== "info").concat(list.filter(x => x.sev === "info")).slice(0, 45);
-  const rows = all.map((x, i) => `${i + 1}. [${x.sev === "error" ? "خطأ" : x.sev === "warn" ? "تحذير" : "ملاحظة"} • ${LINT_CATS[x.cat] ? LINT_CATS[x.cat].name : ""}] شريحة ${x.scene} — ${x.el}\n   المشكلة: ${x.msg}\n   الإصلاح: ${x.fix || "—"}`).join("\n\n");
-  const d = getForm();
-  const catLine = rep ? Object.keys(rep.cats).map(k => rep.cats[k].name + " " + rep.cats[k].score).join(" | ") : "—";
-  const ctx = [d.title ? "العنوان: " + d.title : "", d.subject ? "المادة: " + d.subject : "",
-    "الاتجاه: " + (APP.orientation === "portrait" ? "عمودي 9:16" : "أفقي 16:9"), "المدة: " + APP.durationMs + "ms", "عدد الشرائح: " + SCENES.length].filter(Boolean).join("\n");
-  return `أنت مهندس Motion Graphics. أصلح المخالفات أدناه في كود المشروع المرفق لترفع نتيجته إلى «قوي» (80/100 فأكثر)، دون إعادة كتابة ما يعمل.
-
-📊 نتيجة الفاحص الحالية: ${rep ? rep.score + "/100 — " + GRADE_TXT[rep.grade] : "—"}
-المحاور: ${catLine}
-
-📋 المشروع:
-${ctx}
-
-🔒 لا تغيّر: #project-root، واسم window.PROJECT وتوقيعه، وسمات data-scene-*، وmeta project-duration-ms وproject-orientation، والهوية البصرية القائمة (ألوانها وخطوطها)، ومحتوى الشرائح غير المذكورة أدناه. اجعل كل إصلاح ضمن الشريحة المذكورة فقط ولا تكسر شرائح سليمة.
-
-🔍 المخالفات (${all.length}):
-
-${rows}
-
-📐 قواعد أثناء الإصلاح:
-• كل نص وعنصر يبقى داخل حدود الشريحة وحاويته في كل لحظة (ومنها الدخول والخروج)، مع هامش آمن. عالج ضيق المكان باختصار الكلمات أو بتوسيع الحاوية أو بتغيير التكوين، ولا تصغّر الخط إلا إذا بقي فوق الحد الأدنى (${APP.orientation === "portrait" ? 40 : 38}px).
-• الحالة دالة في الزمن فقط داخل setTime، بلا Math.random ولا اعتماد على الاستدعاء السابق.
-• ممنوع filter وbackdrop-filter وmask وmix-blend-mode وCSS animation/transition.
-
-📤 أخرج الملف HTML كاملًا بعد الإصلاح، بلا شرح وبلا سياج markdown.`;
-}
 
 
 /* ────────── الشرائح / النموذج ────────── */
@@ -2537,9 +2113,10 @@ function getForm() {
     year: $("year").value.trim(),
     extra: $("extra").value.trim(),
     visualStyle: $("visualStyle").value || "auto",
-    motionLevel: $("motionLevel").value || "balanced",
+    motionLevel: $("motionLevel").value || "rich",
     textDensity: $("textDensity").value || "medium",
-    imageCount: Math.max(0, Math.min(20, Number($("imageCount").value) || 0))
+    imageCount: Math.max(0, Math.min(20, Number($("imageCount").value) || 0)),
+    sfx: !!($("hasSfx") && $("hasSfx").checked)
   };
 }
 function renderStyleCards() {
@@ -3119,6 +2696,7 @@ async function loadProject() {
     }
     if (!dur) throw new Error("لم يُعثر على مدة المشروع (meta project-duration-ms)");
     APP.durationMs = dur;
+    try { SFX.auto = readSfxCues(win, doc); renderSfx(); if (SFX.auto.length) Errors.push("info", "مؤثرات صوتية مقروءة من الكود: " + SFX.auto.length); } catch(e) { Errors.push("warn", "قراءة المؤثرات", e); }
     APP.title = meta.title || $("title").value.trim();
     APP.subject = $("subject").value.trim();
     APP.grade = $("grade").value.trim();
@@ -3999,7 +3577,7 @@ function renderAudio() {
     return;
   }
   c.innerHTML = AUDIO.tracks.map((t, i) =>
-    `<div class="audio-row"><div class="audio-name" title="${escA(t.name)}">${esc(t.name)}</div><input type="range" min="0" max="100" value="${Math.round((t.volume || 1) * 100)}" oninput="setAudioVol(${i},this.value)"><span class="audio-val">${Math.round((t.volume || 1) * 100)}%</span><button class="audio-del" onclick="delAudio(${i})">✕</button></div>`
+    `<div class="audio-row"><div class="audio-name" title="${escA(t.name)}">${esc(t.name)}</div><input type="range" min="0" max="100" value="${Math.round((t.volume || 1) * 100)}" oninput="setAudioVol(${i},this.value)"><span class="audio-val">${Math.round((t.volume || 1) * 100)}%</span><button class="audio-del" onclick="delAudio(${i})">✕</button><label class="audio-start">يبدأ عند (ث) <input type="number" min="0" step="0.1" value="${((t.start || 0) / 1000).toFixed(1)}" onchange="setAudioStart(${i},this.value)"></label></div>`
   ).join("");
   $("infoAudio").textContent = AUDIO.tracks.length + " مسار";
 }
@@ -4118,14 +3696,110 @@ async function ensureBuf(t) {
   if (!t._p) t._p = (async () => { const ab = await (await fetch(t.dataUrl)).arrayBuffer(); t.buf = await decodeBuf(ab); return t.buf; })();
   try { return await t._p; } finally { t._p = null; }
 }
+/* ────────── المؤثرات الصوتية: تُصنع برمجيًا (بلا ملفات) وتعمل في المعاينة وفي الدمج عند التصدير ────────── */
+const SFX_TYPES = { whoosh: "سويش (انتقال)", swipe: "انزلاق سريع", pop: "ظهور", click: "نقرة", tick: "تكّة", ding: "جرس نجاح", boom: "ضربة قوية", sparkle: "لمعان", riser: "تصاعد", type: "كتابة" };
+const _sfxNoise = new WeakMap();
+function sfxNoise(ctx) {
+  let b = _sfxNoise.get(ctx);
+  if (b) return b;
+  const n = Math.floor(ctx.sampleRate * 2);
+  b = ctx.createBuffer(1, n, ctx.sampleRate);
+  const d = b.getChannelData(0); let seed = 22222;
+  for (let i = 0; i < n; i++) { seed = (seed * 1664525 + 1013904223) >>> 0; d[i] = (seed / 4294967296) * 2 - 1; }
+  _sfxNoise.set(ctx, b);
+  return b;
+}
+/* يعمل على أي سياق (مباشر أو OfflineAudioContext): when = زمن البدء بثوانٍ على ساعة ذلك السياق */
+function sfxPlay(ctx, dest, type, when, vol) {
+  const peak = Math.max(0.02, Math.min(1, (vol == null || !isFinite(vol)) ? 0.6 : vol));
+  const g = ctx.createGain(); g.gain.value = peak; g.connect(dest);
+  const osc = (wave, f0, f1, t0, dur, amp, atk) => {
+    const o = ctx.createOscillator(), e = ctx.createGain();
+    o.type = wave; o.frequency.setValueAtTime(f0, t0);
+    if (f1 != null && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t0 + dur);
+    e.gain.setValueAtTime(0.0001, t0); e.gain.linearRampToValueAtTime(amp, t0 + (atk || 0.005)); e.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(e); e.connect(g); o.start(t0); o.stop(t0 + dur + 0.03);
+  };
+  const nz = (ft, f0, f1, q, t0, dur, amp, atk) => {
+    const sN = ctx.createBufferSource(); sN.buffer = sfxNoise(ctx); sN.loop = true;
+    const f = ctx.createBiquadFilter(); f.type = ft; f.Q.value = q;
+    f.frequency.setValueAtTime(f0, t0); f.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t0 + dur);
+    const e = ctx.createGain();
+    e.gain.setValueAtTime(0.0001, t0); e.gain.linearRampToValueAtTime(amp, t0 + (atk || 0.01)); e.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    sN.connect(f); f.connect(e); e.connect(g); sN.start(t0); sN.stop(t0 + dur + 0.03);
+  };
+  const t = Math.max(0, when);
+  switch (type) {
+    case "whoosh": nz("bandpass", 250, 3500, 1.1, t, 0.65, 1.7, 0.27); break;
+    case "swipe": nz("bandpass", 3000, 600, 1.4, t, 0.28, 1.6, 0.05); break;
+    case "pop": osc("sine", 560, 170, t, 0.13, 0.95, 0.003); nz("highpass", 4000, 4001, 0.7, t, 0.025, 0.25, 0.001); break;
+    case "click": nz("highpass", 2200, 4200, 0.7, t, 0.04, 0.8, 0.001); osc("square", 1500, 900, t, 0.03, 0.18, 0.001); break;
+    case "tick": osc("square", 2100, 2100, t, 0.03, 0.32, 0.001); break;
+    case "ding": osc("sine", 1318, 1318, t, 1.4, 0.7, 0.004); osc("sine", 1976, 1976, t, 0.9, 0.25, 0.004); osc("sine", 2637, 2637, t, 0.5, 0.12, 0.004); break;
+    case "boom": osc("sine", 140, 38, t, 0.9, 1, 0.004); nz("lowpass", 900, 80, 0.7, t, 0.6, 1.2, 0.003); break;
+    case "sparkle": [2093, 2637, 3136, 3951, 4699].forEach((f, i) => osc("sine", f, f, t + i * 0.055, 0.38, 0.3, 0.003)); break;
+    case "riser": nz("bandpass", 250, 5000, 2, t, 1.4, 1.8, 1.3); osc("sine", 200, 1200, t, 1.4, 0.18, 1.3); break;
+    case "type": for (let i = 0; i < 4; i++) nz("highpass", 2400, 4000, 0.7, t + i * 0.07, 0.035, 0.7, 0.001); break;
+    default: osc("sine", 560, 170, t, 0.13, 0.95, 0.003);
+  }
+}
+function sfxNorm(c) {
+  if (!c) return null;
+  const t = Number(c.t != null ? c.t : (c.time != null ? c.time : c.at));
+  if (!isFinite(t) || t < 0) return null;
+  let type = String(c.type || c.name || "pop").toLowerCase();
+  if (!SFX_TYPES[type]) type = "pop";
+  let vol = Number(c.vol != null ? c.vol : c.volume); if (!isFinite(vol)) vol = 0.6;
+  return { t: Math.round(t), type, vol: Math.max(0.05, Math.min(1, vol)) };
+}
+/* المصدر الأول: window.PROJECT.sfx — والبديل: عناصر بسمات data-sfx وdata-sfx-at */
+function readSfxCues(win, doc) {
+  const out = [], add = c => { const n = sfxNorm(c); if (n && (!APP.durationMs || n.t <= APP.durationMs)) out.push(n); };
+  try { const a = win.PROJECT && win.PROJECT.sfx; if (Array.isArray(a)) a.forEach(add); } catch(e){}
+  try { doc.querySelectorAll("[data-sfx]").forEach(el => add({ t: Number(el.getAttribute("data-sfx-at")), type: el.getAttribute("data-sfx"), vol: el.getAttribute("data-sfx-vol") })); } catch(e){}
+  return out.sort((a, b) => a.t - b.t);
+}
+function sfxAll() { return SFX.on ? SFX.auto.concat(SFX.manual).sort((a, b) => a.t - b.t) : []; }
+function sfxSchedule() {
+  const cues = sfxAll(); if (!cues.length) return;
+  const c = _actx(), sp = APP.speed || 1, cur = APP.currentTime || 0;
+  const bus = c.createGain(); bus.gain.value = SFX.vol; bus.connect(c.destination); SFX.bus = bus;
+  cues.forEach(q => { if (q.t < cur - 20) return; sfxPlay(c, bus, q.type, c.currentTime + 0.03 + Math.max(0, q.t - cur) / 1000 / sp, q.vol); });
+}
+function sfxPreview(type, vol) {
+  try {
+    unlockAudio(); const c = _actx(); if (c.state !== "running") c.resume();
+    const bus = c.createGain(); bus.gain.value = SFX.vol; bus.connect(c.destination);
+    sfxPlay(c, bus, type, c.currentTime + 0.02, vol);
+    setTimeout(() => { try { bus.disconnect(); } catch(e){} }, 2600);
+  } catch(e) { Errors.push("warn", "معاينة مؤثر", e); }
+}
+function sfxResync() { if (APP.playing) { pauseAudio(); playAudio(APP.currentTime); } }
+function renderSfx() {
+  const el = $("sfxList"); if (!el) return;
+  const rows = SFX.auto.map(c => ({ c, src: "auto" })).concat(SFX.manual.map(c => ({ c, src: "manual" }))).sort((a, b) => a.c.t - b.c.t);
+  $("sfxCount").textContent = rows.length ? "(" + rows.length + ")" : "";
+  if (!rows.length) { el.innerHTML = '<div class="audio-empty">لا توجد مؤثرات بعد. فعّل «أريد مؤثرات صوتية» عند إنشاء البرومبت، أو أضف مؤثرًا عند المؤشر.</div>'; return; }
+  el.innerHTML = rows.map(r => {
+    const i = SFX[r.src].indexOf(r.c);
+    return '<div class="sfx-row"><span class="tm">' + (r.c.t / 1000).toFixed(2) + 's</span><span>' + esc(SFX_TYPES[r.c.type]) + '<span class="src">' + (r.src === "auto" ? "من الكود" : "يدوي") + '</span></span><button data-act="play" data-src="' + r.src + '" data-i="' + i + '" aria-label="تجربة">▶</button><button data-act="del" data-src="' + r.src + '" data-i="' + i + '" aria-label="حذف">✕</button></div>';
+  }).join("");
+}
+window.setAudioStart = (i, v) => {
+  const t = AUDIO.tracks[i]; if (!t) return;
+  t.start = Math.max(0, Number(v) || 0) * 1000;
+  renderAudio(); scheduleSave(); sfxResync();
+};
 function pauseAudio() {
   AUDIO.gen = (AUDIO.gen || 0) + 1;
+  if (SFX.bus) { try { SFX.bus.disconnect(); } catch(e){} SFX.bus = null; }
   AUDIO.tracks.forEach(t => { if (t.node) { try { t.node.stop() } catch(e){} t.node = null; } });
 }
 function playAudio(ms) {
   pauseAudio();
   if (APP.recording) return;
   const gen = AUDIO.gen;
+  try { sfxSchedule(); } catch(e) { Errors.push("warn", "جدولة المؤثرات", e); }
   AUDIO.tracks.forEach(t => {
     if (t.muted || !t.dataUrl) return;
     ensureBuf(t).then(buf => {
@@ -4144,7 +3818,9 @@ function playAudio(ms) {
 }
 
 async function mixAudio() {
-  if (!AUDIO.tracks.length || !$("mixAudio").checked) return null;
+  if (!$("mixAudio").checked) return null;
+  const cues = sfxAll();
+  if (!AUDIO.tracks.length && !cues.length) return null;
   const sr = 44100;
   const dur = Math.ceil(APP.durationMs / 1000 * sr);
   if (!dur) return null;
@@ -4172,6 +3848,13 @@ async function mixAudio() {
         src.start(st);
       } catch(e) { Errors.push("warn", "mix one", e) }
     }
+    if (cues.length) {
+      const bus = ctx.createGain();
+      bus.gain.value = SFX.vol;
+      bus.connect(ctx.destination);
+      cues.forEach(q => { try { sfxPlay(ctx, bus, q.type, q.t / 1000, q.vol); } catch(e) { Errors.push("warn", "sfx cue", e); } });
+      Errors.push("info", "مؤثرات مدمجة في التصدير: " + cues.length);
+    }
     return await ctx.startRendering();
   } catch(e) { Errors.push("error", "mix", e); return null }
 }
@@ -4191,6 +3874,7 @@ _audIn.addEventListener("change", async () => {
     const id = "aud_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
     try { await DB.saveAudio(id, du, f.name); } catch(e) { Errors.push("warn", "تعذّر حفظ الصوت محليًا", e); }
     AUDIO.tracks.push({ id, name: f.name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: null });
+    try { const tr = AUDIO.tracks[AUDIO.tracks.length - 1], b = await ensureBuf(tr); if (b.duration < 6) { tr.fadeIn = 0.01; tr.fadeOut = Math.min(0.15, b.duration / 4); } } catch(e){}
     renderAudio();
     scheduleSave();
     toast("تمت الإضافة", "success");
@@ -4198,6 +3882,34 @@ _audIn.addEventListener("change", async () => {
   try { _audIn.value = ""; } catch(_) {}
 });
 $("addAudio").addEventListener("click", () => { try { _audIn.click(); } catch(e) { toast("تعذّر فتح المحدد", "error"); } });
+
+(function initSfxUI() {
+  const sel = $("sfxType");
+  sel.innerHTML = Object.keys(SFX_TYPES).map(k => '<option value="' + k + '">' + SFX_TYPES[k] + '</option>').join("");
+  $("sfxOn").checked = SFX.on;
+  $("sfxVol").value = Math.round(SFX.vol * 100); $("sfxVolVal").textContent = Math.round(SFX.vol * 100) + "%";
+  $("sfxOn").addEventListener("change", () => { SFX.on = $("sfxOn").checked; scheduleSave(); sfxResync(); });
+  $("sfxVol").addEventListener("input", () => {
+    SFX.vol = Number($("sfxVol").value) / 100; $("sfxVolVal").textContent = $("sfxVol").value + "%";
+    if (SFX.bus) SFX.bus.gain.value = SFX.vol; scheduleSave();
+  });
+  $("sfxAddBtn").addEventListener("click", () => {
+    if (!APP.loaded) { toast("حمّل المشروع أولًا", "warn"); return; }
+    const c = sfxNorm({ t: APP.currentTime || 0, type: sel.value, vol: 0.7 });
+    SFX.manual.push(c); renderSfx(); scheduleSave(); sfxPreview(c.type, c.vol);
+    if (!SFX.on) toast("المؤثرات متوقفة — فعّلها لتُسمع وتُدمج", "warn", 3500);
+    else sfxResync();
+  });
+  $("sfxList").addEventListener("click", e => {
+    const b = e.target.closest("button[data-act]"); if (!b) return;
+    const arr = SFX[b.dataset.src], i = Number(b.dataset.i), c = arr && arr[i]; if (!c) return;
+    if (b.dataset.act === "play") sfxPreview(c.type, c.vol);
+    else { arr.splice(i, 1); renderSfx(); scheduleSave(); sfxResync(); }
+  });
+  $("hasSfx").addEventListener("change", scheduleSave);
+  renderSfx();
+})();
+
 /* ────────── Undo/Redo ────────── */
 const History = {
   stack: [], idx: -1, max: 60, debounce: null,
@@ -4263,6 +3975,8 @@ function saveSession() {
       quality: $("quality").value,
       fps: $("fps").value,
       hasAudio: !!$("hasAudio").checked,
+      hasSfx: !!($("hasSfx") && $("hasSfx").checked),
+      sfx: { on: SFX.on, vol: SFX.vol, manual: SFX.manual },
       audio: AUDIO.tracks.map(t => ({ id: t.id, name: t.name, start: t.start, volume: t.volume, fadeIn: t.fadeIn, fadeOut: t.fadeOut, muted: t.muted }))
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(data));
@@ -4290,6 +4004,7 @@ function restoreSession() {
     else if (f.visualStyle) $("visualStyle").value = "auto";
     if (f.motionLevel && MOTION_LEVELS[f.motionLevel]) $("motionLevel").value = f.motionLevel;
     if (f.textDensity && DENSITY[f.textDensity]) $("textDensity").value = f.textDensity;
+    try { updateOptHint(); } catch(e){}
     if (f.imageCount != null) $("imageCount").value = f.imageCount;
     if (d.seedSalt) APP.seedSalt = Number(d.seedSalt) || 0;
     if (d.orientation === "portrait" || d.orientation === "landscape") {
@@ -4304,6 +4019,14 @@ function restoreSession() {
     if (d.quality) $("quality").value = d.quality;
     if (d.fps) $("fps").value = d.fps;
     if (d.hasAudio) { $("hasAudio").checked = true; $("audioOpt").style.display = "block"; }
+    if (d.hasSfx && $("hasSfx")) $("hasSfx").checked = true;
+    if (d.sfx) {
+      SFX.on = d.sfx.on !== false;
+      SFX.vol = typeof d.sfx.vol === "number" ? Math.max(0, Math.min(1, d.sfx.vol)) : 0.7;
+      SFX.manual = Array.isArray(d.sfx.manual) ? d.sfx.manual.map(sfxNorm).filter(Boolean) : [];
+      if ($("sfxOn")) $("sfxOn").checked = SFX.on;
+      if ($("sfxVol")) { $("sfxVol").value = Math.round(SFX.vol * 100); $("sfxVolVal").textContent = Math.round(SFX.vol * 100) + "%"; }
+    }
     return true;
   } catch(e) { Errors.push("warn", "restore", e); return false; }
 }
@@ -5264,10 +4987,27 @@ $("unifyBtn").addEventListener("click", () => {
   renderScenes(); scheduleSave(); History.mark();
   toast("تم توحيد المدة", "success", 1500);
 });
+function updateOptHint() {
+  const box = $("optHint"); if (!box) return;
+  const audioOn = !!($("hasAudio") && $("hasAudio").checked);
+  const mv = $("motionLevel").value, dv = $("textDensity").value;
+  const mTxt = mv === "calm"
+    ? "<b>حركة هادئة:</b> 3–5 عناصر متحركة في كل شريحة بانتقالات بطيئة وراقية. التصدير أسرع والملف أخف، وتناسب المحتوى الرسمي والأكاديمي."
+    : "<b>حركة غنية:</b> 6–10 عناصر متحركة في كل شريحة مع طبقات وحركة خلفية مستمرة. أكثر حيوية، لكن التصدير أبطأ وأثقل على الجوال.";
+  let dTxt;
+  if (audioOn) dTxt = "<b>كثافة النص:</b> غير مستخدمة لأن النص يُبنى من الصوت.";
+  else {
+    const r = wordRange(6, dv);
+    const lead = { light: "جمل قصيرة جدًا والعنصر البصري هو الأساس", medium: "عنوان مع 2–4 نقاط مركّزة", heavy: "عنوان وشرح ونقاط منظّمة في كتل" }[dv] || "";
+    dTxt = "<b>نص " + ({ light: "خفيف", medium: "متوسط", heavy: "كثيف" }[dv] || "") + ":</b> نحو " + r.min + "–" + r.max + " كلمة للشريحة التي مدتها 6 ثوانٍ (" + lead + "). تزيد الكلمات وتقل مع طول الشريحة.";
+  }
+  box.innerHTML = "<div>" + mTxt + "</div><div>" + dTxt + "</div>";
+}
 function syncAudioUI() {
   const on = $("hasAudio").checked;
   $("audioOpt").style.display = on ? "block" : "none";
   const td = $("textDensity"); if (td) { td.disabled = on; td.title = on ? "غير مستخدم: المحتوى من الصوت" : ""; }
+  updateOptHint();
 }
 $("hasAudio").addEventListener("change", () => { syncAudioUI(); scheduleSave(); });
 syncAudioUI();
@@ -5282,7 +5022,7 @@ $("addScene").addEventListener("click", () => {
   el.addEventListener("input", scheduleSave);
   el.addEventListener("change", scheduleSave);
   el.addEventListener("input", () => { History.mark(); updateSummary(); });
-  el.addEventListener("change", () => { updateSummary(); if (id === "textDensity" || id === "motionLevel") renderScenes(); });
+  el.addEventListener("change", () => { updateSummary(); if (id === "textDensity" || id === "motionLevel") { renderScenes(); updateOptHint(); } });
 });
 $("code").addEventListener("input", () => { scheduleSave(); History.mark(); });
 ["quality", "fps"].forEach(id => $(id).addEventListener("change", () => { scheduleSave(); updateInfo(); }));
@@ -5348,8 +5088,7 @@ function analyzeImgsEmpty() {
   updateInfo();
 }
 
-/* الفاحص */
-
+/* الإصلاح التلقائي */
 (function () {
   try { $("afAutoSel").value = localStorage.getItem("afAuto") === "0" ? "0" : "1"; $("afMin").value = localStorage.getItem("afMin") || ""; } catch(e){}
   $("afAutoSel").addEventListener("change", () => { try { localStorage.setItem("afAuto", $("afAutoSel").value); } catch(e){} });
@@ -5362,38 +5101,6 @@ function analyzeImgsEmpty() {
   });
   $("afUndo").addEventListener("click", () => { if (!APP.loaded) return; AutoFix.undo(); toast("أُلغي الإصلاح", "info", 1800); });
 })();
-$("runLint").addEventListener("click", async () => {
-  if (!APP.loaded) { toast("شغّل المشروع أولًا", "warn"); return; }
-  const btn = $("runLint"), t = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "يفحص…";
-  const wasPlaying = APP.playing;
-  stopPreview();
-  try {
-    await sleep(30);
-    const doc = $("projectFrame").contentDocument;
-    const win = $("projectFrame").contentWindow;
-    const r = await Linter.run(doc, win);
-    LINT_CAT = null;
-    renderLint(r);
-    seekTo(APP.currentTime);
-    const rep = Linter.report;
-    toast("النتيجة: " + rep.score + "/100 — " + GRADE_TXT[rep.grade], rep.grade === "strong" ? "success" : rep.grade === "mid" ? "warn" : "error", 4000);
-  } catch(err) { Errors.push("error", "linter", err); toast("فشل الفحص: " + err.message, "error"); }
-  finally { btn.disabled = false; btn.textContent = t; if (wasPlaying) play(); }
-});
-document.querySelectorAll("#lintFilter [data-f]").forEach(b => b.addEventListener("click", () => {
-  LINT_FILTER = b.dataset.f;
-  document.querySelectorAll("#lintFilter [data-f]").forEach(x => x.classList.toggle("active", x === b));
-  if (Linter.report) renderLint(Linter.last);
-}));
-$("genFix").addEventListener("click", () => {
-  if (!Linter.report) { toast("شغّل الفاحص أولًا", "warn"); return; }
-  if (!Linter.last.length) { toast("لا مخالفات — العمل نظيف", "success"); return; }
-  $("fixText").value = buildFixPrompt(Linter.last);
-  $("fixModal").classList.add("visible");
-});
-$("fixCopy2").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("fixText").value); toast("تم النسخ", "success"); } catch(e) { toast("تعذر النسخ", "error"); } });
 
 /* الصور والسجل */
 $("refreshImgs").addEventListener("click", async () => { analyzeImgs(); await applyReplaces(); renderImgs(); });
