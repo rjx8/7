@@ -445,12 +445,135 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 .v-prevbox .pw.on{opacity:1}
 .vl-h .warn{color:var(--amber);margin-inline-start:8px}
 
+
+/* ═════════ تحسينات الواجهة v2 ═════════ */
+:root{--topbar:60px}
+/* شريط علوي: العلامة يمين، التبويبات بجوارها، الحالة يسار */
+.tabs{justify-content:stretch;padding:0 20px;height:var(--topbar);align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Cairo","Tajawal",sans-serif;font-weight:900;font-size:16px;white-space:nowrap}
+.brand-mark{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--teal));color:var(--ink)}
+.brand-mark svg{width:18px;height:18px;fill:currentColor;stroke:none}
+.tabs-in{margin-inline-end:auto}
+.tabs button{padding:8px 22px;display:inline-flex;align-items:center;gap:8px}
+.tabs-end{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px}
+/* تخطيط الاستوديو: المعاينة تثبت أثناء تمرير اللوحة الجانبية فلا تبقى مساحة فارغة */
+.page{max-width:1480px}
+.workspace{grid-template-columns:minmax(0,1fr) 400px;gap:18px}
+.workspace>div:first-child{position:sticky;top:calc(var(--topbar) + 14px)}
+.preview-head{align-items:center}
+.stage{min-height:0;aspect-ratio:16/9;padding:0}
+.stage.portrait{aspect-ratio:auto;height:min(68vh,640px)}
+.player-bar{justify-content:flex-start}
+.pb-spacer{flex:1}
+.scene-now{max-width:none;flex:1;min-width:0;text-align:start;unicode-bidi:plaintext}
+.player-time{direction:ltr;unicode-bidi:isolate}
+/* ملصقات الشرائح في الخط الزمني: وسط الشريحة، تُخفى إن ضاقت */
+.tl-scene{overflow:hidden}
+.tl-scene span{left:50%;right:auto;transform:translate(-50%,-50%);text-align:center;unicode-bidi:plaintext;direction:rtl;max-width:calc(100% - 10px)}
+/* القوائم الجانبية */
+.side{position:sticky;top:calc(var(--topbar) + 14px);max-height:calc(100dvh - var(--topbar) - 28px);min-height:0}
+.side-tabs{grid-template-columns:repeat(5,minmax(0,1fr));flex:none}
+.side-tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;font-size:12px;line-height:1.2;white-space:nowrap}
+.side-tabs button .ic{margin:0;width:18px;height:18px}
+.side-tabs button.active{background:var(--raise);color:var(--primary2);box-shadow:inset 0 -2px 0 var(--primary)}
+.side-pane{overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:1}
+.side-pane.active{display:block}
+.side-pane h3{display:flex;align-items:center;gap:8px}
+.side-pane h3::before{content:"";width:4px;height:14px;border-radius:3px;background:var(--primary)}
+/* صفوف المعلومات: القيمة بمحاذاة النهاية وبدون قلب الاتجاه */
+.info-row span:last-child{text-align:end;unicode-bidi:plaintext;direction:rtl;max-width:70%}
+.info-row span:first-child{flex:none}
+#ratioInfo,#formatInfo,#infoDuration{unicode-bidi:isolate;direction:ltr}
+/* القوائم المنسدلة */
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5l5 5 5-5' fill='none' stroke='%2393a0c2' stroke-width='1.8' stroke-linecap='round'/></svg>")!important;background-repeat:no-repeat!important;background-position:left 12px center!important;padding-inline-end:12px!important;padding-inline-start:32px!important;text-align:right}
+#addAudio{margin-bottom:10px}
+.audio-row{grid-template-columns:minmax(0,1fr) 40px 28px;grid-template-areas:"n n d" "s v v";row-gap:8px;padding:10px}
+.audio-name{grid-area:n;unicode-bidi:plaintext;text-align:start;font-weight:700}
+.audio-row input[type=range]{grid-area:s}
+.audio-val{grid-area:v;direction:ltr}
+.audio-del{grid-area:d;width:28px;height:28px}
+.audio-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:14px;border:1px dashed var(--line);border-radius:12px}
+/* لوحة التسجيل المباشر */
+#recHud{display:none;align-items:center;gap:10px;direction:rtl;unicode-bidi:isolate}
+#recHud.show{display:flex}
+#recHud i{margin:0}
+#recHudT{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+#recHud kbd{font:inherit;font-size:12px;padding:1px 7px;border-radius:6px;background:rgba(255,255,255,.18)}
+/* بطاقات طريقة التصدير */
+.exp-modes{display:grid;gap:10px;margin:12px 0}
+.exp-card{border:1px solid var(--line);border-radius:14px;background:var(--sunk);padding:12px;display:flex;flex-direction:column;gap:8px}
+.exp-card.fast{border-color:rgba(61,219,192,.45);background:rgba(61,219,192,.06)}
+.exp-head{display:flex;align-items:center;gap:8px;font-weight:900;font-size:13.5px}
+.exp-badge{margin-inline-start:auto;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:rgba(61,219,192,.18);color:var(--teal)}
+.exp-card .hint{margin:0;line-height:1.7}
+.exp-card .btn{margin:0!important}
+.presets{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.presets button{border:1px solid var(--line);background:var(--sunk);color:var(--muted);border-radius:10px;padding:8px 4px;font-size:12.5px;font-weight:700}
+.presets button.on{border-color:var(--primary);color:var(--text);background:rgba(139,124,255,.14)}
+.est{margin-top:8px;padding:9px 12px;border-radius:11px;background:rgba(139,124,255,.08);border:1px dashed rgba(139,124,255,.35);color:var(--primary2);font-size:12.5px;line-height:1.7;unicode-bidi:plaintext}
+.progress-text{unicode-bidi:plaintext}
+.toast{unicode-bidi:plaintext;text-align:start}
+.chip{unicode-bidi:plaintext}
+@media(max-width:1100px){
+  .workspace{grid-template-columns:minmax(0,1fr)}
+  .workspace>div:first-child,.side{position:static;max-height:none}
+  .side-pane{overflow:visible}
+}
+@media(max-width:650px){
+  .stage{aspect-ratio:auto;min-height:200px}
+  .side-tabs button{font-size:11.5px}
+    .mobile-nav button{display:flex;align-items:center;justify-content:center;gap:8px}
+}
+
+/* خيار الصوت: بطاقة بمفتاح تبديل */
+.audio-toggle{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--sunk);cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.audio-toggle:hover{border-color:var(--line2)}
+.audio-toggle:has(input:checked){border-color:var(--primary);background:rgba(139,124,255,.10)}
+.audio-toggle input{position:absolute!important;opacity:0;width:1px!important;height:1px!important;padding:0!important;border:0!important;pointer-events:none}
+.audio-toggle .sw{flex:none;width:42px;height:24px;border-radius:999px;background:var(--line2,#2a3558);position:relative;transition:background .2s}
+.audio-toggle .sw::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.audio-toggle input:checked ~ .sw{background:var(--primary)}
+.audio-toggle input:checked ~ .sw::after{transform:translateX(-18px)}
+.audio-toggle input:focus-visible ~ .sw{outline:2px solid var(--primary2);outline-offset:2px}
+.audio-toggle .at{display:flex;flex-direction:column;gap:2px;min-width:0}
+.audio-toggle .at b{font-size:13.5px;color:var(--text)}
+.audio-toggle .at small{font-size:12px;color:var(--muted)}
+#audioOpt .hint{display:block;padding:10px 12px;border-radius:11px;background:rgba(61,219,192,.07);border:1px dashed rgba(61,219,192,.35);color:var(--muted);line-height:1.8;unicode-bidi:plaintext}
+/* صف الخيارات (الحركة/الكثافة/العدد) */
+.opt-row{align-items:end;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.opt-row .field label{white-space:nowrap}
+.opt-row .field input,.opt-row .field select{height:44px}
+/* بطاقات الشرائح */
+.scenes-list{gap:10px}
+.scene-card{padding:12px 14px;transition:border-color .15s}
+.scene-card:hover{border-color:var(--line2)}
+.sc-top{grid-template-columns:34px minmax(0,1fr) auto auto;gap:12px}
+.sc-name{unicode-bidi:plaintext;text-align:start;font-size:15px}
+.sc-dur-w{background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:0 10px 0 8px;height:34px}
+.sc-dur{flex:none;width:46px!important;text-overflow:clip;border:0!important;background:transparent!important;padding:0;height:100%;direction:ltr}
+.scene-acts{gap:4px;padding-inline-start:8px;border-inline-start:1px solid var(--line)}
+.scene-acts button{width:30px;height:30px;display:grid;place-items:center}
+.scene-acts button[data-del]:hover{color:var(--red);border-color:var(--red)}
+.sc-tags{padding-inline:46px 0;padding-right:46px;margin-top:6px}
+/* شريط أدوات الشرائح */
+.scenes-acts{padding:10px 12px;border:1px dashed var(--line);border-radius:13px;background:var(--sunk);gap:10px}
+.scenes-acts .total-duration{order:-1;margin:0;margin-inline-end:auto;font-size:13.5px}
+.scenes-acts #unifyDuration{width:60px;height:38px}
+.scenes-acts button{height:38px}
+.scenes-acts #addScene{background:var(--primary);border-color:var(--primary);color:var(--ink)}
+@media(max-width:650px){
+  .sc-top{grid-template-columns:32px minmax(0,1fr) auto}
+  .scene-acts{grid-column:1/-1;justify-content:flex-end;border:0;padding:0}
+  .sc-tags{padding-right:0}
+  .scenes-acts .total-duration{flex:1 0 100%;margin:0 0 4px}
+}
 </style>
 </head>
 
 <body>
 
 <nav class="tabs" aria-label="التنقل">
+  <div class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></span><span>استوديو المشاريع المرئية</span></div>
   <div class="tabs-in">
     <button class="active" data-page="generator">إنشاء المشروع</button>
     <button data-page="workspace">الاستوديو</button>
@@ -481,9 +604,9 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
           <div class="field"><label for="imageCount">عدد الصور (0–20)</label><input id="imageCount" type="number" min="0" max="20" value="3"></div>
           <div class="field full"><label for="extra">متطلبات إضافية</label><textarea id="extra" placeholder="أي توجيه خاص: نقاط لازم تُذكر، مصادر، نبرة العرض…"></textarea></div>
           <div class="field full">
-            <label class="mini-chk"><input type="checkbox" id="hasAudio"> سأرفق ملفًا صوتيًا مع البرومبت (يُبنى الفيديو على كلام الصوت)</label>
-            <div id="audioOpt" style="display:none;margin-top:8px">
-              <span class="hint" id="audioProbeInfo">سيتغير البرومبت ليبني الفيديو على كلام الصوت. أرفق ملفك الصوتي مع البرومبت عند إرساله للذكاء الاصطناعي؛ الموقع لا يرفعه ولا يقرؤه.</span>
+            <label class="audio-toggle"><input type="checkbox" id="hasAudio"><span class="sw"></span><span class="at"><b>سأرفق ملفًا صوتيًا مع البرومبت</b><small>يُبنى الفيديو على كلام الصوت وتُحدَّث شروط البرومبت</small></span></label>
+            <div id="audioOpt" style="display:none;margin-top:10px">
+              <span class="hint" id="audioProbeInfo">سيتغير البرومبت ليبني الفيديو على كلام الصوت. أرفق ملفك الصوتي مع البرومبت عند إرساله للذكاء الاصطناعي، وبعد توليد الكود أضف الملف نفسه من تبويب «الصوت» في الاستوديو ليُدمج في الفيديو عند التصدير.</span>
             </div>
           </div>
           <div class="field full"><label>اتجاه الفيديو</label>
@@ -510,7 +633,7 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
       </div>
 
       <div class="card">
-        <div class="card-h"><span class="step-no">3</span><h2>الشرائح</h2><small>اضغط ⚙ لتحديد نوع الشريحة وتكوين النص وفكرتها</small></div>
+        <div class="card-h"><span class="step-no">3</span><h2>الشرائح</h2><small>حدّد مدة كل شريحة فقط، والذكاء الاصطناعي يتولى المحتوى والتكوين</small></div>
         <div id="scenesList" class="scenes-list"></div>
         <div class="scenes-acts">
           <input type="number" id="unifyDuration" min="2" max="60" value="6" aria-label="مدة موحدة">
@@ -533,7 +656,6 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
         <div class="domain" id="domainBox">اكتب المادة والعنوان ليتعرّف النظام على المجال ويُكيّف الخلفيات والرموز والحركة.</div>
         <div class="gap"></div><div class="gap"></div>
         <button class="generate" id="generate">إنشاء البرومبت</button>
-        <button class="ghost" id="reseed" type="button">🎲 بصمة بصرية جديدة</button>
       </div>
     </aside>
   </div>
@@ -591,11 +713,11 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 
     <aside class="side">
       <div class="side-tabs" id="sideTabs">
-        <button class="active" data-side="code">الكود</button>
-        <button data-side="images">الصور</button>
-        <button data-side="lint">الفحص</button>
-        <button data-side="audio">الصوت</button>
-        <button data-side="export">التصدير</button>
+        <button class="active" data-side="code"><svg class="ic"><use href="#i-code"/></svg>الكود</button>
+        <button data-side="images"><svg class="ic"><use href="#i-img"/></svg>الصور</button>
+        <button data-side="lint"><svg class="ic"><use href="#i-check"/></svg>الفحص</button>
+        <button data-side="audio"><svg class="ic"><use href="#i-mic"/></svg>الصوت</button>
+        <button data-side="export"><svg class="ic"><use href="#i-film"/></svg>التصدير</button>
       </div>
 
       <div class="side-pane active" data-pane="code">
@@ -678,16 +800,18 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 
       <div class="side-pane" data-pane="audio">
         <h3>الصوت</h3>
-        <div class="btns">
-          <button class="btn" id="addAudio">📁 ملف صوتي</button>
-          <button class="btn" id="recAudio">🎙 تسجيل</button>
-        </div>
+        <button class="btn" id="addAudio"><svg class="ic"><use href="#i-upload"/></svg>إضافة ملف صوتي</button>
         <div class="audio-list" id="audioList"></div>
         <label class="mini-chk" style="margin-top:10px"><input type="checkbox" id="mixAudio" checked> دمج الصوت في الفيديو المصدَّر</label>
       </div>
 
       <div class="side-pane" data-pane="export">
         <h3>إعدادات التصدير</h3>
+        <div class="presets" id="presets">
+          <button type="button" data-p="fast">⚡ سريع<br><small>720p • 24</small></button>
+          <button type="button" data-p="bal" class="on">متوازن<br><small>أصلية • 30</small></button>
+          <button type="button" data-p="hq">جودة عالية<br><small>×1.5 • 30</small></button>
+        </div>
         <div class="export-settings">
           <div><label>الجودة</label><select id="quality">
             <option value="720">720p</option>
@@ -704,14 +828,22 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
         </div>
         <div class="gap"></div>
         <div class="info-row"><span>حجم الإخراج</span><span id="ratioInfo">—</span></div>
+        <div class="est" id="exportEst">—</div>
         <div class="gap"></div>
-        <button class="btn" id="testFrames">اختبار 3 إطارات</button>
-        <div class="gap"></div>
-        <button class="btn primary" id="export">تصدير الفيديو</button>
-        <button class="btn red" id="stopExport" style="display:none;margin-top:8px">إيقاف</button>
-        <button class="btn" id="exportRec" style="display:none;margin-top:8px"><svg class="ic" aria-hidden="true"><use href="#i-film"/></svg>تصدير بتسجيل التبويب (لابتوب — مطابق للمعاينة)</button>
-        <span class="hint" id="recHint" style="display:none;margin-top:6px">يسجّل المتصفح المعاينة نفسها بدقة 100% ويدمج الصوت. يستغرق مدة الفيديو الفعلية، ولازم يبقى هذا التبويب ظاهرًا. عند ظهور نافذة المشاركة اختر «هذا التبويب» ثم «مشاركة». للإيقاف: Esc.</span>
-        <div class="gap"></div>
+        <div class="exp-modes">
+          <div class="exp-card">
+            <div class="exp-head"><svg class="ic"><use href="#i-film"/></svg>تصدير إطارًا بإطار</div>
+            <span class="hint">يعمل على كل الأجهزة. الإطارات المتطابقة (اللحظات الثابتة) تُنسخ تلقائيًا بدل إعادة رسمها، وتُرسم عدة إطارات بالتوازي.</span>
+            <button class="btn primary" id="export">تصدير الفيديو</button>
+            <button class="btn red" id="stopExport" style="display:none">إيقاف</button>
+            <button class="btn" id="testFrames">اختبار 3 إطارات</button>
+          </div>
+          <div class="exp-card fast" id="recCard" style="display:none">
+            <div class="exp-head"><svg class="ic"><use href="#i-play"/></svg>تسجيل مباشر<span class="exp-badge">الأسرع</span></div>
+            <span class="hint" id="recHint">يسجّل المتصفح المعاينة نفسها بدقة 100% ويدمج الصوت، ويستغرق مدة الفيديو الفعلية فقط (دقيقتان = دقيقتان). يجب أن يبقى هذا التبويب ظاهرًا. اختر «هذا التبويب» ثم «مشاركة». للإيقاف: Esc.</span>
+            <button class="btn" id="exportRec" style="display:none"><svg class="ic" aria-hidden="true"><use href="#i-film"/></svg>ابدأ التسجيل المباشر</button>
+          </div>
+        </div>
         <div class="btns">
           <button class="btn blue" id="exportPNG">🖼 إطار PNG</button>
           <button class="btn blue" id="exportPDF">📄 شرائح PDF</button>
@@ -743,10 +875,13 @@ button,.btn,.ghost{transition:transform .16s var(--ease-out),background-color .1
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
 <symbol id="i-para" viewBox="0 0 24 24"><path d="M13 4v16M17 4v16M13 4H9a4 4 0 0 0 0 8h4"/></symbol>
 <symbol id="i-wand" viewBox="0 0 24 24"><path d="M5 19L17 7"/><path d="M15 5l4 4"/><path d="M6 4v3M4.5 5.5h3M19 15v3M17.5 16.5h3"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+<symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5L15.5 10"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
 </defs></svg>
 <div class="toasts" id="toasts"></div>
-<div id="recHud"><i></i><span id="recHudT">تسجيل…</span> — Esc للإيقاف</div>
+<div id="recHud"><i></i><span id="recHudT">تسجيل…</span><span>للإيقاف اضغط</span><kbd>Esc</kbd></div>
 <div id="recCount"></div>
 
 <div id="cropModal" class="modal-bg"><div class="modal">
@@ -1516,96 +1651,40 @@ html,body{overflow:hidden !important;margin:0 !important;padding:0 !important}
 }
 
 
-/* ────────── معيار الجودة (يُستخدم في البرومبت وبرومبت الإصلاح ومطابق للفاحص) ────────── */
+/* ────────── البرومبت: واضح، نظيف، ويُظهر فقط ما عبّأه المستخدم ────────── */
+function pSec(title, body) { return "## " + title + "\n" + body; }
 
-function buildCraftBlock() {
-  return [
-    "🎬 معايير الحرفة (حركة وتصميم) — تُطبَّق على كل شريحة",
-    "الحركة:",
-    "• الدخول بمنحنى Out قوي فقط: Motion.ease.expo أو quart أو cubic. ممنوع easeIn وlinear على العناصر الداخلة (يبدو بطيئًا ومتثاقلًا). linear مسموح فقط للحركة المستمرة مثل شريط التقدم.",
-    "• لا يظهر شيء من العدم: ابدأ من opacity 0 مع إزاحة 24–48px أو scale 0.94، ولا تبدأ أبدًا من scale 0.",
-    "• الخروج أسرع من الدخول (نحو 60–70% من مدته). مدد الدخول: النص 350–600ms، الأشكال الكبيرة 600–900ms، والتتابع بين العناصر المتشابهة 40–90ms.",
-    "• لحظة مؤلَّفة واحدة في كل شريحة (حركة بطل واحدة) والباقي يتبعها بهدوء؛ لا تكرر الدخول نفسه حرفيًا في كل الشرائح.",
-    "• الزخارف الخلفية بطيئة (دورة ≥ 8 ثوانٍ) وصغيرة السعة حتى لا تشتّت عن النص.",
-    "التصميم:",
-    "• ثلاثة مستويات حجم ووزن على الأقل بنسب واضحة، والعنوان متوازن السطور بلا كلمة يتيمة في آخر سطر.",
-    "• لون النص لا يقترب أبدًا من لون ما خلفه: تباين فعلي ≥ 4.5:1 فوق كل نقطة من التدرج أو الصورة؛ وإن تعذّر فضع لوحًا معتمًا (مستطيلًا بخلفية صلبة) خلف النص. لا نص فاتح على خلفية فاتحة ولا داكن على داكنة.",
-    "• كل نص يجب أن يتّسع داخل حاويته وداخل حدود الشاشة: اجعل ارتفاع البطاقات auto أو أكبر من النص بهامش ≥ 24px، وحدّد max-width لكل كتلة نص، ولا تستعمل white-space:nowrap على جمل طويلة. اختبر في ذهنك أطول نص ممكن في كل بطاقة.",
-    "• شريحة الخلاصة: 3 إلى 4 نقاط قصيرة (≤ 8 كلمات للنقطة) أو جملة واحدة، بحجم خط ≥ 56px، داخل حاوية مرنة بهوامش آمنة، ولا تكدّس فقرة كاملة.",
-    "• لون مميز واحد (accent) فوق أساس محايد مصبوغ بدرجة لونية واحدة. ممنوع #000 و#fff الصرفان، وممنوع التدرج البنفسجي/الأزرق الافتراضي ما لم يطلبه الموضوع. النص الثانوي يُلوَّن من درجة الخلفية وليس رماديًا.",
-    "• الظلال بإزاحة وتمويه (مثل box-shadow: 0 18px 40px rgba(r,g,b,.35)) مصبوغة بلون الخلفية؛ لا هالات بلا إزاحة.",
-    "• لا بطاقات متطابقة متجاورة كهيكل للشريحة، ولا بطاقة داخل بطاقة، ولا إيموجي كأيقونات (SVG مرسوم بسمك خط واحد موحّد).",
-    "• المسافات: العناصر المترابطة متقاربة والمجموعات المنفصلة متباعدة؛ هوامش خارجية ثابتة ومحاذاة على شبكة واضحة."
-  ].join("\n") + "\n\n" + buildTypographyBlock() + "\n\n" + buildRealismBlock();
+/* حدود الصفحة والنص — أهم قسم في البرومبت */
+function buildBoundsBlock(W, H, portrait) {
+  const m = portrait ? 72 : 96, minLabel = portrait ? 40 : 38, minBody = portrait ? 52 : 44;
+  return pSec("حدود الصفحة والنص (إلزامي)", [
+    "1. كل شيء يبقى داخل لوحة " + W + "×" + H + " بالكامل: لا نص ولا صورة ولا شكل يخرج عن حدود الشريحة أو يُقصّ من أي جهة، في أي لحظة، ومنها لحظات الدخول والخروج. اترك هامشًا آمنًا ≥ " + m + "px من كل حافة.",
+    "2. كل نص يتّسع داخل حاويته: حدّد max-width لكل كتلة نص، واجعل ارتفاع البطاقات auto (أو أكبر من النص بهامش ≥ 24px)، ولا تستعمل white-space:nowrap على جمل طويلة. تخيّل أطول نص ممكن في كل عنصر وتأكد أنه يتسع.",
+    "3. ممنوع تصغير الخط للمبالغة في إدخال النص. إذا ضاق المكان فاختصر الكلمات أو وزّع المحتوى على كتل أو أعمدة أو غيّر التكوين — لا تصغّر الخط. الحد الأدنى: الجسم ≥ " + minBody + "px وأي نص آخر ≥ " + minLabel + "px، لأن الفيديو يُشاهَد على جوال.",
+    "4. وبالمقابل لا تكبّر النص حتى يزدحم: العنوان في سطرين أو ثلاثة بحد أقصى، ويبقى حول العناصر مساحة فارغة تتنفس.",
+    "5. اكسر أسطر العناوين بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر."
+  ].join("\n"));
 }
+
+function buildDesignBlock() {
+  return pSec("التصميم والحركة", [
+    "• ابدأ من الموضوع نفسه: اشتق لوحة الألوان والخلفيات والرموز والحركة منه، ولا تستعمل قالبًا عامًا (داكن + ذهبي، أو بنفسجي + سماوي) ما لم يفرضه الموضوع.",
+    "• عرّف الألوان في :root (--bg و--surface و--ink و--muted و--primary و--accent) واستعملها في كل مكان. لون مميز واحد فوق أساس محايد، وممنوع #000 و#fff الصرفان.",
+    "• تباين النص مع ما خلفه ≥ 4.5:1 فوق كل نقطة من الخلفية؛ إن تعذّر فضع لوحًا معتمًا خلف النص.",
+    "• لكل شريحة عنصر بطل واحد (رسم أو رقم أو رمز أو عنوان) والباقي يتبعه بهدوء. نوّع التكوين بين الشرائح ولا تكرر الشكل نفسه في شريحتين متتاليتين.",
+    "• ثلاث طبقات في كل شريحة: خلفية بطيئة، محتوى بتتابع، تفاصيل (نبضة أو عدّ أو رسم خط). الدخول بمنحنى Out (expo أو quart أو cubic) من opacity 0 مع إزاحة صغيرة؛ والخروج أسرع من الدخول؛ ولا يظهر شيء أو يختفي فجأة.",
+    "• الأيقونات والرسوم بـ SVG بسمك خط موحّد، لا إيموجي. لا بطاقة داخل بطاقة ولا بطاقات متطابقة متجاورة كهيكل للشريحة."
+  ].join("\n"));
+}
+
 function buildTypographyBlock() {
-  return [
-    "🔤 نظام الخطوط والطباعة (إلزامي)",
-    "الخطوط التالية محمّلة تلقائيًا ولا يُسمح باستيراد غيرها: Tajawal • Cairo • Noto Sans Arabic • IBM Plex Sans Arabic • Readex Pro • Almarai • Noto Kufi Arabic • Reem Kufi • Amiri • Noto Naskh Arabic • Changa • Lalezar • Rubik.",
-    "اختر زوجًا واحدًا فقط (خط عناوين + خط جسم) يناسب شخصية الموضوع، ولا تتجاوز خطين في المشروع كله:",
-    "• علمي / تقني / اقتصادي: عناوين Cairo أو Tajawal وزن 800 + جسم IBM Plex Sans Arabic أو Readex Pro وزن 500.",
-    "• تاريخي / أدبي / ديني / تراثي: عناوين Reem Kufi أو Noto Kufi Arabic وزن 700 + جسم Amiri أو Noto Naskh Arabic وزن 400–700.",
-    "• شبابي / ترفيهي / أطفال: عناوين Lalezar أو Changa وزن 800 + جسم Almarai أو Tajawal وزن 500.",
-    "• أخبار / أعمال / رسمي: عناوين Noto Kufi Arabic وزن 900 أو Cairo 800 + جسم Noto Sans Arabic وزن 500.",
-    "قواعد التنفيذ:",
-    "1. عرّف المتغيرين --font-head و--font-body في :root، واكتب كل font-family مع بدائل مثل: 'Cairo','Tajawal','Noto Sans Arabic',sans-serif. لا تعتمد على خط النظام وحده.",
-    "2. أوزان العناوين 700–900، والجسم 500–700. ممنوع الوزن 300 وما دونه (يتلاشى عند ضغط الفيديو). Lalezar وزنه واحد فلا تحدد له font-weight.",
-    "3. ارتفاع السطر: الجسم 1.55–1.75 والعناوين 1.15–1.3 (الحروف العربية ذات الأعمدة تحتاج مساحة). لا letter-spacing ولا text-transform على العربية.",
-    "4. اكسر أسطر العناوين يدويًا بـ <br> أو max-width مدروس حتى لا تبقى كلمة يتيمة في آخر سطر؛ لا تعتمد على text-wrap لأن التصدير لا يدعمه.",
-    "5. الأرقام: استعمل نمطًا واحدًا (الهندية ٠–٩ أو اللاتينية 0–9) في المشروع كله، وغلّف أي نص لاتيني أو رقم داخل جملة عربية بـ <bdi> أو <span dir=\"ltr\"> حتى لا تنقلب علامات الترقيم.",
-    "6. اضبط على body: font-kerning:normal; text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased. كل النصوص نصوص HTML حية، وممنوع تحويل نص إلى صورة.",
-    "7. نسبة الأكبر للأصغر بين العنوان والجسم ≥ 2.5:1 على الأقل.",
-    "8. المقاسات المرجعية (لوحة 1920×1080 أو 1080×1920): عنوان 120–240px، فرعي 64–96px، جسم 48–72px، تسمية ≥ 38px. المشاهد يرى الفيديو على جوال، فاجعل النص كبيرًا وجريئًا وقلّل عدد الكلمات بدل تصغير الخط."
-  ].join("\n");
-}
-function buildRealismBlock() {
-  return [
-    "🎥 معايير الواقعية الحركية — اجعله يبدو كمقطع مصوّر محترف لا كشرائح متحركة",
-    "1. الفيزياء: لكل عنصر كتلة. الخفيف يدخل بـ Motion.spring بتجاوز 3–6% ثم يستقر، والثقيل يدخل بتباطؤ expo/quart بلا ارتداد. لا تستعمل مدة واحدة لكل العناصر.",
-    "2. التوقّع والمتابعة: قبل الحركة الكبيرة حركة عكسية صغيرة (4–8% لمدة 80–120ms)، وبعد توقف العنصر الرئيسي تتوقف العناصر المرتبطة به متأخرة 40–80ms (حركة متداخلة) لا معًا.",
-    "3. العمق: ثلاث طبقات على الأقل (خلفية / وسط / أمامية) تتحرك بسرعات متناسبة تقريبًا 0.3 : 1 : 1.6، مع تكبير بطيء للمشهد كله (1 → 1.05) كأن كاميرا حقيقية تقترب، وانجراف دقيق ±0.4% ودوران ≤ 0.3° بدالة sin(ms) خالصة.",
-    "4. الإضاءة والمواد: مصدر ضوء واحد باتجاه ثابت في كل المشروع. الظل يتبع ارتفاع العنصر (الأعلى = أبعد وأنعم وأخف)، والأسطح الكبيرة بتدرج خطي دقيق (3–6% بين درجتين من اللون نفسه) وحافة علوية أفتح بسمك 1px، فلا أجسام مسطحة بلا حجم. بلا filter ولا blend.",
-    "5. الرسم: الأشياء المألوفة (كتاب، ساعة، مصباح، خريطة، جهاز…) تُرسم بنسب واقعية وتفاصيل صغيرة (لمعة، ظل، حافة) لا كأشكال هندسية مجردة؛ الخطوط بسمك موحّد وتُرسم تدريجيًا بـ Motion.draw.",
-    "6. الإيقاع: اجعل المدد مضاعفات لـ 1000÷fps ms، ونوّع بين ثلاث سرعات (سريع 200–350 / متوسط 400–700 / بطيء 800–1400ms)، وبعد كل حركة كبيرة لحظة سكون قصيرة كي يرتاح النظر.",
-    "7. التركيز: عنصر بطل واحد في كل لحظة هو الأسرع والأكبر تباينًا، والبقية شبه ساكنة (حركة ≤ 20% من الشاشة). لا يمر أي عنصر متحرك فوق النص ولا يقلّل تباينه.",
-    "8. الاستمرارية: كل ما تراه العين في لحظة موجود في اللحظة التي قبلها بشكل ما (يتحول أو يبتعد أو يتلاشى تدريجيًا)، فلا شيء يظهر أو يختفي فجأة.",
-    "9. الحتمية: كل هذه الحركات دوال خالصة من ms وحده، لأن setTime قد تُستدعى لأي زمن وبأي ترتيب."
-  ].join("\n");
-}
-function buildQualityBlock() {
-  return [
-    "📏 معيار الجودة — ما الضعيف وما الوسط وما القوي",
-    "الفاحص الآلي سيقيّم عملك بدرجة من 100: قوي ≥ 80 ، وسط 60–79 ، ضعيف < 60. المطلوب: قوي في كل المحاور. الوسط مرفوض، والضعيف يُعاد من الصفر.",
-    "",
-    "| المحور | ضعيف ❌ | وسط ⚠️ | قوي ✅ (المطلوب) |",
-    "|---|---|---|---|",
-    "| التكوين | كل النص في المنتصف، أو نفس التكوين يتكرر في الشرائح | تكوينان أو ثلاثة تتناوب دون هرمية أو مساحات مقصودة | كل شريحة بتكوين مختلف عن التي قبلها، محاذاة لخطوط شبكة واضحة، مساحة سلبية مقصودة، ولا يتمركز إلا الغلاف والختام |",
-    "| الهوية | ألوان عامة تشبه أي مشروع (داكن + ذهبي، أو بنفسجي + سماوي) | ألوان متناسقة لكن لا علاقة لها بالموضوع | لوحة مشتقة من طبيعة الموضوع + بصمة أشكال ثابتة (زوايا وزخرفة) تظهر في كل الشرائح |",
-    "| الخلفيات | لون مسطح واحد لكل الشرائح | تدرج واحد ثابت في كل الشرائح | خلفية من عائلة واحدة تتنوع في كل شريحة (نمط/تدرج/كتل) وتتحرك ببطء وتخدم المادة |",
-    "| الحركة | ظهور واختفاء فقط، أو شرائح ثابتة، أو نفس الحركة لكل عنصر | دخول متشابه لكل العناصر دون إبراز أو حركة خلفية | ثلاث طبقات (خلفية، محتوى، تفاصيل) بتتابع مدروس، إبراز (نبضة/عدّ/رسم/كشف)، حركة مستمرة خفيفة، وخروج ناعم |",
-    "| الطباعة | حجم واحد تقريبًا أو نص أصغر من 38px | عنوان وجسم فقط بلا مستوى وسيط | هرمية بثلاثة مستويات، عنوان ≥ 120px، نسبة الأكبر للأصغر ≥ 3:1، ارتفاع سطر ≥ 1.4 للعربية، تباين ≥ 4.5:1 |",
-    "| المحتوى | فقرات طويلة أو شرائح شبه فارغة أو نص عام بلا تفاصيل | كمية كلمات مناسبة لكن بلا فكرة واحدة واضحة | فكرة واحدة لكل شريحة، عنوان يلخّص الفكرة، أرقام وأمثلة وأسماء محددة، وكلمات ضمن النطاق |",
-    "| الصور | صور ممتدة أو عشوائية الموضع | صور في أماكنها لكن منفصلة عن التكوين | صور داخل .img-frame مقصوصة بنسبة صحيحة، وجزء من التكوين وتتحرك معه |",
-    "| التقني | أخطاء أو مخالفة للقواعد الممنوعة، أو الحالة لا تُعاد عند الرجوع بالزمن | يعمل مع تحذيرات | يعمل بلا أخطاء، setTime حتمية ويمكن استدعاؤها لأي زمن بأي ترتيب |",
-    "",
-    "✋ قبل إخراج الكود: قيّم كل شريحة داخليًا من 0 إلى 10 على المحاور أعلاه. أي شريحة أقل من 8 أعد تصميمها قبل الإخراج. لا تعرض هذا التقييم في المخرجات."
-  ].join("\n");
-}
-
-function kindGuide(kind, d) {
-  switch (kind) {
-    case "cover": return "العنوان الرئيسي بحجم ضخم + سطر فرعي يوضح الزاوية + (" + [d.subject, d.grade, d.year].filter(Boolean).join(" · ") + ") بحجم صغير. بلا أسماء الطالب والمعلم.";
-    case "intro": return "سؤال مثير أو مفارقة أو رقم صادم يفتح الموضوع ويجعل المشاهد يريد المتابعة.";
-    case "concept": return "فكرة واحدة: عنوان يلخّصها + تعريف في جملة + عنصر بصري يشرحها.";
-    case "process": return "3–5 مراحل مرقمة بأسماء قصيرة ووصف سطر واحد، وتظهر تباعًا بترتيبها.";
-    case "data": return "رقم أو أكثر بارز (countUp) أو مخطط عبر Motion.charts مع عنوان يستخلص المعنى (ماذا يعني الرقم؟).";
-    case "compare": return "طرفان بعنوان وقائمة قصيرة لكل طرف، وخلاصة المقارنة في سطر.";
-    case "example": return "مثال واقعي أو مسألة محلولة، وتُعرض خطوات المثال تباعًا.";
-    case "quote": return "جملة قوية واحدة أو حقيقة لافتة بحجم كبير مع مصدرها أو تعليق قصير.";
-    case "summary": return "3–4 نقاط تلخّص أهم ما تعلمناه، كل نقطة بكلمة مفتاحية بارزة.";
-    case "closing": return "شكر مختصر + اسم الطالب (" + (d.student || "—") + ") + اسم المعلم (" + (d.teacher || "—") + ") بتكوين أنيق.";
-    default: return "اختر أنت النوع الأنسب للفكرة (شرح، خطوات، أرقام، مثال…) بحسب المحتوى.";
-  }
+  return pSec("الخطوط", [
+    "المحمّل تلقائيًا فقط (لا تستورد غيره): Tajawal • Cairo • Noto Sans Arabic • IBM Plex Sans Arabic • Readex Pro • Almarai • Noto Kufi Arabic • Reem Kufi • Amiri • Noto Naskh Arabic • Changa • Lalezar • Rubik.",
+    "• خطان فقط (عناوين + جسم) يناسبان شخصية الموضوع، مع بدائل في font-family، معرّفان كـ --font-head و--font-body.",
+    "• العناوين بوزن 700–900 والجسم 500–700 (لا وزن 300 فما دون). حجم العنوان 100–220px وهرمية واضحة بثلاثة مستويات.",
+    "• ارتفاع السطر: الجسم 1.55–1.75 والعناوين 1.15–1.3. لا letter-spacing ولا text-transform على العربية.",
+    "• نمط أرقام واحد في المشروع كله، وغلّف أي نص لاتيني داخل جملة عربية بـ <bdi>. كل النصوص نصوص HTML حية لا صور."
+  ].join("\n"));
 }
 
 function createPrompt() {
@@ -1617,134 +1696,112 @@ function createPrompt() {
   const totalMs = total ? timing[total - 1].end : 0;
   const fps = Number($("fps").value) || 30;
   const domain = detectDomain(d);
-  const style = STYLES[d.visualStyle] || STYLES.auto;
+  const style = STYLES[d.visualStyle];
   const ml = MOTION_LEVELS[d.motionLevel] || MOTION_LEVELS.balanced;
   const dn = DENSITY[d.textDensity] || DENSITY.medium;
-  const dna = getDNA(d);
-  const layouts = assignLayouts();
-  const minText = portrait ? 52 : 44;
-
   const audioOn = !!($("hasAudio") && $("hasAudio").checked);
-  const audioInfo = "مدد الشرائح في الجدول مبدئية (موزعة بالتساوي) وليست مدة الصوت الحقيقية: استخرج المدة الفعلية من الملف المرفق، واستبدل بها المدة الكلية وكل start/end وقيمة window.PROJECT.duration وmeta project-duration-ms، وابقِ الشرائح متصلة بلا فجوات.";
-  const rows = timing.map((t, i) => {
-    const sc = SCENES[i] || {};
-    const role = getSceneRole(t.n, total);
-    const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
-    const w = wordRange(t.duration, d.textDensity);
-    return "| " + t.n + " | " + t.title + " | " + (audioOn ? "من الصوت" : KINDS[kind].name) + " | " + LAYOUTS[layouts[i]].name + " | " + t.start + " | " + t.end + " | " + t.duration + " | " + (audioOn ? "حسب الصوت" : w.min + "–" + w.max) + " |";
-  }).join("\n");
+  const orient = portrait ? "عمودي 9:16" : "أفقي 16:9";
+  const S = [];
 
-  const details = timing.map((t, i) => {
-    const sc = SCENES[i] || {};
-    const role = getSceneRole(t.n, total);
-    const kind = sc.kind && sc.kind !== "auto" ? sc.kind : autoKind(role);
-    const lay = LAYOUTS[layouts[i]];
-    const w = wordRange(t.duration, d.textDensity);
-    const lines = [
-      "▪ الشريحة " + t.n + " — «" + t.title + "»" + (audioOn ? "" : " (" + KINDS[kind].name + ")") + "  [" + t.start + "ms → " + t.end + "ms" + (audioOn ? " — مبدئي" : "") + "]",
-      "   • المحتوى: " + (audioOn ? "المقطع المنطوق الذي يقع في هذا الجزء من الصوت (حدّد حدوده عند أقرب نهاية جملة)" : kindGuide(kind, d)),
-      "   • التكوين: " + lay.name + " — " + (portrait ? lay.p : lay.l)
-    ];
-    if (!audioOn) lines.push("   • الكلمات: " + w.min + "–" + w.max);
-    if (sc.note && sc.note.trim()) lines.push("   • فكرة يحددها المستخدم (التزم بها): " + sc.note.trim());
-    return lines.join("\n");
-  }).join("\n\n");
+  /* 1) المهمة */
+  S.push("أنت مخرج فني ومصمم Motion Graphics. أنشئ فيديو موشن عربي كامل في ملف HTML واحد، بهوية بصرية خاصة بموضوع المشروع.");
 
-  const imgCount = d.imageCount;
-  let imgBlock = "بدون صور: اعتمد على الرسوم والأشكال SVG والعناصر الزخرفية.";
-  if (imgCount > 0) {
-    const iw = portrait ? 800 : 1000, ih = portrait ? 1000 : 700;
-    const irows = [];
-    for (let k = 0; k < imgCount; k++) {
-      const si = Math.min(total, 1 + Math.floor(k * total / imgCount));
-      const t = timing[si - 1] || timing[0];
-      irows.push("| img-" + (k + 1) + " | الشريحة " + si + " | " + iw + "×" + ih + " px | " + t.start + "–" + t.end + " |");
-    }
-    imgBlock = "أضف " + imgCount + " صورة وفق الجدول، وأدخلها ضمن تكوين الشريحة (لا تتركها عائمة بلا علاقة بالتكوين):\n\n| # | الشريحة | أبعاد الحاوية | ضمن التوقيت |\n|---|---|---|---|\n" + irows.join("\n") +
-      "\n\nقواعد صارمة للصور:\n• كل صورة داخل عنصر class=\"img-frame\" بأبعاد بالبكسل مطابقة للجدول (يمكنك تغيير الأبعاد بما يناسب التكوين لكن بالبكسل).\n• .img-frame: position:relative؛ overflow:hidden؛ width و height بـ px فقط.\n• img: width:100%؛ height:100%؛ object-fit:cover؛ display:block.\n• ممنوع %، vw، vh، auto في أبعاد .img-frame.\n• الصورة البديلة تكون data:image/svg+xml بلون من لوحة المشروع، مع alt واضح و data-image-name=\"img-N\".\n\nمثال:\n<div class=\"img-frame\" style=\"width:" + iw + "px;height:" + ih + "px;position:relative;overflow:hidden;\">\n  <img src=\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='" + iw + "' height='" + ih + "'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3C/svg%3E\" alt=\"وصف الصورة\" data-image-name=\"img-1\" style=\"width:100%;height:100%;object-fit:cover;display:block;\">\n</div>";
+  /* 2) بيانات المشروع: لا يظهر إلا ما عُبّئ */
+  const info = [["العنوان", d.title], ["المادة", d.subject], ["الصف", d.grade], ["الطالب", d.student], ["المعلم", d.teacher], ["العام", d.year]]
+    .filter(r => r[1]).map(r => r[0] + ": " + r[1]);
+  info.push("الأبعاد: " + W + "×" + H + " (" + orient + ") — " + fps + " إطارًا/ث");
+  info.push("عدد الشرائح: " + total + " — المدة الكلية: " + totalMs + "ms");
+  S.push(pSec("المشروع", info.join("\n")));
+
+  if (d.extra) S.push(pSec("متطلبات إضافية من صاحب المشروع (التزم بها)", d.extra));
+  if ((d.student || d.teacher) && !audioOn) S.push("اسما الطالب والمعلم" + (d.student && d.teacher ? "" : " (المذكور منهما)") + " يظهران في الشريحة الأخيرة فقط.");
+
+  /* 3) الاتجاه العام */
+  const dir = [];
+  if (style && d.visualStyle !== "auto") dir.push("الهوية البصرية: " + style.name + " — " + style.text);
+  else dir.push("الهوية البصرية: اشتقها من الموضوع نفسه (ألوان وخلفيات ورموز وحركة خاصة به).");
+  if (domain.k !== "generic") {
+    dir.push("المجال: " + domain.name + " — اجعل لغة الموضوع نفسه أولى من هذه الإرشادات إن كان أدق منها.");
+    dir.push("رموز مناسبة: " + domain.motifs);
+    dir.push("أدوات شرح مناسبة: " + domain.visuals);
+    if (domain.content && !audioOn) dir.push("ملاحظة محتوى: " + domain.content);
+  }
+  dir.push("الحركة: " + ml.name + " — " + ml.text);
+  if (!audioOn) dir.push("كثافة النص: " + dn.name + " — " + dn.text);
+  S.push(pSec("الاتجاه العام", dir.join("\n")));
+
+  /* 4) الشرائح: المدة فقط، والباقي للذكاء */
+  const rows = timing.map(t => "| " + t.n + " | " + t.start + " | " + t.end + " | " + t.duration + " |").join("\n");
+  S.push(pSec("الشرائح والتوقيت", "التزم بهذا الجدول حرفيًا (الأزمنة بالمللي ثانية):\n\n| # | start | end | المدة (ث) |\n|---|---|---|---|\n" + rows +
+    "\n\nتوزيع المحتوى على الشرائح وعناوينها وتكوين كل شريحة وطريقة عرضها قرارك أنت؛ رتّب الأفكار بما يخدم الموضوع ويحكي قصة متسلسلة من الغلاف إلى الخاتمة."));
+
+  /* 5) الصوت: يظهر فقط عند تفعيله */
+  if (audioOn) {
+    S.push(pSec("الصوت المرفق (مهم)", [
+      "مرفق مع هذه الرسالة ملف صوتي هو المصدر الوحيد للمحتوى، وسيُضاف إلى الفيديو لاحقًا داخل المنصة ويُدمج عند التصدير.",
+      "1. استمع إلى الملف كاملًا قبل التصميم، واشتق منه وحده الأفكار والنصوص والأرقام المعروضة؛ لا تضف معلومة غير مذكورة فيه" + (d.title || d.subject ? " (بيانات المشروع أعلاه للسياق فقط)" : "") + ".",
+      "2. الأزمنة في الجدول مبدئية موزعة بالتساوي. اضبطها على الصوت الحقيقي: اجعل المدة الكلية = مدة الصوت، وابدأ كل شريحة وأنهها عند حدود المعنى أو الجملة، بلا فجوات بين الشرائح. عدّل data-scene-start/end وwindow.PROJECT.duration وmeta project-duration-ms بما يطابق ذلك.",
+      "3. اعرض الكلمات والجمل المهمة من الكلام (لك حرية الاختصار والتنسيق) وزامن ظهورها مع نطقها بفارق لا يزيد عن 100ms.",
+      "4. لا تضف وسم <audio> ولا أي صوت داخل الكود.",
+      "5. إن لم تستطع سماع الملف أو لم تجد مرفقًا فتوقف واكتب جملة واحدة بذلك بدل اختلاق المحتوى."
+    ].join("\n")));
   }
 
+  /* 6) الصور: تظهر فقط إن طُلبت */
+  if (d.imageCount > 0) {
+    const iw = portrait ? 800 : 1000, ih = portrait ? 1000 : 700;
+    S.push(pSec("الصور (" + d.imageCount + ")", [
+      "أضف " + d.imageCount + " صورة في الشرائح التي تناسبها، وأدخلها ضمن تكوين الشريحة لا عائمة بلا علاقة.",
+      "• كل صورة داخل <div class=\"img-frame\" style=\"width:" + iw + "px;height:" + ih + "px;position:relative;overflow:hidden\"> بأبعاد بالبكسل فقط (يمكنك تغييرها لتناسب التكوين).",
+      "• داخلها <img> بـ width:100%؛ height:100%؛ object-fit:cover؛ display:block، بلا تمديد ولا تشويه.",
+      "• الصورة البديلة data:image/svg+xml بلون من لوحة المشروع، مع alt واضح وسمة data-image-name=\"img-N\" (N من 1 إلى " + d.imageCount + ").",
+      "مثال:\n<div class=\"img-frame\" style=\"width:" + iw + "px;height:" + ih + "px;position:relative;overflow:hidden\"><img src=\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='" + iw + "' height='" + ih + "'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3C/svg%3E\" alt=\"وصف الصورة\" data-image-name=\"img-1\" style=\"width:100%;height:100%;object-fit:cover;display:block\"></div>"
+    ].join("\n")));
+  }
+
+  /* 7) حدود الصفحة + التصميم + الخطوط */
+  S.push(buildBoundsBlock(W, H, portrait));
+  S.push(buildDesignBlock());
+  S.push(buildTypographyBlock());
+
+  /* 8) التقنية */
   const scenesLiteral = "[" + timing.map(t => "{n:" + t.n + ",s:" + t.start + ",e:" + t.end + "}").join(",") + "]";
   const skeleton = [
-    "<section data-scene=\"1\" data-scene-name=\"" + (timing[0] ? timing[0].title : "الغلاف") + "\" data-scene-start=\"0\" data-scene-end=\"" + (timing[0] ? timing[0].end : 6000) + "\" style=\"position:absolute;inset:0\"> … </section>",
-    "",
-    "<script>",
     "var SCENES=" + scenesLiteral + ";",
     "function anim1(l, el){            // l = الزمن المحلي للشريحة بالمللي ثانية",
-    "  var title=el.querySelector('.title');",
-    "  title.style.clipPath=Motion.reveal(l,150,700,'start');",
-    "  title.style.transform='translateY('+Motion.slideIn(l,150,700,40)+'px)';",
-    "  Motion.words(el.querySelector('.sub'),'نص السطر الفرعي',l,500,{per:90});",
-    "  el.querySelector('.bg-shape').style.transform='translateX('+Motion.float(l,18,5000)+'px) rotate('+(l/200)+'deg)';",
+    "  var t=el.querySelector('.title');",
+    "  t.style.clipPath=Motion.reveal(l,150,700,'start');",
+    "  t.style.transform='translateY('+Motion.slideIn(l,150,700,40)+'px)';",
     "}",
-    "var FN=[anim1 /* ، anim2 ، … لكل شريحة دالة */];",
+    "var FN=[anim1 /* ، anim2 ، … دالة لكل شريحة */];",
     "window.PROJECT={duration:" + totalMs + ",orientation:\"" + APP.orientation + "\",setTime:function(ms){",
     "  SCENES.forEach(function(sc,i){",
     "    var el=document.querySelector('[data-scene=\"'+sc.n+'\"]');",
     "    var f=Motion.scene(ms,sc.s,sc.e,{in:300,out:300,last:i===SCENES.length-1});",
     "    el.style.opacity=f.alpha; el.style.visibility=f.visible?'visible':'hidden';",
-    "    if(f.visible && FN[i]) FN[i](f.local, el, ms);   // كل استدعاء يضبط الحالة كاملة من الصفر",
+    "    if(f.visible && FN[i]) FN[i](f.local, el, ms);   // كل استدعاء يضبط الحالة من الصفر",
     "  });",
-    "}};",
-    "<\/script>"
+    "}};"
   ].join("\n");
+  S.push(pSec("القواعد التقنية", [
+    "1. <html lang=\"ar\" dir=\"rtl\">، والـ body فيه #project-root فقط بحجم " + W + "px × " + H + "px مباشرة (بلا transform:scale)، وكل الشرائح بداخله بوضع absolute متراكبة.",
+    "2. كل شريحة: <section data-scene=\"N\" data-scene-name=\"اسم قصير من اختيارك\" data-scene-start=\"MS\" data-scene-end=\"MS\">، متصلة بلا فجوات.",
+    "3. في <head>: <meta name=\"project-duration-ms\" content=\"" + totalMs + "\"> و<meta name=\"project-orientation\" content=\"" + APP.orientation + "\"> و<meta name=\"project-title\" content=\"" + escA(d.title) + "\">.",
+    "4. الحالة دالة في الزمن فقط: كل استدعاء لـ window.PROJECT.setTime(ms) يضبط كل شيء من الصفر، ويُستدعى لأي زمن وبأي ترتيب. ممنوع Math.random وDate.now وperformance.now.",
+    "5. ممنوع: CSS animation وtransition، وrequestAnimationFrame وsetTimeout وsetInterval للحركة.",
+    "6. ممنوع (التصدير لا يدعمها): filter وdrop-shadow وbackdrop-filter وmask-image وmix-blend-mode وbackground-clip:text. المسموح: gradient وclip-path وbox-shadow وSVG وopacity وtransform.",
+    "7. النص العربي يُحرَّك كلمة كلمة أو سطرًا كاملًا، لا حرفًا حرفًا (يفكك اتصال الحروف).",
+    "",
+    "مكتبة Motion جاهزة تُحقن تلقائيًا (لا تكتبها)، وكل توابعها تستقبل ms:",
+    "Motion.scene(ms,start,end,{in,out,last}) ← {local,progress,alpha,visible} • Motion.p / tween / fadeIn / fadeOut / slideIn / scaleIn / spring • Motion.reveal(ms,delay,dur,dir) ← clip-path جاهز • Motion.words(el,text,ms,delay,{per}) • Motion.draw(pathEl,ms,delay,dur) • Motion.float / pulse • Motion.countUp(ms,delay,dur,from,to,{arabic:true}) • Motion.stagger(i,gap) • Motion.lerpColor • Motion.ease.{linear|easeOut|cubic|quart|expo|back|elastic|spring} • Motion.charts.{bar|line|pie|area}(el,{data:[{label,value}],t}) • Motion.katex(el,\"x^2+1\")",
+    "",
+    "هيكل الكود (اتبعه):",
+    skeleton
+  ].join("\n")));
 
-  const P = [];
-  P.push("أنت مخرج فني (Art Director) ومصمم Motion Graphics للمحتوى العربي التعليمي. مهمتك إنتاج مشروع فيديو موشن كامل في ملف HTML واحد، بهوية بصرية خاصة بموضوع هذا المشروع تحديدًا، لا تشبه أي مشروع آخر.");
-  P.push("");
-  P.push("📋 بيانات المشروع\nالعنوان: " + (d.title || "غير محدد") + "\nالمادة: " + (d.subject || "غير محددة") + "\nالصف: " + (d.grade || "غير محدد") + "\nالطالب: " + (d.student || "غير محدد") + "\nالمعلم: " + (d.teacher || "غير محدد") + "\nالعام: " + (d.year || "غير محدد") + "\nمتطلبات إضافية: " + (d.extra || "لا توجد") + "\nالأبعاد: " + W + " × " + H + " (" + (portrait ? "عمودي 9:16" : "أفقي 16:9") + ")\nالإطارات: " + fps + "\nعدد الشرائح: " + total + "\nالمدة الكلية: " + totalMs + "ms");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🧠 الخطوة صفر: حلّل قبل أن تصمّم\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("قبل كتابة أي كود فكّر بصمت في: (1) ما الذي يجعل هذا الموضوع مميزًا بصريًا؟ (2) ما الأشياء الملموسة والرموز التي تنتمي له؟ (3) من الجمهور وما مستواه؟ (4) ما الشعور المطلوب (وقار، حماس، دهشة، هدوء)؟ ثم اشتق منها لوحة الألوان والخلفيات والرموز والحركة. لا تبدأ من قالب جاهز، ولا تستعمل ألوانًا افتراضية ما لم يفرضها الموضوع.");
-  P.push("");
-  P.push("المجال المكتشف للمشروع: " + domain.name + (domain.k === "generic" ? "" : "\nإذا كان موضوع البحث أدق من هذا المجال (مثلًا معركة بعينها في التاريخ أو ظاهرة بعينها في العلوم) فقدّم لغة الموضوع نفسه على التوجيهات التالية:") +
-    "\n• الخلفيات: " + domain.bg + "\n• رموز وزخارف: " + domain.motifs + "\n• أدوات الشرح البصرية: " + domain.visuals + "\n• لغة الحركة: " + domain.motion + "\n• المحتوى: " + domain.content);
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎨 الهوية البصرية\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("الاتجاه العام المختار: " + style.name + "\n" + style.text);
-  P.push("");
-  P.push("بصمة هذا المشروع (التزم بها في كل الشرائح لتتميز عن غيرها):\n• لغة الأشكال: " + dna.shape + "\n• الزخرفة المميزة: " + dna.motif + "\n• تقنية الخلفيات: " + dna.bg + "\n• العناوين: " + dna.title + "\n• استخدام اللون المميز: " + dna.accent + "\n• الإيقاع: " + dna.pace);
-  P.push("");
-  P.push("قواعد الهوية:\n1. عرّف 6 متغيرات في :root: --bg و --surface و --ink و --muted و --primary و --accent، واستخدمها في كل الألوان (لا ألوان عشوائية خارجها إلا التدرجات المشتقة منها).\n2. اللوحة مشتقة من الموضوع (انظر المجال أعلاه) لا من الذوق العام. الأخطاء الشائعة الممنوعة ما لم يفرضها الموضوع: خلفية سوداء + ذهبي، تدرج بنفسجي/سماوي، بطاقات متطابقة الحجم والزوايا، وظلال رمادية موحدة.\n3. زوج خطوط واحد (عنوان + جسم) يُختار من «نظام الخطوط والطباعة» أدناه، والعناوين بوزن 800–900.\n4. الخلفية لكل شريحة تنتمي إلى عائلة واحدة لكنها تتغير من شريحة لأخرى (نمط أو تدرج أو كتل مختلفة)، ولا تكون لونًا مسطحًا إلا في شريحة واحدة على الأكثر.\n5. العناصر الزخرفية تُبنى بـ SVG وCSS gradients وclip-path فقط، وتتحرك ببطء طوال الشريحة.");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⏱️ جدول التوقيت والشرائح (استخدمه حرفيًا)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("| # | الاسم | النوع | التكوين | start (ms) | end (ms) | المدة (ث) | الكلمات |\n|---|---|---|---|---|---|---|---|\n" + rows);
-  P.push("");
-  P.push("Meta إلزامية في <head>:\n<meta name=\"project-duration-ms\" content=\"" + totalMs + "\">\n<meta name=\"project-orientation\" content=\"" + APP.orientation + "\">\n<meta name=\"project-title\" content=\"" + escA(d.title) + "\">");
-  P.push("");
-  if (audioOn) {
-    P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎙 مرفق صوتي — ملف صوتي مرفق مع هذه الرسالة\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    P.push(audioInfo);
-    P.push("1. الملف الصوتي المرفق هو الكلام الذي سيُعرض الفيديو معه وهو المصدر الوحيد للمحتوى. استمع إليه كاملًا وفرّغه حرفيًا قبل أي تصميم.\n2. اشتق منه وحده: النص المعروض والأفكار والأرقام والأمثلة والرسوم. لا تضف معلومة أو عنوانًا أو اسمًا غير مذكور فيه (بيانات المشروع أعلاه للسياق فقط وليست نصًا يُعرض).\n3. اجعل عدد الشرائح " + total + " كما هو، وقسّم الكلام عليها عند حدود المعنى والجمل، وعدّل بدايات الشرائح ونهاياتها في الجدول لتطابق لحظات الكلام الفعلية (data-scene-start/end متصلة بلا فجوات)، والمدة الكلية = مدة الصوت الفعلية" + " وقيمة window.PROJECT.duration تساويها" + ". تُهمل خانة الكلمات وكثافة النص.\n4. النص على الشاشة حرفي من المنطوق (لا تصحيح ولا اختصار ولا إعادة صياغة)، وتظهر كل كلمة أو جملة عند نطقها لا قبلها ولا بعدها بأكثر من 100ms، وتبقى حتى تنتهي جملتها.\n5. إن لم تستطع سماع الصوت أو لم تجد مرفقًا، توقّف واكتب جملة واحدة بذلك بدل اختلاق المحتوى.\n6. لا تضف <audio> ولا أي صوت داخل الكود؛ يُضاف الصوت لاحقًا في الاستوديو.");
-    P.push("");
-  }
-  P.push("تفاصيل كل شريحة:\n\n" + details);
-  P.push("");
-  if (!audioOn) P.push("كثافة النص: " + dn.name + " — " + dn.text + " الأسماء (الطالب والمعلم) في الشريحة الأخيرة فقط.");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🧩 قواعد التكوين (لا مركزية شاملة)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. طبّق التكوين المحدد لكل شريحة أعلاه بدقة. ممنوع تكرار التكوين نفسه في شريحتين متتاليتين.\n2. لا يُسمح بتوسيط النص إلا في الغلاف والختام على الأكثر. النص العربي يبدأ من اليمين: اجعل محاذاته لليمين (text-align:right) داخل عمود محدد العرض، ولا تمدّد النص على كامل عرض الشريحة.\n3. اعتمد شبكة من 12 عمودًا وهوامش ≥ 96px (أفقي) أو ≥ 72px (عمودي)، وحاذِ العناصر لخطوط الشبكة.\n4. عرض عمود النص لا يتجاوز 55% من الشريحة، ويترك جزء من الشريحة فارغًا عمدًا (مساحة سلبية ≥ 25%).\n5. هرمية النص: عنوان (120–240px)، عنوان فرعي (64–96px)، جسم (" + minText + "–72px)، تسمية صغيرة (≥ " + (portrait ? 40 : 38) + "px). ممنوع أي نص أصغر من " + (portrait ? 40 : 38) + "px لأن الفيديو يُشاهَد على شاشة جوال صغيرة.\n6. اجعل العنصر البصري أو الرقم أو الرمز هو البطل الأكبر في كل شريحة، لا النص وحده.\n7. ارتفاع السطر للعربية ≥ 1.4 للجسم و≥ 1.15 للعناوين، وتباين اللون مع الخلفية ≥ 4.5:1.");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🎬 الحركة المفصلة\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("مستوى الحركة: " + ml.name + " — " + ml.text + "\n\nكل شريحة تتكون من ثلاث طبقات زمنية:\n• طبقة الخلفية: عنصر أو اثنان يتحركان طوال الشريحة ببطء (Motion.float أو دوران بطيء أو انزلاق نمط).\n• طبقة المحتوى: العنوان ثم الفرعي ثم النقاط ثم العنصر البصري بتتابع، ولا يدخل عنصران بالحركة نفسها متتاليين: نوّع بين reveal وwords وslideIn وscaleIn وdraw.\n• طبقة التفاصيل: إبراز بنبضة (Motion.pulse) أو عدّ (countUp) أو رسم خط (draw) أو تلوين كلمة مفتاحية.\n\nتوزيع الزمن داخل الشريحة (نسب من مدتها):\n• 0–8%: انتقال دخول (crossfade 300ms) والخلفية تستقر.\n• 5–25%: دخول العنوان.\n• 20–55%: دخول باقي العناصر بتتابع.\n• 40–80%: الإبراز والتفاصيل.\n• 85–100%: خروج ناعم (انزلاق 12–20px مع تلاشي) قبل الانتقال.\n\nقواعد الحركة:\n1. الحالة دالة في الزمن فقط: كل استدعاء لـ setTime يضبط كل الخصائص من الصفر (لا تراكم ولا اعتماد على الاستدعاء السابق) لكي يعمل التمرير والرجوع والتصدير.\n2. ممنوع Math.random و Date.now و performance.now داخل الحركة (استخدم قيمًا ثابتة أو دوال من ms).\n3. للنص العربي: حرّك كلمة كلمة (Motion.words) أو السطر كاملًا، وممنوع تقطيعه إلى حروف لأن ذلك يفكك اتصال الحروف.\n4. الأرقام تعدّ صعودًا (countUp)، والخطوط والمنحنيات تُرسم (draw)، والمخططات تنمو.");
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🧰 مكتبة Motion الجاهزة (تُحقن تلقائيًا ولا تكتبها)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("كل التوابع الزمنية تستقبل ميلي ثانية:\n• Motion.scene(ms, start, end, {in, out, last}) ← {local, progress, alpha, visible}\n• Motion.p(ms, delay, dur, ease) ← تقدّم مرن 0..1 ، Motion.tween(ms, delay, dur, from, to, ease)\n• Motion.fadeIn / fadeOut(ms, delay, dur) ، Motion.slideIn(ms, delay, dur, distPx) ، Motion.scaleIn ، Motion.spring(ms, delay, dur)\n• Motion.reveal(ms, delay, dur, dir) ← قيمة clip-path جاهزة؛ dir: start (من اليمين) | end | up | down | center\n• Motion.words(el, text, ms, delay, {per, dur, dist}) ← ظهور كلمة كلمة\n• Motion.typewriter(text, ms, delay, cps) ← للنص اللاتيني والكود\n• Motion.draw(pathEl, ms, delay, dur) ← رسم مسار SVG\n• Motion.float(ms, amp, periodMs, phase) ← حركة تنفس مستمرة ، Motion.pulse(ms, delay, dur, amt)\n• Motion.countUp(ms, delay, dur, from, to, {arabic:true, decimals})\n• Motion.lerpColor(hexA, hexB, t) ، Motion.stagger(i, gapMs)\n• Motion.ease.{linear|easeIn|easeOut|easeInOut|cubic|quart|expo|back|elastic|bounce|spring}(t)\n• Motion.charts.{bar|line|pie|area}(el, {data:[{label,value}], t:localMs})\n• Motion.katex(el, \"x^2+1\") للمعادلات");
-  P.push("");
-  P.push("هيكل الكود المطلوب (اتبعه):\n\n" + skeleton);
-  P.push("");
-  P.push(buildCraftBlock());
-  P.push("");
-  P.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚙️ قواعد تقنية\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  P.push("1. #project-root بحجم " + W + "px × " + H + "px مباشرة، بلا transform:scale، وكل الشرائح بداخله بوضع absolute متراكبة.\n2. body يحتوي #project-root فقط، و<html lang=\"ar\" dir=\"rtl\">.\n3. كل شريحة: <section data-scene=\"N\" data-scene-name=\"الاسم\" data-scene-start=\"MS\" data-scene-end=\"MS\">.\n4. window.PROJECT = { duration: " + totalMs + ", orientation: \"" + APP.orientation + "\", setTime: function(ms){…} }.\n5. ممنوع: CSS animation وtransition، requestAnimationFrame، setTimeout وsetInterval للحركة.\n6. ممنوع (لأن التصدير لا يدعمها): filter، drop-shadow، backdrop-filter، mask-image، mix-blend-mode، background-clip:text. المسموح: linear/radial-gradient، clip-path، box-shadow، SVG، opacity، transform.\n7. ممنوع letter-spacing وtext-transform على العربية.\n8. الصور ضمن .img-frame كما في قسم الصور.");
-  P.push("");
-  P.push("🖼️ الصور\n" + imgBlock);
-  P.push("");
-  if (audioOn) { P.push("⚠️ تذكير أخير: محتوى الشاشة = كلام الملف الصوتي المرفق فقط، حرفيًا ومتزامنًا مع نطقه. كل قاعدة تخالف قسم 🎙 المرفق الصوتي (عدد الكلمات، كثافة النص، عناوين تضيفها من عندك) تُلغى."); P.push(""); }
-  P.push(buildQualityBlock());
-  P.push("");
-  P.push("📤 المخرجات: ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>. بدون أي شرح قبله أو بعده وبدون سياج markdown.");
-  return P.join("\n");
+  /* 9) المخرجات */
+  S.push(pSec("المخرجات", "ملف HTML واحد كامل يبدأ بـ <!doctype html> وينتهي بـ </html>، بلا أي شرح قبله أو بعده وبلا سياج markdown. قبل الإخراج راجع كل شريحة: لا نص خارج الحدود، ولا خط أصغر من الحد، ولا عنصر مقصوص."));
+  return S.join("\n\n");
 }
 
 
@@ -2343,31 +2400,28 @@ function buildFixPrompt(list) {
   const rows = all.map((x, i) => `${i + 1}. [${x.sev === "error" ? "خطأ" : x.sev === "warn" ? "تحذير" : "ملاحظة"} • ${LINT_CATS[x.cat] ? LINT_CATS[x.cat].name : ""}] شريحة ${x.scene} — ${x.el}\n   المشكلة: ${x.msg}\n   الإصلاح: ${x.fix || "—"}`).join("\n\n");
   const d = getForm();
   const catLine = rep ? Object.keys(rep.cats).map(k => rep.cats[k].name + " " + rep.cats[k].score).join(" | ") : "—";
-  return `أنت مهندس Motion Graphics. أصلح المخالفات أدناه لترفع مستوى المشروع إلى «قوي» (80/100 فأكثر)، دون إعادة كتابة ما يعمل.
+  const ctx = [d.title ? "العنوان: " + d.title : "", d.subject ? "المادة: " + d.subject : "",
+    "الاتجاه: " + (APP.orientation === "portrait" ? "عمودي 9:16" : "أفقي 16:9"), "المدة: " + APP.durationMs + "ms", "عدد الشرائح: " + SCENES.length].filter(Boolean).join("\n");
+  return `أنت مهندس Motion Graphics. أصلح المخالفات أدناه في كود المشروع المرفق لترفع نتيجته إلى «قوي» (80/100 فأكثر)، دون إعادة كتابة ما يعمل.
 
 📊 نتيجة الفاحص الحالية: ${rep ? rep.score + "/100 — " + GRADE_TXT[rep.grade] : "—"}
 المحاور: ${catLine}
 
-⚠️ لا تُغيّر: #project-root، window.PROJECT (اسمه وتوقيعه)، data-scene-*، meta project-duration-ms / project-orientation، الهوية البصرية القائمة (ألوانها وخطوطها وبصمة أشكالها)، ومحتوى الشرائح غير المذكورة أدناه.
-✅ اجعل كل إصلاح ضمن الشريحة المذكورة فقط، ولا تكسر شرائح سليمة.
+📋 المشروع:
+${ctx}
 
-📋 السياق:
-العنوان: ${d.title || "—"} — ${d.subject || ""}
-الاتجاه: ${APP.orientation === "portrait" ? "عمودي" : "أفقي"}
-المدة: ${APP.durationMs}ms
-الشرائح: ${SCENES.length}
+🔒 لا تغيّر: #project-root، واسم window.PROJECT وتوقيعه، وسمات data-scene-*، وmeta project-duration-ms وproject-orientation، والهوية البصرية القائمة (ألوانها وخطوطها)، ومحتوى الشرائح غير المذكورة أدناه. اجعل كل إصلاح ضمن الشريحة المذكورة فقط ولا تكسر شرائح سليمة.
 
 🔍 المخالفات (${all.length}):
 
 ${rows}
 
-قواعد لا تنسها أثناء الإصلاح:
-• الحالة دالة في الزمن فقط داخل setTime (بلا اعتماد على الاستدعاء السابق ولا Math.random).
+📐 قواعد أثناء الإصلاح:
+• كل نص وعنصر يبقى داخل حدود الشريحة وحاويته في كل لحظة (ومنها الدخول والخروج)، مع هامش آمن. عالج ضيق المكان باختصار الكلمات أو بتوسيع الحاوية أو بتغيير التكوين، ولا تصغّر الخط إلا إذا بقي فوق الحد الأدنى (${APP.orientation === "portrait" ? 40 : 38}px).
+• الحالة دالة في الزمن فقط داخل setTime، بلا Math.random ولا اعتماد على الاستدعاء السابق.
 • ممنوع filter وbackdrop-filter وmask وmix-blend-mode وCSS animation/transition.
-• لا مركزية في شرائح المحتوى، ولا تكرار للتكوين في شريحتين متتاليتين.
-• حركة من ثلاث طبقات (خلفية، محتوى، تفاصيل) وليست تلاشيًا فقط.
 
-أخرج HTML كاملًا بعد الإصلاح، بلا شرح.`;
+📤 أخرج الملف HTML كاملًا بعد الإصلاح، بلا شرح وبلا سياج markdown.`;
 }
 
 
@@ -2389,50 +2443,21 @@ const sceneData = () => SCENES.map(s => ({ title: s.title, duration: s.duration,
 
 function renderScenes() {
   const w = $("scenesList");
-  const total = SCENES.length;
-  const defs = defaultSceneTitles(total);
-  const auto = assignLayouts();
-  const kindOpts = Object.keys(KINDS).map(k => `<option value="${k}">${KINDS[k].name}</option>`).join("");
-  w.innerHTML = SCENES.map((sc, i) => {
-    const r = getSceneRole(i + 1, total);
-    const kind = sc.kind && KINDS[sc.kind] ? sc.kind : "auto";
-    const effKind = kind === "auto" ? autoKind(r) : kind;
-    const lay = sc.layout && sc.layout !== "auto" ? sc.layout : auto[i];
-    const layOpts = `<option value="auto">تلقائي (سيُختار: ${LAYOUTS[auto[i]].name})</option>` + LAYOUT_IDS.map(k => `<option value="${k}">${LAYOUTS[k].name}</option>`).join("");
-    const open = sc._open ? " open" : "";
-    return `<div class="scene-card${open}" data-card="${i}">
+  w.innerHTML = SCENES.map((sc, i) => `<div class="scene-card" data-card="${i}">
       <div class="sc-top">
         <span class="scene-index">${i + 1}</span>
-        <input type="text" class="sc-name" data-i="${i}" data-f="title" value="${escA(sc.title)}" placeholder="${escA(defs[i])}" aria-label="اسم الشريحة ${i + 1}">
-        <div class="sc-dur-w"><input type="number" class="sc-dur" data-i="${i}" data-f="dur" min="2" max="60" value="${sc.duration}" aria-label="المدة"><span>ث</span></div>
-        <div class="scene-acts"><button data-more="${i}" title="تفاصيل الشريحة">⚙</button><button data-mv="up" data-i="${i}" title="أعلى">▲</button><button data-mv="down" data-i="${i}" title="أسفل">▼</button><button data-dup="${i}" title="نسخ">⎘</button><button data-del="${i}" title="حذف">✕</button></div>
+        <div class="sc-name" style="padding:6px 2px;font-weight:700">الشريحة ${i + 1}</div>
+        <div class="sc-dur-w"><input type="number" class="sc-dur" data-i="${i}" data-f="dur" min="2" max="60" value="${sc.duration}" aria-label="مدة الشريحة ${i + 1}"><span>ث</span></div>
+        <div class="scene-acts"><button data-mv="up" data-i="${i}" title="أعلى">▲</button><button data-mv="down" data-i="${i}" title="أسفل">▼</button><button data-dup="${i}" title="نسخ">⎘</button><button data-del="${i}" title="حذف">✕</button></div>
       </div>
-      <div class="sc-tags"><span class="tag p">${ROLE_NAMES[r]}</span><span class="tag">${KINDS[effKind].name}</span><span class="tag">${LAYOUTS[lay].name}</span>${sc.note ? '<span class="tag">📝 فكرة</span>' : ""}</div>
-      <div class="sc-detail">
-        <div class="field"><label>نوع الشريحة</label><select data-i="${i}" data-f="kind">${kindOpts.replace(`value="${kind}"`, `value="${kind}" selected`)}</select></div>
-        <div class="field"><label>تكوين النص</label><select data-i="${i}" data-f="layout">${layOpts.replace(`value="${sc.layout || "auto"}"`, `value="${sc.layout || "auto"}" selected`)}</select></div>
-        <div class="field full"><label>فكرة الشريحة (اختياري)</label><input type="text" data-i="${i}" data-f="note" value="${escA(sc.note)}" placeholder="مثال: اذكر ثلاثة أسباب رئيسية للثورة مع رقم لكل سبب"></div>
-        <div class="field full hint">${esc(KINDS[effKind].desc)}</div>
-      </div>
-    </div>`;
-  }).join("");
+    </div>`).join("");
   const touch = () => { updateTotal(); scheduleSave(); History.mark(); };
-  w.querySelectorAll("input,select").forEach(inp => {
-    const ev = inp.tagName === "SELECT" ? "change" : "input";
-    inp.addEventListener(ev, e => {
-      const i = Number(e.target.dataset.i), f = e.target.dataset.f;
-      if (!SCENES[i]) return;
-      if (f === "title") SCENES[i].title = e.target.value;
-      else if (f === "dur") { let v = Number(e.target.value); if (!isFinite(v)) v = 6; SCENES[i].duration = Math.max(2, Math.min(60, v)); }
-      else if (f === "note") SCENES[i].note = e.target.value;
-      else if (f === "kind" || f === "layout") { SCENES[i][f] = e.target.value; touch(); renderScenes(); return; }
-      touch();
-    });
-  });
-  w.querySelectorAll("[data-more]").forEach(b => b.addEventListener("click", () => {
-    const i = Number(b.dataset.more);
-    SCENES[i]._open = !SCENES[i]._open;
-    b.closest(".scene-card").classList.toggle("open", !!SCENES[i]._open);
+  w.querySelectorAll("input.sc-dur").forEach(inp => inp.addEventListener("input", e => {
+    const i = Number(e.target.dataset.i);
+    if (!SCENES[i]) return;
+    let v = Number(e.target.value); if (!isFinite(v)) v = 6;
+    SCENES[i].duration = Math.max(2, Math.min(60, v));
+    touch();
   }));
   w.querySelectorAll("[data-mv]").forEach(b => b.addEventListener("click", () => {
     const i = Number(b.dataset.i), d = b.dataset.mv;
@@ -3925,7 +3950,7 @@ window.applyBg = async () => {
 function renderAudio() {
   const c = $("audioList");
   if (!AUDIO.tracks.length) {
-    c.innerHTML = '<div style="color:var(--muted);font-size:9px;text-align:center;padding:8px">لا مسارات.</div>';
+    c.innerHTML = '<div class="audio-empty">لا توجد مسارات صوتية بعد.</div>';
     $("infoAudio").textContent = "—";
     return;
   }
@@ -3985,38 +4010,6 @@ function unlockAudio() {
 }
 ["touchstart", "touchend", "pointerdown", "click", "keydown"].forEach(ev => document.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
 /* ────────── ميكروفون: يعمل على iOS وأندرويد والحاسوب مع رسائل خطأ واضحة ────────── */
-function micError(e) {
-  const n = e && e.name;
-  if (!isSecure()) return "الميكروفون يتطلب فتح الصفحة عبر https:// أو localhost (لا يعمل من file://).";
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) return "هذا المتصفح لا يدعم التسجيل الصوتي.";
-  if (n === "NotAllowedError" || n === "SecurityError") return "تم رفض إذن الميكروفون — اسمح به من إعدادات الموقع ثم أعد المحاولة.";
-  if (n === "NotFoundError" || n === "OverconstrainedError") return "لا يوجد ميكروفون متصل بالجهاز.";
-  if (n === "NotReadableError" || n === "AbortError") return "الميكروفون مشغول بتطبيق آخر — أغلقه وأعد المحاولة.";
-  return "تعذّر التسجيل: " + (n || e);
-}
-function _audioSession(t) { try { if (navigator.audioSession) navigator.audioSession.type = t; } catch(e){} }
-async function micStart(onTick) {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) throw Object.assign(new Error("unsupported"), { name: "NotSupported" });
-  MIC.active = true; _audioSession("play-and-record");
-  let stream;
-  try {
-    try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); }
-    catch (e) { if (e && (e.name === "OverconstrainedError" || e.name === "TypeError")) stream = await navigator.mediaDevices.getUserMedia({ audio: true }); else throw e; }
-  } catch (e) { MIC.active = false; _audioSession("playback"); throw e; }
-  const cand = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"];
-  const mime = cand.find(m => { try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; } }) || "";
-  let mr; try { mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream); } catch(e) { mr = new MediaRecorder(stream); }
-  const chunks = [], t0 = Date.now();
-  mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-  const tick = onTick ? setInterval(() => onTick((Date.now() - t0) / 1000), 500) : 0;
-  const stopped = new Promise(res => {
-    const fin = () => { clearInterval(tick); stream.getTracks().forEach(t => t.stop()); MIC.active = false; _audioSession("playback"); res(new Blob(chunks, { type: mr.mimeType || mime || "audio/mp4" })); };
-    mr.onstop = fin; mr.onerror = e => { Errors.push("error", "MediaRecorder", e.error || e); try { if (mr.state !== "inactive") mr.stop(); else fin(); } catch(_) { fin(); } };
-  });
-  mr.start(1000);
-  return { stop() { if (mr.state !== "inactive") mr.stop(); return stopped; } };
-}
-
 /* ────────── فك الصوت من ملف صوتي أو فيديو (مع بديل بالتشغيل الصامت للفيديوهات الضخمة أو النادرة) ────────── */
 const isVideoFile = f => /^video\//.test(f.type || "") || (!f.type && /\.(mp4|mov|m4v|mkv|avi|3gp)$/i.test(f.name || ""));
 async function decodeMedia(file, say, maxRate) {
@@ -4161,27 +4154,6 @@ _audIn.addEventListener("change", async () => {
   try { _audIn.value = ""; } catch(_) {}
 });
 $("addAudio").addEventListener("click", () => { try { _audIn.click(); } catch(e) { toast("تعذّر فتح المحدد", "error"); } });
-$("recAudio").addEventListener("click", async () => {
-  if (AUDIO.recorder) {
-    const r = AUDIO.recorder; AUDIO.recorder = null; $("recAudio").textContent = "🎙 تسجيل";
-    try {
-      const blob = await r.stop();
-      if (!blob.size) { toast("التسجيل فارغ — تأكد من الميكروفون", "warn", 5000); return; }
-      const du = await readFile(blob, false), id = "aud_" + Date.now();
-      const name = "تسجيل " + new Date().toLocaleTimeString("ar-EG", { hour12: false });
-      await DB.saveAudio(id, du, name);
-      AUDIO.tracks.push({ id, name, dataUrl: du, start: 0, volume: 1, fadeIn: 0.2, fadeOut: 0.3, muted: false, audioEl: null });
-      renderAudio(); scheduleSave(); toast("تم التسجيل", "success");
-    } catch(e) { Errors.push("error", "record stop", e); toast("تعذّر حفظ التسجيل", "error"); }
-    return;
-  }
-  try {
-    AUDIO.recorder = await micStart(s => { $("recAudio").textContent = "⏹ إيقاف " + fmtTC(s * 1000); });
-    $("recAudio").textContent = "⏹ إيقاف";
-    toast("يسجّل… اضغط مرة أخرى للإيقاف", "info", 3000);
-  } catch(e) { AUDIO.recorder = null; Errors.push("error", "mic", e); toast(micError(e), "error", 6500); }
-});
-
 /* ────────── Undo/Redo ────────── */
 const History = {
   stack: [], idx: -1, max: 60, debounce: null,
@@ -4307,6 +4279,8 @@ function updateInfo() {
   const es = exportSize();
   const ri = $("ratioInfo");
   if (ri) ri.textContent = es.width + "×" + es.height;
+  try { updateExportEstimate(); } catch(e){}
+  try { $("stage").classList.toggle("portrait", p); } catch(e){}
   resizePreview();
 }
 function setStatus(t, k) { $("stateInfo").textContent = t; }
@@ -4402,7 +4376,26 @@ function yieldToBrowser() {
   });
 }
 /* html2canvas يفصل الحروف عند وجود letter-spacing فينكسر اتصال الحروف العربية: نلغيه للنصوص العربية فقط */
+function markArabicSpacing(doc) {
+  const out = [];
+  try {
+    const win = doc.defaultView;
+    captureScope(doc).forEach(el => {
+      let ls = ""; try { ls = win.getComputedStyle(el).letterSpacing } catch(e){}
+      if (ls && ls !== "normal" && parseFloat(ls) !== 0) { el.setAttribute("data-lsfix", "1"); out.push(el); }
+    });
+  } catch(e){}
+  return out;
+}
+function fixArabicSpacingFast(cd) {
+  try {
+    cd.querySelectorAll("[data-lsfix]").forEach(p => {
+      for (const n of p.childNodes) if (n.nodeType === 3 && hasAr(n.nodeValue)) { p.style.setProperty("letter-spacing", "normal", "important"); break; }
+    });
+  } catch(e){}
+}
 function fixArabicSpacing(cd) {
+  if (APP.lsPrepared) return fixArabicSpacingFast(cd);
   try {
     const win = cd.defaultView;
     const root = cd.getElementById("project-root") || cd.body;
@@ -4507,7 +4500,7 @@ async function renderFrame(ms, opt) {
   const root = doc.getElementById("project-root") || doc.body;
   const b = baseSize();
   const sc = opt.scale || renderScale();
-  setTime(ms, APP.exportAnimations);
+  if (!opt.seeked) setTime(ms, APP.exportAnimations);
   const run = safe => html2canvas(root, {
     width: b.width, height: b.height,
     windowWidth: b.width, windowHeight: b.height,
@@ -4534,6 +4527,7 @@ async function renderFrame(ms, opt) {
     }
   });
   if (APP.safeImages) return await run(true);
+  if (opt.pipelined) return await run(false);
   try { return await run(false); }
   catch(e) {
     Errors.push("error", "فشل رسم الإطار مع الصور — إعادة المحاولة بدونها", e);
@@ -4541,6 +4535,36 @@ async function renderFrame(ms, opt) {
     toast("تعذّر رسم الصور — سيكتمل التصدير بدونها. جرّب صورًا أصغر أو أعد قصّها.", "warn", 8000);
     return await run(true);
   }
+}
+/* بصمة حالة الصفحة: إن تطابقت بصمتا إطارين فالصورة متطابقة تمامًا فلا حاجة لإعادة الرسم.
+   تُرجع null (= ارسم دائمًا) عند وجود canvas/video أو حركة CSS جارية لا تظهر في الـ DOM. */
+function domSignature(doc, root) {
+  try {
+    const parts = [];
+    const els = [root].concat(Array.from(root.querySelectorAll("*")));
+    for (const el of els) {
+      const tag = el.tagName;
+      if (tag === "CANVAS" || tag === "VIDEO" || tag === "IFRAME" || tag === "AUDIO") return null;
+      let t = tag;
+      const at = el.attributes;
+      for (let i = 0; i < at.length; i++) {
+        const a = at[i];
+        let v = a.value;
+        if (v.length > 300) v = v.replace(/data:[^)'"\s]{120,}/g, m => "data:" + m.length + m.slice(-24));
+        t += "|" + a.name + "=" + v;
+      }
+      for (let n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3) t += "#" + n.nodeValue;
+      parts.push(t);
+    }
+    if (doc.getAnimations) {
+      const an = doc.getAnimations();
+      for (let i = 0; i < an.length; i++) {
+        if (an[i].playState === "running") return null;
+        parts.push("anim" + i + ":" + an[i].currentTime + ":" + an[i].playState);
+      }
+    }
+    return parts.join("\n");
+  } catch(e) { return null; }
 }
 function frameHash(canvas) {
   try {
@@ -4568,10 +4592,14 @@ async function prepareCapture(doc, win, withOptimize) {
   const imgRestore = withOptimize ? await optimizeDocImages(doc) : [];
   const snap = snapshotInline(doc);
   const stats = preprocess(doc, win);
-  return { snap, imgRestore, stats, fontUndo };
+  const lsMarked = markArabicSpacing(doc);
+  APP.lsPrepared = true;
+  return { snap, imgRestore, stats, fontUndo, lsMarked };
 }
 function endCapture(ctx) {
   if (!ctx) return;
+  APP.lsPrepared = false;
+  try { (ctx.lsMarked || []).forEach(el => el.removeAttribute("data-lsfix")); } catch(e){}
   try { if (ctx.snap) restoreInline(ctx.snap); } catch(e){}
   try { restoreDocImages(ctx.imgRestore); } catch(e){}
   try { if (ctx.fontUndo) ctx.fontUndo(); } catch(e){}
@@ -4607,6 +4635,36 @@ function buildPdf(pages) {
   return new Blob(chunks, { type: "application/pdf" });
 }
 const canvasBlob = (cv, type, q) => new Promise(res => cv.toBlob(b => res(b), type, q));
+function fmtETA(sec) {
+  sec = Math.max(0, Math.round(sec));
+  if (sec < 60) return sec + "ث";
+  const m = Math.floor(sec / 60), r = sec % 60;
+  return m + "د" + (r ? " " + r + "ث" : "");
+}
+function updateExportEstimate() {
+  const el = $("exportEst");
+  if (!el) return;
+  if (!APP.durationMs) { el.textContent = "شغّل المشروع ليظهر تقدير زمن التصدير."; return; }
+  const fps = Math.max(1, Number($("fps").value) || 30);
+  let ts = Math.max(0, Number($("trimStart").value) || 0) * 1000, te = Number($("trimEnd").value) > 0 ? Math.min(APP.durationMs, Number($("trimEnd").value) * 1000) : APP.durationMs;
+  if (te <= ts + 100) { ts = 0; te = APP.durationMs; }
+  const dur = (te - ts) / 1000, frames = Math.ceil(dur * fps);
+  let per = APP.perFrameMs, dup = APP.dupRatio || 0, measured = !!per;
+  if (!per) { try { const p = JSON.parse(localStorage.getItem("__exp_perf") || "null"); if (p && p.ms) { per = p.ms / Math.max(0.2, p.s * p.s) * (renderScale() * renderScale()); dup = p.dup || 0; measured = true; } } catch(e){} }
+  if (!per) { per = (isMobile() ? 420 : 260) * Math.max(0.3, renderScale() * renderScale()); dup = 0.25; }
+  const est = frames * (1 - dup) * per / 1000;
+  el.textContent = frames + " إطار • الزمن المتوقع ~" + fmtETA(est) + (measured ? " (حسب آخر تصدير)" : " (تقدير أولي)") + (recSupported() ? " • التسجيل المباشر: " + fmtETA(dur) : "");
+}
+(function () {
+  const P = { fast: ["720", "24"], bal: ["native", "30"], hq: ["x1.5", "30"] };
+  document.querySelectorAll("#presets [data-p]").forEach(b => b.addEventListener("click", () => {
+    const v = P[b.dataset.p]; $("quality").value = v[0]; $("fps").value = v[1];
+    document.querySelectorAll("#presets [data-p]").forEach(x => x.classList.toggle("on", x === b));
+    updateInfo();
+  }));
+  ["quality", "fps", "trimStart", "trimEnd"].forEach(id => $(id).addEventListener("input", () => { document.querySelectorAll("#presets [data-p]").forEach(x => x.classList.remove("on")); updateInfo(); }));
+  $("quality").addEventListener("change", updateInfo); $("fps").addEventListener("change", updateInfo);
+})();
 function autoDownload(a) { if (!isMobile()) { try { a.click() } catch(e){} } }
 
 $("export").addEventListener("click", async () => {
@@ -4699,32 +4757,63 @@ $("export").addEventListener("click", async () => {
     await output.start();
     if (audio) audioTask = audio.src.add(audio.buffer).catch(e => { Errors.push("warn", "فشل إضافة عيّنات الصوت", e); });
 
-    const YIELD = isMobile() ? 2 : 8;
     const startWall = performance.now();
-
-    for (let i = 0; i < totalFrames; i++) {
-      if (APP.stop) throw new Error("تم الإيقاف");
+    /* خط إنتاج: يُلتقط DOM كل إطار فورًا (نسخة مستقلة) ثم تُكمل html2canvas الرسم لعدة إطارات بالتوازي */
+    const DEPTH = isMobile() ? 2 : 3;
+    const exRoot = doc.getElementById("project-root") || doc.body;
+    let lastSig = null, next = 0, done = 0, rendered = 0, sinceYield = 0;
+    const q = [];
+    const mkJob = i => {
       const ts = i * frameDur;
       const ms = Math.min(APP.durationMs - 0.001, trimStart + ts * 1000);
-      const rs = performance.now();
-      const rendered = await renderFrame(ms, { scale: sc });
-      APP.stats.renderMs += performance.now() - rs;
-      /* كل إطار يُرسم دائمًا: المقارنة المصغّرة القديمة كانت تعدّ الحركات الصغيرة (عدّادات/نصوص تُكتب) إطارات مكرّرة فتتجمّد */
-      if (rendered.width === es.width && rendered.height === es.height) ctx.drawImage(rendered, 0, 0);
-      else ctx.drawImage(rendered, 0, 0, es.width, es.height);
-      try { rendered.width = rendered.height = 0; } catch(e){}
+      setTime(ms, APP.exportAnimations);
+      const sig = domSignature(doc, exRoot);
+      if (sig !== null && sig === lastSig) { APP.stats.skipped++; return { i, ts, dup: true }; }
+      lastSig = sig;
+      const p = renderFrame(ms, { scale: sc, pipelined: true, seeked: true });
+      p.catch(() => {});
+      return { i, ts, dup: false, p };
+    };
+    while (done < totalFrames) {
+      if (APP.stop) throw new Error("تم الإيقاف");
+      while (q.length < DEPTH && next < totalFrames) q.push(mkJob(next++));
+      const job = q.shift();
+      if (!job.dup) {
+        const rs = performance.now();
+        let frame;
+        try { frame = await job.p; }
+        catch (err) {
+          if (APP.safeImages) throw err;
+          Errors.push("error", "فشل رسم الإطار مع الصور — إعادة المحاولة بدونها", err);
+          APP.safeImages = true;
+          toast("تعذّر رسم الصور — سيكتمل التصدير بدونها.", "warn", 8000);
+          await Promise.allSettled(q.map(j => j.p));
+          q.length = 0; next = done; lastSig = null;
+          continue;
+        }
+        APP.stats.renderMs += performance.now() - rs;
+        rendered++;
+        if (frame.width === es.width && frame.height === es.height) ctx.drawImage(frame, 0, 0);
+        else ctx.drawImage(frame, 0, 0, es.width, es.height);
+        try { frame.width = frame.height = 0; } catch(e){}
+      }
       const encStart = performance.now();
-      await source.add(ts, frameDur);
+      await source.add(job.ts, frameDur);
       APP.stats.encodeMs += performance.now() - encStart;
-      APP.stats.frames = i + 1;
+      done++;
+      APP.stats.frames = done;
       const elapsed = (performance.now() - startWall) / 1000;
-      const speed = (i + 1) / Math.max(0.1, elapsed);
-      const eta = (totalFrames - i - 1) / Math.max(0.1, speed);
-      updateProgress(7 + ((i + 1) / totalFrames) * 88,
-        "تصدير " + (i + 1) + " / " + totalFrames + " • " + speed.toFixed(1) + " إطار/ث • ~" + Math.round(eta) + "ث" + (APP.safeImages ? " • بدون صور" : ""));
-      if ((i + 1) % YIELD === 0) await yieldToBrowser();
-      /* استراحة قصيرة على الجوال كل 45 إطارًا: تمنع ارتفاع الحرارة وتباطؤ المعالج التدريجي */
-      if (isMobile() && (i + 1) % 45 === 0 && i + 1 < totalFrames) { await sleep(450); }
+      const eta = elapsed / done * (totalFrames - done);
+      updateProgress(7 + (done / totalFrames) * 88,
+        "تصدير " + done + " / " + totalFrames + " • متبقٍ ~" + fmtETA(eta) + (APP.stats.skipped ? " • " + APP.stats.skipped + " إطار ثابت" : "") + (APP.safeImages ? " • بدون صور" : ""));
+      if (++sinceYield >= (isMobile() ? 4 : 12)) { sinceYield = 0; await yieldToBrowser(); }
+      /* استراحة قصيرة على الجوال كل 60 إطارًا مرسومًا: تمنع ارتفاع الحرارة */
+      if (isMobile() && rendered && rendered % 60 === 0 && !job.dup && done < totalFrames) { await sleep(250); }
+    }
+    if (rendered) {
+      APP.perFrameMs = (performance.now() - startWall) / Math.max(1, rendered);
+      APP.dupRatio = APP.stats.skipped / Math.max(1, totalFrames);
+      try { localStorage.setItem("__exp_perf", JSON.stringify({ ms: APP.perFrameMs, dup: APP.dupRatio, s: sc })); } catch(e){}
     }
 
     updateProgress(96, "إنهاء…");
@@ -4738,7 +4827,7 @@ $("export").addEventListener("click", async () => {
     const blob = new Blob([buffer], { type: isMp4 ? "video/mp4" : "video/webm" });
     finalizeExport(blob, isMp4 ? "mp4" : "webm", label);
     const totalTime = (performance.now() - startWall) / 1000;
-    const summary = "✅ " + APP.stats.frames + " إطار • " + totalTime.toFixed(1) + "ث" + (audio ? " • مع صوت" : "") + (APP.safeImages ? " • بدون صور" : "");
+    const summary = "✅ " + APP.stats.frames + " إطار (" + APP.stats.skipped + " ثابت لم يُعَد رسمه) • " + fmtETA(totalTime) + (audio ? " • مع صوت" : "") + (APP.safeImages ? " • بدون صور" : "");
     updateProgress(100, summary);
     Errors.push("info", summary);
     toast(APP.safeImages ? "تم التصدير (بدون الصور)" : "تم التصدير — اضغط زر الحفظ", APP.safeImages ? "warn" : "success", 5000);
@@ -4772,7 +4861,7 @@ $("export").addEventListener("click", async () => {
 function recSupported() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia && window.MediaRecorder && (window.RestrictionTarget || window.CropTarget) && !isMobile());
 }
-(function () { if (recSupported()) { $("exportRec").style.display = "block"; $("recHint").style.display = "block"; } })();
+(function () { if (recSupported()) { $("exportRec").style.display = "block"; $("recHint").style.display = "block"; $("recCard").style.display = "flex"; } })();
 function recMime() {
   const c = ["video/mp4;codecs=avc1.640028,mp4a.40.2", "video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
   return c.find(m => { try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; } }) || "";
@@ -5071,7 +5160,13 @@ $("unifyBtn").addEventListener("click", () => {
   renderScenes(); scheduleSave(); History.mark();
   toast("تم توحيد المدة", "success", 1500);
 });
-$("hasAudio").addEventListener("change", () => { $("audioOpt").style.display = $("hasAudio").checked ? "block" : "none"; scheduleSave(); });
+function syncAudioUI() {
+  const on = $("hasAudio").checked;
+  $("audioOpt").style.display = on ? "block" : "none";
+  const td = $("textDensity"); if (td) { td.disabled = on; td.title = on ? "غير مستخدم: المحتوى من الصوت" : ""; }
+}
+$("hasAudio").addEventListener("change", () => { syncAudioUI(); scheduleSave(); });
+syncAudioUI();
 $("addScene").addEventListener("click", () => {
   if (SCENES.length >= 20) { toast("الحد الأقصى 20 شريحة", "warn"); return; }
   setSceneCount(SCENES.length + 1);
@@ -5084,12 +5179,6 @@ $("addScene").addEventListener("click", () => {
   el.addEventListener("change", scheduleSave);
   el.addEventListener("input", () => { History.mark(); updateSummary(); });
   el.addEventListener("change", () => { updateSummary(); if (id === "textDensity" || id === "motionLevel") renderScenes(); });
-});
-$("reseed").addEventListener("click", () => {
-  APP.seedSalt = (APP.seedSalt + 1) % 100000;
-  scheduleSave();
-  renderScenes();
-  toast("بصمة بصرية جديدة — أنشئ البرومبت مرة أخرى", "success", 2500);
 });
 $("code").addEventListener("input", () => { scheduleSave(); History.mark(); });
 ["quality", "fps"].forEach(id => $(id).addEventListener("change", () => { scheduleSave(); updateInfo(); }));
@@ -5231,9 +5320,12 @@ document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", 
   if (!r || !SCENES.length) setSceneCount(6);
   else renderScenes();
   if (isMobile()) {
+    /* الجوال: 720p و24 إطارًا — أسرع وأخف على الذاكرة في سفاري، ولا يظهر خيار 60 لأنه لا يُجدي هناك */
+    try { const o60 = $("fps").querySelector('option[value="60"]'); if (o60) o60.remove(); } catch(e){}
     $("quality").value = "720";
-    $("fps").value = "30";
-    Errors.push("info", "ضبط الجوال: 720p / 30fps");
+    $("fps").value = "24";
+    document.querySelectorAll("#presets [data-p]").forEach(x => x.classList.toggle("on", x.dataset.p === "fast"));
+    Errors.push("info", "ضبط الجوال: 720p / 24fps");
   }
   applySize(APP.orientation);
   resizePreview();
