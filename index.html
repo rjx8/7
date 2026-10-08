@@ -357,7 +357,7 @@ button.cat.sel{background:rgba(139,124,255,.16)}
   .side-tabs button{font-size:12px}
   .stage{min-height:200px;padding:6px}
   .img-meta{grid-template-columns:1fr}
-  .mobile-nav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:100;height:62px;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(11,17,32,.96);border-top:1px solid var(--line);backdrop-filter:blur(16px)}
+  .mobile-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:100;height:62px;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(11,17,32,.96);border-top:1px solid var(--line);backdrop-filter:blur(16px)}
   .mobile-nav button{border:0;background:transparent;color:var(--muted);border-radius:12px;font-weight:700}
   .mobile-nav button.active{color:var(--ink);background:var(--primary)}
 }
@@ -412,7 +412,9 @@ body.rec .fs-exit,body.rec .stage-play{display:none!important}
 /* ── صقل: منحنيات حركة قوية، ضغط الأزرار، أسطح المتصفح، أرقام ثابتة العرض ── */
 :root{--ease-out:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1)}
 ::selection{background:color-mix(in srgb,var(--primary) 38%,transparent);color:var(--text)}
-input,textarea,select{caret-color:var(--primary2)}
+input,textarea,select{caret-color:var(--primary2);color-scheme:dark}
+select option,select optgroup{background:#131c33;color:#e9eefc;font-family:inherit}
+select option:checked{background:#8b7cff;color:#120d3a}
 input[type=checkbox],input[type=radio],input[type=range]{accent-color:var(--primary)}
 *{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 h1,h2,h3{text-wrap:balance}
@@ -4521,7 +4523,7 @@ async function embedFonts(doc, win) {
       const href = l.href;
       if (!FONT_CACHE.css.has(href)) {
         const txt = await (await fetch(href)).text();
-        const keep = (txt.match(/@font-face\s*{[^}]*}/g) || []).filter(b => { const m = b.match(/unicode-range:\s*([^;]+)/i); return !m || /U\+0600|U\+0000/i.test(m[1]); });
+        const keep = (txt.match(/@font-face\s*{[^}]*}/g) || []).filter(b => { const m = b.match(/unicode-range:\s*([^;]+)/i); return !m || /U\+0600|U\+0000|U\+0750|U\+FB50|U\+FE70/i.test(m[1]); });
         const out = [];
         for (let b of keep) {
           const urls = Array.from(new Set((b.match(/url\((https:[^)]+)\)/g) || []).map(u => u.slice(4, -1))));
@@ -4529,7 +4531,7 @@ async function embedFonts(doc, win) {
             if (!FONT_CACHE.file.has(u)) FONT_CACHE.file.set(u, await blobToDataURL(await (await fetch(u)).blob()));
             b = b.split(u).join(FONT_CACHE.file.get(u));
           }
-          out.push(b);
+          out.push(b.replace(/font-display\s*:\s*swap/gi, "font-display:block"));
         }
         FONT_CACHE.css.set(href, out);
       }
@@ -4556,7 +4558,13 @@ async function embedFonts(doc, win) {
       st.textContent = picked.join("\n");
       doc.head.appendChild(st);
       links.forEach(l => { l.disabled = true; });
-      undo = () => { try { st.remove(); } catch(e){} links.forEach(l => { l.disabled = false; }); };
+      /* السبب الجذري: html2canvas يرسم النص على canvas يُنشأ في الصفحة الرئيسية (لا في إطار المشروع)،
+         فيبحث عن الخط في document.fonts الرئيسي. لذلك نسجّل نفس الخطوط هنا أيضًا طوال التصدير. */
+      const mst = document.createElement("style");
+      mst.id = "__fonts_embedded_main__";
+      mst.textContent = picked.join("\n");
+      document.head.appendChild(mst);
+      undo = () => { try { st.remove(); } catch(e){} try { mst.remove(); } catch(e){} links.forEach(l => { l.disabled = false; }); };
     }
     /* قائمة الخطوط المستعملة فعليًا: تُحمَّل داخل النسخة المستنسخة قبل الرسم */
     const specs = new Set();
@@ -4568,6 +4576,18 @@ async function embedFonts(doc, win) {
     });
     APP.fontSpecs = Array.from(specs);
     try { await Promise.all(APP.fontSpecs.map(f => doc.fonts.load(f, "أبجد abc 123").catch(() => {}))); await doc.fonts.ready; } catch(e){}
+    /* تحميل كل عائلة ووزن على حدة في الصفحة الرئيسية (الـ canvas يستعمل خطوطها) والتأكد من جاهزيتها */
+    try {
+      const mainSpecs = new Set();
+      used.forEach((weights, fam) => {
+        if (/^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-sans-serif|ui-serif|-apple-system|arial|inherit)$/.test(fam)) return;
+        (weights.size ? Array.from(weights) : [400]).forEach(w => mainSpecs.add("normal " + w + ' 40px "' + fam + '"'));
+      });
+      APP.mainFontSpecs = Array.from(mainSpecs);
+      const ld = () => Promise.all(APP.mainFontSpecs.map(f => document.fonts.load(f, "أبجد هوز abc 123").catch(() => {})));
+      await Promise.race([ld().then(() => document.fonts.ready), sleep(8000)]);
+      if (APP.mainFontSpecs.some(f => { try { return !document.fonts.check(f, "أبجد"); } catch(e) { return false; } })) await Promise.race([ld(), sleep(4000)]);
+    } catch(e){}
     return undo;
   } catch(e) {
     Errors.push("warn", "تعذّر تضمين الخطوط — سيُستخدم خط النظام", e);
@@ -4582,6 +4602,7 @@ async function renderFrame(ms, opt) {
   const b = baseSize();
   const sc = opt.scale || renderScale();
   if (!opt.seeked) setTime(ms, APP.exportAnimations);
+  try { if (APP.mainFontSpecs && APP.mainFontSpecs.length) await document.fonts.ready; } catch(e){}
   const run = safe => html2canvas(root, {
     width: b.width, height: b.height,
     windowWidth: b.width, windowHeight: b.height,
