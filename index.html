@@ -810,7 +810,11 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
           <h4>المؤثرات الصوتية <span class="sfx-count" id="sfxCount"></span></h4>
           <label class="mini-chk"><input type="checkbox" id="sfxOn" checked> تفعيل المؤثرات (معاينة وتصدير)</label>
           <div class="sfx-vol"><span>مستوى المؤثرات</span><input type="range" id="sfxVol" min="0" max="100" value="70"><span id="sfxVolVal">70%</span></div>
-          <div class="sfx-add"><select id="sfxType" aria-label="نوع المؤثر"></select><button class="btn" id="sfxAddBtn">إضافة عند المؤشر</button></div>
+          <div class="sfx-vol"><span>مصدر التوقيت</span><select id="sfxMode" style="flex:1;min-width:0"><option value="visual">تلقائي من الحركة (الأدق)</option><option value="both">الحركة + قائمة الكود</option><option value="code">قائمة الكود فقط</option></select></div>
+        <div class="sfx-vol"><span>إزاحة التزامن</span><input type="range" id="sfxShift" min="-300" max="300" step="10" value="0"><span id="sfxShiftVal">0ms</span></div>
+        <div class="sfx-add" style="margin-bottom:6px"><button class="ghost" id="sfxDetectBtn" style="flex:1;margin:0">رصد المؤثرات من الحركة</button></div>
+        <div class="hint" id="sfxStatus" style="margin:0 0 8px">لم يُرصد بعد.</div>
+        <div class="sfx-add"><select id="sfxType" aria-label="نوع المؤثر"></select><button class="btn" id="sfxAddBtn">إضافة عند المؤشر</button></div>
           <div class="audio-list" id="sfxList"></div>
         </div>
       </div>
@@ -1143,7 +1147,7 @@ const SESSION_KEY = "motion-platform-session-v5";
 const LEGACY = ["motion-platform-session-v4", "motion-platform-session-v3", "motion-platform-session-v2", "motion-platform-session-v1"];
 const IMG_MGR = { items: [], replaces: new Map(), selected: new Set(), pending: null, restored: false };
 const AUDIO = { tracks: [], recorder: null, chunks: [], restored: false };
-const SFX = { auto: [], manual: [], on: true, vol: 0.7, bus: null };
+const SFX = { auto: [], manual: [], code: [], vis: [], mode: "visual", shift: 0, busy: false, on: true, vol: 0.7, bus: null };
 const MIC = { active: false };
 const CROP = { item: null, src: "", name: "", mime: "image/png", origSrc: "", img: null, nw: 0, nh: 0, ratio: 1, frame: { left:0,top:0,width:0,height:0 }, left: 0, top: 0, baseScale: 1, zoom: 1, dragging: false, pointerId: null, startX: 0, startY: 0, startL: 0, startT: 0 };
 const BG = { item: null, src: "", name: "", origSrc: "", img: null, color: null, tol: 30, fea: 2, result: null, batch: null };
@@ -1866,9 +1870,9 @@ function createPrompt() {
     S.push(pSec("المؤثرات الصوتية (مطلوبة)", [
       "المنصة تصنع المؤثرات بنفسها وتدمجها في المعاينة وعند التصدير. دورك أن تحدد متى يُسمع كل مؤثر فقط، عبر قائمة توقيتات داخل الكود.",
       "1. عرّف داخل window.PROJECT خاصية sfx: مصفوفة عناصرها {t:الزمن بالمللي ثانية من بداية المشروع، type:اسم المؤثر، vol:من 0.1 إلى 1}. وvol اختيارية (الافتراضي 0.6).",
-      "2. الأنواع المتاحة فقط: whoosh (انتقال كبير بين شريحتين أو دخول عنصر ضخم) • swipe (انزلاق سريع لعنصر أو سطر) • pop (ظهور بطاقة أو أيقونة أو رقم) • click (اختيار أو تحديد) • tick (عدّاد أو عنصر في قائمة) • ding (نتيجة صحيحة أو إنجاز أو فكرة محورية) • boom (ضربة قوية لعنوان الغلاف أو لحظة درامية) • sparkle (تمييز أو تتويج) • riser (تصاعد قبل كشف مهم، يبلغ ذروته عند لحظة الكشف) • type (نص يظهر كأنه يُكتب). أي اسم آخر يُتجاهل.",
+      "2. الأنواع المتاحة فقط (اختر بحسب معنى الحدث لا بحسب العادة): انتقالات: whoosh • swoosh_up • slide • swipe • reverse • riser (تصاعد قبل كشف مهم) • impact • boom (لحظة درامية أو غلاف) — ظهور عناصر: pop • bubble • blip • snap • drop • tap — واجهة: click • tick • toggle — نصوص: type (جملة تُكتب) • keys (نص طويل) — أرقام وبيانات: count (عدّاد) • coin (قيمة أو نقود) — عناوين: thud • hit — تأكيد ونجاح: ding • chime • success • glint • sparkle — علوم وحركة: zap (كهرباء أو طاقة) • hum (حقل أو طنين) • wobble (اهتزاز أو موجة) • ping (إشارة أو سونار) • warn (خطأ أو تحذير). أي اسم آخر يُتجاهل.",
       "3. زامن t مع لحظة بدء الحركة المرئية نفسها بفارق ≤ 50ms (ويجوز تقديم whoosh وswipe بنحو 40ms). الزمن مطلق لا نسبي للشريحة: t = بداية الشريحة + تأخير العنصر، فاحسبه من القيم نفسها التي تستعملها في الحركة.",
-      "4. اقتصد: مؤثر لكل حدث ذي معنى لا لكل عنصر. من 2 إلى 5 مؤثرات في الشريحة، وبين كل مؤثرين 150ms على الأقل، ولا يتراكب مؤثران بارزان في اللحظة نفسها.",
+      "4. اقتصد وتنوّع: مؤثر لكل حدث ذي معنى لا لكل عنصر، من 2 إلى 5 في الشريحة، وبين كل مؤثرين 150ms على الأقل. ممنوع تكرار النوع نفسه في مؤثرين متتاليين، ولا يزيد نوع واحد عن 35% من القائمة، واستعمل 6 أنواع مختلفة على الأقل في المشروع. القائمة الواقعة في الكود تُستعمل عند اختيار «قائمة الكود»، وفي الوضع التلقائي ترصد المنصة لحظات ظهور العناصر بنفسها.",
       "5. اجعل الانتقال بين الشرائح مؤثرًا خفيفًا (whoosh أو swipe بـ vol بين 0.35 و0.5)، والغلاف boom أو sparkle، والخاتمة ding أو sparkle.",
       "6. المؤثرات تأكيد لا أساس: اجعل vol بين 0.25 و0.7 في الغالب، ولا يتجاوز 0.9 إلا boom. لا مؤثر في آخر 300ms من المشروع.",
       "7. القائمة ثابتة ومرتبة تصاعديًا بالزمن، وكل t ضمن [0، المدة الكلية]، وكل مؤثر مرتبط بحركة مرئية موجودة فعلًا.",
@@ -2872,7 +2876,7 @@ async function loadProject() {
     }
     if (!dur) throw new Error("لم يُعثر على مدة المشروع (meta project-duration-ms)");
     APP.durationMs = dur;
-    try { SFX.auto = readSfxCues(win, doc); renderSfx(); if (SFX.auto.length) Errors.push("info", "مؤثرات صوتية مقروءة من الكود: " + SFX.auto.length); } catch(e) { Errors.push("warn", "قراءة المؤثرات", e); }
+    try { SFX.code = readSfxCues(win, doc); SFX.vis = []; sfxRefreshAuto(); if (SFX.code.length) Errors.push("info", "مؤثرات صوتية مقروءة من الكود: " + SFX.code.length); if (($("hasSfx") && $("hasSfx").checked) || SFX.code.length) setTimeout(() => sfxDetect(true), 900); } catch(e) { Errors.push("warn", "قراءة المؤثرات", e); }
     APP.title = meta.title || $("title").value.trim();
     APP.subject = $("subject").value.trim();
     APP.grade = $("grade").value.trim();
@@ -3873,7 +3877,7 @@ async function ensureBuf(t) {
   try { return await t._p; } finally { t._p = null; }
 }
 /* ────────── المؤثرات الصوتية: تُصنع برمجيًا (بلا ملفات) وتعمل في المعاينة وفي الدمج عند التصدير ────────── */
-const SFX_TYPES = { whoosh: "سويش (انتقال)", swipe: "انزلاق سريع", pop: "ظهور", click: "نقرة", tick: "تكّة", ding: "جرس نجاح", boom: "ضربة قوية", sparkle: "لمعان", riser: "تصاعد", type: "كتابة" };
+const SFX_TYPES = { whoosh: "سويش (انتقال)", swoosh_up: "سويش صاعد", slide: "انزلاق ناعم", swipe: "انزلاق سريع", reverse: "سويش معكوس", riser: "تصاعد", impact: "اصطدام سينمائي", boom: "ضربة قوية", thud: "دقّة عنوان", hit: "ضربة قصيرة", pop: "ظهور", bubble: "فقاعة", blip: "بيب", snap: "طقطقة", drop: "قطرة", tap: "لمسة", click: "نقرة", tick: "تكّة", toggle: "تبديل", type: "كتابة", keys: "لوحة مفاتيح", count: "عدّاد", coin: "عملة", ding: "جرس نجاح", chime: "نغمة ثلاثية", success: "إنجاز", glint: "لمعة", sparkle: "لمعان", ping: "سونار", zap: "شرارة", hum: "طنين", wobble: "اهتزاز", warn: "تنبيه" };
 const _sfxNoise = new WeakMap();
 function sfxNoise(ctx) {
   let b = _sfxNoise.get(ctx);
@@ -3886,36 +3890,63 @@ function sfxNoise(ctx) {
   return b;
 }
 /* يعمل على أي سياق (مباشر أو OfflineAudioContext): when = زمن البدء بثوانٍ على ساعة ذلك السياق */
-function sfxPlay(ctx, dest, type, when, vol) {
+function sfxPlay(ctx, dest, type, when, vol, seed) {
   const peak = Math.max(0.02, Math.min(1, (vol == null || !isFinite(vol)) ? 0.6 : vol));
-  const g = ctx.createGain(); g.gain.value = peak; g.connect(dest);
+  const sd = Math.abs(Math.floor(seed || 0));
+  const PF = [1, 1.122, 1.26, 1.335, 1.498, 0.891, 0.794, 1.682];
+  const pf = PF[sd % PF.length], jit = 0.85 + ((sd * 7) % 31) / 100;
+  const g = ctx.createGain(); g.gain.value = peak;
+  if (ctx.createStereoPanner) { const pn = ctx.createStereoPanner(); pn.pan.value = ((sd % 7) - 3) / 8; g.connect(pn); pn.connect(dest); } else g.connect(dest);
   const osc = (wave, f0, f1, t0, dur, amp, atk) => {
     const o = ctx.createOscillator(), e = ctx.createGain();
-    o.type = wave; o.frequency.setValueAtTime(f0, t0);
-    if (f1 != null && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t0 + dur);
+    o.type = wave; o.frequency.setValueAtTime(f0 * pf, t0);
+    if (f1 != null && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(1, f1 * pf), t0 + dur);
     e.gain.setValueAtTime(0.0001, t0); e.gain.linearRampToValueAtTime(amp, t0 + (atk || 0.005)); e.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(e); e.connect(g); o.start(t0); o.stop(t0 + dur + 0.03);
   };
   const nz = (ft, f0, f1, q, t0, dur, amp, atk) => {
     const sN = ctx.createBufferSource(); sN.buffer = sfxNoise(ctx); sN.loop = true;
     const f = ctx.createBiquadFilter(); f.type = ft; f.Q.value = q;
-    f.frequency.setValueAtTime(f0, t0); f.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t0 + dur);
+    f.frequency.setValueAtTime(f0 * Math.sqrt(pf), t0); f.frequency.exponentialRampToValueAtTime(Math.max(20, f1 * Math.sqrt(pf)), t0 + dur);
     const e = ctx.createGain();
     e.gain.setValueAtTime(0.0001, t0); e.gain.linearRampToValueAtTime(amp, t0 + (atk || 0.01)); e.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     sN.connect(f); f.connect(e); e.connect(g); sN.start(t0); sN.stop(t0 + dur + 0.03);
   };
   const t = Math.max(0, when);
   switch (type) {
-    case "whoosh": nz("bandpass", 250, 3500, 1.1, t, 0.65, 1.7, 0.27); break;
-    case "swipe": nz("bandpass", 3000, 600, 1.4, t, 0.28, 1.6, 0.05); break;
+    case "whoosh": nz("bandpass", 250, 3500, 1.1, t, 0.65 * jit, 1.7, 0.27); break;
+    case "swoosh_up": nz("bandpass", 400, 5000, 1.6, t, 0.42 * jit, 1.5, 0.3); break;
+    case "slide": nz("bandpass", 1200, 500, 0.8, t, 0.45 * jit, 0.9, 0.12); break;
+    case "swipe": nz("bandpass", 3000, 600, 1.4, t, 0.28 * jit, 1.6, 0.05); break;
+    case "reverse": nz("highpass", 600, 6000, 0.9, t, 0.9 * jit, 1.6, 0.8); break;
+    case "riser": nz("bandpass", 250, 5000, 2, t, 1.4, 1.8, 1.3); osc("sine", 200, 1200, t, 1.4, 0.18, 1.3); break;
+    case "impact": osc("sine", 120, 34, t, 1.1, 1, 0.004); nz("lowpass", 1200, 60, 0.7, t, 0.9, 1.3, 0.003); nz("highpass", 3000, 1500, 0.7, t, 0.25, 0.5, 0.002); break;
+    case "boom": osc("sine", 140, 38, t, 0.9, 1, 0.004); nz("lowpass", 900, 80, 0.7, t, 0.6, 1.2, 0.003); break;
+    case "thud": osc("sine", 90, 45, t, 0.35, 1, 0.003); nz("lowpass", 600, 100, 0.7, t, 0.2, 0.8, 0.002); break;
+    case "hit": nz("bandpass", 900, 300, 0.9, t, 0.15, 1.4, 0.002); osc("triangle", 200, 80, t, 0.15, 0.6, 0.002); break;
     case "pop": osc("sine", 560, 170, t, 0.13, 0.95, 0.003); nz("highpass", 4000, 4001, 0.7, t, 0.025, 0.25, 0.001); break;
+    case "bubble": osc("sine", 300, 900, t, 0.12 * jit, 0.8, 0.01); osc("sine", 450, 1300, t + 0.03, 0.1, 0.3, 0.01); break;
+    case "blip": osc("square", 880, 880, t, 0.05, 0.25, 0.002); osc("square", 1320, 1320, t + 0.055, 0.06, 0.25, 0.002); break;
+    case "snap": nz("highpass", 1800, 5000, 0.8, t, 0.06, 1.1, 0.001); osc("triangle", 900, 300, t, 0.06, 0.35, 0.001); break;
+    case "drop": osc("sine", 1400, 500, t, 0.09, 0.8, 0.003); osc("sine", 1000, 1000, t + 0.1, 0.3, 0.3, 0.004); break;
+    case "tap": osc("sine", 220, 110, t, 0.08, 0.9, 0.003); nz("lowpass", 800, 300, 0.7, t, 0.04, 0.4, 0.001); break;
     case "click": nz("highpass", 2200, 4200, 0.7, t, 0.04, 0.8, 0.001); osc("square", 1500, 900, t, 0.03, 0.18, 0.001); break;
     case "tick": osc("square", 2100, 2100, t, 0.03, 0.32, 0.001); break;
+    case "toggle": osc("square", 1800, 1800, t, 0.025, 0.25, 0.001); osc("square", 1200, 1200, t + 0.07, 0.03, 0.25, 0.001); break;
+    case "type": for (let i = 0; i < 5; i++) nz("highpass", 2200 + ((i * 37 + sd) % 7) * 300, 4200, 0.7, t + i * 0.065 * jit, 0.03, 0.6, 0.001); break;
+    case "keys": [0, 0.09, 0.15, 0.27, 0.33, 0.45, 0.5].forEach((d, i) => nz("highpass", 1800 + ((i * 53 + sd) % 9) * 260, 3800, 0.7, t + d, 0.035, 0.65, 0.001)); break;
+    case "count": for (let i = 0; i < 4; i++) osc("square", 1400 + i * 250, 1400 + i * 250, t + i * 0.055, 0.03, 0.26, 0.001); break;
+    case "coin": osc("square", 988, 988, t, 0.06, 0.25, 0.002); osc("square", 1319, 1319, t + 0.07, 0.4, 0.25, 0.002); break;
     case "ding": osc("sine", 1318, 1318, t, 1.4, 0.7, 0.004); osc("sine", 1976, 1976, t, 0.9, 0.25, 0.004); osc("sine", 2637, 2637, t, 0.5, 0.12, 0.004); break;
-    case "boom": osc("sine", 140, 38, t, 0.9, 1, 0.004); nz("lowpass", 900, 80, 0.7, t, 0.6, 1.2, 0.003); break;
+    case "chime": [1047, 1319, 1568].forEach((f, i) => osc("sine", f, f, t + i * 0.09, 0.9, 0.5, 0.004)); break;
+    case "success": osc("sine", 784, 784, t, 0.18, 0.6, 0.004); osc("sine", 1175, 1175, t + 0.12, 1.0, 0.6, 0.004); osc("sine", 1568, 1568, t + 0.12, 0.7, 0.2, 0.004); break;
+    case "glint": osc("sine", 3136, 3136, t, 0.35, 0.35, 0.002); osc("sine", 4699, 4699, t + 0.02, 0.2, 0.2, 0.002); break;
     case "sparkle": [2093, 2637, 3136, 3951, 4699].forEach((f, i) => osc("sine", f, f, t + i * 0.055, 0.38, 0.3, 0.003)); break;
-    case "riser": nz("bandpass", 250, 5000, 2, t, 1.4, 1.8, 1.3); osc("sine", 200, 1200, t, 1.4, 0.18, 1.3); break;
-    case "type": for (let i = 0; i < 4; i++) nz("highpass", 2400, 4000, 0.7, t + i * 0.07, 0.035, 0.7, 0.001); break;
+    case "ping": osc("sine", 1200, 1200, t, 1.2, 0.5, 0.003); osc("sine", 1800, 1800, t, 0.5, 0.15, 0.003); break;
+    case "zap": osc("sawtooth", 2400, 120, t, 0.22, 0.35, 0.002); break;
+    case "hum": osc("sine", 110, 110, t, 0.9, 0.5, 0.15); osc("sine", 113, 113, t, 0.9, 0.4, 0.15); break;
+    case "wobble": osc("sine", 500, 300, t, 0.25, 0.6, 0.01); osc("sine", 300, 520, t + 0.2, 0.25, 0.6, 0.01); break;
+    case "warn": osc("square", 440, 440, t, 0.12, 0.3, 0.003); osc("square", 440, 440, t + 0.16, 0.12, 0.3, 0.003); break;
     default: osc("sine", 560, 170, t, 0.13, 0.95, 0.003);
   }
 }
@@ -3935,18 +3966,100 @@ function readSfxCues(win, doc) {
   try { doc.querySelectorAll("[data-sfx]").forEach(el => add({ t: Number(el.getAttribute("data-sfx-at")), type: el.getAttribute("data-sfx"), vol: el.getAttribute("data-sfx-vol") })); } catch(e){}
   return out.sort((a, b) => a.t - b.t);
 }
-function sfxAll() { return SFX.on ? SFX.auto.concat(SFX.manual).sort((a, b) => a.t - b.t) : []; }
+function sfxAll() {
+  if (!SFX.on) return [];
+  return SFX.auto.concat(SFX.manual).map(q => SFX.shift ? { t: Math.max(0, q.t + SFX.shift), type: q.type, vol: q.vol } : q).sort((a, b) => a.t - b.t);
+}
+function sfxRefreshAuto() {
+  const code = SFX.code || [], vis = SFX.vis || [];
+  if (SFX.mode === "code") SFX.auto = code;
+  else if (SFX.mode === "both") SFX.auto = vis.concat(code.filter(c => !vis.some(v => Math.abs(v.t - c.t) < 120)));
+  else SFX.auto = vis.length ? vis : code;
+  renderSfx();
+}
+/* يمسح الزمن عبر setTime ويرصد اللحظة التي يبدأ فيها كل عنصر بالظهور، فيُولَّد المؤثر عند اللحظة البصرية نفسها لا عند تقدير */
+async function sfxDetect(silent) {
+  if (!APP.loaded || SFX.busy) return;
+  if (APP.playing) { if (!silent) toast("أوقف التشغيل ثم أعد الرصد", "warn", 3000); return; }
+  SFX.busy = true;
+  const stEl = $("sfxStatus"), setSt = t => { if (stEl) stEl.textContent = t; };
+  const f = $("projectFrame"), doc = f.contentDocument, win = f.contentWindow, at = APP.currentTime || 0, STEP = 50;
+  const cs = el => win.getComputedStyle(el);
+  const seek = ms => { try { Bridge.setTime(ms); void doc.body.offsetHeight; } catch (e) {} };
+  const root = doc.getElementById("project-root") || doc.body;
+  const secs = Array.from(doc.querySelectorAll("section[data-scene]"));
+  const scopes = secs.length ? secs.map((el, i) => ({ el, st: (APP.scenesMeta[i] || {}).start || 0, en: (APP.scenesMeta[i] || {}).end || APP.durationMs })) : [{ el: root, st: 0, en: APP.durationMs }];
+  const SKIP = /^(script|style|title|desc|defs|clippath|mask|lineargradient|radialgradient|stop|pattern|filter|noscript|br)$/i;
+  const rr = root.getBoundingClientRect(), RA = Math.max(1, rr.width * rr.height);
+  const rot = n => (Math.imul(Math.round(n), 2654435761) >>> 0) % 997;
+  const events = [];
+  try {
+    let done = 0; const total = Math.max(1, scopes.reduce((a, s) => a + Math.ceil((s.en - s.st) / STEP), 0));
+    for (let si = 0; si < scopes.length; si++) {
+      const sc = scopes[si], fired = new Set(), prev = new Map(); let first = true;
+      const cand = Array.from(sc.el.querySelectorAll("*")).filter(el => !SKIP.test(el.localName) && !(el.localName !== "svg" && el.closest("svg"))).slice(0, 450);
+      for (let ms = sc.st; ms < sc.en; ms += STEP, done++) {
+        seek(ms);
+        const oc = new Map();
+        const effOp = el => { if (oc.has(el)) return oc.get(el); const p = el.parentElement; const v = (parseFloat(cs(el).opacity) || 0) * (p && p !== doc.documentElement ? effOp(p) : 1); oc.set(el, v); return v; };
+        for (const el of cand) {
+          let vis = false, r = null;
+          if (effOp(el) >= 0.06) { r = el.getBoundingClientRect(); if (r.width >= 8 && r.height >= 8 && r.right > rr.left && r.left < rr.right && r.bottom > rr.top && r.top < rr.bottom && cs(el).visibility !== "hidden") vis = true; }
+          if (vis && !prev.get(el) && !first && !fired.has(el)) { fired.add(el); events.push({ si, t: ms - STEP / 2, el, area: r.width * r.height }); }
+          prev.set(el, vis);
+        }
+        first = false;
+        if (done % 20 === 0) { setSt("جارٍ رصد الحركة… " + Math.round(done / total * 100) + "%"); await new Promise(r => setTimeout(r, 0)); }
+      }
+    }
+    const kindOf = e => {
+      const el = e.el, tag = el.localName, tx = Array.from(el.childNodes).filter(n => n.nodeType === 3).map(n => n.nodeValue).join("").trim();
+      const fs = parseFloat(cs(el).fontSize) || 0, ar = e.area / RA;
+      if (tx) { if (/^[\d٠-٩.,%+\-×÷=\s]+$/.test(tx)) return { k: "num", s: 2.4 }; if (fs >= 90) return { k: "title", s: 3 }; return tx.length > 30 ? { k: "ltext", s: 2 } : { k: "stext", s: 2.2 }; }
+      if (tag === "img" || tag === "svg" || tag === "canvas" || tag === "video") return { k: "media", s: 2.6 };
+      if (ar > 0.2) return { k: "big", s: 2 };
+      if (ar < 0.015) return { k: "shape", s: 0.8 };
+      return { k: "shape", s: 1.2 };
+    };
+    const raw = [];
+    scopes.forEach((sc, si) => {
+      raw.push(si === 0 ? { t: sc.st + 60, k: "cover" } : { t: sc.st, k: "trans" });
+      const ev = events.filter(e => e.si === si).sort((a, b) => a.t - b.t);
+      const groups = []; ev.forEach(e => { const g = groups[groups.length - 1]; if (g && e.t - g.t0 <= 140) g.items.push(e); else groups.push({ t0: e.t, items: [e] }); });
+      let items = groups.map(g => { const best = g.items.map(e => Object.assign({ e }, kindOf(e))).sort((a, b) => b.s - a.s)[0]; return { t: g.t0, k: best.k, s: best.s }; }).filter(x => x.s >= 0.8);
+      const cap = Math.max(2, Math.min(7, Math.round((sc.en - sc.st) / 2600)));
+      if (items.length > cap) items = items.sort((a, b) => b.s - a.s).slice(0, cap).sort((a, b) => a.t - b.t);
+      let last = sc.st; items.forEach(x => { if (x.t - last >= 220) { last = x.t; raw.push(x); } });
+    });
+    const POOL = { cover: ["impact", "boom", "riser"], trans: ["whoosh", "swoosh_up", "slide", "reverse", "swipe"], big: ["whoosh", "swoosh_up", "slide", "reverse"], title: ["thud", "impact", "snap", "hit"], num: ["count", "coin", "tick", "blip"], ltext: ["type", "keys", "swipe", "slide"], stext: ["tick", "pop", "snap", "tap", "blip"], media: ["bubble", "glint", "pop", "drop", "ping"], shape: ["pop", "blip", "bubble", "tap", "drop", "toggle"] };
+    const VOL = { cover: 0.7, trans: 0.42, big: 0.42, title: 0.58, num: 0.4, ltext: 0.3, stext: 0.36, media: 0.4, shape: 0.34 };
+    const recent = [], out = [];
+    raw.forEach(c => {
+      const pool = POOL[c.k], r0 = rot(c.t);
+      let type = pool[r0 % pool.length];
+      for (let i = 0; i < pool.length && recent.slice(-2).includes(type); i++) type = pool[(r0 + i + 1) % pool.length];
+      recent.push(type);
+      const n = sfxNorm({ t: c.t, type, vol: VOL[c.k] * (0.85 + (r0 % 30) / 100) });
+      if (n && n.t <= APP.durationMs - 300) out.push(n);
+    });
+    SFX.vis = out; sfxRefreshAuto();
+    setSt("رُصد " + out.length + " مؤثرًا متزامنًا مع ظهور العناصر (" + new Set(out.map(o => o.type)).size + " أنواع)");
+    if (!silent) toast("تم رصد المؤثرات من الحركة: " + out.length, "success", 3000);
+    sfxResync();
+  } catch (e) { Errors.push("warn", "رصد المؤثرات", e); setSt("تعذّر الرصد التلقائي"); }
+  finally { seek(at); SFX.busy = false; }
+}
 function sfxSchedule() {
   const cues = sfxAll(); if (!cues.length) return;
   const c = _actx(), sp = APP.speed || 1, cur = APP.currentTime || 0;
   const bus = c.createGain(); bus.gain.value = SFX.vol; bus.connect(c.destination); SFX.bus = bus;
-  cues.forEach(q => { if (q.t < cur - 20) return; sfxPlay(c, bus, q.type, c.currentTime + 0.03 + Math.max(0, q.t - cur) / 1000 / sp, q.vol); });
+  cues.forEach(q => { if (q.t < cur - 20) return; sfxPlay(c, bus, q.type, c.currentTime + 0.03 + Math.max(0, q.t - cur) / 1000 / sp, q.vol, q.t); });
 }
 function sfxPreview(type, vol) {
   try {
     unlockAudio(); const c = _actx(); if (c.state !== "running") c.resume();
     const bus = c.createGain(); bus.gain.value = SFX.vol; bus.connect(c.destination);
-    sfxPlay(c, bus, type, c.currentTime + 0.02, vol);
+    sfxPlay(c, bus, type, c.currentTime + 0.02, vol, Math.floor(c.currentTime * 1000));
     setTimeout(() => { try { bus.disconnect(); } catch(e){} }, 2600);
   } catch(e) { Errors.push("warn", "معاينة مؤثر", e); }
 }
@@ -4028,7 +4141,7 @@ async function mixAudio() {
       const bus = ctx.createGain();
       bus.gain.value = SFX.vol;
       bus.connect(ctx.destination);
-      cues.forEach(q => { try { sfxPlay(ctx, bus, q.type, q.t / 1000, q.vol); } catch(e) { Errors.push("warn", "sfx cue", e); } });
+      cues.forEach(q => { try { sfxPlay(ctx, bus, q.type, q.t / 1000, q.vol, q.t); } catch(e) { Errors.push("warn", "sfx cue", e); } });
       Errors.push("info", "مؤثرات مدمجة في التصدير: " + cues.length);
     }
     return await ctx.startRendering();
@@ -4063,6 +4176,11 @@ $("addAudio").addEventListener("click", () => { try { _audIn.click(); } catch(e)
   const sel = $("sfxType");
   sel.innerHTML = Object.keys(SFX_TYPES).map(k => '<option value="' + k + '">' + SFX_TYPES[k] + '</option>').join("");
   $("sfxOn").checked = SFX.on;
+  $("sfxMode").value = SFX.mode;
+  $("sfxMode").addEventListener("change", () => { SFX.mode = $("sfxMode").value; sfxRefreshAuto(); scheduleSave(); sfxResync(); if (SFX.mode !== "code" && !SFX.vis.length) sfxDetect(false); });
+  $("sfxShift").addEventListener("input", () => { SFX.shift = Number($("sfxShift").value); $("sfxShiftVal").textContent = SFX.shift + "ms"; });
+  $("sfxShift").addEventListener("change", () => { scheduleSave(); sfxResync(); });
+  $("sfxDetectBtn").addEventListener("click", () => sfxDetect(false));
   $("sfxVol").value = Math.round(SFX.vol * 100); $("sfxVolVal").textContent = Math.round(SFX.vol * 100) + "%";
   $("sfxOn").addEventListener("change", () => { SFX.on = $("sfxOn").checked; scheduleSave(); sfxResync(); });
   $("sfxVol").addEventListener("input", () => {
@@ -4152,7 +4270,7 @@ function saveSession() {
       fps: $("fps").value,
       hasAudio: !!$("hasAudio").checked,
       hasSfx: !!($("hasSfx") && $("hasSfx").checked),
-      sfx: { on: SFX.on, vol: SFX.vol, manual: SFX.manual },
+      sfx: { on: SFX.on, vol: SFX.vol, manual: SFX.manual, mode: SFX.mode, shift: SFX.shift },
       audio: AUDIO.tracks.map(t => ({ id: t.id, name: t.name, start: t.start, volume: t.volume, fadeIn: t.fadeIn, fadeOut: t.fadeOut, muted: t.muted }))
     };
     localStorage.setItem(SESSION_KEY, JSON.stringify(data));
@@ -4200,6 +4318,10 @@ function restoreSession() {
       SFX.on = d.sfx.on !== false;
       SFX.vol = typeof d.sfx.vol === "number" ? Math.max(0, Math.min(1, d.sfx.vol)) : 0.7;
       SFX.manual = Array.isArray(d.sfx.manual) ? d.sfx.manual.map(sfxNorm).filter(Boolean) : [];
+      SFX.mode = ["visual", "both", "code"].includes(d.sfx.mode) ? d.sfx.mode : "visual";
+      SFX.shift = Number(d.sfx.shift) || 0;
+      if ($("sfxMode")) $("sfxMode").value = SFX.mode;
+      if ($("sfxShift")) { $("sfxShift").value = SFX.shift; $("sfxShiftVal").textContent = SFX.shift + "ms"; }
       if ($("sfxOn")) $("sfxOn").checked = SFX.on;
       if ($("sfxVol")) { $("sfxVol").value = Math.round(SFX.vol * 100); $("sfxVolVal").textContent = Math.round(SFX.vol * 100) + "%"; }
     }
