@@ -847,7 +847,7 @@ select{appearance:none;-webkit-appearance:none;background-image:url("data:image/
         <div class="exp-modes">
           <div class="exp-card">
             <div class="exp-head"><svg class="ic"><use href="#i-film"/></svg>تصدير إطارًا بإطار</div>
-            <span class="hint">يعمل على كل الأجهزة. الإطارات المتطابقة (اللحظات الثابتة) تُنسخ تلقائيًا بدل إعادة رسمها، وتُرسم عدة إطارات بالتوازي.</span>
+            <span class="hint">يعمل على كل الأجهزة. يُرسم كل إطار بالكامل دون تخطّي أي إطار، وتُرسم عدة إطارات بالتوازي.</span>
             <button class="btn primary" id="export">تصدير الفيديو</button>
             <button class="btn red" id="stopExport" style="display:none">إيقاف</button>
             <button class="btn" id="testFrames">اختبار 3 إطارات</button>
@@ -1683,6 +1683,24 @@ const NS="http://www.w3.org/2000/svg";
 function buildMotionLib() {
   return '<script id="__motion_lib__">(' + __motionBoot.toString() + ')();<\/script>';
 }
+
+/* مكتبات إضافية تُحقن داخل المشروع عند ظهور اسمها في الكود فقط (لا تثقل المشاريع التي لا تستعملها) */
+function buildLibsInject(html) {
+  const J = "https://cdn.jsdelivr.net/npm/", out = [];
+  const tag = u => '<script src="' + u + '" crossorigin="anonymous"><\/script>';
+  if (/\bTHREE\b/.test(html)) out.push(tag(J + "three@0.149.0/build/three.min.js"));
+  if (/\bMatter\b/.test(html)) out.push(tag(J + "matter-js@0.19.0/build/matter.min.js"));
+  if (/\becharts\b/.test(html)) out.push(tag(J + "echarts@5.5.0/dist/echarts.min.js"));
+  if (/\bd3\.geo|\bgeo(Path|Mercator|NaturalEarth1|Orthographic|EqualEarth)\b|\bWORLD_110\b|\btopojson\b/.test(html)) {
+    out.push(tag(J + "d3-array@3.2.4/dist/d3-array.min.js"));
+    out.push(tag(J + "d3-geo@3.1.0/dist/d3-geo.min.js"));
+    out.push(tag(J + "topojson-client@3.1.0/dist/topojson-client.min.js"));
+    /* حدود الدول (world-atlas) تُحمَّل بطلب متزامن ليكون window.WORLD_110 جاهزًا قبل كود المشروع */
+    out.push('<script>(function(){try{var x=new XMLHttpRequest();x.open("GET","' + J + 'world-atlas@2.0.2/countries-110m.json",false);x.send();if(x.status===200)window.WORLD_110=JSON.parse(x.responseText)}catch(e){}})();<\/script>');
+  }
+  if (/data-icon\s*=|\bIconify\b|\biconify\b/.test(html)) out.push(tag("https://code.iconify.design/3/3.1.1/iconify.min.js"));
+  return out.length ? "\n" + out.join("\n") : "";
+}
 function buildKatexInject() {
   return '\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">\n<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"><\/script>';
 }
@@ -1718,7 +1736,7 @@ function injectCSS(html, base) {
 html,body{overflow:hidden !important;margin:0 !important;padding:0 !important}
 </style>`;
   const errHook = '<script>window.addEventListener("error",function(e){try{parent.__projErr&&parent.__projErr(e.message||"",e.lineno||0)}catch(_){}});window.addEventListener("unhandledrejection",function(e){try{parent.__projErr&&parent.__projErr(String(e.reason&&e.reason.message||e.reason||"promise"),0)}catch(_){}});<\/script>';
-  const first = errHook + buildMotionLib();
+  const first = errHook + buildMotionLib() + buildLibsInject(html);
   const last = style + buildFontsInject() + buildKatexInject();
   let out = html;
   if (/<head[^>]*>/i.test(out)) {
@@ -1798,6 +1816,19 @@ function buildTypographyBlock() {
   ].join("\n"));
 }
 
+
+function buildLibsBlock() {
+  return pSec("مكتبات إضافية متاحة (اختيارية)", [
+    "تُضيفها المنصة تلقائيًا حين يظهر اسمها في الكود. لا تضف وسوم <script> ولا import ولا روابط CDN بنفسك. استعملها فقط حين ترفع جودة الشرح فعلًا، وبقواعد الزمن نفسها: كل استدعاء لـ setTime يعيد رسم الحالة من الصفر، بلا Math.random ولا Date.now ولا requestAnimationFrame.",
+    "• الأيقونات (MingCute عبر Iconify): <span class=\"iconify\" data-icon=\"mingcute:rocket-line\" style=\"font-size:64px;color:#hex\"></span>. تُستبدل بـ SVG داخل الصفحة. حدّد color وfont-size صراحة على العنصر نفسه. الأسماء بصيغة mingcute:اسم-line أو mingcute:اسم-fill (مثل mingcute:flash-line وmingcute:chart-bar-line وmingcute:location-line). استعمل اسمًا واحدًا مؤكدًا من هذه الصيغة، ولا تخترع أسماء غريبة.",
+    "• three.js (THREE): للمجسمات ثلاثية الأبعاد. أنشئ المشهد والكاميرا مرة واحدة، و new THREE.WebGLRenderer({antialias:true, alpha:true, preserveDrawingBuffer:true}) (preserveDrawingBuffer إلزامي وإلا يظهر الإطار فارغًا في التصدير). اضبط setPixelRatio(1) وsetSize بحجم حاوية ثابت بالبكسل. داخل setTime ضع موضع الأجسام والكاميرا كدالة في الزمن ثم renderer.render(scene,camera) مباشرة في الاستدعاء نفسه. لا تستعمل clock ولا requestAnimationFrame. النصوص العربية تُكتب كعناصر HTML فوق اللوحة لا داخل WebGL.",
+    "• Matter.js (Matter): فيزياء حقيقية (تصادمات وجاذبية). اجعل المحاكاة حتمية: Engine.create ثم حرّكها بخطوة ثابتة Engine.update(engine, 1000/60) مرارًا حتى الزمن المطلوب؛ وعند الرجوع للخلف أو القفز أعد بناء المحرك من الصفر ثم تقدّم (خزّن آخر زمن لتتقدم من حيث وصلت عند الزمن المتزايد). لا تستعمل Matter.Runner ولا Render. ارسم الأجسام بنفسك من body.position وangle داخل عناصر HTML أو SVG أو canvas ثنائي.",
+    "• ECharts (echarts): رسوم بيانية غنية. استعمل echarts.init(el,null,{renderer:'canvas', width:W, height:H, devicePixelRatio:1}) مرة واحدة، مع animation:false في الخيارات، وفي كل setTime استدعِ setOption بالبيانات المحسوبة من الزمن (نسبة التقدم تحدد كم عمودًا أو نقطة تظهر) مع notMerge:true. خط النص fontFamily:'var(--font-body)' غير مدعوم داخل canvas، فاكتب اسم الخط صراحة (مثل 'IBM Plex Sans Arabic'). حجم الخط ≥ 28 داخل الرسم.",
+    "• الخرائط: d3.geoPath وd3.geoMercator وd3.geoNaturalEarth1 وd3.geoOrthographic وtopojson.feature متاحة، والمتغير window.WORLD_110 جاهز (TopoJSON حدود دول العالم). مثال: var land=topojson.feature(WORLD_110,WORLD_110.objects.countries); var proj=d3.geoNaturalEarth1().fitSize([w,h],land); var path=d3.geoPath(proj); ثم ارسم path(feature) داخل SVG واملأ الدولة المقصودة بلون المشروع. لتحديد موضع مدينة أو نقطة: proj([lon,lat]). أسماء الأماكن تُكتب كنص HTML أو SVG حيّ بخط المشروع (الخريطة نفسها بلا أسماء).",
+    "• لا تستعمل HarfBuzz: المتصفح يشكّل الحروف العربية بنفسه في HTML وSVG وcanvas.",
+    "• أي مكتبة منها تزيد حمل التصدير: استعمل واحدة أو اثنتين فقط حين يخدمان الفكرة، ولا تضعها للتزيين."
+  ].join("\n"));
+}
 function createPrompt() {
   const d = getForm();
   const portrait = APP.orientation === "portrait";
@@ -1934,6 +1965,9 @@ function createPrompt() {
     "هيكل الكود (اتبعه):",
     skeleton
   ].join("\n")));
+
+  /* 8b) المكتبات الإضافية */
+  S.push(buildLibsBlock());
 
   /* 9) المخرجات */
   S.push(buildReminder("تذكير أخير قبل الإخراج"));
@@ -2798,7 +2832,11 @@ function setFrame(html) {
 }
 async function waitProject(win) {
   for (let i = 0; i < 30; i++) {
-    if (win.PROJECT && typeof win.PROJECT.setTime === "function") return true;
+    if (win.PROJECT && typeof win.PROJECT.setTime === "function") {
+      /* أيقونات Iconify تُستبدل بـ SVG بعد جلبها: ننتظرها (حتى 4 ثوانٍ) كي لا تُلتقط فارغة */
+      try { for (let k = 0; k < 40 && win.document.querySelector("span[data-icon],span.iconify,span.iconify-inline"); k++) await sleep(100); } catch(e){}
+      return true;
+    }
     await sleep(100);
   }
   return false;
@@ -4639,6 +4677,7 @@ async function renderFrame(ms, opt) {
     ignoreElements: safe ? (el => el.tagName === "IMG" || el.tagName === "VIDEO" || el.tagName === "CANVAS") : undefined,
     onclone: async cd => {
       try { sanitizeForCapture(cd); enforceRoot(cd); } catch(e){}
+      try { cd.querySelectorAll("svg.iconify").forEach(sv => { const c = cd.defaultView.getComputedStyle(sv).color; if (c) sv.innerHTML = sv.innerHTML.replace(/currentColor/g, c); }); } catch(e){}
       fixArabicSpacing(cd);
       /* الشرائح البعيدة عن الزمن الحالي تُحذف من النسخة: الرسم أسرع بكثير ويقل الحمل والحرارة */
       try { cd.querySelectorAll('section[data-scene]').forEach(sc => { const st = Number(sc.dataset.sceneStart), en = Number(sc.dataset.sceneEnd); if (isFinite(st) && isFinite(en) && (ms < st - 1500 || ms > en + 1500)) sc.remove(); }); } catch(e){}
@@ -4658,36 +4697,6 @@ async function renderFrame(ms, opt) {
     toast("تعذّر رسم الصور — سيكتمل التصدير بدونها. جرّب صورًا أصغر أو أعد قصّها.", "warn", 8000);
     return await run(true);
   }
-}
-/* بصمة حالة الصفحة: إن تطابقت بصمتا إطارين فالصورة متطابقة تمامًا فلا حاجة لإعادة الرسم.
-   تُرجع null (= ارسم دائمًا) عند وجود canvas/video أو حركة CSS جارية لا تظهر في الـ DOM. */
-function domSignature(doc, root) {
-  try {
-    const parts = [];
-    const els = [root].concat(Array.from(root.querySelectorAll("*")));
-    for (const el of els) {
-      const tag = el.tagName;
-      if (tag === "CANVAS" || tag === "VIDEO" || tag === "IFRAME" || tag === "AUDIO") return null;
-      let t = tag;
-      const at = el.attributes;
-      for (let i = 0; i < at.length; i++) {
-        const a = at[i];
-        let v = a.value;
-        if (v.length > 300) v = v.replace(/data:[^)'"\s]{120,}/g, m => "data:" + m.length + m.slice(-24));
-        t += "|" + a.name + "=" + v;
-      }
-      for (let n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3) t += "#" + n.nodeValue;
-      parts.push(t);
-    }
-    if (doc.getAnimations) {
-      const an = doc.getAnimations();
-      for (let i = 0; i < an.length; i++) {
-        if (an[i].playState === "running") return null;
-        parts.push("anim" + i + ":" + an[i].currentTime + ":" + an[i].playState);
-      }
-    }
-    return parts.join("\n");
-  } catch(e) { return null; }
 }
 function frameHash(canvas) {
   try {
@@ -4774,9 +4783,9 @@ function updateExportEstimate() {
   let ts = Math.max(0, Number($("trimStart").value) || 0) * 1000, te = Number($("trimEnd").value) > 0 ? Math.min(APP.durationMs, Number($("trimEnd").value) * 1000) : APP.durationMs;
   if (te <= ts + 100) { ts = 0; te = APP.durationMs; }
   const dur = (te - ts) / 1000, frames = Math.ceil(dur * fps);
-  let per = APP.perFrameMs, dup = APP.dupRatio || 0, measured = !!per;
-  if (!per) { try { const p = JSON.parse(localStorage.getItem("__exp_perf") || "null"); if (p && p.ms) { per = p.ms / Math.max(0.2, p.s * p.s) * (renderScale() * renderScale()); dup = p.dup || 0; measured = true; } } catch(e){} }
-  if (!per) { per = (isMobile() ? 420 : 260) * Math.max(0.3, renderScale() * renderScale()); dup = 0.25; }
+  let per = APP.perFrameMs, dup = 0, measured = !!per;
+  if (!per) { try { const p = JSON.parse(localStorage.getItem("__exp_perf") || "null"); if (p && p.ms) { per = p.ms / Math.max(0.2, p.s * p.s) * (renderScale() * renderScale()); dup = 0; measured = true; } } catch(e){} }
+  if (!per) { per = (isMobile() ? 420 : 260) * Math.max(0.3, renderScale() * renderScale()); dup = 0; }
   const est = frames * (1 - dup) * per / 1000;
   el.textContent = frames + " إطار • الزمن المتوقع ~" + fmtETA(est) + (measured ? " (حسب آخر تصدير)" : " (تقدير أولي)") + (recSupported() ? " • التسجيل المباشر: " + fmtETA(dur) : "");
 }
@@ -4886,15 +4895,12 @@ $("export").addEventListener("click", async () => {
     /* خط إنتاج: يُلتقط DOM كل إطار فورًا (نسخة مستقلة) ثم تُكمل html2canvas الرسم لعدة إطارات بالتوازي */
     const DEPTH = isMobile() ? 2 : 3;
     const exRoot = doc.getElementById("project-root") || doc.body;
-    let lastSig = null, next = 0, done = 0, rendered = 0, sinceYield = 0;
+    let next = 0, done = 0, rendered = 0, sinceYield = 0;
     const q = [];
     const mkJob = i => {
       const ts = i * frameDur;
       const ms = Math.min(APP.durationMs - 0.001, trimStart + ts * 1000);
       setTime(ms, APP.exportAnimations);
-      const sig = domSignature(doc, exRoot);
-      if (sig !== null && sig === lastSig) { APP.stats.skipped++; return { i, ts, dup: true }; }
-      lastSig = sig;
       const p = renderFrame(ms, { scale: sc, pipelined: true, seeked: true });
       p.catch(() => {});
       return { i, ts, dup: false, p };
@@ -4913,7 +4919,7 @@ $("export").addEventListener("click", async () => {
           APP.safeImages = true;
           toast("تعذّر رسم الصور — سيكتمل التصدير بدونها.", "warn", 8000);
           await Promise.allSettled(q.map(j => j.p));
-          q.length = 0; next = done; lastSig = null;
+          q.length = 0; next = done;
           continue;
         }
         APP.stats.renderMs += performance.now() - rs;
@@ -4930,7 +4936,7 @@ $("export").addEventListener("click", async () => {
       const elapsed = (performance.now() - startWall) / 1000;
       const eta = elapsed / done * (totalFrames - done);
       updateProgress(7 + (done / totalFrames) * 88,
-        "تصدير " + done + " / " + totalFrames + " • متبقٍ ~" + fmtETA(eta) + (APP.stats.skipped ? " • " + APP.stats.skipped + " إطار ثابت" : "") + (APP.safeImages ? " • بدون صور" : ""));
+        "تصدير " + done + " / " + totalFrames + " • متبقٍ ~" + fmtETA(eta) + (APP.safeImages ? " • بدون صور" : ""));
       if (++sinceYield >= (isMobile() ? 4 : 12)) { sinceYield = 0; await yieldToBrowser(); }
       /* استراحة قصيرة على الجوال كل 60 إطارًا مرسومًا: تمنع ارتفاع الحرارة */
       if (isMobile() && rendered && rendered % 60 === 0 && !job.dup && done < totalFrames) { await sleep(250); }
@@ -4952,7 +4958,7 @@ $("export").addEventListener("click", async () => {
     const blob = new Blob([buffer], { type: isMp4 ? "video/mp4" : "video/webm" });
     finalizeExport(blob, isMp4 ? "mp4" : "webm", label);
     const totalTime = (performance.now() - startWall) / 1000;
-    const summary = "✅ " + APP.stats.frames + " إطار (" + APP.stats.skipped + " ثابت لم يُعَد رسمه) • " + fmtETA(totalTime) + (audio ? " • مع صوت" : "") + (APP.safeImages ? " • بدون صور" : "");
+    const summary = "✅ " + APP.stats.frames + " إطار مرسوم بالكامل • " + fmtETA(totalTime) + (audio ? " • مع صوت" : "") + (APP.safeImages ? " • بدون صور" : "");
     updateProgress(100, summary);
     Errors.push("info", summary);
     toast(APP.safeImages ? "تم التصدير (بدون الصور)" : "تم التصدير — اضغط زر الحفظ", APP.safeImages ? "warn" : "success", 5000);
